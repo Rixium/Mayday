@@ -55,3 +55,5 @@ monodroid*.msi
 /CompiledContent/Windows/IgnoreMe.dll
 *.cachefile
 *.dll
+/.vs/Mayday/v16/Server/sqlite3/db.lock
+/.vs/Mayday/v16/Server/sqlite3/storage.ide
