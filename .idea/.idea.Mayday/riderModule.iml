@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="RIDER_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://C:/Program Files (x86)/MonoGame/v3.0/Assemblies/DesktopGL/MonoGame.Framework.dll.config" />
+    <content url="file://C:/Program Files (x86)/MonoGame/v3.0/Assemblies/DesktopGL/libSDL2-2.0.0.dylib" />
+    <content url="file://C:/Program Files (x86)/MonoGame/v3.0/Assemblies/DesktopGL/libopenal.1.dylib" />
+    <content url="file://C:/Program Files (x86)/MonoGame/v3.0/Assemblies/DesktopGL/x64" />
+    <content url="file://C:/Program Files (x86)/MonoGame/v3.0/Assemblies/DesktopGL/x86" />
+    <content url="file://$MODULE_DIR$/../.." />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
