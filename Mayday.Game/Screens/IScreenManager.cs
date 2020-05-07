@@ -11,9 +11,11 @@ namespace Mayday.Game.Screens
 
         void ChangeScreen(string screenName);
 
-        void Update(float delta);
+        IScreen GetScreen(string screenName);
 
-        void Draw(SpriteBatch spriteBatch);
+        void Update();
+
+        void Draw();
 
     }
 }
