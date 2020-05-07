@@ -8,7 +8,6 @@ namespace Mayday.Game
     {
         
         private readonly GraphicsDeviceManager _graphics;
-        
         private SpriteBatch _spriteBatch;
         
         public Game1()
@@ -41,5 +40,7 @@ namespace Mayday.Game
             
             base.Draw(gameTime);
         }
+        
+        
     }
 }
