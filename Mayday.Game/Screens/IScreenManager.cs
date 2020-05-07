@@ -1,4 +1,6 @@
-﻿namespace Mayday.Game.Screens
+﻿using System.Collections.Generic;
+
+namespace Mayday.Game.Screens
 {
     
     /// <summary>
@@ -6,6 +8,11 @@
     /// </summary>
     public interface IScreenManager
     {
+        
+        /// <summary>
+        /// Holds the collection of screen currently tracked by the screen manager.
+        /// </summary>
+        IDictionary<string, IScreen> Screens { get; }
         
         /// <summary>
         /// Add a screen to the screen manager to track.
@@ -16,8 +23,14 @@
         /// <summary>
         /// Removes a given screen from the screen manager if it exists.
         /// </summary>
-        /// <param name="screen">The name of the screen to remove.</param>
+        /// <param name="screen">The screen to remove.</param>
         void RemoveScreen(IScreen screen);
+        
+        /// <summary>
+        /// Removes a given screen by screen name from the screen manager if it exists.
+        /// </summary>
+        /// <param name="screen">The name of the screen to remove.</param>
+        void RemoveScreen(string screenName);
 
         /// <summary>
         /// Set the next screen to the given screen name if it exists.
