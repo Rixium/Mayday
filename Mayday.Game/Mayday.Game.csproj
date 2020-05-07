@@ -50,6 +50,7 @@
     <Compile Include="Screens\ScreenManager.cs" />
     <Compile Include="Utils\Time.cs" />
     <Compile Include="Utils\Window.cs" />
+    <Compile Include="Utils\MouseState.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
