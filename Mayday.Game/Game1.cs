@@ -1,4 +1,5 @@
 ﻿using Mayday.Game.Screens;
+using Mayday.Game.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -36,12 +37,17 @@ namespace Mayday.Game
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            Time.Update(gameTime);
+            _screenManager.Update();
+            
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
+            
+            _screenManager.Draw();
             
             base.Draw(gameTime);
         }
