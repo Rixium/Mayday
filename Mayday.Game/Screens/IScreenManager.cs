@@ -29,7 +29,7 @@ namespace Mayday.Game.Screens
         /// <summary>
         /// Removes a given screen by screen name from the screen manager if it exists.
         /// </summary>
-        /// <param name="screen">The name of the screen to remove.</param>
+        /// <param name="screenName">The name of the screen to remove.</param>
         void RemoveScreen(string screenName);
 
         /// <summary>
