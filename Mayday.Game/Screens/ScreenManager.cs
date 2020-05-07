@@ -34,7 +34,13 @@ namespace Mayday.Game.Screens
 
         public void Update() => _activeScreen?.Update();
         
-        public void Draw() => _activeScreen?.Draw();
-        
+        public void Draw()
+        {
+            Graphics.Begin();
+            
+            _activeScreen?.Draw();
+            
+            Graphics.End();
+        }
     }
 }
