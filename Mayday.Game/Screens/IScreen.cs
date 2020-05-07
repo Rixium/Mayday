@@ -7,9 +7,9 @@ namespace Mayday.Game.Screens
 
         string Name { get; set; }
         
-        void Update(float delta);
+        void Update();
 
-        void Draw(SpriteBatch spriteBatch);
+        void Draw();
         
     }
 }
