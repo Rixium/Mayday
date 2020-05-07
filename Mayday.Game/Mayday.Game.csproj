@@ -51,6 +51,7 @@
     <Compile Include="Utils\Time.cs" />
     <Compile Include="Utils\Window.cs" />
     <Compile Include="Utils\MouseState.cs" />
+    <Compile Include="Utils\UtilManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
