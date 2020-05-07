@@ -24,6 +24,7 @@
         </e>
         <e p="Utils" t="Include">
           <e p="Time.cs" t="Include" />
+          <e p="Window.cs" t="Include" />
         </e>
       </e>
       <e p="Mayday.Game.Tests" t="IncludeRecursive">
