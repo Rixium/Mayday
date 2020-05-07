@@ -49,6 +49,7 @@
     <Compile Include="Screens\IScreenManager.cs" />
     <Compile Include="Screens\ScreenManager.cs" />
     <Compile Include="Utils\Time.cs" />
+    <Compile Include="Utils\Window.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
