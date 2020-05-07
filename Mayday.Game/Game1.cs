@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Mayday.Game.Screens;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -9,11 +10,15 @@ namespace Mayday.Game
         
         private readonly GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
+        private readonly IScreenManager _screenManager;
         
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            
+            _screenManager = new ScreenManager();
         }
 
         protected override void LoadContent()
