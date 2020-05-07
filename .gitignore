@@ -57,3 +57,4 @@ monodroid*.msi
 *.dll
 /.vs/Mayday/v16/Server/sqlite3/db.lock
 /.vs/Mayday/v16/Server/sqlite3/storage.ide
+/packages
