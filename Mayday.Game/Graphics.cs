@@ -1,9 +1,8 @@
-using Mayday.Game.Utils;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Mayday.Game
 {
-    public static class Graphics
+    public class Graphics
     {
 
         // We wanna be able to access this everywhere.
