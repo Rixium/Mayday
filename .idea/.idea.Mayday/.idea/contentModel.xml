@@ -25,8 +25,14 @@
         <e p="Screens" t="Include">
           <e p="IScreen.cs" t="Include" />
           <e p="IScreenManager.cs" t="Include" />
+          <e p="MenuScreen.cs" t="Include" />
           <e p="ScreenManager.cs" t="Include" />
           <e p="SplashScreen.cs" t="Include" />
+          <e p="Transitions" t="Include">
+            <e p="FadeTransition.cs" t="Include" />
+            <e p="ITransition.cs" t="Include" />
+            <e p="Transition.cs" t="Include" />
+          </e>
         </e>
         <e p="Utils" t="Include">
           <e p="GraphicsUtils.cs" t="Include" />

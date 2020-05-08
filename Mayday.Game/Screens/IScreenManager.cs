@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Mayday.Game.Screens.Transitions;
 
 namespace Mayday.Game.Screens
 {
@@ -14,6 +15,12 @@ namespace Mayday.Game.Screens
         /// </summary>
         IDictionary<string, IScreen> Screens { get; }
         
+        /// <summary>
+        /// The screen transition can be used by the screen manager on transitioning from active to
+        /// next screen.
+        /// </summary>
+        ITransition ScreenTransition { get; }
+
         /// <summary>
         /// Add a screen to the screen manager to track.
         /// </summary>
@@ -37,7 +44,8 @@ namespace Mayday.Game.Screens
         /// Transitions will happen as defined by the user.
         /// </summary>
         /// <param name="screenName">The name of the screen to transition to.</param>
-        void ChangeScreen(string screenName);
+        /// <param name="shouldTransition">Whether or not a transition should be played on changing screen.</param>
+        void ChangeScreen(string screenName, bool shouldTransition = true);
 
         /// <summary>
         /// Returns a screen by a given screen name tracked by the screen manager if it exists.
@@ -45,6 +53,12 @@ namespace Mayday.Game.Screens
         /// <param name="screenName">The screen name of the screen.</param>
         /// <returns>The screen of the specified screen name.</returns>
         IScreen GetScreen(string screenName);
+
+        /// <summary>
+        /// Set the transition that should be played between screen changes.
+        /// </summary>
+        /// <param name="transition">The transition to play between screens.</param>
+        void SetScreenTransition(ITransition transition);
 
         /// <summary>
         /// Updates the active screen, or updates the transition if the next screen is set.

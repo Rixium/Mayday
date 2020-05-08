@@ -49,8 +49,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Screens\IScreen.cs" />
     <Compile Include="Screens\IScreenManager.cs" />
+    <Compile Include="Screens\MenuScreen.cs" />
     <Compile Include="Screens\ScreenManager.cs" />
     <Compile Include="Screens\SplashScreen.cs" />
+    <Compile Include="Screens\Transitions\FadeTransition.cs" />
+    <Compile Include="Screens\Transitions\ITransition.cs" />
+    <Compile Include="Screens\Transitions\Transition.cs" />
     <Compile Include="Utils\Time.cs" />
     <Compile Include="Utils\Window.cs" />
     <Compile Include="Utils\MouseState.cs" />
