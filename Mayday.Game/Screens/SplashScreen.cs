@@ -19,9 +19,11 @@ namespace Mayday.Game.Screens
         private readonly Sprite _sprite;
         private readonly Vector2 _spritePos;
 
+        private bool _hasInitialized;
+
         private float _spentTime;
         private float _transValue;
-        private float _stayTime = 5f; //seconds
+        private const float StayTime = 5f; //seconds
 
         private bool _shouldRotate;
         private float _angle; // used for rotation
@@ -34,16 +36,23 @@ namespace Mayday.Game.Screens
             _sprite = new Sprite(image);
             _spritePos = Window.Center;
         }
-        
+
+        public void Initialize()
+        {
+            _hasInitialized = true;
+        }
+
         public void Update()
         {
+            if (!_hasInitialized) return;
+            
             if (Keyboard.GetState().GetPressedKeys().Length > 0
-            && !Keyboard.GetState().GetPressedKeys().Contains(Keys.Space)) 
+                && !Keyboard.GetState().GetPressedKeys().Contains(Keys.P)) 
             {
-                _spentTime = _stayTime;
+                _spentTime = StayTime;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            if (Keyboard.GetState().IsKeyDown(Keys.P))
             {
                 _shouldRotate = true;
             }
@@ -57,7 +66,7 @@ namespace Mayday.Game.Screens
             
             _spentTime += Time.DeltaTime;
             
-            if (_spentTime <= _stayTime)
+            if (_spentTime <= StayTime)
             {
                 _transValue += Time.DeltaTime;
             }
@@ -68,11 +77,10 @@ namespace Mayday.Game.Screens
 
             _transValue = MathHelper.Clamp(_transValue, 0, 1);
             
-            if (_spentTime > _stayTime + 3f && Math.Abs(_transValue) < 0.001f)
+            if (_spentTime > StayTime + 1.5f && Math.Abs(_transValue) < 0.001f)
             {
                 ScreenManager.ChangeScreen("MenuScreen");
             }
-            
         }
 
         public void Draw()
