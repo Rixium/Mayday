@@ -11,7 +11,7 @@ namespace Mayday.Game.Screens
         string Name { get; set; }
 
         /// <summary>
-        /// Called as soon as the screen is made the active screen,
+        /// Called as soon as the screen is set as the active screen,
         /// Keep in mind the transition may still be playing.
         /// </summary>
         void Awake();
