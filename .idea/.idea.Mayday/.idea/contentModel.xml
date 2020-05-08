@@ -5,6 +5,9 @@
       <e p="Mayday.Game" t="IncludeRecursive">
         <e p="app.manifest" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
+        <e p="Config" t="Include">
+          <e p="inputBindings.json" t="Include" />
+        </e>
         <e p="Content" t="Include">
           <e p="Content.mgcb" t="Include" />
         </e>
@@ -15,6 +18,13 @@
         </e>
         <e p="Icon.bmp" t="Include" />
         <e p="Icon.ico" t="Include" />
+        <e p="Inputs" t="Include">
+          <e p="GamePadInputBinding.cs" t="Include" />
+          <e p="IInputBinding.cs" t="Include" />
+          <e p="IInputManager.cs" t="Include" />
+          <e p="InputManager.cs" t="Include" />
+          <e p="KeyInputBinding.cs" t="Include" />
+        </e>
         <e p="Mayday.Game.csproj" t="IncludeRecursive" />
         <e p="obj" t="ExcludeRecursive" />
         <e p="packages.config" t="Include" />

@@ -1,4 +1,6 @@
-﻿using Mayday.Game.Screens;
+﻿using System.IO;
+using Mayday.Game.Inputs;
+using Mayday.Game.Screens;
 using Mayday.Game.Screens.Transitions;
 using Mayday.Game.Utils;
 using Microsoft.Xna.Framework;
@@ -15,6 +17,7 @@ namespace Mayday.Game
         public string GameSubtitle = "The game that Mathias and Dan will finish";
 
         public static ContentManager ContentManager;
+        public static IInputManager InputManager;
 
         /// <summary>
         /// Just do version numbers here.
@@ -41,6 +44,10 @@ namespace Mayday.Game
         {
             SetupUtils();
             Window.Title = $"{GameName} - {GameSubtitle}";
+            
+            InputManager = new InputManager();
+            InputManager.Initialize(File.ReadAllText("Config/inputBindings.json"));
+            
             base.Initialize();
         }
 
@@ -80,6 +87,7 @@ namespace Mayday.Game
             // Update all of our util stuff !DO FIRST ALWAYS
             UtilManager.Update(gameTime);
             
+            InputManager.Update();
             _screenManager.Update();
             
             // base update. Calls the base classes update method !DO LAST ALWAYS

@@ -32,6 +32,7 @@ namespace Mayday.Game.Screens
             if (_activeScreen != null) return;
             
             _activeScreen = screen;
+            _activeScreen.Awake();
             ScreenTransition.SetTransitionDirection(TransitionDirection.In);
         }
 

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Mayday.Game.Graphics;
+using Mayday.Game.Inputs;
 using Mayday.Game.Screens.Transitions;
 using Mayday.Game.Utils;
 using Microsoft.Xna.Framework;
@@ -40,7 +41,20 @@ namespace Mayday.Game.Screens
 
         public void Awake()
         {
-            
+            Game1.InputManager.RegisterInputEvent("interact", OnInteractPressed);
+            Game1.InputManager.RegisterInputEvent("secret", OnRotatePressed);
+        }
+
+        private void OnInteractPressed()
+        {
+            _spentTime = StayTime;
+            _isReady = true;
+        }
+        
+        private void OnRotatePressed()
+        {
+            _isReady = true;
+            _shouldRotate = true;
         }
 
         public void Begin()
@@ -51,17 +65,6 @@ namespace Mayday.Game.Screens
         public void Update()
         {
             if (!_isReady) return;
-            
-            if (Keyboard.GetState().GetPressedKeys().Length > 0
-                && !Keyboard.GetState().GetPressedKeys().Contains(Keys.P)) 
-            {
-                _spentTime = StayTime;
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.P))
-            {
-                _shouldRotate = true;
-            }
 
             if (_shouldRotate)
             {

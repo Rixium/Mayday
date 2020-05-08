@@ -1,0 +1,14 @@
+﻿[
+  {
+    "bindingName":"interact",
+    "key":32,
+    "gamePadIndex":0,
+    "gamePadButton":4096
+  },
+  {
+    "bindingName":"secret",
+    "key":80,
+    "gamePadIndex":0,
+    "gamePadButton":8192
+  }
+]
