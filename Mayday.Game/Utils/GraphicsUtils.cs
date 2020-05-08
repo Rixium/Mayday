@@ -1,5 +1,4 @@
 using Mayday.Game.Graphics;
-using Mayday.Game.Utils.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
