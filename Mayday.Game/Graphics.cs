@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Mayday.Game
 {
-    public class Graphics
+    public static class Graphics
     {
 
         // We wanna be able to access this everywhere.
