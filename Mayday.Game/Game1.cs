@@ -23,7 +23,7 @@ namespace Mayday.Game
         private int _revision = 0;
         
         // TEMP FOR DEBUG
-        private const Keys DebugKey = Keys.OemTilde;
+        private const Keys DebugKey = Keys.F1;
         private Texture2D _pixel;
         private SpriteFont _debugFont;
         private bool _isDebug;
