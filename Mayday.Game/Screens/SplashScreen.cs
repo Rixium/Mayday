@@ -59,11 +59,11 @@ namespace Mayday.Game.Screens
             
             if (_spentTime <= _stayTime)
             {
-                _transValue += 0.01f;
+                _transValue += Time.DeltaTime;
             }
             else
             {
-                _transValue -= 0.01f;
+                _transValue -= Time.DeltaTime;
             }
 
             _transValue = MathHelper.Clamp(_transValue, 0, 1);

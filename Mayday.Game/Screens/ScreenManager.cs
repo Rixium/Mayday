@@ -60,7 +60,7 @@ namespace Mayday.Game.Screens
 
         private void TransitionInComplete()
         {
-            
+            _activeScreen?.Initialize();
         }
 
         private void TransitionOutComplete()

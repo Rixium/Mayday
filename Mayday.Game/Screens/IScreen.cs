@@ -9,10 +9,11 @@ namespace Mayday.Game.Screens
         Color BackgroundColor { get; set; }
         
         string Name { get; set; }
+
+        void Initialize();
         
         void Update();
 
         void Draw();
-        
     }
 }

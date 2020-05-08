@@ -53,7 +53,7 @@ namespace Mayday.Game.Screens.Transitions
         /// </summary>
         public override void Draw()
         {
-            GraphicsUtils.SpriteBatch.Draw(_pixel, new Rectangle(0, 0, Window.WindowWidth, Window.ViewportHeight),
+            GraphicsUtils.SpriteBatch.Draw(_pixel, new Rectangle(0, 0, Window.ViewportWidth, Window.ViewportHeight),
                 Color.Black * _fade);
         }
         
