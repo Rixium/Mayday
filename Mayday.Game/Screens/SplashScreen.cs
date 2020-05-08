@@ -99,6 +99,8 @@ namespace Mayday.Game.Screens
 
         public void Finish()
         {
+            // Removing our input events, because if we don't
+            // they'll stay in the list on the next screen and will still be called BAD!
             Game1.InputManager.DeRegisterInputEvent("interact", OnInteractPressed);
             Game1.InputManager.DeRegisterInputEvent("secret", OnRotatePressed);
         }

@@ -17,7 +17,11 @@ namespace Mayday.Game.Screens
         {
             
         }
-
+        
+        public void Finish()
+        {
+            
+        }
         public void Update()
         {
             
@@ -27,10 +31,6 @@ namespace Mayday.Game.Screens
         {
             
         }
-
-        public void Finish()
-        {
-            
-        }
+        
     }
 }
