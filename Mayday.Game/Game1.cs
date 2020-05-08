@@ -23,6 +23,7 @@ namespace Mayday.Game
         private int _revision = 0;
         
         // TEMP FOR DEBUG
+        private const Keys DebugKey = Keys.OemTilde;
         private Texture2D _pixel;
         private SpriteFont _debugFont;
         private bool _isDebug;
@@ -97,7 +98,7 @@ namespace Mayday.Game
         {
             var keyState = Keyboard.GetState();
 
-            if (keyState.IsKeyDown(Keys.OemTilde) && _lastKeyState.IsKeyUp(Keys.OemTilde)) 
+            if (keyState.IsKeyDown(DebugKey) && _lastKeyState.IsKeyUp(DebugKey)) 
                 _isDebug = !_isDebug;
 
             _lastKeyState = keyState;
