@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Mayday.Game
 {
@@ -14,12 +14,14 @@ namespace Mayday.Game
         /// </summary>
         public static void Begin()
         {
-            SpriteBatch.Begin(SpriteSortMode.Deferred,
-                null,
-                SamplerState.PointClamp,
-                DepthStencilState.Default,
-                RasterizerState.CullClockwise,
-                null);
+            SpriteBatch.Begin(
+                SpriteSortMode.Deferred, // Only render images when end has been called
+                null,  // No blending
+                SamplerState.PointClamp, // Point clamp, so we get sexy pixel perfect resizing
+                null, // We don't care about this. Tbh, I don't even understand it.
+                null, // I don't even know what this it.
+                null, // We can choose to flip textures as an example, but we dont, so null it.
+                Window.ViewportMatrix); // Window viewport, for nice resizing.
         }
 
         public static void End() => SpriteBatch.End();
