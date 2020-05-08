@@ -33,6 +33,9 @@ namespace Mayday.Game.Inputs
             if(state.IsButtonDown(_gamePadButton) && _lastState.IsButtonUp(_gamePadButton))
                 foreach(var action in OnPressed)
                     action?.Invoke();
+            else if(state.IsButtonUp(_gamePadButton) && _lastState.IsButtonDown(_gamePadButton))
+                foreach(var action in OnReleased)
+                    action?.Invoke();
 
             _lastState = state;
         }
