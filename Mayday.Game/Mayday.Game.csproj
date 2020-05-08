@@ -49,6 +49,7 @@
     <Compile Include="Screens\IScreen.cs" />
     <Compile Include="Screens\IScreenManager.cs" />
     <Compile Include="Screens\ScreenManager.cs" />
+    <Compile Include="Screens\SplashScreen.cs" />
     <Compile Include="Utils\Time.cs" />
     <Compile Include="Utils\Window.cs" />
     <Compile Include="Utils\MouseState.cs" />
