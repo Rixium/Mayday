@@ -40,6 +40,7 @@
           <e p="IScreen.cs" t="Include" />
           <e p="IScreenManager.cs" t="Include" />
           <e p="ScreenManager.cs" t="Include" />
+          <e p="SplashScreen.cs" t="Include" />
         </e>
         <e p="Utils" t="Include">
           <e p="MouseState.cs" t="Include" />

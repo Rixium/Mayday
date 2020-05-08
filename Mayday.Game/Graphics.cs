@@ -14,13 +14,12 @@ namespace Mayday.Game
         /// </summary>
         public static void Begin()
         {
-            SpriteBatch.Begin(SpriteSortMode.Deferred, 
-                null, 
-                SamplerState.PointClamp, 
-                DepthStencilState.Default, 
-                RasterizerState.CullClockwise, 
-                null, 
-                Utils.Window.ViewportMatrix);
+            SpriteBatch.Begin(SpriteSortMode.Deferred,
+                null,
+                SamplerState.PointClamp,
+                DepthStencilState.Default,
+                RasterizerState.CullClockwise,
+                null);
         }
 
         public static void End() => SpriteBatch.End();
