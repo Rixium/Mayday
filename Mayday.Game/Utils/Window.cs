@@ -33,6 +33,11 @@ namespace Mayday.Game.Utils
         public static Matrix InvertViewportMatrix => Matrix.Invert(ViewportMatrix);
 
         /// <summary>
+        /// Returns the center of the viewport.
+        /// </summary>
+        public static Vector2 Center => new Vector2(ViewportWidth / 2.0f, ViewportHeight / 2.0f);
+
+        /// <summary>
         /// Sets all the properties required and makes sure that the window maintains aspect.
         /// </summary>
         /// <param name="windowClientBounds"></param>
