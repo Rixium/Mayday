@@ -22,6 +22,7 @@ namespace Mayday.Game.Screens
 
         public void AddScreen(IScreen screen)
         {
+            screen.ScreenManager = this;
             Screens.Add(screen.Name, screen);
             if (_activeScreen == null)
             {
@@ -33,7 +34,7 @@ namespace Mayday.Game.Screens
         
         public void RemoveScreen(string screenName) => Screens.Remove(screenName);
         
-        public void ChangeScreen(string screenName) => _nextScreen = Screens[screenName];
+        public void ChangeScreen(string screenName) => _activeScreen = Screens[screenName];
 
         public IScreen GetScreen(string screenName)
         {

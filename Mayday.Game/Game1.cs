@@ -72,6 +72,7 @@ namespace Mayday.Game
                     BackgroundColor = Color.White
                 }
              );
+            _screenManager.AddScreen(new MenuScreen());
         }
 
         protected override void Update(GameTime gameTime)
