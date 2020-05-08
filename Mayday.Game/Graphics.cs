@@ -1,3 +1,4 @@
+using Mayday.Game.Utils;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Mayday.Game
