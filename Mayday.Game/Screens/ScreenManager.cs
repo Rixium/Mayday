@@ -18,7 +18,14 @@ namespace Mayday.Game.Screens
             Screens = new Dictionary<string, IScreen>();
         }
 
-        public void AddScreen(IScreen screen) => Screens.Add(screen.Name, screen);
+        public void AddScreen(IScreen screen)
+        {
+            Screens.Add(screen.Name, screen);
+            if (_activeScreen == null)
+            {
+                _activeScreen = screen;
+            }
+        }
 
         public void RemoveScreen(IScreen screen) => Screens.Remove(screen.Name);
         
