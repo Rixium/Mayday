@@ -2,41 +2,66 @@
 using Mayday.Game.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace Mayday.Game
 {
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        
-        private readonly GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
 
-        private readonly IScreenManager _screenManager;
+        public string GameVersion => $"{major}.{_minor}.{_revision}";
+        public string GameName = "Mayday";
+        public string GameSubtitle = "The game that Mathias and Dan will finish";
+
+        /// <summary>
+        /// Just do version numbers here.
+        /// Don't need to change any of these until we have an actual build to release, but it's here
+        /// because I want to look official.
+        /// </summary>
+        private int major = 0;
+        private int _minor = 0;
+        private int _revision = 0;
         
+        private readonly IScreenManager _screenManager;
+
         public Game1()
         {
-            _graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
+            Utils.Window.GraphicsDeviceManager = Utils.Window.CreateGraphicsDevice(this);
             
+            Content.RootDirectory = "Content";
             _screenManager = new ScreenManager();
+        }
+        
+        protected override void Initialize()
+        {
+            SetupUtils();
+            Window.Title = $"{GameName} - {GameSubtitle}";
+            base.Initialize();
+        }
+        
+        private void SetupUtils()
+        {
+            Window.ClientSizeChanged += (obj, eventArgs) => Utils.Window.WindowResized(Window);
+
+            IsMouseVisible = true;
         }
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-        }
-
-        protected override void UnloadContent()
-        {
+            // Monogame stuffs !DO FIRST ALWAYS
+            Graphics.SpriteBatch  = new SpriteBatch(GraphicsDevice);
             
+            // Loady Loady..
+            // TODO Load content in each window or load all the same time, what you think?
         }
 
         protected override void Update(GameTime gameTime)
-        { 
-            Time.Update(gameTime);
-            _screenManager.Update();
+        {
+            // Update all of our util stuff !DO FIRST ALWAYS
+            UtilManager.Update(gameTime);
             
+            _screenManager.Update();
+
+            // base update. Calls the base classes update method !DO LAST ALWAYS
             base.Update(gameTime);
         }
 
@@ -45,10 +70,9 @@ namespace Mayday.Game
             GraphicsDevice.Clear(Color.Black);
             
             _screenManager.Draw();
-            
+
             base.Draw(gameTime);
         }
-        
-        
+
     }
 }
