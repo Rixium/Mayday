@@ -1,4 +1,5 @@
 ﻿using Mayday.Game.Screens;
+using Mayday.Game.Screens.Transitions;
 using Mayday.Game.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -27,7 +28,7 @@ namespace Mayday.Game
 
         // TEMP FOR DEBUG
         private const Keys DebugKey = Keys.F1;
-        private Texture2D _pixel;
+        public static Texture2D _pixel;
         private SpriteFont _debugFont;
         private bool _isDebug;
         private KeyboardState _lastKeyState;
@@ -66,12 +67,15 @@ namespace Mayday.Game
 
             LoadDebug();
             
+            _screenManager.SetScreenTransition(new FadeTransition());
+            
             _screenManager.AddScreen(
                 new SplashScreen
                 {
                     BackgroundColor = Color.White
                 }
              );
+            
             _screenManager.AddScreen(new MenuScreen());
         }
 
