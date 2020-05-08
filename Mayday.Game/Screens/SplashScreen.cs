@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Mayday.Game.Graphics;
+using Mayday.Game.Screens.Transitions;
 using Mayday.Game.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,7 +20,7 @@ namespace Mayday.Game.Screens
         private readonly Sprite _sprite;
         private readonly Vector2 _spritePos;
 
-        private bool _hasInitialized;
+        private bool _isReady;
 
         private float _spentTime;
         private float _transValue;
@@ -37,14 +38,19 @@ namespace Mayday.Game.Screens
             _spritePos = Window.Center;
         }
 
-        public void Initialize()
+        public void Awake()
         {
-            _hasInitialized = true;
+            
+        }
+
+        public void Begin()
+        {
+            _isReady = true;
         }
 
         public void Update()
         {
-            if (!_hasInitialized) return;
+            if (!_isReady) return;
             
             if (Keyboard.GetState().GetPressedKeys().Length > 0
                 && !Keyboard.GetState().GetPressedKeys().Contains(Keys.P)) 

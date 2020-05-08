@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Diagnostics;
 using Mayday.Game.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,14 +8,14 @@ namespace Mayday.Game.Screens.Transitions
 
     public class FadeTransition : Transition
     {
-        private Texture2D _pixel;
 
+        private bool complete;
+        private Texture2D _pixel;
         private float _fade = 1.0f;
-        public float Speed { get; set; } = 1.0f;
 
         public FadeTransition()
         {
-            _pixel = Game1._pixel;
+            _pixel = Game1.ContentManager.Load<Texture2D>("Utils/pixel");
         }
         
         /// <summary>
@@ -23,9 +23,7 @@ namespace Mayday.Game.Screens.Transitions
         /// </summary>
         protected override void TransitionIn()
         {
-            _fade -= Time.DeltaTime * Speed;
-
-            _fade = MathHelper.Clamp(_fade, 0, 1);
+            _fade = MathHelper.Clamp(_fade - Time.DeltaTime / Speed, 0, 1);
             
             if (_fade <= 0.0f)
             {
@@ -38,10 +36,8 @@ namespace Mayday.Game.Screens.Transitions
         /// </summary>
         protected override void TransitionOut()
         {
-            _fade += Time.DeltaTime * Speed;
+            _fade = MathHelper.Clamp(_fade +  Time.DeltaTime / Speed, 0, 1);
 
-            _fade = MathHelper.Clamp(_fade, 0, 1);
-            
             if (_fade >= 1.0f)
             {
                 OnTransitionOutComplete?.Invoke();
@@ -56,6 +52,6 @@ namespace Mayday.Game.Screens.Transitions
             GraphicsUtils.SpriteBatch.Draw(_pixel, new Rectangle(0, 0, Window.ViewportWidth, Window.ViewportHeight),
                 Color.Black * _fade);
         }
-        
+
     }
 }

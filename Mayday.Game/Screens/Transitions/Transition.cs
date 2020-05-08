@@ -14,6 +14,8 @@ namespace Mayday.Game.Screens.Transitions
 
         public void Update()
         {
+            if (TransitionTime > Speed) return;
+            
             TransitionTime += Time.DeltaTime;
             
             if(TransitionDirection == TransitionDirection.In)
@@ -24,7 +26,7 @@ namespace Mayday.Game.Screens.Transitions
 
         public abstract void Draw();
         
-        public void SetTransitionDirection(TransitionDirection transitionDirection)
+        public virtual void SetTransitionDirection(TransitionDirection transitionDirection)
         {
             TransitionDirection = transitionDirection;
             TransitionTime = 0f;

@@ -39,10 +39,23 @@ namespace Mayday.Game.Screens
         
         public void RemoveScreen(string screenName) => Screens.Remove(screenName);
         
-        public void ChangeScreen(string screenName)
+        public void ChangeScreen(string screenName, bool transition = true)
         {
+            if (_nextScreen != null)
+            {
+                if (_nextScreen.Name.Equals(screenName)) 
+                    return;
+            }
+            
             _nextScreen = Screens[screenName];
-            ScreenTransition.SetTransitionDirection(TransitionDirection.Out);
+
+            if (transition)
+                ScreenTransition.SetTransitionDirection(TransitionDirection.Out);
+            else
+            {
+                _activeScreen = _nextScreen;
+                _nextScreen = null;
+            }
         }
 
         public IScreen GetScreen(string screenName)
@@ -58,16 +71,16 @@ namespace Mayday.Game.Screens
             ScreenTransition.OnTransitionOutComplete += TransitionOutComplete;
         }
 
-        private void TransitionInComplete()
-        {
-            _activeScreen?.Initialize();
-        }
+        private void TransitionInComplete() => _activeScreen?.Begin();
 
         private void TransitionOutComplete()
         {
-            if(_nextScreen != null)
+            if (_nextScreen != null)
+            {
                 _activeScreen = _nextScreen;
-            
+                _activeScreen.Awake();
+            }
+
             ScreenTransition.SetTransitionDirection(TransitionDirection.In);
         }
 

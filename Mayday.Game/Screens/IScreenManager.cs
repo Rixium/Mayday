@@ -20,7 +20,7 @@ namespace Mayday.Game.Screens
         /// next screen.
         /// </summary>
         ITransition ScreenTransition { get; }
-        
+
         /// <summary>
         /// Add a screen to the screen manager to track.
         /// </summary>
@@ -44,7 +44,8 @@ namespace Mayday.Game.Screens
         /// Transitions will happen as defined by the user.
         /// </summary>
         /// <param name="screenName">The name of the screen to transition to.</param>
-        void ChangeScreen(string screenName);
+        /// <param name="shouldTransition">Whether or not a transition should be played on changing screen.</param>
+        void ChangeScreen(string screenName, bool shouldTransition = true);
 
         /// <summary>
         /// Returns a screen by a given screen name tracked by the screen manager if it exists.
