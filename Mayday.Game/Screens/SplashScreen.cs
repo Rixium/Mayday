@@ -12,11 +12,13 @@ namespace Mayday.Game.Screens
         public Color BackgroundColor { get; set; } = Color.White;
         
         private readonly Sprite _sprite;
+        private Vector2 _spritePos;
 
         public SplashScreen()
         {
             var image = Game1.ContentManager.Load<Texture2D>("Splash/splash");
             _sprite = new Sprite(image);
+            _spritePos = Window.Center;
         }
         
         public void Update()
@@ -26,7 +28,7 @@ namespace Mayday.Game.Screens
 
         public void Draw()
         {
-            GraphicsUtils.Draw(_sprite, Window.Center);
+            GraphicsUtils.Draw(_sprite, _spritePos);
         }
         
     }

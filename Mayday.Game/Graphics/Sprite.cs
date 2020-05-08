@@ -16,5 +16,12 @@ namespace Mayday.Game.Graphics
             Origin = new Vector2(texture.Width / 2.0f, texture.Height / 2.0f);
         }
         
+        public Sprite(Texture2D texture, Rectangle? sourceRectangle, Vector2 origin)
+        {
+            Texture = texture;
+            Origin = origin;
+            SourceRectangle = sourceRectangle;
+        }
+        
     }
 }

@@ -54,6 +54,7 @@ namespace Mayday.Game
         {
             Window.ClientSizeChanged += (obj, eventArgs) => Utils.Window.WindowResized(Window);
             IsMouseVisible = true;
+            Window.AllowUserResizing = true;
         }
 
         protected override void LoadContent()
