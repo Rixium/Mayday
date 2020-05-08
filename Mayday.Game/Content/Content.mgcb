@@ -20,7 +20,7 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/debugFont.spritefont
 
-#begin Splash/splash.jpg
+#begin Splash/splash.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -30,7 +30,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Splash/splash.jpg
+/build:Splash/splash.png
 
 #begin Utils/pixel.png
 /importer:TextureImporter
