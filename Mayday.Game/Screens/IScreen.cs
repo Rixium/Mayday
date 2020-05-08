@@ -25,5 +25,11 @@ namespace Mayday.Game.Screens
         void Update();
 
         void Draw();
+
+        /// <summary>
+        /// Called as soon as the screen has finished transitioning out, use for cleanup.
+        /// </summary>
+        void Finish();
+        
     }
 }

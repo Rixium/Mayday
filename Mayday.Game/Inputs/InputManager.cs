@@ -75,9 +75,30 @@ namespace Mayday.Game.Inputs
                 default:
                     throw new ArgumentOutOfRangeException(nameof(eventType), eventType, null);
             }
-
-            InputBindings.Add(binding);
         }
-        
+
+        public void DeRegisterInputEvent(string bindingName, Action callback, InputEventType eventType = InputEventType.Pressed)
+        {
+            foreach (var binding in InputBindings.Where(binding => binding.Name.Equals(bindingName)))
+                DeRegisterInputEvent(binding, callback, eventType);
+        }
+
+        public void DeRegisterInputEvent(IInputBinding binding, Action callback, InputEventType eventType = InputEventType.Pressed)
+        {
+            switch (eventType)
+            {
+                case InputEventType.Pressed:
+                    binding.OnPressed.Remove(callback);
+                    break;
+                case InputEventType.Released:
+                    binding.OnReleased.Remove(callback);
+                    break;
+                case InputEventType.Held:
+                    binding.OnHeld.Remove(callback);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(eventType), eventType, null);
+            }
+        }
     }
 }

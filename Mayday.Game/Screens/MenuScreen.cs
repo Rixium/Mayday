@@ -27,5 +27,10 @@ namespace Mayday.Game.Screens
         {
             
         }
+
+        public void Finish()
+        {
+            
+        }
     }
 }

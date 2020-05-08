@@ -19,5 +19,7 @@ namespace Mayday.Game.Inputs
         void RegisterInputEvent(string bindingName, Action callback, InputEventType eventType = InputEventType.Pressed);
         void RegisterInputEvent(IInputBinding binding, Action callback, InputEventType eventType = InputEventType.Pressed);
 
+        void DeRegisterInputEvent(string binding, Action callback, InputEventType eventType = InputEventType.Pressed);
+        void DeRegisterInputEvent(IInputBinding binding, Action callback, InputEventType eventType = InputEventType.Pressed);
     }
 }

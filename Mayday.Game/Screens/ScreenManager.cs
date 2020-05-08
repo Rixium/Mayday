@@ -54,6 +54,7 @@ namespace Mayday.Game.Screens
                 ScreenTransition.SetTransitionDirection(TransitionDirection.Out);
             else
             {
+                _activeScreen?.Finish();
                 _activeScreen = _nextScreen;
                 _nextScreen = null;
             }
@@ -76,6 +77,8 @@ namespace Mayday.Game.Screens
 
         private void TransitionOutComplete()
         {
+            _activeScreen?.Finish();
+            
             if (_nextScreen != null)
             {
                 _activeScreen = _nextScreen;

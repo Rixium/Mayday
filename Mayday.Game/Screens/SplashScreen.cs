@@ -96,6 +96,12 @@ namespace Mayday.Game.Screens
         {
             GraphicsUtils.Draw(_sprite, _spritePos, _angle, _scale, Color.White*_transValue);
         }
+
+        public void Finish()
+        {
+            Game1.InputManager.DeRegisterInputEvent("interact", OnInteractPressed);
+            Game1.InputManager.DeRegisterInputEvent("secret", OnRotatePressed);
+        }
         
     }
 }
