@@ -55,6 +55,7 @@
     <Compile Include="Utils\Window.cs" />
     <Compile Include="Utils\MouseState.cs" />
     <Compile Include="Utils\UtilManager.cs" />
+    <Compile Include="Utils\GraphicsUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework, Version=3.7.1.189, Culture=neutral, PublicKeyToken=null">

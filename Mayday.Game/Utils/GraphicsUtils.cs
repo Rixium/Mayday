@@ -1,9 +1,11 @@
-using Mayday.Game.Utils;
+using Mayday.Game.Graphics;
+using Mayday.Game.Utils.Utils;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Mayday.Game
+namespace Mayday.Game.Utils
 {
-    public static class Graphics
+    public static class GraphicsUtils
     {
 
         // We wanna be able to access this everywhere.
@@ -23,6 +25,19 @@ namespace Mayday.Game
                 null, // I don't even know what this it.
                 null, // We can choose to flip textures as an example, but we dont, so null it.
                 Window.ViewportMatrix); // Window viewport, for nice resizing.
+        }
+
+        public static void Draw(ISprite sprite, Vector2 position)
+        {
+            SpriteBatch.Draw(sprite.Texture, 
+                position, 
+                sprite.SourceRectangle, 
+                Color.White, 
+                0, 
+                sprite.Origin, 
+                1, 
+                SpriteEffects.None, 
+                0);
         }
 
         public static void End() => SpriteBatch.End();
