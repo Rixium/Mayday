@@ -26,19 +26,21 @@ namespace Mayday.Game.Utils
                 Window.ViewportMatrix); // Window viewport, for nice resizing.
         }
 
-        public static void Draw(ISprite sprite, Vector2 position)
+        public static void Draw(ISprite sprite, Vector2 position) => Draw(sprite, position, Color.White);
+
+        public static void Draw(ISprite sprite, Vector2 position, Color color)
         {
             SpriteBatch.Draw(sprite.Texture, 
                 position, 
                 sprite.SourceRectangle, 
-                Color.White, 
+                color, 
                 0, 
                 sprite.Origin, 
                 1, 
                 SpriteEffects.None, 
                 0);
         }
-
+        
         public static void End() => SpriteBatch.End();
         
     }
