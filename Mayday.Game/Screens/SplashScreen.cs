@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Mayday.Game.Graphics;
+using Mayday.Game.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -7,12 +8,17 @@ namespace Mayday.Game.Screens
     public class SplashScreen : IScreen
     {
         public string Name { get; set; } = "Splash";
-        private Texture2D _image;
+        
+        public Color BackgroundColor { get; set; } = Color.White;
+        
+        private readonly Sprite _sprite;
 
         public SplashScreen()
         {
-            _image = Game1.ContentManager.Load<Texture2D>("Splash/splash");
+            var image = Game1.ContentManager.Load<Texture2D>("Splash/splash");
+            _sprite = new Sprite(image);
         }
+        
         public void Update()
         {
             
@@ -20,7 +26,8 @@ namespace Mayday.Game.Screens
 
         public void Draw()
         {
-            Graphics.SpriteBatch.Draw(_image, new Vector2(0,0), Color.White);
+            GraphicsUtils.Draw(_sprite, Window.Center);
         }
+        
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Mayday.Game.Utils;
+using Microsoft.Xna.Framework;
 
 namespace Mayday.Game.Screens
 {
@@ -43,11 +45,10 @@ namespace Mayday.Game.Screens
         
         public void Draw()
         {
-            Graphics.Begin();
-            
+            GraphicsUtils.SpriteBatch.GraphicsDevice.Clear(_activeScreen?.BackgroundColor ?? Color.Black);
+            GraphicsUtils.Begin();
             _activeScreen?.Draw();
-            
-            Graphics.End();
+            GraphicsUtils.End();
         }
     }
 }

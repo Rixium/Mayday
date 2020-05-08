@@ -9,7 +9,10 @@
           <e p="Content.mgcb" t="Include" />
         </e>
         <e p="Game1.cs" t="Include" />
-        <e p="Graphics.cs" t="Include" />
+        <e p="Graphics" t="Include">
+          <e p="ISprite.cs" t="Include" />
+          <e p="Sprite.cs" t="Include" />
+        </e>
         <e p="Icon.bmp" t="Include" />
         <e p="Icon.ico" t="Include" />
         <e p="Mayday.Game.csproj" t="IncludeRecursive" />
@@ -26,6 +29,7 @@
           <e p="SplashScreen.cs" t="Include" />
         </e>
         <e p="Utils" t="Include">
+          <e p="GraphicsUtils.cs" t="Include" />
           <e p="MouseState.cs" t="Include" />
           <e p="Time.cs" t="Include" />
           <e p="UtilManager.cs" t="Include" />

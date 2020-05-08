@@ -59,12 +59,18 @@ namespace Mayday.Game
         protected override void LoadContent()
         {
             // Monogame stuffs !DO FIRST ALWAYS
-            Graphics.SpriteBatch = new SpriteBatch(GraphicsDevice);
+            GraphicsUtils.SpriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO Load content in each window or load all the same time, what you think?
 
             LoadDebug();
-            _screenManager.AddScreen(new SplashScreen());
+            
+            _screenManager.AddScreen(
+                new SplashScreen
+                {
+                    BackgroundColor = Color.White
+                }
+             );
         }
 
         protected override void Update(GameTime gameTime)
@@ -83,12 +89,10 @@ namespace Mayday.Game
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
-
             DrawDebug();
-
+            
             _screenManager.Draw();
-
+            
             base.Draw(gameTime);
         }
 
@@ -115,35 +119,35 @@ namespace Mayday.Game
         {
             if (!_isDebug) return;
 
-            Graphics.SpriteBatch.Begin();
+            GraphicsUtils.SpriteBatch.Begin();
 
             // WINDOW MEASUREMENTS
-            Graphics.SpriteBatch.Draw(_pixel, new Rectangle(0, 10, Utils.Window.WindowWidth, 1), Color.White);
-            Graphics.SpriteBatch.DrawString(_debugFont, "" + Utils.Window.WindowWidth,
+            GraphicsUtils.SpriteBatch.Draw(_pixel, new Rectangle(0, 10, Utils.Window.WindowWidth, 1), Color.White);
+            GraphicsUtils.SpriteBatch.DrawString(_debugFont, "" + Utils.Window.WindowWidth,
                 new Vector2(Utils.Window.WindowWidth / 2.0f, 30), Color.White);
-            Graphics.SpriteBatch.Draw(_pixel, new Rectangle(10, 0, 1, Utils.Window.WindowHeight), Color.White);
-            Graphics.SpriteBatch.DrawString(_debugFont, "" + Utils.Window.WindowHeight,
+            GraphicsUtils.SpriteBatch.Draw(_pixel, new Rectangle(10, 0, 1, Utils.Window.WindowHeight), Color.White);
+            GraphicsUtils.SpriteBatch.DrawString(_debugFont, "" + Utils.Window.WindowHeight,
                 new Vector2(30, Utils.Window.WindowHeight / 2.0f), Color.White);
 
-            Graphics.SpriteBatch.DrawString(_debugFont, "Window Measurements",
+            GraphicsUtils.SpriteBatch.DrawString(_debugFont, "Window Measurements",
                 new Vector2(40,
                     40), Color.White);
 
             // VIEWPORT MEASUREMENTS
-            Graphics.SpriteBatch.Draw(_pixel,
+            GraphicsUtils.SpriteBatch.Draw(_pixel,
                 new Rectangle(0, Utils.Window.WindowHeight - 10, Utils.Window.WindowWidth, 1), Color.Green);
-            Graphics.SpriteBatch.DrawString(_debugFont, "" + Utils.Window.ViewportWidth,
+            GraphicsUtils.SpriteBatch.DrawString(_debugFont, "" + Utils.Window.ViewportWidth,
                 new Vector2(Utils.Window.WindowWidth / 2.0f, Utils.Window.WindowHeight - 10 - 30), Color.Green);
-            Graphics.SpriteBatch.Draw(_pixel,
+            GraphicsUtils.SpriteBatch.Draw(_pixel,
                 new Rectangle(Utils.Window.WindowWidth - 10, 0, 1, Utils.Window.WindowHeight), Color.Green);
-            Graphics.SpriteBatch.DrawString(_debugFont, "" + Utils.Window.ViewportHeight,
+            GraphicsUtils.SpriteBatch.DrawString(_debugFont, "" + Utils.Window.ViewportHeight,
                 new Vector2(Utils.Window.WindowWidth - 10 - 30, Utils.Window.WindowHeight / 2.0f), Color.Green);
 
-            Graphics.SpriteBatch.DrawString(_debugFont, "Viewport Measurements",
+            GraphicsUtils.SpriteBatch.DrawString(_debugFont, "Viewport Measurements",
                 new Vector2(Utils.Window.WindowWidth - _debugFont.MeasureString("Viewport Measurements").X - 40,
                     Utils.Window.WindowHeight - _debugFont.MeasureString("Viewport Measurements").Y - 40), Color.Green);
 
-            Graphics.SpriteBatch.End();
+            GraphicsUtils.SpriteBatch.End();
         }
     }
 }
