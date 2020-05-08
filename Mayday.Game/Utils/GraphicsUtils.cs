@@ -31,12 +31,38 @@ namespace Mayday.Game.Utils
         public static void Draw(ISprite sprite, Vector2 position, Color color)
         {
             SpriteBatch.Draw(sprite.Texture, 
-                position, 
+                position,
                 sprite.SourceRectangle, 
                 color, 
                 0, 
-                sprite.Origin, 
+                sprite.Origin,
                 1, 
+                SpriteEffects.None, 
+                0);
+        }
+        
+        public static void Draw(ISprite sprite, Vector2 position, float rotation, Color color)
+        {
+            SpriteBatch.Draw(sprite.Texture, 
+                position,
+                sprite.SourceRectangle, 
+                color,
+                rotation, 
+                sprite.Origin,
+                1, 
+                SpriteEffects.None, 
+                0);
+        }
+        
+        public static void Draw(ISprite sprite, Vector2 position, float rotation, float scale, Color color)
+        {
+            SpriteBatch.Draw(sprite.Texture, 
+                position,
+                sprite.SourceRectangle, 
+                color,
+                rotation, 
+                sprite.Origin,
+                scale, 
                 SpriteEffects.None, 
                 0);
         }
