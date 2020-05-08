@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Mayday.Game.Graphics;
 using Mayday.Game.Utils;
@@ -20,7 +21,12 @@ namespace Mayday.Game.Screens
 
         private float _spentTime;
         private float _transValue;
-        private const float StayTime = 5f; //seconds
+        private float _stayTime = 5f; //seconds
+
+        private bool _shouldRotate;
+        private float _angle; // used for rotation
+        private float _angleIncreaseExp;
+        private float _scale = 1f;
 
         public SplashScreen()
         {
@@ -31,14 +37,27 @@ namespace Mayday.Game.Screens
         
         public void Update()
         {
-            if (Keyboard.GetState().GetPressedKeys().Length > 0)
+            if (Keyboard.GetState().GetPressedKeys().Length > 0
+            && !Keyboard.GetState().GetPressedKeys().Contains(Keys.Space)) 
             {
-                _spentTime = StayTime;
+                _spentTime = _stayTime;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
+                _shouldRotate = true;
+            }
+
+            if (_shouldRotate)
+            {
+                _angle += 0.01f * _angleIncreaseExp;
+                _angleIncreaseExp += 0.05f;
+                _scale -= 0.002f;
             }
             
             _spentTime += Time.DeltaTime;
             
-            if (_spentTime <= StayTime)
+            if (_spentTime <= _stayTime)
             {
                 _transValue += 0.01f;
             }
@@ -47,17 +66,18 @@ namespace Mayday.Game.Screens
                 _transValue -= 0.01f;
             }
 
-            if (_spentTime > StayTime && Math.Abs(_transValue) < 0.001f)
+            _transValue = MathHelper.Clamp(_transValue, 0, 1);
+            
+            if (_spentTime > _stayTime + 3f && Math.Abs(_transValue) < 0.001f)
             {
                 ScreenManager.ChangeScreen("MenuScreen");
             }
-
-            _transValue = MathHelper.Clamp(_transValue, 0, 1);
+            
         }
 
         public void Draw()
         {
-            GraphicsUtils.Draw(_sprite, _spritePos, Color.White*_transValue);
+            GraphicsUtils.Draw(_sprite, _spritePos, _angle, _scale, Color.White*_transValue);
         }
         
     }
