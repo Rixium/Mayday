@@ -42,7 +42,7 @@ namespace Mayday.Game.Screens
         public void Awake()
         {
             Game1.InputManager.RegisterInputEvent("interact", OnInteractPressed);
-            Game1.InputManager.RegisterInputEvent("secret", OnRotatePressed);
+            Game1.InputManager.RegisterInputEvent("secret", OnRotatePressed, InputEventType.Released);
         }
 
         private void OnInteractPressed()
