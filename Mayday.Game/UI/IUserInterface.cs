@@ -1,11 +1,17 @@
-﻿namespace Mayday.Game.UI
+﻿using System.Collections.Generic;
+
+namespace Mayday.Game.UI
 {
     
     public interface IUserInterface
     {
 
-        IElement Element { get; set; }
-        
+        IList<IElement> Element { get; set; }
+
+        void Update();
+
+        void Draw();
+
     }
     
 }
