@@ -1,4 +1,5 @@
 ﻿using Mayday.Game.UI;
+using Mayday.Game.UI.Widgets;
 using Microsoft.Xna.Framework;
 
 namespace Mayday.Game.Screens
@@ -14,6 +15,7 @@ namespace Mayday.Game.Screens
         public void Awake()
         {
             UserInterface =  new UserInterface();
+            UserInterface.AddElement(new Panel());
         }
 
         public void Begin()

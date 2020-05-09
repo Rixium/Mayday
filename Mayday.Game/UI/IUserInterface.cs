@@ -6,12 +6,15 @@ namespace Mayday.Game.UI
     public interface IUserInterface
     {
 
-        IList<IElement> Element { get; set; }
+        IList<IElement> Elements { get; set; }
+        
+        void AddElement(IElement element);
 
         void Update();
 
         void Draw();
 
+        
     }
     
 }

@@ -68,7 +68,7 @@ namespace Mayday.Game.Graphics
 
         public void Draw()
         {
-            GraphicsUtils.Draw(_sprites[currentFrameNumber], Window.BottomRight + new Vector2(-50, -50), 0, 3, Color.White);
+            GraphicsUtils.Instance.Draw(_sprites[currentFrameNumber], Window.BottomRight + new Vector2(-50, -50), 0, 3, Color.White);
         }
     }
 }

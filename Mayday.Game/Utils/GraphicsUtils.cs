@@ -1,20 +1,40 @@
+using System.Runtime.Remoting.Contexts;
 using Mayday.Game.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Mayday.Game.Utils
 {
-    public static class GraphicsUtils
+    public class GraphicsUtils
     {
 
         // We wanna be able to access this everywhere.
         // I hate this but there should only ever be one sprite batch so.. yeh.
-        public static SpriteBatch SpriteBatch;
+        public SpriteBatch SpriteBatch;
 
+        /// <summary>
+        /// Used with Debug Draw calls so we don't need to continue making rectangles.
+        /// </summary>
+        private Rectangle _temporaryRectangle = new Rectangle(0, 0, 0, 0);
+        
+        /// <summary>
+        /// Pixel texture is for rendering things like lines.
+        /// </summary>
+        public Texture2D PixelTexture { get; set; }
+
+        private static GraphicsUtils _graphicsUtils;
+
+        public static GraphicsUtils Instance => _graphicsUtils ?? (_graphicsUtils = new GraphicsUtils());
+
+        private GraphicsUtils()
+        {
+        }
+        
         /// <summary>
         /// Wrapping this so we don't have to stare at the ugly ass.
         /// </summary>
-        public static void Begin()
+        public void Begin()
         {
             SpriteBatch.Begin(
                 SpriteSortMode.Deferred, // Only render images when end has been called
@@ -26,14 +46,14 @@ namespace Mayday.Game.Utils
                 Window.ViewportMatrix); // Window viewport, for nice resizing.
         }
 
-        public static void Draw(ISprite sprite, Vector2 position) => Draw(sprite, position, Color.White);
+        public void Draw(ISprite sprite, Vector2 position) => Draw(sprite, position, Color.White);
 
-        public static void Draw(ISprite sprite, Vector2 position, Color color) => Draw(sprite, position, 0, color);
+        public void Draw(ISprite sprite, Vector2 position, Color color) => Draw(sprite, position, 0, color);
 
-        public static void Draw(ISprite sprite, Vector2 position, float rotation, Color color) =>
+        public void Draw(ISprite sprite, Vector2 position, float rotation, Color color) =>
             Draw(sprite, position, rotation, 1, color);
         
-        public static void Draw(ISprite sprite, Vector2 position, float rotation, float scale, Color color)
+        public void Draw(ISprite sprite, Vector2 position, float rotation, float scale, Color color)
         {
             SpriteBatch.Draw(sprite.Texture, 
                 position,
@@ -46,7 +66,58 @@ namespace Mayday.Game.Utils
                 0);
         }
         
-        public static void End() => SpriteBatch.End();
+        public void End() => SpriteBatch.End();
+
+        public void DrawRectangle(int x, int y, int width, int height, Color color, bool fill = false)
+        {
+            if (fill)
+                DrawFilledRectangle(x, y, width, height, color);
+            else 
+                DrawHollowRectangle(x, y, width, height, color);
+        }
+
+        public void DrawHollowRectangle(int x, int y, int width, int height, Color color)
+        {
+            _temporaryRectangle.X = x;
+            _temporaryRectangle.Y = y;
+            _temporaryRectangle.Width = width;
+            _temporaryRectangle.Height = 1;
+            
+            SpriteBatch.Draw(PixelTexture, _temporaryRectangle, color);
+
+            _temporaryRectangle.X = width - 1;
+            _temporaryRectangle.Y = y;
+            _temporaryRectangle.Width = 1;
+            _temporaryRectangle.Height = height;
+                
+            SpriteBatch.Draw(PixelTexture, _temporaryRectangle, color);
+            
+            _temporaryRectangle.X = x;
+            _temporaryRectangle.Y = height - 1;
+            _temporaryRectangle.Width = width;
+            _temporaryRectangle.Height = 1;
+            
+            SpriteBatch.Draw(PixelTexture, _temporaryRectangle, color);
+            
+            _temporaryRectangle.X = x;
+            _temporaryRectangle.Y = y;
+            _temporaryRectangle.Width = 1;
+            _temporaryRectangle.Height = height;
+            
+            SpriteBatch.Draw(PixelTexture, _temporaryRectangle, color);
+        }
+
+        public void DrawFilledRectangle(int x, int y, int width, int height, Color color)
+        {
+            _temporaryRectangle.X = x;
+            _temporaryRectangle.Y = y;
+            _temporaryRectangle.Width = width;
+            _temporaryRectangle.Height = height;
+            
+            SpriteBatch.Draw(PixelTexture, _temporaryRectangle, color);
+        }
+
+        public void Load(ContentManager content) => PixelTexture = content.Load<Texture2D>("Utils/pixel");
         
     }
 }

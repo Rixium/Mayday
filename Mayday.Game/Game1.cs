@@ -58,15 +58,16 @@ namespace Mayday.Game
 
         protected override void LoadContent()
         {
-            // Monogame stuffs !DO FIRST ALWAYS
-            GraphicsUtils.SpriteBatch = new SpriteBatch(GraphicsDevice);
+            // Set up our graphics utils DO FIRST ALWAYS!
+            GraphicsUtils.Instance.SpriteBatch = new SpriteBatch(GraphicsDevice);
+            GraphicsUtils.Instance.Load(ContentManager);
 
             // TODO Load content in each window or load all the same time, what you think?
 
             _screenManager.SetScreenTransition(
                 new FadeTransition
                 {
-                    Speed = 2f
+                    Speed = 3f
                 }
             );
             

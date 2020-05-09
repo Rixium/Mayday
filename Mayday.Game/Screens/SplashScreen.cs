@@ -97,8 +97,10 @@ namespace Mayday.Game.Screens
 
         public void Draw()
         {
-            GraphicsUtils.Draw(_logoSprite, _logoSpritePos, _angle, _scale, Color.White*_transValue);
+            GraphicsUtils.Instance.Draw(_logoSprite, _logoSpritePos, _angle, _scale, Color.White*_transValue);
             _ballAnimation.Draw();
+            
+            GraphicsUtils.Instance.DrawHollowRectangle(0, 0, Window.ViewportWidth, Window.ViewportHeight, Color.Red);
         }
 
         public void Finish()

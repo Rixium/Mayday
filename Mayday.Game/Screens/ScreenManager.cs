@@ -96,12 +96,14 @@ namespace Mayday.Game.Screens
         
         public void Draw()
         {
-            GraphicsUtils.SpriteBatch.GraphicsDevice.Clear(_activeScreen?.BackgroundColor ?? Color.Black);
+            GraphicsUtils.Instance.SpriteBatch.GraphicsDevice.Clear(_activeScreen?.BackgroundColor ?? Color.Black);
             
-            GraphicsUtils.Begin();
+            GraphicsUtils.Instance.Begin();
+            
             _activeScreen?.Draw();
             ScreenTransition?.Draw();
-            GraphicsUtils.End();
+            
+            GraphicsUtils.Instance.End();
         }
     }
 }
