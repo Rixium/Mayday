@@ -13,7 +13,7 @@ namespace Mayday.Game.Screens
 
         public void Awake()
         {
-            
+            UserInterface =  new UserInterface();
         }
 
         public void Begin()
