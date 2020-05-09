@@ -45,6 +45,10 @@
             <e p="Transition.cs" t="Include" />
           </e>
         </e>
+        <e p="UI" t="Include">
+          <e p="IUserInterface.cs" t="Include" />
+          <e p="UserInterface.cs" t="Include" />
+        </e>
         <e p="Utils" t="Include">
           <e p="GraphicsUtils.cs" t="Include" />
           <e p="MouseState.cs" t="Include" />
