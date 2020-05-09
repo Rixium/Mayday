@@ -1,5 +1,6 @@
 ﻿using System;
 using Mayday.Game.ECS;
+using Mayday.Game.ECS.Components;
 using Mayday.Game.ECS.Components.Renderables;
 using Mayday.Game.Graphics;
 using Mayday.Game.Utils;
@@ -25,49 +26,49 @@ namespace Mayday.Game.Screens
 
         public SplashScreen() : base("Splash")
         {
-        }
-
-        public override void Awake()
-        {
             var logoSprite = new Sprite(Game1.ContentManager.Load<Texture2D>("Splash/splash"));
             _logoEntity = CreateEntity("logo");
             _logoEntity.Position = Window.Center;
             _logoSpriteComponent = _logoEntity.AddComponent(new SpriteRenderComponent(logoSprite));
+            
 
             var ballImage = Game1.ContentManager.Load<Texture2D>("Ball");
             var ballEntity = CreateEntity("ball");
             ballEntity.Position = Window.BottomRight + new Vector2(-50, -50);
             ballEntity.Scale = 3;
-            
+
             var animationComponent = new Animation(ballImage, "Content/Assets/Ball.json");
             ballEntity.AddComponent(animationComponent);
+        }
+
+        public override void Awake()
+        {
+            _isReady = false;
+            _angleIncreaseExp = 0;
+            _spentTime = 0;
+            _shouldRotate = false;
+            _transValue = 0;
+            _logoEntity.Rotation = 0;
+            _logoEntity.Scale = 1;
+            _logoSpriteComponent.Color = Color.White * 0;
             
             Game1.InputManager.RegisterInputEvent("interact", OnInteractPressed);
             Game1.InputManager.RegisterInputEvent("secret", OnRotatePressed);
         }
 
-        private void OnInteractPressed()
-        {
-            _spentTime = StayTime;
-            _isReady = true;
-        }
+        private void OnInteractPressed() => ScreenManager.ChangeScreen("MenuScreen");
 
-        private void OnRotatePressed()
-        {
-            _isReady = true;
-            _shouldRotate = true;
-        }
+        private void OnRotatePressed() => _shouldRotate = true;
 
-        public override void Begin()
-        {
-            _isReady = true;
-        }
+        public override void Begin() => _isReady = true;
 
         public override void Update()
         {
+            base.Update();
             if (!_isReady) return;
 
             if (_shouldRotate)
+
             {
                 _logoEntity.Rotation += 0.01f * _angleIncreaseExp;
                 _angleIncreaseExp += 0.05f;
@@ -93,8 +94,6 @@ namespace Mayday.Game.Screens
             }
 
             _logoSpriteComponent.Color = Color.White * _transValue;
-
-            base.Update();
         }
 
         public override void Finish()

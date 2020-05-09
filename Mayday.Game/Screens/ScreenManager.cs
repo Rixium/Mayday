@@ -85,6 +85,7 @@ namespace Mayday.Game.Screens
                 _activeScreen.Awake();
             }
 
+            _nextScreen = null;
             ScreenTransition.SetTransitionDirection(TransitionDirection.In);
         }
 

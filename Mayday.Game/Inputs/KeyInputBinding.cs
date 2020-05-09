@@ -29,15 +29,13 @@ namespace Mayday.Game.Inputs
             var keyState = Keyboard.GetState();
 
             if (keyState.IsKeyDown(Key) && _lastKeyboardState.IsKeyUp(Key))
-            {
                 foreach (var action in OnPressed)
-                {
                     action?.Invoke();
-                }
-            } else if (keyState.IsKeyUp(Key) && _lastKeyboardState.IsKeyDown((Key)))
-            {
-                foreach (var action in OnReleased) action?.Invoke();
-            }
+            else if (keyState.IsKeyUp(Key) && _lastKeyboardState.IsKeyDown(Key))
+                foreach (var action in OnReleased)
+                    action?.Invoke();
+            else if (keyState.IsKeyDown(Key) && _lastKeyboardState.IsKeyDown(Key))
+                foreach(var action in OnHeld) action?.Invoke();
             
             _lastKeyboardState = keyState;
         }
