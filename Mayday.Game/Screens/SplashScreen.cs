@@ -21,8 +21,8 @@ namespace Mayday.Game.Screens
         public IUserInterface UserInterface { get; set; }
         public Color BackgroundColor { get; set; } = Color.White;
 
-        private readonly Sprite _sprite;
-        private readonly Vector2 _spritePos;
+        private Sprite _sprite;
+        private Vector2 _spritePos;
 
         private bool _isReady;
 
@@ -35,15 +35,12 @@ namespace Mayday.Game.Screens
         private float _angleIncreaseExp;
         private float _scale = 1f;
 
-        public SplashScreen()
+        public void Awake()
         {
             var image = Game1.ContentManager.Load<Texture2D>("Splash/splash");
             _sprite = new Sprite(image);
             _spritePos = Window.Center;
-        }
-
-        public void Awake()
-        {
+            
             Game1.InputManager.RegisterInputEvent("interact", OnInteractPressed);
             Game1.InputManager.RegisterInputEvent("secret", OnRotatePressed, InputEventType.Released);
         }
