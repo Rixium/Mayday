@@ -34,8 +34,6 @@ namespace Mayday.Game.Inputs
     {
         
         public HashSet<IInputBinding> InputBindings { get; set; }
-        
-        public Action OnInputEvent { get; set; }
 
         public InputManager()
         {
