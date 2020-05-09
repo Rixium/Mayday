@@ -1,10 +1,17 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Mayday.Game.UI;
+using Microsoft.Xna.Framework;
 
 namespace Mayday.Game.Screens
 {
     public interface IScreen
     {
         IScreenManager ScreenManager { get; set; }
+
+        /// <summary>
+        /// Use this to set up each screen user interface.
+        /// Add elements to the user interface.
+        /// </summary>
+        IUserInterface UserInterface { get; set; }
         
         Color BackgroundColor { get; set; }
         
@@ -25,5 +32,11 @@ namespace Mayday.Game.Screens
         void Update();
 
         void Draw();
+
+        /// <summary>
+        /// Called as soon as the screen has finished transitioning out, use for cleanup.
+        /// </summary>
+        void Finish();
+        
     }
 }

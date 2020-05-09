@@ -1,10 +1,14 @@
 ﻿using System;
-using System.IO;
-using System.Net.Mime;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using Mayday.Game.Graphics;
+using Mayday.Game.Inputs;
+using Mayday.Game.Screens.Transitions;
+using Mayday.Game.UI;
 using Mayday.Game.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Mayday.Game.Screens
 {
@@ -13,6 +17,8 @@ namespace Mayday.Game.Screens
         public string Name { get; set; } = "Splash";
 
         public IScreenManager ScreenManager { get; set; }
+        
+        public IUserInterface UserInterface { get; set; }
         public Color BackgroundColor { get; set; } = Color.White;
         
         public IAnimation ballAnimation;
@@ -100,6 +106,14 @@ namespace Mayday.Game.Screens
         {
             GraphicsUtils.Draw(_logoSprite, _logoSpritePos, _angle, _scale, Color.White*_transValue);
             ballAnimation.Draw();
+        }
+
+        public void Finish()
+        {
+            // Removing our input events, because if we don't
+            // they'll stay in the list on the next screen and will still be called BAD!
+            Game1.InputManager.DeRegisterInputEvent("interact", OnInteractPressed);
+            Game1.InputManager.DeRegisterInputEvent("secret", OnRotatePressed);
         }
         
     }

@@ -2,13 +2,19 @@
   {
     "bindingName":"interact",
     "key":32,
+    
     "gamePadIndex":0,
-    "gamePadButton":4096
+    "gamePadButton":4096,
+    
+    "mouseButton": "Left"
   },
   {
     "bindingName":"secret",
     "key":80,
+    
     "gamePadIndex":0,
-    "gamePadButton":8192
+    "gamePadButton":8192,
+    
+    "mouseButton": "Right"
   }
 ]

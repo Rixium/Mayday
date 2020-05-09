@@ -47,6 +47,7 @@
           <e p="IInputManager.cs" t="Include" />
           <e p="InputManager.cs" t="Include" />
           <e p="KeyInputBinding.cs" t="Include" />
+          <e p="MouseButtonBinding.cs" t="Include" />
         </e>
         <e p="Mayday.Game.csproj" t="IncludeRecursive" />
         <e p="obj" t="ExcludeRecursive" />
@@ -66,6 +67,11 @@
             <e p="ITransition.cs" t="Include" />
             <e p="Transition.cs" t="Include" />
           </e>
+        </e>
+        <e p="UI" t="Include">
+          <e p="IElement.cs" t="Include" />
+          <e p="IUserInterface.cs" t="Include" />
+          <e p="UserInterface.cs" t="Include" />
         </e>
         <e p="Utils" t="Include">
           <e p="GraphicsUtils.cs" t="Include" />
