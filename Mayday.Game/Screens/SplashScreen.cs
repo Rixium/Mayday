@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using Mayday.Game.Graphics;
 using Mayday.Game.Inputs;
 using Mayday.Game.Screens.Transitions;
+using Mayday.Game.UI;
 using Mayday.Game.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -16,6 +17,8 @@ namespace Mayday.Game.Screens
         public string Name { get; set; } = "Splash";
 
         public IScreenManager ScreenManager { get; set; }
+        
+        public IUserInterface UserInterface { get; set; }
         public Color BackgroundColor { get; set; } = Color.White;
 
         private readonly Sprite _sprite;
