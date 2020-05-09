@@ -6,11 +6,11 @@ namespace Mayday.Game.Screens
     public interface IScreen
     {
         IScreenManager ScreenManager { get; set; }
-        
+
         /// <summary>
-                              /// Use this to set up each screen user interface.
-                              /// Add elements to the user interface.
-                              /// </summary>
+        /// Use this to set up each screen user interface.
+        /// Add elements to the user interface.
+        /// </summary>
         IUserInterface UserInterface { get; set; }
         
         Color BackgroundColor { get; set; }
