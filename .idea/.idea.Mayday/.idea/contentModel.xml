@@ -46,6 +46,7 @@
           </e>
         </e>
         <e p="UI" t="Include">
+          <e p="IElement.cs" t="Include" />
           <e p="IUserInterface.cs" t="Include" />
           <e p="UserInterface.cs" t="Include" />
         </e>

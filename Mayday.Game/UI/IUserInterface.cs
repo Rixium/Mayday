@@ -3,6 +3,8 @@
     
     public interface IUserInterface
     {
+
+        IElement Element { get; set; }
         
     }
     

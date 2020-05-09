@@ -61,6 +61,7 @@
     <Compile Include="Screens\Transitions\FadeTransition.cs" />
     <Compile Include="Screens\Transitions\ITransition.cs" />
     <Compile Include="Screens\Transitions\Transition.cs" />
+    <Compile Include="UI\IElement.cs" />
     <Compile Include="UI\IUserInterface.cs" />
     <Compile Include="UI\UserInterface.cs" />
     <Compile Include="Utils\Time.cs" />
