@@ -1,5 +1,4 @@
-﻿using System;
-using Mayday.Game.Utils;
+﻿using Mayday.Game.Utils;
 using Microsoft.Xna.Framework;
 
 namespace Mayday.Game.UI
@@ -19,22 +18,15 @@ namespace Mayday.Game.UI
 
         public void Update()
         {
-            
         }
 
-        public void Draw()
+        public virtual void Draw()
         {
-            
         }
 
         public virtual void DrawDebug()
         {
-            if (!_debug) return;
-
             GraphicsUtils.Instance.DrawRectangle(X, Y, Width, Height, Color.Red);
         }
-
-        public void SetDebug(bool isDebug) => _debug = isDebug;
-        
     }
 }

@@ -14,7 +14,7 @@ namespace Mayday.Game.UI
 
         void Draw();
 
-        
+        void DrawDebug();
     }
     
 }

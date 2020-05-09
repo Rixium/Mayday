@@ -42,6 +42,11 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ECS\Components\Component.cs" />
+    <Compile Include="ECS\Components\IComponent.cs" />
+    <Compile Include="ECS\Components\Renderables\SpriteRenderComponent.cs" />
+    <Compile Include="ECS\Entity.cs" />
+    <Compile Include="ECS\IEntity.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Graphics\Animation.cs" />
     <Compile Include="Graphics\IAnimation.cs" />
@@ -58,6 +63,7 @@
     <Compile Include="Screens\IScreen.cs" />
     <Compile Include="Screens\IScreenManager.cs" />
     <Compile Include="Screens\MenuScreen.cs" />
+    <Compile Include="Screens\Screen.cs" />
     <Compile Include="Screens\ScreenManager.cs" />
     <Compile Include="Screens\SplashScreen.cs" />
     <Compile Include="Screens\Transitions\FadeTransition.cs" />

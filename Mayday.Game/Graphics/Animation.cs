@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Mayday.Game.ECS.Components.Renderables;
 using Mayday.Game.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -25,50 +28,44 @@ namespace Mayday.Game.Graphics
         public int H { get; set; }
     }
 
-    public class Animation : IAnimation
+    public class Animation : SpriteRenderComponent
     {
-        private readonly Texture2D _image;
-        private IList<ISprite> _sprites;
+        private readonly IList<ISprite> _sprites;
 
-        private float frameDuration = 0.100f;
-        private float passedTime;
-        private int currentFrameNumber;
+        private const float FrameDuration = 0.100f;
+        private float _passedTime;
+        private int _currentFrameNumber;
 
-        public Animation(Texture2D image)
-        {
-            _image = image;
-        }
-
-        public void Initialize(string filePath)
+        public Animation(Texture2D image, string path) : base(null)
         {
             _sprites = new List<ISprite>();
-            var JsonFrames = JsonConvert.DeserializeObject< JsonFrames>(filePath);
             
-            foreach (var frame in JsonFrames.Frames)
+            var data = File.ReadAllText(path);
+            var jsonFrames = JsonConvert.DeserializeObject<JsonFrames>(data);
+            
+            foreach (var sprite in jsonFrames.Frames.Select(frame => new Sprite(image, new Rectangle(frame.Value.Frame.X, frame.Value.Frame.Y, frame.Value.Frame.W, frame.Value.Frame.H))))
             {
-                Sprite sprite = new Sprite(_image, new Rectangle(frame.Value.Frame.X, frame.Value.Frame.Y, frame.Value.Frame.W, frame.Value.Frame.H));
                 _sprites.Add(sprite);
             }
+
+            Sprite = _sprites[0];
         }
 
-        public void Update()
+        public override void Update()
         {
-            passedTime += Time.DeltaTime;
-            if (passedTime >= frameDuration)
+            _passedTime += Time.DeltaTime;
+            if (_passedTime < FrameDuration) return;
+            
+            _passedTime = 0;
+            _currentFrameNumber++;
+
+            if (_currentFrameNumber == _sprites.Count)
             {
-                passedTime = 0;
-                currentFrameNumber++;
-
-                if (currentFrameNumber == _sprites.Count)
-                {
-                    currentFrameNumber = 0;
-                }
+                _currentFrameNumber = 0;
             }
+
+            Sprite = _sprites[_currentFrameNumber];
         }
 
-        public void Draw()
-        {
-            GraphicsUtils.Instance.Draw(_sprites[currentFrameNumber], Window.BottomRight + new Vector2(-50, -50), 0, 3, Color.White);
-        }
     }
 }

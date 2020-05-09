@@ -12,7 +12,6 @@
         void Update();
         void Draw();
         void DrawDebug();
-        void SetDebug(bool isDebug);
-
+        
     }
 }

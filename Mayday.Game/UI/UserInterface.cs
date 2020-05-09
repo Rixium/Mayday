@@ -4,7 +4,6 @@ namespace Mayday.Game.UI
 {
     public class UserInterface : IUserInterface
     {
-        
         public IList<IElement> Elements { get; set; }
 
         public void AddElement(IElement element)
@@ -18,6 +17,8 @@ namespace Mayday.Game.UI
 
         public void Update()
         {
+            if (Elements == null) return;
+            
             foreach (var element in Elements)
             {
                 element.Update();
@@ -26,10 +27,18 @@ namespace Mayday.Game.UI
 
         public void Draw()
         {
+            if (Elements == null) return;
+            
             foreach (var element in Elements)
-            {
                 element.Draw();
-            }
+        }
+
+        public void DrawDebug()
+        {
+            if (Elements == null) return;
+            
+            foreach (var element in Elements)
+                element.DrawDebug();
         }
     }
 }

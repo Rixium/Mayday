@@ -1,41 +1,44 @@
-﻿using Mayday.Game.UI;
-using Mayday.Game.UI.Widgets;
+﻿using Mayday.Game.UI.Widgets;
+using Mayday.Game.Utils;
 using Microsoft.Xna.Framework;
 
 namespace Mayday.Game.Screens
 {
-    public class MenuScreen : IScreen
+    public class MenuScreen : Screen
     {
-        public IScreenManager ScreenManager { get; set; }
-        
-        public IUserInterface UserInterface { get; set; }
-        public Color BackgroundColor { get; set; } = Color.Green;
-        public string Name { get; set; } = "MenuScreen";
-
-        public void Awake()
+        public MenuScreen() : base("MenuScreen")
         {
-            UserInterface =  new UserInterface();
-            UserInterface.AddElement(new Panel());
         }
 
-        public void Begin()
+        public override void Awake()
         {
-            
-        }
-        
-        public void Finish()
-        {
-            
-        }
-        public void Update()
-        {
-            
+            BackgroundColor = Color.Green;
+
+            UserInterface.AddElement(new Panel
+            {
+                X = 0,
+                Y = 0,
+                Width = Window.ViewportWidth,
+                Height = Window.ViewportHeight
+            });
         }
 
-        public void Draw()
+        public override void Begin()
         {
-            
         }
-        
+
+        public override void Finish()
+        {
+        }
+
+        public override void Update()
+        {
+            base.Update();
+        }
+
+        public override void Draw()
+        {
+            base.Draw();
+        }
     }
 }

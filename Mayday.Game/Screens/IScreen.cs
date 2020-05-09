@@ -1,10 +1,17 @@
-﻿using Mayday.Game.UI;
+﻿using System.Collections.Generic;
+using Mayday.Game.ECS;
+using Mayday.Game.UI;
 using Microsoft.Xna.Framework;
 
 namespace Mayday.Game.Screens
 {
     public interface IScreen
     {
+        
+        bool IsDebug { get; set; }
+        
+        HashSet<IEntity> Entities { get; set; }
+        
         IScreenManager ScreenManager { get; set; }
 
         /// <summary>
@@ -37,6 +44,19 @@ namespace Mayday.Game.Screens
         /// Called as soon as the screen has finished transitioning out, use for cleanup.
         /// </summary>
         void Finish();
-        
+
+        /// <summary>
+        /// Creates a new entity.
+        /// </summary>
+        /// <returns>A new entity ready to go.</returns>
+        IEntity CreateEntity(string entityName);
+
+        /// <summary>
+        /// Add an entity to the screen.
+        /// </summary>
+        /// <param name="entity">The entity to add.</param>
+        /// <returns>A reference to the entity.</returns>
+        IEntity AddEntity(IEntity entity);
+
     }
 }

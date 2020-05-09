@@ -92,8 +92,7 @@ namespace Mayday.Game
             // base update. Calls the base classes update method !DO LAST ALWAYS
             base.Update(gameTime);
         }
-
-
+        
         protected override void Draw(GameTime gameTime)
         {
             _screenManager.Draw();
