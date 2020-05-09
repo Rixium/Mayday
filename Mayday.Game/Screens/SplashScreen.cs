@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Linq;
-using System.Runtime.CompilerServices;
+using System.IO;
+using System.Net.Mime;
 using Mayday.Game.Graphics;
-using Mayday.Game.Inputs;
-using Mayday.Game.Screens.Transitions;
 using Mayday.Game.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace Mayday.Game.Screens
 {
@@ -17,9 +14,12 @@ namespace Mayday.Game.Screens
 
         public IScreenManager ScreenManager { get; set; }
         public Color BackgroundColor { get; set; } = Color.White;
+        
+        public IAnimation ballAnimation;
 
-        private readonly Sprite _sprite;
-        private readonly Vector2 _spritePos;
+        private readonly Sprite _logoSprite;
+        private readonly Vector2 _logoSpritePos;
+        private readonly Texture2D _ballImage;
 
         private bool _isReady;
 
@@ -34,15 +34,17 @@ namespace Mayday.Game.Screens
 
         public SplashScreen()
         {
-            var image = Game1.ContentManager.Load<Texture2D>("Splash/splash");
-            _sprite = new Sprite(image);
-            _spritePos = Window.Center;
+            _logoSprite = new Sprite(Game1.ContentManager.Load<Texture2D>("Splash/splash"));
+            _logoSpritePos = Window.Center; 
+            _ballImage = Game1.ContentManager.Load<Texture2D>("Ball");
         }
 
         public void Awake()
         {
             Game1.InputManager.RegisterInputEvent("interact", OnInteractPressed);
             Game1.InputManager.RegisterInputEvent("secret", OnRotatePressed);
+            ballAnimation = new Animation(_ballImage);
+            ballAnimation.Initialize(File.ReadAllText("Content/Assets/Ball.json"));
         }
 
         private void OnInteractPressed()
@@ -64,6 +66,8 @@ namespace Mayday.Game.Screens
 
         public void Update()
         {
+            ballAnimation.Update();
+            
             if (!_isReady) return;
 
             if (_shouldRotate)
@@ -94,7 +98,8 @@ namespace Mayday.Game.Screens
 
         public void Draw()
         {
-            GraphicsUtils.Draw(_sprite, _spritePos, _angle, _scale, Color.White*_transValue);
+            GraphicsUtils.Draw(_logoSprite, _logoSpritePos, _angle, _scale, Color.White*_transValue);
+            ballAnimation.Draw();
         }
         
     }

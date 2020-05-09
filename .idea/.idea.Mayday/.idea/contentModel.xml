@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\dev\Mayday" t="IncludeFlat">
+    <e p="C:\Program Files (x86)\MonoGame\v3.0\Assemblies\DesktopGL\libopenal.1.dylib" t="Include" />
+    <e p="C:\Program Files (x86)\MonoGame\v3.0\Assemblies\DesktopGL\libSDL2-2.0.0.dylib" t="Include" />
+    <e p="C:\Program Files (x86)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll.config" t="Include" />
+    <e p="C:\Program Files (x86)\MonoGame\v3.0\Assemblies\DesktopGL\x64" t="Include">
+      <e p="libopenal.so.1" t="Include" />
+      <e p="libSDL2-2.0.so.0" t="Include" />
+      <e p="SDL2.dll" t="Include" />
+      <e p="soft_oal.dll" t="Include" />
+    </e>
+    <e p="C:\Program Files (x86)\MonoGame\v3.0\Assemblies\DesktopGL\x86" t="Include">
+      <e p="libopenal.so.1" t="Include" />
+      <e p="libSDL2-2.0.so.0" t="Include" />
+      <e p="SDL2.dll" t="Include" />
+      <e p="soft_oal.dll" t="Include" />
+    </e>
+    <e p="C:\Users\thega\AppData\local\JetBrains\Rider2020.1\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\thega\AppData\local\JetBrains\Rider2020.1\resharper-host\local\Transient\ReSharperHost\v201\SolutionCaches\_Mayday.1274502947.00" t="ExcludeRecursive" />
+    <e p="F:\GAME DEV\Mayday" t="IncludeFlat">
       <e p="Mayday.Game" t="IncludeRecursive">
         <e p="app.manifest" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
@@ -9,10 +26,16 @@
           <e p="inputBindings.json" t="Include" />
         </e>
         <e p="Content" t="Include">
+          <e p="Assets" t="Include">
+            <e p="Ball.json" t="Include" />
+          </e>
+          <e p="Ball.png" t="Include" />
           <e p="Content.mgcb" t="Include" />
         </e>
         <e p="Game1.cs" t="Include" />
         <e p="Graphics" t="Include">
+          <e p="Animation.cs" t="Include" />
+          <e p="IAnimation.cs" t="Include" />
           <e p="ISprite.cs" t="Include" />
           <e p="Sprite.cs" t="Include" />
         </e>
@@ -67,22 +90,5 @@
       <e p="Mayday.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />
     </e>
-    <e p="C:\Program Files (x86)\MonoGame\v3.0\Assemblies\DesktopGL\libopenal.1.dylib" t="Include" />
-    <e p="C:\Program Files (x86)\MonoGame\v3.0\Assemblies\DesktopGL\libSDL2-2.0.0.dylib" t="Include" />
-    <e p="C:\Program Files (x86)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll.config" t="Include" />
-    <e p="C:\Program Files (x86)\MonoGame\v3.0\Assemblies\DesktopGL\x64" t="Include">
-      <e p="libopenal.so.1" t="Include" />
-      <e p="libSDL2-2.0.so.0" t="Include" />
-      <e p="SDL2.dll" t="Include" />
-      <e p="soft_oal.dll" t="Include" />
-    </e>
-    <e p="C:\Program Files (x86)\MonoGame\v3.0\Assemblies\DesktopGL\x86" t="Include">
-      <e p="libopenal.so.1" t="Include" />
-      <e p="libSDL2-2.0.so.0" t="Include" />
-      <e p="SDL2.dll" t="Include" />
-      <e p="soft_oal.dll" t="Include" />
-    </e>
-    <e p="C:\Users\Dan\.Rider2019.3\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\Dan\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_Mayday.-727750422.00" t="ExcludeRecursive" />
   </component>
 </project>

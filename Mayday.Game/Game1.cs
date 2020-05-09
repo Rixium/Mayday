@@ -6,7 +6,6 @@ using Mayday.Game.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace Mayday.Game
 {
@@ -47,7 +46,7 @@ namespace Mayday.Game
             
             InputManager = new InputManager();
             InputManager.Initialize(File.ReadAllText("Config/inputBindings.json"));
-            
+
             base.Initialize();
         }
 

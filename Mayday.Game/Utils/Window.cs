@@ -37,6 +37,8 @@ namespace Mayday.Game.Utils
         /// </summary>
         public static Vector2 Center => new Vector2(ViewportWidth / 2.0f, ViewportHeight / 2.0f);
 
+        public static Vector2 BottomRight => new Vector2(ViewportWidth, ViewportHeight);
+
         /// <summary>
         /// Sets all the properties required and makes sure that the window maintains aspect.
         /// </summary>
