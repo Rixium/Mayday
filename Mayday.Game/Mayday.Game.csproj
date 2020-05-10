@@ -111,6 +111,9 @@
     </None>
     <None Include="app.manifest" />
     <None Include="packages.config" />
+    <Content Include="steam_appid.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Assets\Ball.json">
@@ -122,6 +125,10 @@
     <ProjectReference Include="..\Yetiface.Engine\Yetiface.Engine.csproj">
       <Project>{6b7d6ee3-17d6-4e6b-ac60-d3bd2027c1cc}</Project>
       <Name>Yetiface.Engine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yetiface.Steamworks\Yetiface.Steamworks.csproj">
+      <Project>{a5b02cc5-5b93-419d-a296-40caa402b4b9}</Project>
+      <Name>Yetiface.Steamworks</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

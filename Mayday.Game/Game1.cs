@@ -1,5 +1,6 @@
 ﻿using Mayday.Game.Screens;
 using Yetiface.Engine;
+using Yetiface.Steamworks;
 
 namespace Mayday.Game
 {
@@ -8,7 +9,8 @@ namespace Mayday.Game
 
         public Game1() : base("Mayday")
         {
-            
+            var steam = new Steam(0);
+            steam.Exit += Exit;
         }
         
         protected override void LoadContent()

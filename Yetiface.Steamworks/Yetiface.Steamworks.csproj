@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net45</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="Steamworks.NET, Version=11.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>Steamworks.NET.dll</HintPath>
+      </Reference>
+      <Reference Include="Steamworks.NET, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>Steamworks.NET.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Steamworks.NET.dll" />
+      <Content Include="Steamworks.NET.dll">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="steam_api.dll" />
+      <None Remove="steam_api64.dll" />
+      <Content Include="steam_api64.dll">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+    
+</Project>

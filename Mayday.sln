@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yetiface.Engine.Tests", "Ye
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yetiface.Engine", "Yetiface.Engine\Yetiface.Engine.csproj", "{6B7D6EE3-17D6-4E6B-AC60-D3BD2027C1CC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yetiface.Steamworks", "Yetiface.Steamworks\Yetiface.Steamworks.csproj", "{A5B02CC5-5B93-419D-A296-40CAA402B4B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{6B7D6EE3-17D6-4E6B-AC60-D3BD2027C1CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B7D6EE3-17D6-4E6B-AC60-D3BD2027C1CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B7D6EE3-17D6-4E6B-AC60-D3BD2027C1CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5B02CC5-5B93-419D-A296-40CAA402B4B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5B02CC5-5B93-419D-A296-40CAA402B4B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5B02CC5-5B93-419D-A296-40CAA402B4B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5B02CC5-5B93-419D-A296-40CAA402B4B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
