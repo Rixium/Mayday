@@ -45,6 +45,7 @@
     <Compile Include="ECS\Components\Component.cs" />
     <Compile Include="ECS\Components\IComponent.cs" />
     <Compile Include="ECS\Components\Renderables\SpriteRenderComponent.cs" />
+    <Compile Include="ECS\Components\SplashLogoComponent.cs" />
     <Compile Include="ECS\Entity.cs" />
     <Compile Include="ECS\IEntity.cs" />
     <Compile Include="YetiGame.cs" />
