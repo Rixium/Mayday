@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Yetiface.Engine.ECS;
 using Yetiface.Engine.ECS.Components.Renderables;
 using Yetiface.Engine.Graphics;
@@ -13,10 +11,9 @@ namespace Yetiface.Engine.Screens
         private bool _isReady;
 
         private float _spentTime;
-        private float _transValue;
         private const float StayTime = 5f; //seconds
 
-        private IEntity _logoEntity;
+        private readonly IEntity _logoEntity;
 
         private bool _shouldRotate;
         private float _angleIncreaseExp;
@@ -26,7 +23,7 @@ namespace Yetiface.Engine.Screens
         public SplashScreen() : base("Splash")
         {
             IsForced = true;
-            
+
             var logoSprite = new Sprite(YetiGame.ContentManager.Load<Texture2D>("Splash/splash"));
             _logoEntity = CreateEntity("logo");
             _logoEntity.Position = Window.Center;
@@ -39,16 +36,18 @@ namespace Yetiface.Engine.Screens
             _angleIncreaseExp = 0;
             _spentTime = 0;
             _shouldRotate = false;
-            _transValue = 0;
             _logoEntity.Rotation = 0;
             _logoEntity.Scale = 1;
-            _logoSpriteComponent.Color = Color.White * 0;
-            
+
             YetiGame.InputManager.RegisterInputEvent("interact", OnInteractPressed);
             YetiGame.InputManager.RegisterInputEvent("secret", OnRotatePressed);
         }
 
-        private void OnInteractPressed() => ScreenManager.ChangeScreen("MenuScreen");
+        private void OnInteractPressed()
+        {
+            IsForced = false;
+            ScreenManager.NextScreen();
+        }
 
         private void OnRotatePressed() => _shouldRotate = true;
 
@@ -69,30 +68,14 @@ namespace Yetiface.Engine.Screens
 
             _spentTime += Time.DeltaTime;
 
-            if (_spentTime <= StayTime)
-            {
-                _transValue += Time.DeltaTime;
-            }
-            else
-            {
-                _transValue -= Time.DeltaTime;
-            }
+            if (_spentTime < StayTime + 1.5f) return;
 
-            _transValue = MathHelper.Clamp(_transValue, 0, 1);
-
-            if (_spentTime > StayTime + 1.5f && Math.Abs(_transValue) < 0.001f)
-            {
-                IsForced = false;
-                ScreenManager.NextScreen();
-            }
-
-            _logoSpriteComponent.Color = Color.White * _transValue;
+            IsForced = false;
+            ScreenManager.NextScreen();
         }
 
         public override void Finish()
         {
-            // Removing our input events, because if we don't
-            // they'll stay in the list on the next screen and will still be called BAD!
             YetiGame.InputManager.DeRegisterInputEvent("interact", OnInteractPressed);
             YetiGame.InputManager.DeRegisterInputEvent("secret", OnRotatePressed);
         }
