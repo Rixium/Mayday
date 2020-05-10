@@ -1,4 +1,4 @@
-﻿<component name="ProjectRunConfigurationManager">
+<component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Mayday.Game" type="DotNetProject" factoryName=".NET Project">
     <option name="EXE_PATH" value="$PROJECT_DIR$/Mayday.Game/bin/DesktopGL/AnyCPU/Debug/Mayday.Game.exe" />
     <option name="PROGRAM_PARAMETERS" value="" />
