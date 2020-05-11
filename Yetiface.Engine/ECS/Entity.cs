@@ -7,6 +7,7 @@ namespace Yetiface.Engine.ECS
 {
     public class Entity : IEntity
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public Vector2 Position { get; set; }
         public float Rotation { get; set; }
