@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using Yetiface.Engine.ECS.Components;
 using Yetiface.Engine.ECS.Components.Renderables;
 using Yetiface.Engine.Graphics;
 using Yetiface.Engine.Utils;
@@ -10,28 +9,22 @@ namespace Yetiface.Engine.Screens
     {
         public SplashScreen() : base("Splash")
         {
-            
         }
 
         public override void Awake()
         {
             IsForced = false;
-            
-            var logoSprite = new Sprite(YetiGame.ContentManager.Load<Texture2D>("Splash/splash"));
-            var logoEntity = CreateEntity("logo");
-            logoEntity.Position = Window.Center;
-            logoEntity.AddComponent(new SpriteRenderComponent(logoSprite));
-            logoEntity.AddComponent(new SplashLogoComponent(ScreenManager));
+
+            var texture = YetiGame.ContentManager.Load<Texture2D>("Splash/splash");
+            var sprite = new Sprite(texture);
+            var splashEntity = CreateEntity(Window.Center);
+            splashEntity.AddComponent(new SpriteRenderComponent(sprite));
         }
 
-        public override void Begin()
-        {
-
-        }
+        public override void Begin() => ScreenManager.NextScreen();
 
         public override void Finish()
         {
-
         }
     }
 }

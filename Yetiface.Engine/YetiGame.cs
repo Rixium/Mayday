@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,22 +16,19 @@ namespace Yetiface.Engine
     /// </summary>
     public class YetiGame : Game
     {
-       public string GameVersion => $"{Major}.{Minor}.{Revision}";
+        
         public string GameName = "YetiGame";
+        public string GameVersion => $"{Major}.{Minor}.{Revision}";
+
+        protected int Major = 0;
+        protected int Minor = 1;
+        protected int Revision = 0;
         
         public static ContentManager ContentManager;
         public static IInputManager InputManager;
         public IScreenManager ScreenManager { get; set; }
 
-        /// <summary>
-        /// Just do version numbers here.
-        /// Don't need to change any of these until we have an actual build to release, but it's here
-        /// because I want to look official.
-        /// </summary>
-        protected int Major = 0;
-
-        protected int Minor = 0;
-        protected int Revision = 0;
+        private FrameRate _frameRate;
 
 
         public YetiGame(string gameName)
@@ -41,17 +40,22 @@ namespace Yetiface.Engine
             Content.RootDirectory = "Content";
             ScreenManager = new ScreenManager();
             ContentManager = Content;
+            
+            _frameRate = new FrameRate();
         }
 
         protected override void Initialize()
         {
+            SetWindowTitle();
             SetupUtils();
-            Window.Title = $"{GameName} - {GameVersion}";
-            
             InputManager = new InputManager();
             InputManager.Initialize(File.ReadAllText("Config/inputBindings.json"));
-
             base.Initialize();
+        }
+
+        private void SetWindowTitle(params string[] supplementaryText)
+        {
+            Window.Title = $"{GameName} - Version {GameVersion} - {string.Join(" - ", supplementaryText)}";
         }
 
         private void SetupUtils()
@@ -91,9 +95,11 @@ namespace Yetiface.Engine
             // base update. Calls the base classes update method !DO LAST ALWAYS
             base.Update(gameTime);
         }
-        
+
         protected override void Draw(GameTime gameTime)
         {
+            _frameRate.Update((float) gameTime.ElapsedGameTime.TotalSeconds);
+            SetWindowTitle($"{Math.Round(_frameRate.AverageFramesPerSecond)} fps");
             ScreenManager.Draw();
             base.Draw(gameTime);
         }

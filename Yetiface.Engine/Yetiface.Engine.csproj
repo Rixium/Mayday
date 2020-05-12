@@ -42,15 +42,22 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Data\AsepriteAnimationData.cs" />
+    <Compile Include="Data\AsepriteFrameData.cs" />
+    <Compile Include="Data\AsepriteSheet.cs" />
     <Compile Include="ECS\Components\Component.cs" />
     <Compile Include="ECS\Components\IComponent.cs" />
+    <Compile Include="ECS\Components\Renderables\Animation.cs" />
+    <Compile Include="ECS\Components\Renderables\IRenderable.cs" />
     <Compile Include="ECS\Components\Renderables\SpriteRenderComponent.cs" />
     <Compile Include="ECS\Components\SplashLogoComponent.cs" />
+    <Compile Include="ECS\Components\Updateables\IUpdateable.cs" />
     <Compile Include="ECS\Entity.cs" />
     <Compile Include="ECS\IEntity.cs" />
+    <Compile Include="Graphics\Renderers\BasicRenderer.cs" />
+    <Compile Include="Graphics\Renderers\IRenderer.cs" />
+    <Compile Include="Utils\FrameRate.cs" />
     <Compile Include="YetiGame.cs" />
-    <Compile Include="Graphics\Animation.cs" />
-    <Compile Include="Graphics\IAnimation.cs" />
     <Compile Include="Graphics\ISprite.cs" />
     <Compile Include="Graphics\Sprite.cs" />
     <Compile Include="Inputs\GamePadInputBinding.cs" />

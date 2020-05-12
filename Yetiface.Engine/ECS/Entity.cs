@@ -7,45 +7,34 @@ namespace Yetiface.Engine.ECS
 {
     public class Entity : IEntity
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
         public Vector2 Position { get; set; }
-        public float Rotation { get; set; }
-        public float Scale { get; set; } = 1.0f;
-        public IScreen Screen { get; set; }
-        
-        public HashSet<IComponent> Components { get; set; }
 
-        public T AddComponent<T>(T component) where T : IComponent
+        // 1 By default, or any new entities will have a zero scale.
+        public float Scale { get; set; } = 1.0f;
+        public float Rotation { get; set; }
+        public IList<IComponent> Components { get; set; }
+        public IScreen Screen { get; set; }
+
+        public Entity(IScreen screen) : this(screen, Vector2.Zero)
         {
-            if(Components == null)
-                Components = new HashSet<IComponent>();
+            // Ignore this, it calls the constructor below.
+        }
+        
+        public Entity(IScreen screen, Vector2 position)
+        {
+            Screen = screen;
+            Position = position;
+        }
+        
+        public void AddComponent(IComponent component)
+        {
+            if (Components == null)
+                Components = new List<IComponent>();
 
             component.Entity = this;
-            Components.Add(component);
-
-            return component;
-        }
-
-        public void Update()
-        {
-            if (Components == null) return;
             
-            foreach (var component in Components)
-                component.Update();
+            Screen.AddComponentToSystems(component);
         }
-
-        public void Draw()
-        {
-            if (Components == null) return;
-            
-            foreach (var component in Components)
-                component.Draw();
-        }
-
-        public void DrawDebug()
-        {
-            
-        }
+        
     }
 }

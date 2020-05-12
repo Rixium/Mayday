@@ -28,9 +28,9 @@ namespace Yetiface.Engine.ECS.Components
         {
             if (_shouldRotate)
             {
-                Entity.Rotation += 0.01f * _angleIncreaseExp;
-                _angleIncreaseExp += 0.05f;
-                Entity.Scale -= 0.002f;
+                // Entity.Rotation += 0.01f * _angleIncreaseExp;
+                // _angleIncreaseExp += 0.05f;
+                // Entity.Scale -= 0.002f;
             }
 
             _spentTime += Time.DeltaTime;

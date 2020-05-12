@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Yetiface.Engine;
-using Yetiface.Engine.Graphics;
+using Yetiface.Engine.ECS.Components.Renderables;
 using Yetiface.Engine.Screens;
 using Yetiface.Engine.UI.Widgets;
 using Yetiface.Engine.Utils;
@@ -12,17 +12,16 @@ namespace Mayday.Game.Screens
     {
         public MenuScreen() : base("MenuScreen")
         {
-            var ballImage = YetiGame.ContentManager.Load<Texture2D>("Ball");
-            var ballEntity = CreateEntity("ball");
-            ballEntity.Position = Window.BottomRight + new Vector2(-50, -50);
-            ballEntity.Scale = 3;
-            
-            var animationComponent = new Animation(ballImage, "Content/Assets/Ball.json");
-            ballEntity.AddComponent(animationComponent);
         }
 
         public override void Awake()
         {
+            var ball = CreateEntity(Window.BottomRight - new Vector2(50, 50));
+            ball.AddComponent(new Animation(YetiGame.ContentManager.Load<Texture2D>("Ball"),
+                "Content/Assets/Ball.json"));
+
+            ball.Scale = 3;
+            
             BackgroundColor = Color.Green;
 
             UserInterface.AddElement(new Panel
@@ -41,6 +40,5 @@ namespace Mayday.Game.Screens
         public override void Finish()
         {
         }
-        
     }
 }
