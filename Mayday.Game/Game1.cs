@@ -12,7 +12,13 @@ namespace Mayday.Game
             var steam = new Steam(0);
             steam.Exit += Exit;
         }
-        
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Window.AllowUserResizing = true; // TODO just for debugging.
+        }
+
         protected override void LoadContent()
         {
             base.LoadContent();
