@@ -12,9 +12,11 @@ namespace Yetiface.Steamworks
         {
             try
             {
-                if (!SteamAPI.RestartAppIfNecessary(new AppId_t(appId))) return;
-                Console.Out.WriteLine("Game wasn't started by Steam-client. Restarting.");
-                Exit?.Invoke();
+                if (SteamAPI.RestartAppIfNecessary(new AppId_t(appId)))
+                {
+                    Console.Out.WriteLine("Game wasn't started by Steam-client. Restarting.");
+                    Exit?.Invoke();
+                }
             }
             catch (DllNotFoundException exception)
             {
@@ -23,13 +25,15 @@ namespace Yetiface.Steamworks
                                       exception);
                 Exit?.Invoke();
             }
-            
-            SteamAPI.Init();
+
+            Initialize();
         }
         
         public void Initialize()
         {
             SteamAPI.Init();
         }
+
+        public string GetSteamName() => SteamFriends.GetPersonaName();
     }
 }

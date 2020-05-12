@@ -9,9 +9,13 @@ namespace Mayday.Game
 
         public Game1() : base("Mayday")
         {
-            var steam = new Steam(0);
+            var steam = new Steam(1323490);
             steam.Exit += Exit;
+
+            Name = steam.GetSteamName();
         }
+
+        public static string Name { get; set; }
 
         protected override void Initialize()
         {

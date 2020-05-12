@@ -32,6 +32,13 @@
 /processorParam:TextureFormat=Color
 /build:Splash/splash.png
 
+#begin Utils/DebugFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Utils/DebugFont.spritefont
+
 #begin Utils/pixel.png
 /importer:TextureImporter
 /processor:TextureProcessor

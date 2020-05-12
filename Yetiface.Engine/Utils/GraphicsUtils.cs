@@ -25,6 +25,7 @@ namespace Yetiface.Engine.Utils
         private static GraphicsUtils _graphicsUtils;
 
         public static GraphicsUtils Instance => _graphicsUtils ?? (_graphicsUtils = new GraphicsUtils());
+        public SpriteFont DebugFont { get; set; }
 
         private GraphicsUtils()
         {
@@ -116,7 +117,10 @@ namespace Yetiface.Engine.Utils
             SpriteBatch.Draw(PixelTexture, _temporaryRectangle, color);
         }
 
-        public void Load(ContentManager content) => PixelTexture = content.Load<Texture2D>("Utils/pixel");
-        
+        public void Load(ContentManager content)
+        {
+            PixelTexture = content.Load<Texture2D>("Utils/pixel");
+            DebugFont = content.Load<SpriteFont>("Utils/debugFont");
+        }
     }
 }
