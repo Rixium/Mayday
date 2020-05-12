@@ -38,6 +38,7 @@ namespace Mayday.Game.Screens
             base.Draw();
             
             GraphicsUtils.Instance.SpriteBatch.DrawString(GraphicsUtils.Instance.DebugFont, Game1.Name, new Vector2(20, 20), Color.White);
+            GraphicsUtils.Instance.SpriteBatch.DrawString(GraphicsUtils.Instance.DebugFont, "" + Game1.FriendCount, new Vector2(70, 20), Color.White);
         }
 
         public override void Finish()

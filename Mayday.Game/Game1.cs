@@ -13,7 +13,10 @@ namespace Mayday.Game
             steam.Exit += Exit;
 
             Name = steam.GetSteamName();
+            FriendCount = steam.GetSteamFriendCount();
         }
+
+        public static int FriendCount { get; set; }
 
         public static string Name { get; set; }
 

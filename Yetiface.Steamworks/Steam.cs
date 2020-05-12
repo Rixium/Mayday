@@ -35,5 +35,6 @@ namespace Yetiface.Steamworks
         }
 
         public string GetSteamName() => SteamFriends.GetPersonaName();
+        public int GetSteamFriendCount() => SteamFriends.GetFriendCount(EFriendFlags.k_EFriendFlagAll);
     }
 }
