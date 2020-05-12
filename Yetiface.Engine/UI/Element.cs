@@ -8,6 +8,8 @@ namespace Yetiface.Engine.UI
     {
         private bool _debug;
         public IUserInterface UserInterface { get; set; }
+
+        public IElement Parent { get; set; }
         public IList<IElement> Children { get; set; }
 
         public int X { get; set; }
@@ -21,8 +23,9 @@ namespace Yetiface.Engine.UI
         public IElement AddElement(IElement element)
         {
             if (Children == null) Children = new List<IElement>();
-
+            element.Parent = this;
             Children.Add(element);
+            
             return element;
         }
 

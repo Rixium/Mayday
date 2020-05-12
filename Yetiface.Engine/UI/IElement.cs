@@ -5,8 +5,10 @@ namespace Yetiface.Engine.UI
     public interface IElement
     {
         
-        IUserInterface UserInterface { get; set; }
+        IUserInterface UserInterface { get; set; }        
+        IElement Parent { get; set; }
         IList<IElement> Children { get; set; }
+
         int X { get; set; }
         int Y { get; set; }
         int Width { get; set; }
