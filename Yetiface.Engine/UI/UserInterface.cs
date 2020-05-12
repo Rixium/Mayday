@@ -1,11 +1,15 @@
-﻿namespace Yetiface.Engine.UI
+﻿using Yetiface.Engine.Utils;
+
+namespace Yetiface.Engine.UI
 {
     public class UserInterface : IUserInterface
     {
         public IElement Root { get; set; }
 
-        public IElement AddElement(IElement element)
+        public IElement SetRoot(IElement element)
         {
+            element.Width = Window.ViewportWidth;
+            element.Height = Window.ViewportHeight;
             element.UserInterface = this;
             Root = element;
             return element;
