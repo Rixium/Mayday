@@ -1,44 +1,29 @@
-﻿using System.Collections.Generic;
-
-namespace Yetiface.Engine.UI
+﻿namespace Yetiface.Engine.UI
 {
     public class UserInterface : IUserInterface
     {
-        public IList<IElement> Elements { get; set; }
+        public IElement Root { get; set; }
 
-        public void AddElement(IElement element)
+        public IElement AddElement(IElement element)
         {
-            if (Elements == null)
-                Elements = new List<IElement>();
-            
             element.UserInterface = this;
-            Elements.Add(element);
+            Root = element;
+            return element;
         }
 
         public void Update()
         {
-            if (Elements == null) return;
-            
-            foreach (var element in Elements)
-            {
-                element.Update();
-            }
+            Root?.Update();
         }
 
         public void Draw()
         {
-            if (Elements == null) return;
-            
-            foreach (var element in Elements)
-                element.Draw();
+            Root?.Draw();
         }
 
         public void DrawDebug()
         {
-            if (Elements == null) return;
-            
-            foreach (var element in Elements)
-                element.DrawDebug();
+            Root?.DrawDebug();
         }
     }
 }

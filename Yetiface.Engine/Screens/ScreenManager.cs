@@ -116,5 +116,7 @@ namespace Yetiface.Engine.Screens
             
             GraphicsUtils.Instance.End();
         }
+
+        public IScreen GetActiveScreen() => _activeScreen;
     }
 }

@@ -6,9 +6,9 @@ namespace Yetiface.Engine.UI
     public interface IUserInterface
     {
 
-        IList<IElement> Elements { get; set; }
+        IElement Root { get; set; }
         
-        void AddElement(IElement element);
+        IElement AddElement(IElement element);
 
         void Update();
 

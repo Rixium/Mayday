@@ -75,5 +75,6 @@ namespace Yetiface.Engine.Screens
         /// </summary>
         void Draw();
 
+        IScreen GetActiveScreen();
     }
 }

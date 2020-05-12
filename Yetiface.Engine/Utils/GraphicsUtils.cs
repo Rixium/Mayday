@@ -84,7 +84,7 @@ namespace Yetiface.Engine.Utils
             
             SpriteBatch.Draw(PixelTexture, _temporaryRectangle, color);
 
-            _temporaryRectangle.X = width - 1;
+            _temporaryRectangle.X = x + width - 1;
             _temporaryRectangle.Y = y;
             _temporaryRectangle.Width = 1;
             _temporaryRectangle.Height = height;
@@ -92,7 +92,7 @@ namespace Yetiface.Engine.Utils
             SpriteBatch.Draw(PixelTexture, _temporaryRectangle, color);
             
             _temporaryRectangle.X = x;
-            _temporaryRectangle.Y = height - 1;
+            _temporaryRectangle.Y = y + height - 1;
             _temporaryRectangle.Width = width;
             _temporaryRectangle.Height = 1;
             

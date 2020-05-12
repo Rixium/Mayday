@@ -24,12 +24,20 @@ namespace Mayday.Game.Screens
             
             BackgroundColor = Color.Green;
 
-            UserInterface.AddElement(new Panel
+            var panel = UserInterface.AddElement(new Panel
             {
                 X = 0,
                 Y = 0,
                 Width = Window.ViewportWidth,
                 Height = Window.ViewportHeight
+            });
+
+            panel.AddElement(new Panel()
+            {
+                X = 10,
+                Y = 10,
+                Width = 100,
+                Height = 100
             });
         }
 

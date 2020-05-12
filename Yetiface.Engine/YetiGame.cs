@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Yetiface.Engine.Inputs;
 using Yetiface.Engine.Screens;
 using Yetiface.Engine.Screens.Transitions;
@@ -82,6 +83,13 @@ namespace Yetiface.Engine
                     BackgroundColor = Color.White
                 }
              );
+
+            InputManager.RegisterInputEvent(new KeyInputBinding(Keys.F1),
+                callback: () =>
+                {
+                    var activeScreen = ScreenManager.GetActiveScreen();
+                    activeScreen.IsDebug = !activeScreen.IsDebug;
+                });
         }
 
         protected override void Update(GameTime gameTime)
