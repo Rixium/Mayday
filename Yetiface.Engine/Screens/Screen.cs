@@ -52,8 +52,8 @@ namespace Yetiface.Engine.Screens
 
         public virtual void Draw()
         {
-            UserInterface?.Draw();
             Renderer?.Draw();
+            UserInterface?.Draw();
             
             if (!IsDebug) return;
 

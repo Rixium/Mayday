@@ -14,6 +14,10 @@ namespace Yetiface.Engine.UI
         int Y { get; set; }
         int Width { get; set; }
         int Height { get; set; }
+        
+        Rectangle RenderRectangle { get; }
+
+        bool FillToParent { get; set; }
 
         IElement AddElement(IElement element);
         void CalculateRectangle();

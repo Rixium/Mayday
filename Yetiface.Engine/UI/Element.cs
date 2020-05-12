@@ -7,6 +7,7 @@ namespace Yetiface.Engine.UI
     public abstract class Element : IElement
     {
         private bool _debug;
+        
         public IUserInterface UserInterface { get; set; }
 
         public IElement Parent { get; set; }
@@ -22,19 +23,27 @@ namespace Yetiface.Engine.UI
 
         public int Height { get; set; }
 
+        public Color FillColor { get; set; }
+
         /// <summary>
         ///  The constructor should currently just create a new render rectangle from the X, Y, Width and Height
         /// that have hopefully been set as properties.
         /// </summary>
-        protected Element(int offsetX, int offsetY)
+        protected Element(int offsetX, int offsetY, bool fillToParent = true)
         {
             Offset = new Vector2(offsetX, offsetY);
+            FillToParent = fillToParent;
         }
 
         /// <summary>
         ///  The render rectangle will keep track of the actual render position of the element, and should be updated
         ///  in regards to the elements parent.
         /// </summary>
+
+        public Rectangle RenderRectangle => _renderRectangle;
+        
+        public bool FillToParent { get; set; }
+
         private Rectangle _renderRectangle;
 
         public IElement AddElement(IElement element)
@@ -56,6 +65,8 @@ namespace Yetiface.Engine.UI
         public virtual void Draw()
         {
             CalculateRectangle();
+            
+            GraphicsUtils.Instance.DrawFilledRectangle(RenderRectangle.X, RenderRectangle.Y, Width, Height, FillColor);
 
             if (Children == null) return;
 
@@ -78,10 +89,14 @@ namespace Yetiface.Engine.UI
 
             if (Parent != null)
             {
-                newX = Parent.X;
-                newY = Parent.Y;
-                newWidth = (int) (Parent.Width - (Offset.X * 2));
-                newHeight = (int) (Parent.Height - (Offset.Y * 2));
+                newX = Parent.RenderRectangle.X;
+                newY = Parent.RenderRectangle.Y;
+
+                if (FillToParent)
+                {
+                    newWidth = (int) (Parent.RenderRectangle.Width - (Offset.X * 2));
+                    newHeight = (int) (Parent.RenderRectangle.Height - (Offset.Y * 2));
+                }
             }
 
             X = newX;
@@ -124,8 +139,8 @@ namespace Yetiface.Engine.UI
 
         public virtual void DrawDebug()
         {
-            GraphicsUtils.Instance.DrawRectangle(_renderRectangle.X, _renderRectangle.Y, _renderRectangle.Width,
-                _renderRectangle.Height, Color.Red);
+            GraphicsUtils.Instance.DrawRectangle(RenderRectangle.X, RenderRectangle.Y, RenderRectangle.Width,
+                RenderRectangle.Height, Color.Red);
 
             if (Children == null) return;
 

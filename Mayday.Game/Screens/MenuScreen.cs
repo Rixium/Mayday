@@ -25,8 +25,10 @@ namespace Mayday.Game.Screens
             BackgroundColor = Color.Green;
 
             var panel = UserInterface.SetRoot(new Panel());
+            var panel2 = panel.AddElement(new Panel(50, 50){FillColor = Color.Black * 0.5f});
 
-            panel.AddElement(new Panel(50, 50));
+            var button = panel2.AddElement(new Button(){Width = 300, Height = 100, FillToParent = false});
+            var text = button.AddElement(new TextBlock("Penis",(int)(button.Width*0.5f), (int)(button.Height*0.5f)));
         }
 
         public override void Begin()
