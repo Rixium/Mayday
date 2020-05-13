@@ -61,7 +61,6 @@ namespace Yetiface.Engine
 
         private void SetupUtils()
         {
-            Window.ClientSizeChanged += (obj, eventArgs) => Utils.Window.WindowResized(Window);
             IsMouseVisible = true;
         }
 

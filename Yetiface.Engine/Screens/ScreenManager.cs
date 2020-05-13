@@ -107,14 +107,8 @@ namespace Yetiface.Engine.Screens
         
         public void Draw()
         {
-            GraphicsUtils.Instance.SpriteBatch.GraphicsDevice.Clear(_activeScreen?.BackgroundColor ?? Color.Black);
-            
-            GraphicsUtils.Instance.Begin();
-            
             _activeScreen?.Draw();
             ScreenTransition?.Draw();
-            
-            GraphicsUtils.Instance.End();
         }
 
         public IScreen GetActiveScreen() => _activeScreen;

@@ -1,5 +1,7 @@
 ﻿using Mayday.Game.Screens;
+using Microsoft.Xna.Framework.Input;
 using Yetiface.Engine;
+using Yetiface.Engine.Inputs;
 using Yetiface.Steamworks;
 
 namespace Mayday.Game
@@ -23,7 +25,9 @@ namespace Mayday.Game
         protected override void Initialize()
         {
             base.Initialize();
-            Window.AllowUserResizing = true; // TODO just for debugging.
+            InputManager.RegisterInputEvent(new KeyInputBinding(Keys.F2), () => Yetiface.Engine.Utils.Window.ResizeWindow(640, 360));
+            InputManager.RegisterInputEvent(new KeyInputBinding(Keys.F3), () => Yetiface.Engine.Utils.Window.ResizeWindow(1280, 720));
+            InputManager.RegisterInputEvent(new KeyInputBinding(Keys.F4), () => Yetiface.Engine.Utils.Window.ResizeWindow(1920, 1080));
         }
 
         protected override void LoadContent()

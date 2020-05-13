@@ -67,10 +67,10 @@ namespace Yetiface.Engine.Utils
         /// <summary>
         /// Pushes the window size change to the game.
         /// </summary>
-        /// <param name="window">The window that has been resized.</param>
-        public static void WindowResized(GameWindow window)
+        public static void ResizeWindow(int width, int height)
         {
-            UpdateWindowSize(window.ClientBounds);
+            var windowClientBounds = new Rectangle(0, 0, width, height);
+            UpdateWindowSize(windowClientBounds);
             ApplyWindowSize();
         }
 

@@ -34,16 +34,22 @@ namespace Yetiface.Engine.Utils
         /// <summary>
         /// Wrapping this so we don't have to stare at the ugly ass.
         /// </summary>
-        public void Begin()
+        public void Begin(bool useViewportMatrix = true)
         {
-            SpriteBatch.Begin(
+            if(useViewportMatrix)
+                SpriteBatch.Begin(
+                    SpriteSortMode.Deferred, // Only render images when end has been called
+                    null,  // No blending
+                    SamplerState.PointClamp, // Point clamp, so we get sexy pixel perfect resizing
+                    null, // We don't care about this. Tbh, I don't even understand it.
+                    null, // I don't even know what this it.
+                    null, // We can choose to flip textures as an example, but we dont, so null it.
+                    Window.ViewportMatrix); // Window viewport, for nice resizing.
+            else
+                SpriteBatch.Begin(
                 SpriteSortMode.Deferred, // Only render images when end has been called
                 null,  // No blending
-                SamplerState.PointClamp, // Point clamp, so we get sexy pixel perfect resizing
-                null, // We don't care about this. Tbh, I don't even understand it.
-                null, // I don't even know what this it.
-                null, // We can choose to flip textures as an example, but we dont, so null it.
-                Window.ViewportMatrix); // Window viewport, for nice resizing.
+                SamplerState.PointClamp);
         }
 
         public void Draw(ISprite sprite, Vector2 position) => Draw(sprite, position, Color.White);

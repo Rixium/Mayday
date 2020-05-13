@@ -5,6 +5,7 @@ using Yetiface.Engine.ECS.Components;
 using Yetiface.Engine.ECS.Components.Renderables;
 using Yetiface.Engine.Graphics.Renderers;
 using Yetiface.Engine.UI;
+using Yetiface.Engine.Utils;
 using IUpdateable = Yetiface.Engine.ECS.Components.Updateables.IUpdateable;
 
 namespace Yetiface.Engine.Screens
@@ -52,7 +53,11 @@ namespace Yetiface.Engine.Screens
 
         public virtual void Draw()
         {
+            GraphicsUtils.Instance.SpriteBatch.GraphicsDevice.Clear(BackgroundColor);
+            GraphicsUtils.Instance.Begin();
             Renderer?.Draw();
+            GraphicsUtils.Instance.End();
+            
             UserInterface?.Draw();
             
             if (!IsDebug) return;

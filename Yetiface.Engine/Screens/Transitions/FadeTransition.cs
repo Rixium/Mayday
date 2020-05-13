@@ -48,7 +48,9 @@ namespace Yetiface.Engine.Screens.Transitions
         /// </summary>
         public override void Draw()
         {
+            GraphicsUtils.Instance.Begin();
             GraphicsUtils.Instance.DrawFilledRectangle(0, 0, Window.ViewportWidth, Window.ViewportHeight, Color.Black * _fade);
+            GraphicsUtils.Instance.End();
         }
 
     }

@@ -65,9 +65,9 @@ namespace Yetiface.Engine.UI
         public virtual void Draw()
         {
             CalculateRectangle();
-            
+            GraphicsUtils.Instance.Begin(false);
             GraphicsUtils.Instance.DrawFilledRectangle(RenderRectangle.X, RenderRectangle.Y, Width, Height, FillColor);
-
+            GraphicsUtils.Instance.End();
             if (Children == null) return;
 
             foreach (var element in Children) element.Draw();
@@ -97,6 +97,11 @@ namespace Yetiface.Engine.UI
                     newWidth = (int) (Parent.RenderRectangle.Width - (Offset.X * 2));
                     newHeight = (int) (Parent.RenderRectangle.Height - (Offset.Y * 2));
                 }
+            }
+            else
+            {
+                newWidth = (int) (Window.WindowWidth - (Offset.X * 2));
+                newHeight = (int) (Window.WindowHeight - (Offset.Y * 2));
             }
 
             X = newX;
@@ -139,9 +144,10 @@ namespace Yetiface.Engine.UI
 
         public virtual void DrawDebug()
         {
+            GraphicsUtils.Instance.Begin(false);
             GraphicsUtils.Instance.DrawRectangle(RenderRectangle.X, RenderRectangle.Y, RenderRectangle.Width,
                 RenderRectangle.Height, Color.Red);
-
+            GraphicsUtils.Instance.End();
             if (Children == null) return;
 
             foreach (var element in Children) element.DrawDebug();
