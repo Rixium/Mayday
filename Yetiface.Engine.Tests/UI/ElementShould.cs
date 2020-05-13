@@ -25,8 +25,10 @@ namespace Yetiface.Engine.Tests.UI
 
             var childPanel1 = element.AddElement(new Panel());
             var childPanel2 = element.AddElement(new Panel());
+            var childPanel3 = element.AddElement(new Panel());
             
             childPanel2.GetPreviousSibling().ShouldBe(childPanel1);
+            childPanel3.GetPreviousSibling().ShouldBe(childPanel2);
         }
         
         

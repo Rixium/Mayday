@@ -10,6 +10,10 @@ namespace Yetiface.Engine.UI
         IElement Parent { get; set; }
         IList<IElement> Children { get; set; }
         Vector2 Offset { get; set; }
+        /// <summary>
+        /// The position relative to the element' parent
+        /// </summary>
+        Vector2 RelativePosition { get; set; }
         int X { get; set; }
         int Y { get; set; }
         int Width { get; set; }

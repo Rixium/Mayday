@@ -14,6 +14,8 @@ namespace Yetiface.Engine.UI
         public IList<IElement> Children { get; set; }
 
         public Vector2 Offset { get; set; }
+        
+        public Vector2 RelativePosition { get; set; }
 
         public int X { get; set; }
 
@@ -82,6 +84,13 @@ namespace Yetiface.Engine.UI
         /// </summary>
         public void CalculateRectangle()
         {
+            var sibling = GetPreviousSibling();
+            var siblingOffset = 0;
+            if (sibling != null)
+            {
+                siblingOffset = sibling.RenderRectangle.Height - (int)sibling.RelativePosition.Y;
+            }
+
             var newX = X;
             var newY = Y;
             var newWidth = Width;
@@ -97,6 +106,8 @@ namespace Yetiface.Engine.UI
                     newWidth = (int) (Parent.RenderRectangle.Width - (Offset.X * 2));
                     newHeight = (int) (Parent.RenderRectangle.Height - (Offset.Y * 2));
                 }
+                
+                RelativePosition = new Vector2(Parent.RenderRectangle.X, Parent.RenderRectangle.Y) - new Vector2(RenderRectangle.X, RenderRectangle.Y);
             }
             else
             {
@@ -105,7 +116,7 @@ namespace Yetiface.Engine.UI
             }
 
             X = newX;
-            Y = newY;
+            Y = newY + siblingOffset;
             Width = newWidth;
             Height = newHeight;
 
