@@ -7,14 +7,14 @@ namespace Yetiface.Engine.UI
     public abstract class Element : IElement
     {
         private bool _debug;
-        
+
         public IUserInterface UserInterface { get; set; }
 
         public IElement Parent { get; set; }
         public IList<IElement> Children { get; set; }
 
         public Vector2 Offset { get; set; }
-        
+
         public Vector2 RelativePosition { get; set; }
 
         public int X { get; set; }
@@ -43,7 +43,7 @@ namespace Yetiface.Engine.UI
         /// </summary>
 
         public Rectangle RenderRectangle => _renderRectangle;
-        
+
         public bool FillToParent { get; set; }
 
         private Rectangle _renderRectangle;
@@ -88,7 +88,7 @@ namespace Yetiface.Engine.UI
             var siblingOffset = 0;
             if (sibling != null)
             {
-                siblingOffset = sibling.RenderRectangle.Height - (int)sibling.RelativePosition.Y;
+                siblingOffset = sibling.RenderRectangle.Height + (int) sibling.RelativePosition.Y;
             }
 
             var newX = X;
@@ -106,8 +106,6 @@ namespace Yetiface.Engine.UI
                     newWidth = (int) (Parent.RenderRectangle.Width - (Offset.X * 2));
                     newHeight = (int) (Parent.RenderRectangle.Height - (Offset.Y * 2));
                 }
-                
-                RelativePosition = new Vector2(Parent.RenderRectangle.X, Parent.RenderRectangle.Y) - new Vector2(RenderRectangle.X, RenderRectangle.Y);
             }
             else
             {
@@ -124,6 +122,11 @@ namespace Yetiface.Engine.UI
             _renderRectangle.Y = (int) (Y + Offset.Y);
             _renderRectangle.Width = Width;
             _renderRectangle.Height = Height;
+
+            RelativePosition = Parent != null
+                ? new Vector2(RenderRectangle.X, RenderRectangle.Y) -
+                  new Vector2(Parent.RenderRectangle.X, Parent.RenderRectangle.Y)
+                : new Vector2(0, 0);
         }
 
         /// <summary>
