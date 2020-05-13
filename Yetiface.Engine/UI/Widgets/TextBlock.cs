@@ -15,8 +15,12 @@ namespace Yetiface.Engine.UI.Widgets
         public override void Draw()
         {
             base.Draw();
+
+            var textSize = GraphicsUtils.Instance.DebugFont.MeasureString(Text);
+            var newX = RenderRectangle.X - textSize.X / 2.0f;
+            var newY = RenderRectangle.Y - textSize.Y / 2.0f;
             GraphicsUtils.Instance.SpriteBatch.DrawString(
-                GraphicsUtils.Instance.DebugFont, Text, new Vector2(RenderRectangle.X, RenderRectangle.Y), Color.White);
+                GraphicsUtils.Instance.DebugFont, Text, new Vector2(newX, newY), Color.White);
         }
     }
 }
