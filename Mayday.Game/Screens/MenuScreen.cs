@@ -29,14 +29,15 @@ namespace Mayday.Game.Screens
 
             var button = panel2.AddElement(new Button(){Width = 300, Height = 100, FillToParent = false});
             var text = button.AddElement(new TextBlock("Penis",(int)(button.Width*0.5f), (int)(button.Height*0.5f)));
+            button.OnClicked += () => ScreenManager.ChangeScreen("Game");
             
             var button2 = panel2.AddElement(new Button(){Width = 300, Height = 100, FillToParent = false});
             var text2 = button2.AddElement(new TextBlock("I am also penis",(int)(button.Width*0.5f), (int)(button.Height*0.5f)));
             
             var button3 = panel2.AddElement(new Button(){Width = 300, Height = 100, FillToParent = false});
             button3.AddElement(new TextBlock("Well, not me!",(int)(button.Width*0.5f), (int)(button.Height*0.5f)));
-            
-            var button4 = panel2.AddElement(new Button(){Width = 300, Height = 100, FillToParent = false});
+
+            var button4 = panel2.AddElement(new Button() {Width = 300, Height = 100, FillToParent = false});
             button4.AddElement(new TextBlock("Well, not me!",(int)(button.Width*0.5f), (int)(button.Height*0.5f)));
         }
 

@@ -17,7 +17,11 @@ namespace Yetiface.Engine.UI
 
         public void Update()
         {
-            Root?.Update();
+            // We make a new hover element and set it to null,
+            // now we can pass it as a REFERENCE to the update. I wrote a comment in element
+            // to discuss this further.
+            IElement hoverElement = null;
+            Root?.Update(ref hoverElement);
         }
 
         public void Draw()

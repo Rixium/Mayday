@@ -76,12 +76,12 @@ namespace Yetiface.Engine
                 }
             );
             
-            // ScreenManager.AddScreen(
-            //     new SplashScreen
-            //     {
-            //         BackgroundColor = Color.White
-            //     }
-            //  );
+            ScreenManager.AddScreen(
+                new SplashScreen
+                {
+                    BackgroundColor = Color.White
+                }
+             );
 
             InputManager.RegisterInputEvent(new KeyInputBinding(Keys.F1),
                 callback: () =>

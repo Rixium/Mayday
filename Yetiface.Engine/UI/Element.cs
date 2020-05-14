@@ -45,10 +45,11 @@ namespace Yetiface.Engine.UI
         public Rectangle RenderRectangle => _renderRectangle;
 
         public bool FillToParent { get; set; }
+        public bool IsHovering { get; set; }
 
         private Rectangle _renderRectangle;
-
-        public IElement AddElement(IElement element)
+        
+        public T AddElement<T>(T element) where T : IElement
         {
             if (Children == null) Children = new List<IElement>();
             element.Parent = this;
@@ -57,11 +58,50 @@ namespace Yetiface.Engine.UI
             return element;
         }
 
-        public void Update()
+        public IElement GetElementUnderMouse(Rectangle mouseBounds)
         {
-            if (Children == null) return;
+            if (!mouseBounds.Intersects(_renderRectangle)) return null;
+            
+            foreach (var child in Children)
+            {
+                var childHit = child.GetElementUnderMouse(mouseBounds);
+                if (childHit != null) 
+                    return childHit;
+            }
 
-            foreach (var element in Children) element.Update();
+            return this;
+        }
+
+        public void Update(ref IElement hoverElement)
+        {
+            // Set our hovering to whether or not the mouse is intersecting our render rectangle.
+            IsHovering = MouseState.Bounds.Intersects(_renderRectangle);
+            
+            // We're going to head through the children NOW.
+            // We pass a reference to the hover element. This way if the hover element changes in any of our children
+            // we can see that, as it is a reference. TODO Mathias: SEE REFERENCE TYPES VS VALUE TYPES : https://www.tutorialsteacher.com/csharp/csharp-value-type-and-reference-type
+            if (Children != null)
+            {
+                foreach (var element in Children) 
+                    element.Update(ref hoverElement);
+            }
+
+            // If we're hovering we do this.
+            // This is a concise way of saying if the hover element isn't null, then it stays a hover element otherwise we set it to this element.
+            // basically, if(hoverelement != null) hoverelement = hoverelement; else hoverelement = this;
+            if(IsHovering)
+                hoverElement = hoverElement ?? this; 
+
+            // Now we can check if we are the hover element, and set our fill colour accordingly, otherwise just set it to a different
+            // value, so we can see it working.
+            if (hoverElement == this)
+            {
+                FillColor = Color.Black * 0.8f;
+            }
+            else
+            {
+                FillColor = Color.Black * 0.5f;
+            }
         }
 
         public virtual void Draw()
