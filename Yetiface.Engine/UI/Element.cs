@@ -16,6 +16,8 @@ namespace Yetiface.Engine.UI
         public Vector2 Offset { get; set; }
 
         public Vector2 RelativePosition { get; set; }
+        
+        public Anchor Anchor { get; set; } = Anchor.Center;
 
         public int X { get; set; }
 

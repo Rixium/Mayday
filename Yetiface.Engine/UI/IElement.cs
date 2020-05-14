@@ -3,6 +3,14 @@ using Microsoft.Xna.Framework;
 
 namespace Yetiface.Engine.UI
 {
+
+    public enum Anchor
+    {
+        Left,
+        Center,
+        Right
+    }
+    
     public interface IElement
     {
         IUserInterface UserInterface { get; set; }
@@ -15,6 +23,12 @@ namespace Yetiface.Engine.UI
         /// </summary>
         Vector2 RelativePosition { get; set; }
 
+        /// <summary>
+        /// The anchor will be where the element holds its children.
+        /// NOT where the parent holds the element.
+        /// </summary>
+        Anchor Anchor { get; set; }
+        
         int X { get; set; }
         int Y { get; set; }
         int Width { get; set; }
