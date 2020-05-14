@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Yetiface.Engine.ECS;
 using Yetiface.Engine.Utils;
 
 namespace Yetiface.Engine.UI
@@ -108,7 +110,7 @@ namespace Yetiface.Engine.UI
 
         public virtual void Draw()
         {
-            CalculateRectangle();
+            CalculateRenderRectangle();
             GraphicsUtils.Instance.Begin(false);
             GraphicsUtils.Instance.DrawFilledRectangle(RenderRectangle.X, RenderRectangle.Y, Width, Height, FillColor);
             GraphicsUtils.Instance.End();
@@ -124,7 +126,7 @@ namespace Yetiface.Engine.UI
         /// It should take in to account our offset, so we can ideally position an element
         /// within another element at a certain offset.
         /// </summary>
-        public void CalculateRectangle()
+        public void CalculateRenderRectangle()
         {
             var sibling = GetPreviousSibling();
             var siblingOffset = 0;
@@ -160,8 +162,43 @@ namespace Yetiface.Engine.UI
             Width = newWidth;
             Height = newHeight;
 
-            _renderRectangle.X = (int) (X + Offset.X);
-            _renderRectangle.Y = (int) (Y + Offset.Y);
+            // We can finally apply our offset to our Y.
+
+            newY = (int) (Y + Offset.Y);
+
+            // TODO this is fucking gross, and needs a refactor, but it is something that needs to happen
+            // since the render rectangle should be affected by the anchor of the parent.
+            if (Parent != null)
+            {
+                switch (Parent.Anchor)
+                {
+                    case Anchor.Left:
+                        newX = Parent.RenderRectangle.X + (int) Offset.X;
+                        break;
+                    case Anchor.Center:
+                        // I guess the center is the parents render x, plus half of its width, this should get our
+                        // left side lined up with the center of the parents render rectangle.
+                        // At that point we can just also take off half of our width, so that we line up in the center.
+                        newX = (int) (Parent.RenderRectangle.X + Parent.RenderRectangle.Width / 2.0f -
+                                      RenderRectangle.Width / 2.0f);
+                        break;
+                    case Anchor.Right:
+                        // The right should set us completely on the right side of the parents render rectangle using
+                        // parent render x + parent render width then we can take away our width, and we should have
+                        // our right side lined up with the parents right side.
+                        newX = Parent.RenderRectangle.X + Parent.RenderRectangle.Width - (int) (RenderRectangle.Width + Offset.X);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+            else
+            {
+                newX = (int) (X + Offset.X);
+            }
+
+            _renderRectangle.X = newX;
+            _renderRectangle.Y = newY;
             _renderRectangle.Width = Width;
             _renderRectangle.Height = Height;
 

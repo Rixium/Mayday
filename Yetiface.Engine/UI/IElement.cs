@@ -49,7 +49,7 @@ namespace Yetiface.Engine.UI
         // TODO Mathias: SEE GENERICS: https://www.tutorialspoint.com/csharp/csharp_generics.htm
         T AddElement<T>(T element) where T : IElement;
 
-        void CalculateRectangle();
+        void CalculateRenderRectangle();
         IElement GetPreviousSibling();
         IElement GetElementUnderMouse(Rectangle mouseBounds);
 

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Yetiface.Engine;
 using Yetiface.Engine.ECS.Components.Renderables;
 using Yetiface.Engine.Screens;
+using Yetiface.Engine.UI;
 using Yetiface.Engine.UI.Widgets;
 using Yetiface.Engine.Utils;
 
@@ -25,20 +26,50 @@ namespace Mayday.Game.Screens
             BackgroundColor = Color.Green;
 
             var panel = UserInterface.SetRoot(new Panel());
-            var panel2 = panel.AddElement(new Panel(50, 50){FillColor = Color.Black * 0.5f});
+            
+            var panel2 = panel.AddElement(new Panel(50, 50)
+            {
+                FillColor = Color.Black * 0.5f
+            });
 
-            var button = panel2.AddElement(new Button(){Width = 300, Height = 100, FillToParent = false});
-            var text = button.AddElement(new TextBlock("Penis",(int)(button.Width*0.5f), (int)(button.Height*0.5f)));
+            panel2.Anchor = Anchor.Center;
+
+            var button = panel2.AddElement(new Button
+            {
+                Width = 300, 
+                Height = 100, 
+                FillToParent = false
+            });
+            
+            var text = button.AddElement(new TextBlock("Penis"));
             button.OnClicked += () => ScreenManager.ChangeScreen("Game");
             
-            var button2 = panel2.AddElement(new Button(){Width = 300, Height = 100, FillToParent = false});
-            var text2 = button2.AddElement(new TextBlock("I am also penis",(int)(button.Width*0.5f), (int)(button.Height*0.5f)));
+            var button2 = panel2.AddElement(new Button
+            {
+                Width = 300, 
+                Height = 100, 
+                FillToParent = false
+            });
             
-            var button3 = panel2.AddElement(new Button(){Width = 300, Height = 100, FillToParent = false});
-            button3.AddElement(new TextBlock("Well, not me!",(int)(button.Width*0.5f), (int)(button.Height*0.5f)));
+            var text2 = button2.AddElement(new TextBlock("I am also penis"));
+            
+            var button3 = panel2.AddElement(new Button
+            {
+                Width = 300, 
+                Height = 100, 
+                FillToParent = false
+            });
+            
+            button3.AddElement(new TextBlock("Well, not me!"));
 
-            var button4 = panel2.AddElement(new Button() {Width = 300, Height = 100, FillToParent = false});
-            button4.AddElement(new TextBlock("Well, not me!",(int)(button.Width*0.5f), (int)(button.Height*0.5f)));
+            var button4 = panel2.AddElement(new Button
+            {
+                Width = 300, 
+                Height = 100, 
+                FillToParent = false
+            });
+            
+            button4.AddElement(new TextBlock("Well, not me!"));
         }
 
         public override void Begin()

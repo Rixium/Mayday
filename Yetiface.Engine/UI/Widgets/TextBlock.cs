@@ -17,8 +17,9 @@ namespace Yetiface.Engine.UI.Widgets
             base.Draw();
 
             var textSize = GraphicsUtils.Instance.DebugFont.MeasureString(Text);
-            var newX = RenderRectangle.X - textSize.X / 2.0f;
-            var newY = RenderRectangle.Y - textSize.Y / 2.0f;
+
+            var newX = RenderRectangle.X + Parent.RenderRectangle.Width / 2.0f - textSize.X / 2.0f;
+            var newY = RenderRectangle.Y + Parent.RenderRectangle.Height / 2.0f - textSize.Y / 2.0f;
             
             GraphicsUtils.Instance.Begin(false);
             GraphicsUtils.Instance.SpriteBatch.DrawString(
