@@ -29,7 +29,7 @@ namespace Mayday.Game.Screens
             
             var panel2 = panel.AddElement(new Panel(50, 50)
             {
-                FillColor = Color.Black * 0.5f
+                FillColor = Color.Black
             });
 
             panel2.Anchor = Anchor.Center;

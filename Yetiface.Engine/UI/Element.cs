@@ -100,7 +100,7 @@ namespace Yetiface.Engine.UI
             // value, so we can see it working.
             if (hoverElement == this)
             {
-                FillColor = Color.Black * 0.8f;
+                FillColor = Color.Pink;
             }
             else
             {
