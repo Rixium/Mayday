@@ -30,6 +30,8 @@ namespace Yetiface.Engine.UI
         public int Height { get; set; }
 
         public Color FillColor { get; set; }
+        
+        public Action OnHover { get; set; }
 
         /// <summary>
         ///  The constructor should currently just create a new render rectangle from the X, Y, Width and Height
@@ -100,11 +102,11 @@ namespace Yetiface.Engine.UI
             // value, so we can see it working.
             if (hoverElement == this)
             {
-                FillColor = Color.Pink;
+                OnHover?.Invoke();
             }
             else
             {
-                FillColor = Color.Black * 0.5f;
+                
             }
         }
 

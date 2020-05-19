@@ -13,6 +13,7 @@ namespace Mayday.Game.Screens
     {
         public MenuScreen() : base("MenuScreen")
         {
+            BackgroundColor = Color.Black;
         }
 
         public override void Awake()
@@ -23,53 +24,61 @@ namespace Mayday.Game.Screens
 
             ball.Scale = 3;
             
-            BackgroundColor = Color.Green;
-
             var panel = UserInterface.SetRoot(new Panel());
-            
-            var panel2 = panel.AddElement(new Panel(50, 50)
+
+            var image = YetiGame.ContentManager.Load<Texture2D>("MainMenu/menuImage");
+            var imageElement = panel.AddElement(new Image(image, 0, -200, false));
+
+            var titlePanel = imageElement.AddElement(new Panel(0, 200)
             {
-                FillColor = Color.Black
+                FillColor = Color.Black * 0.5f,
+                FillToParent = false,
+                Width = imageElement.Width,
+                Height = 100,
+                Anchor = Anchor.Right
             });
 
-            panel2.Anchor = Anchor.Center;
+            titlePanel.AddElement(new TextBlock("Mayday"));
+            
+            var buttonPanel = panel.AddElement(new Panel()
+            {
+                FillColor = Color.Black,
+                Anchor = Anchor.Left
+            });
 
-            var button = panel2.AddElement(new Button
+            var playButton = buttonPanel.AddElement(new Button()
             {
-                Width = 300, 
-                Height = 100, 
+                Anchor = Anchor.Left,
+                FillColor = Color.Black,
+                Height = 50,
+                Width = 300,
+                Offset = new Vector2(0, 20),
                 FillToParent = false
             });
-            
-            var text = button.AddElement(new TextBlock("Penis"));
-            button.OnClicked += () => ScreenManager.ChangeScreen("Game");
-            
-            var button2 = panel2.AddElement(new Button
-            {
-                Width = 300, 
-                Height = 100, 
-                FillToParent = false
-            });
-            
-            var text2 = button2.AddElement(new TextBlock("I am also penis"));
-            
-            var button3 = panel2.AddElement(new Button
-            {
-                Width = 300, 
-                Height = 100, 
-                FillToParent = false
-            });
-            
-            button3.AddElement(new TextBlock("Well, not me!"));
 
-            var button4 = panel2.AddElement(new Button
+            playButton.AddElement(new TextBlock("Start Game"));
+            
+            var settingsButton = buttonPanel.AddElement(new Button()
             {
-                Width = 300, 
-                Height = 100, 
+                Anchor = Anchor.Left,
+                FillColor = Color.Black,
+                Height = 50,
+                Width = 300,
                 FillToParent = false
             });
+
+            settingsButton.AddElement(new TextBlock("Settings"));
             
-            button4.AddElement(new TextBlock("Well, not me!"));
+            var quitButton = buttonPanel.AddElement(new Button()
+            {
+                Anchor = Anchor.Left,
+                FillColor = Color.Black,
+                Height = 50,
+                Width = 300,
+                FillToParent = false
+            });
+
+            quitButton.AddElement(new TextBlock("Quit"));
         }
 
         public override void Begin()

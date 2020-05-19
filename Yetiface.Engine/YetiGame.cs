@@ -75,13 +75,13 @@ namespace Yetiface.Engine
                     Speed = 3f
                 }
             );
-            
-            ScreenManager.AddScreen(
-                new SplashScreen
-                {
-                    BackgroundColor = Color.White
-                }
-             );
+            //
+            // ScreenManager.AddScreen(
+            //     new SplashScreen
+            //     {
+            //         BackgroundColor = Color.White
+            //     }
+            //  );
 
             InputManager.RegisterInputEvent(new KeyInputBinding(Keys.F1),
                 callback: () =>

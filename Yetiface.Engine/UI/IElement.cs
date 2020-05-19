@@ -25,7 +25,6 @@ namespace Yetiface.Engine.UI
 
         /// <summary>
         /// The anchor will be where the element holds its children.
-        /// NOT where the parent holds the element.
         /// </summary>
         Anchor Anchor { get; set; }
         
