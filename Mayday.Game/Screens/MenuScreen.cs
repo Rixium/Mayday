@@ -27,58 +27,61 @@ namespace Mayday.Game.Screens
             var panel = UserInterface.SetRoot(new Panel());
 
             var image = YetiGame.ContentManager.Load<Texture2D>("MainMenu/menuImage");
-            var imageElement = panel.AddElement(new Image(image, 0, -200, false));
-
-            var titlePanel = imageElement.AddElement(new Panel(0, 200)
-            {
-                FillColor = Color.Black * 0.5f,
-                FillToParent = false,
-                Width = imageElement.Width,
-                Height = 100,
-                Anchor = Anchor.Right
-            });
-
-            titlePanel.AddElement(new TextBlock("Mayday"));
+            var imageElement = panel.AddElement(
+                new Image(image, 0, 0)
+                {
+                    Anchor = Anchor.Center
+                }
+            );
+            //
+            // var titlePanel = imageElement.AddElement(new Panel
+            // {
+            //     FillColor = Color.Black * 0.5f,
+            //     FillToParent = true,
+            //     Height = 100
+            // });
+            //
+            // titlePanel.AddElement(new TextBlock("Mayday"));
+            //
+            // var buttonPanel = panel.AddElement(new Panel
+            //  {
+            //      FillColor = Color.Black,
+            //      Anchor = Anchor.Left
+            //  });
             
-            var buttonPanel = panel.AddElement(new Panel()
-            {
-                FillColor = Color.Black,
-                Anchor = Anchor.Left
-            });
-
-            var playButton = buttonPanel.AddElement(new Button()
-            {
-                Anchor = Anchor.Left,
-                FillColor = Color.Black,
-                Height = 50,
-                Width = 300,
-                Offset = new Vector2(0, 20),
-                FillToParent = false
-            });
-
-            playButton.AddElement(new TextBlock("Start Game"));
-            
-            var settingsButton = buttonPanel.AddElement(new Button()
-            {
-                Anchor = Anchor.Left,
-                FillColor = Color.Black,
-                Height = 50,
-                Width = 300,
-                FillToParent = false
-            });
-
-            settingsButton.AddElement(new TextBlock("Settings"));
-            
-            var quitButton = buttonPanel.AddElement(new Button()
-            {
-                Anchor = Anchor.Left,
-                FillColor = Color.Black,
-                Height = 50,
-                Width = 300,
-                FillToParent = false
-            });
-
-            quitButton.AddElement(new TextBlock("Quit"));
+            //
+            // var playButton = buttonPanel.AddElement(new Button()
+            // {
+            //     Anchor = Anchor.Left,
+            //     FillColor = Color.Black,
+            //     Height = 50,
+            //     Width = 300,
+            //     FillToParent = false
+            // });
+            //
+            // playButton.AddElement(new TextBlock("Start Game"));
+            //
+            // var settingsButton = buttonPanel.AddElement(new Button()
+            // {
+            //     Anchor = Anchor.Left,
+            //     FillColor = Color.Black,
+            //     Height = 50,
+            //     Width = 300,
+            //     FillToParent = false
+            // });
+            //
+            // settingsButton.AddElement(new TextBlock("Settings"));
+            //
+            // var quitButton = buttonPanel.AddElement(new Button()
+            // {
+            //     Anchor = Anchor.Left,
+            //     FillColor = Color.Black,
+            //     Height = 50,
+            //     Width = 300,
+            //     FillToParent = false
+            // });
+            //
+            // quitButton.AddElement(new TextBlock("Quit"));
         }
 
         public override void Begin()

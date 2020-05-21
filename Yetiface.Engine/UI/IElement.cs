@@ -4,11 +4,16 @@ using Microsoft.Xna.Framework;
 namespace Yetiface.Engine.UI
 {
 
+    /// <summary>
+    /// Auto is used when stacking elements. Left center and right will just use the parent and not the siblings to
+    /// position an element.
+    /// </summary>
     public enum Anchor
     {
+        Auto,
         Left,
         Center,
-        Right
+        Right,
     }
     
     public interface IElement

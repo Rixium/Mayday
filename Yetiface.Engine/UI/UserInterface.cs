@@ -26,7 +26,9 @@ namespace Yetiface.Engine.UI
 
         public void Draw()
         {
+            GraphicsUtils.Instance.Begin(false);
             Root?.Draw();
+            GraphicsUtils.Instance.End();
         }
 
         public void DrawDebug()

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Yetiface.Engine.ECS;
 using Yetiface.Engine.Utils;
 
 namespace Yetiface.Engine.UI
@@ -113,10 +112,8 @@ namespace Yetiface.Engine.UI
         public void Draw()
         {
             CalculateRenderRectangle();
-            GraphicsUtils.Instance.Begin(false);
             GraphicsUtils.Instance.DrawFilledRectangle(RenderRectangle.X, RenderRectangle.Y, Width, Height, FillColor);
             DrawElement();
-            GraphicsUtils.Instance.End();
             if (Children == null) return;
 
             foreach (var element in Children) element.Draw();
@@ -133,11 +130,15 @@ namespace Yetiface.Engine.UI
         /// </summary>
         public void CalculateRenderRectangle()
         {
-            var sibling = GetPreviousSibling();
             var siblingOffset = 0;
-            if (sibling != null)
+            
+            if (Anchor == Anchor.Auto)
             {
-                siblingOffset = sibling.RenderRectangle.Height + (int) sibling.RelativePosition.Y;
+                var sibling = GetPreviousSibling();
+                if (sibling != null)
+                {
+                    siblingOffset = sibling.RenderRectangle.Height + (int) sibling.RelativePosition.Y;
+                }
             }
 
             var newX = X;

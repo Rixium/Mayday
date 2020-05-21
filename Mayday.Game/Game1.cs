@@ -11,11 +11,12 @@ namespace Mayday.Game
 
         public Game1() : base("Mayday")
         {
-            var steam = new Steam(1323490);
-            steam.Exit += Exit;
-
-            Name = steam.GetSteamName();
-            FriendCount = steam.GetSteamFriendCount();
+            // TODO Uncomment for steam support.
+            // var steam = new Steam(1323490);
+            // steam.Exit += Exit;
+            //
+            // Name = steam.GetSteamName();
+            // FriendCount = steam.GetSteamFriendCount();
         }
 
         public static int FriendCount { get; set; }
