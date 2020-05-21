@@ -24,41 +24,49 @@ namespace Mayday.Game.Screens
 
             ball.Scale = 3;
             
-            var panel = UserInterface.SetRoot(new Panel());
+            var panel = UserInterface.SetRoot(new Panel()
+            {
+                Anchor = Anchor.Center
+            });
 
             var image = YetiGame.ContentManager.Load<Texture2D>("MainMenu/menuImage");
             var imageElement = panel.AddElement(
-                new Image(image, 0, 0)
+                new Image(image, DrawMode.Stretch)
                 {
                     Anchor = Anchor.Center
                 }
             );
-            //
-            // var titlePanel = imageElement.AddElement(new Panel
-            // {
-            //     FillColor = Color.Black * 0.5f,
-            //     FillToParent = true,
-            //     Height = 100
-            // });
-            //
-            // titlePanel.AddElement(new TextBlock("Mayday"));
-            //
-            // var buttonPanel = panel.AddElement(new Panel
-            //  {
-            //      FillColor = Color.Black,
-            //      Anchor = Anchor.Left
-            //  });
             
-            //
-            // var playButton = buttonPanel.AddElement(new Button()
-            // {
-            //     Anchor = Anchor.Left,
-            //     FillColor = Color.Black,
-            //     Height = 50,
-            //     Width = 300,
-            //     FillToParent = false
-            // });
-            //
+            var titlePanel = imageElement.AddElement(new Panel
+            {
+                FillColor = Color.Black * 0.5f,
+                FillToParent = false,
+                Height = 100,
+                Width = 1280
+            });
+            
+            titlePanel.AddElement(new TextBlock("Mayday"));
+
+                                    
+            var buttonPanel = panel.AddElement(new Panel
+            {
+                Offset = new Vector2(0, 720),
+                Width = 1280,
+                Height = 500,
+                FillColor = Color.Black,
+                FillToParent = false,
+                Anchor = Anchor.Left
+            });
+
+            var playButton = buttonPanel.AddElement(new Button()
+            {
+                Anchor = Anchor.Left,
+                FillColor = Color.Black,
+                Height = 50,
+                Width = 300,
+                FillToParent = false
+            });
+            
             // playButton.AddElement(new TextBlock("Start Game"));
             //
             // var settingsButton = buttonPanel.AddElement(new Button()

@@ -13,20 +13,20 @@ namespace Yetiface.Engine.UI.Widgets
     /// </summary>
     public enum DrawMode
     {
-        Fill,
+        Stretch,
         Preserve
     }
     
     public class Image : Element
     {
         private readonly Texture2D _texture;
-        private readonly DrawMode DrawMode;
+        private readonly DrawMode _drawMode;
 
-        public Image(Texture2D texture, DrawMode drawMode = DrawMode.Fill, int offsetX = 0, int offsetY = 0, bool fillToParent = true) : base(offsetX, offsetY,
+        public Image(Texture2D texture, DrawMode drawMode = DrawMode.Preserve, int offsetX = 0, int offsetY = 0, bool fillToParent = true) : base(offsetX, offsetY,
             fillToParent)
         {
             _texture = texture;
-            DrawMode = drawMode;
+            _drawMode = drawMode;
 
             Width = texture.Width;
             Height = texture.Height;
@@ -35,9 +35,12 @@ namespace Yetiface.Engine.UI.Widgets
 
         public override void DrawElement()
         {
-            switch (DrawMode)
+            if (_drawMode == DrawMode.Stretch)
+                FillToParent = true;
+            
+            switch (_drawMode)
             {
-                case DrawMode.Fill:
+                case DrawMode.Stretch:
                     GraphicsUtils.Instance.SpriteBatch.Draw(
                         _texture,
                         RenderRectangle, Color.White);
@@ -45,14 +48,7 @@ namespace Yetiface.Engine.UI.Widgets
                 case DrawMode.Preserve:
                     GraphicsUtils.Instance.SpriteBatch.Draw(
                         _texture,
-                        new Vector2(RenderRectangle.X, RenderRectangle.Y),
-                        null,
-                        Color.White,
-                        0.0f,
-                        new Vector2(_texture.Width / 2.0f, _texture.Height / 2.0f), 
-                        1, 
-                        SpriteEffects.None, 
-                        0);
+                        new Vector2(RenderRectangle.X, RenderRectangle.Y), Color.White);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

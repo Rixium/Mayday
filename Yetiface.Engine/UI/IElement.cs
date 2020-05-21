@@ -7,6 +7,8 @@ namespace Yetiface.Engine.UI
     /// <summary>
     /// Auto is used when stacking elements. Left center and right will just use the parent and not the siblings to
     /// position an element.
+    /// TODO WE REALLY NEED MORE ANCHORS, TOP LEFT, TOP CENTER, TOP RIGHT, CENTER LEFT, CENTER, CENTER RIGHT, BOTTOM LEFT, BOTTOM CENTER, BOTTOM RIGHT
+    /// because we need to be able to anchor stuff so that any resolution changes doesnt affect the positioning of UI elements. :) :)
     /// </summary>
     public enum Anchor
     {
