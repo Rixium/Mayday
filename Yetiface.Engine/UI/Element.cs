@@ -110,16 +110,19 @@ namespace Yetiface.Engine.UI
             }
         }
 
-        public virtual void Draw()
+        public void Draw()
         {
             CalculateRenderRectangle();
             GraphicsUtils.Instance.Begin(false);
             GraphicsUtils.Instance.DrawFilledRectangle(RenderRectangle.X, RenderRectangle.Y, Width, Height, FillColor);
+            DrawElement();
             GraphicsUtils.Instance.End();
             if (Children == null) return;
 
             foreach (var element in Children) element.Draw();
         }
+
+        public abstract void DrawElement();
 
         /// <summary>
         /// We use this method to recalculate the position of this element in relation

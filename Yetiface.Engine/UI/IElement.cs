@@ -54,6 +54,12 @@ namespace Yetiface.Engine.UI
 
         void Update(ref IElement hoverElement);
         void Draw();
+
+        /// <summary>
+        /// Element specific draw method, override this and call base.
+        /// It will be called in the elements Draw method.
+        /// </summary>
+        void DrawElement();
         void DrawDebug();
     }
 }

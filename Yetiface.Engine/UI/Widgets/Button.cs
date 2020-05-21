@@ -9,5 +9,10 @@ namespace Yetiface.Engine.UI.Widgets
             FillColor = Color.Black * 0.7f;
             Anchor = Anchor.Center;
         }
+
+        public override void DrawElement()
+        {
+            
+        }
     }
 }
