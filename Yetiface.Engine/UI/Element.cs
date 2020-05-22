@@ -36,7 +36,7 @@ namespace Yetiface.Engine.UI
         ///  The constructor should currently just create a new render rectangle from the X, Y, Width and Height
         /// that have hopefully been set as properties.
         /// </summary>
-        protected Element(int offsetX, int offsetY, bool fillToParent = true)
+        protected Element(int offsetX, int offsetY, bool fillToParent = false)
         {
             Offset = new Vector2(offsetX, offsetY);
             FillToParent = fillToParent;
@@ -131,25 +131,23 @@ namespace Yetiface.Engine.UI
         public void CalculateRenderRectangle()
         {
             var siblingOffset = 0;
-
-
+            
             var newX = X;
             var newY = Y;
             var newWidth = Width;
             var newHeight = Height;
 
             if (Parent != null)
-            {            
-                
-                if (Parent.Anchor == Anchor.Auto)
+            {
+                if (Anchor == Anchor.Auto)
                 {
                     var sibling = GetPreviousSibling();
                     if (sibling != null)
                     {
-                        siblingOffset = sibling.RenderRectangle.Height + (int) sibling.RelativePosition.Y;
+                        siblingOffset = (int) (sibling.RenderRectangle.Height + sibling.RelativePosition.Y);
                     }
                 }
-                
+
                 newX = Parent.RenderRectangle.X;
                 newY = Parent.RenderRectangle.Y;
 
@@ -173,28 +171,40 @@ namespace Yetiface.Engine.UI
             // We can finally apply our offset to our Y.
 
             newY = (int) (Y + Offset.Y);
-
-            // TODO this is fucking gross, and needs a refactor, but it is something that needs to happen
-            // since the render rectangle should be affected by the anchor of the parent.
+            
             if (Parent != null)
             {
-                switch (Parent.Anchor)
+                switch (Anchor)
                 {
-                    case Anchor.Left:
-                        newX = Parent.RenderRectangle.X + (int) Offset.X;
+                    case Anchor.TopLeft:
+                        break;
+                    case Anchor.TopCenter:
+                        newX = Parent.RenderRectangle.Width / 2 - _renderRectangle.Width / 2 + Parent.RenderRectangle.X;
+                        break;
+                    case Anchor.TopRight:
+                        newX = (int) (Parent.RenderRectangle.Width - _renderRectangle.Width + Parent.Offset.X);
+                        break;
+                    case Anchor.CenterLeft:
+                        newY = Parent.RenderRectangle.Height / 2 - _renderRectangle.Height / 2 + (int)Parent.RelativePosition.Y;
                         break;
                     case Anchor.Center:
-                        // I guess the center is the parents render x, plus half of its width, this should get our
-                        // left side lined up with the center of the parents render rectangle.
-                        // At that point we can just also take off half of our width, so that we line up in the center.
-                        newX = (int) (Parent.RenderRectangle.X + Parent.RenderRectangle.Width / 2.0f -
-                                      RenderRectangle.Width / 2.0f);
+                        newX = Parent.RenderRectangle.Width / 2 - _renderRectangle.Width / 2 + Parent.RenderRectangle.X;
+                        newY = Parent.RenderRectangle.Height / 2 - _renderRectangle.Height / 2 + Parent.RenderRectangle.Y;
                         break;
-                    case Anchor.Right:
-                        // The right should set us completely on the right side of the parents render rectangle using
-                        // parent render x + parent render width then we can take away our width, and we should have
-                        // our right side lined up with the parents right side.
-                        newX = Parent.RenderRectangle.X + Parent.RenderRectangle.Width - (int) (RenderRectangle.Width + Offset.X);
+                    case Anchor.CenterRight:
+                        newX = (int) (Parent.RenderRectangle.Width - _renderRectangle.Width + Parent.Offset.X);
+                        newY = Parent.RenderRectangle.Height / 2 - _renderRectangle.Height / 2 + Parent.RenderRectangle.Y;
+                        break;
+                    case Anchor.BottomLeft:
+                        newY = (int) (Parent.RenderRectangle.Height - _renderRectangle.Height + Parent.RelativePosition.Y);
+                        break;
+                    case Anchor.BottomCenter:
+                        newX = Parent.RenderRectangle.Width / 2 - _renderRectangle.Width / 2 + Parent.RenderRectangle.X;
+                        newY = (int) (Parent.RenderRectangle.Height - _renderRectangle.Height + Parent.RelativePosition.Y);
+                        break;
+                    case Anchor.BottomRight:
+                        newX = (int) (Parent.RenderRectangle.Width - _renderRectangle.Width + Parent.Offset.X);
+                        newY = (int) (Parent.RenderRectangle.Height - _renderRectangle.Height + Parent.RelativePosition.Y);
                         break;
                     case Anchor.Auto:
                         break;
@@ -202,13 +212,9 @@ namespace Yetiface.Engine.UI
                         throw new ArgumentOutOfRangeException();
                 }
             }
-            else
-            {
-                newX = (int) (X + Offset.X);
-            }
 
-            _renderRectangle.X = newX;
-            _renderRectangle.Y = newY;
+            _renderRectangle.X = (int) (newX + Offset.X);
+            _renderRectangle.Y = (int) (newY + Offset.Y);
             _renderRectangle.Width = Width;
             _renderRectangle.Height = Height;
 

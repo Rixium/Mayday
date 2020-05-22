@@ -77,10 +77,16 @@ namespace Yetiface.Engine
             );
             
             ScreenManager.AddScreen(
+                new UiTestScreen
+                {
+                    BackgroundColor = Color.White
+                }
+                /*
                 new SplashScreen
                 {
                     BackgroundColor = Color.White
                 }
+                */
              );
 
             InputManager.RegisterInputEvent(new KeyInputBinding(Keys.F1),

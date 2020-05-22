@@ -56,6 +56,7 @@
     <Compile Include="ECS\IEntity.cs" />
     <Compile Include="Graphics\Renderers\BasicRenderer.cs" />
     <Compile Include="Graphics\Renderers\IRenderer.cs" />
+    <Compile Include="Screens\UiTestScreen.cs" />
     <Compile Include="UI\Widgets\Button.cs" />
     <Compile Include="UI\Widgets\Image.cs" />
     <Compile Include="UI\Widgets\TextBlock.cs" />

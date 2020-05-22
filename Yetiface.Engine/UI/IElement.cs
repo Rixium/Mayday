@@ -13,9 +13,15 @@ namespace Yetiface.Engine.UI
     public enum Anchor
     {
         Auto,
-        Left,
+        TopLeft,
+        TopCenter,
+        TopRight,
+        CenterLeft,
         Center,
-        Right,
+        CenterRight,
+        BottomLeft,
+        BottomCenter,
+        BottomRight
     }
     
     public interface IElement

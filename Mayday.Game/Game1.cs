@@ -32,7 +32,7 @@ namespace Mayday.Game
             InputManager.RegisterInputEvent(new KeyInputBinding(Keys.F4), () => Yetiface.Engine.Utils.Window.ResizeWindow(1920, 1080));
             
             var music  = YetiGame.ContentManager.Load<Song>("MainMenu/menuMusic");
-            MediaPlayer.Play(music);
+            //MediaPlayer.Play(music);
         }
 
         protected override void LoadContent()
