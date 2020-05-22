@@ -104,6 +104,8 @@ namespace Yetiface.Engine
             InputManager.Update();
             ScreenManager.Update();
             
+            UtilManager.AfterUpdate(gameTime);
+            
             // base update. Calls the base classes update method !DO LAST ALWAYS
             base.Update(gameTime);
         }

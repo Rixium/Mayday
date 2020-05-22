@@ -41,9 +41,14 @@ namespace Yetiface.Engine.Utils
         }
         
         private static bool _isDirty;
+
+        public static Microsoft.Xna.Framework.Input.MouseState LastState { get; private set; }
+        public static Microsoft.Xna.Framework.Input.MouseState CurrentState { get; private set; }
         
         public static void Update()
         {
+            CurrentState = Mouse.GetState();
+            
             _mousePosition = Mouse.GetState().Position.ToVector2();
 
             if (Math.Abs(_mousePosition.X - _lastMouseX) > 0.01f || Math.Abs(_mousePosition.Y - _lastMouseY) > 0.01f) 
@@ -51,6 +56,11 @@ namespace Yetiface.Engine.Utils
 
             _lastMouseX = _mousePosition.X;
             _lastMouseY = _mousePosition.Y;
+        }
+
+        public static void AfterUpdate()
+        {
+            LastState = CurrentState;
         }
 
         public static bool Intersects(Rectangle rectangle) => Bounds.Intersects(rectangle);

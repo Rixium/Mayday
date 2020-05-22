@@ -25,7 +25,7 @@ namespace Yetiface.Engine.UI.Widgets
 
             var position = new Vector2(newX, newY);
             var origin = Vector2.Zero;
-            var scale = 1;
+            var scale = 1f;
             
             GraphicsUtils.Instance.SpriteBatch.DrawString(GraphicsUtils.Instance.DebugFont, Text, position, Color,
                 0, origin, scale, SpriteEffects.None, 1);
@@ -37,10 +37,10 @@ namespace Yetiface.Engine.UI.Widgets
             var newX = RenderRectangle.X + Parent.RenderRectangle.Width / 2.0f - textSize.X / 2.0f;
             var newY = RenderRectangle.Y + Parent.RenderRectangle.Height / 2.0f - textSize.Y / 2.0f;
             var position = new Vector2(newX, newY);
-            var outlineWidth = 1;
+            var outlineWidth = 2;
             var outlineColor = Color.Black;
             var origin = Vector2.Zero;
-            var scale = 1;
+            var scale = 1f;
             
             GraphicsUtils.Instance.SpriteBatch.DrawString(GraphicsUtils.Instance.DebugFont, Text, position + Vector2.UnitX * outlineWidth, outlineColor,
                 0, origin, scale, SpriteEffects.None, 0.5f);

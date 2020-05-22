@@ -29,6 +29,14 @@ namespace Yetiface.Engine.UI
         IUserInterface UserInterface { get; set; }
         IElement Parent { get; set; }
         IList<IElement> Children { get; set; }
+        
+        /// <summary>
+        /// Determines whether an element is active. If active, then business can continue as usual.
+        /// Otherwise, you can do something that only occurs when inactive, such as disabling rendering and
+        /// any input events on that particular element.
+        /// </summary>
+        bool Active { get; set; }
+        
         Vector2 Offset { get; set; }
         
         /// <summary>

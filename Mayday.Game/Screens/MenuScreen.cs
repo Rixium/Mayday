@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Media;
 using Yetiface.Engine;
 using Yetiface.Engine.Screens;
 using Yetiface.Engine.UI;
@@ -12,6 +11,10 @@ namespace Mayday.Game.Screens
     public class MenuScreen : Screen
     {
         private Image _imageElement;
+        private Panel _mainPanel;
+        private Panel _singlePlayerPanel;
+        private Panel _multiplayerPanel;
+        private Panel _settingsPanel;
 
         public MenuScreen() : base("MenuScreen")
         {
@@ -21,7 +24,7 @@ namespace Mayday.Game.Screens
         public override void Awake()
         {
             var image = YetiGame.ContentManager.Load<Texture2D>("MainMenu/planet");
-            
+
             _imageElement = UserInterface.AddElement(
                 new Image(image)
                 {
@@ -39,53 +42,220 @@ namespace Mayday.Game.Screens
             
             titlePanel.AddElement(new TextBlock("Mayday"));
 
-            var buttonPanel = UserInterface.AddElement(new Panel
+            SetupMainMenuPanel();
+            SetupSinglePlayerPanel();
+            SetupMultiplayerPanel();
+            SetupSettingsPanel();
+        }
+
+        private void SetupMainMenuPanel()
+        {
+            _mainPanel = UserInterface.AddElement(new Panel
             {
                 Anchor = Anchor.BottomLeft,
-                Size = new Vector2(200, 0)
+                Size = new Vector2(300, 0)
             });
 
-            var playButton = buttonPanel.AddElement(new Button("Start Game")
+            var singlePlayerButton = _mainPanel.AddElement(new Button("Single Player")
+            {
+                Anchor = Anchor.BottomLeft,
+                Size = new Vector2(1, 60),
+                Offset = new Vector2(10, -220),
+                FillColor = new Color(210, 125, 44)
+            });
+            
+            var multiplayerButton = _mainPanel.AddElement(new Button("Multiplayer")
             {
                 Anchor = Anchor.BottomLeft,
                 Size = new Vector2(1, 60),
                 Offset = new Vector2(10, -150),
-                FillColor = Color.White * 0.5f,
+                FillColor = new Color(210, 125, 44)
             });
             
-            var settingsButton = buttonPanel.AddElement(new Button("Settings")
+            var settingsButton = _mainPanel.AddElement(new Button("Settings")
             {
                 Anchor = Anchor.BottomLeft,
                 Size = new Vector2(1, 60),
                 Offset = new Vector2(10, -80),
-                FillColor = Color.White * 0.5f,
+                FillColor = new Color(210, 125, 44)
             });
             
-            var exitButton = buttonPanel.AddElement(new Button("Exit")
+            var exitButton = _mainPanel.AddElement(new Button("Exit")
             {
                 Anchor = Anchor.BottomLeft,
                 Size = new Vector2(1, 60),
                 Offset = new Vector2(10, -10),
-                FillColor = Color.White * 0.5f,
+                FillColor = new Color(210, 125, 44)
             });
 
-            playButton.OnHover += OnButtonHover;
-            playButton.OnLeave += OnHoverLeave;
+            singlePlayerButton.OnHover += OnButtonHover;
+            singlePlayerButton.OnLeave += OnHoverLeave;
+            multiplayerButton.OnHover += OnButtonHover;
+            multiplayerButton.OnLeave += OnHoverLeave;
             settingsButton.OnHover += OnButtonHover;
             settingsButton.OnLeave += OnHoverLeave;
             exitButton.OnHover += OnButtonHover;
             exitButton.OnLeave += OnHoverLeave;
             exitButton.OnClicked += (element) => YetiGame.Quit();
+            
+            singlePlayerButton.OnClicked += (element) =>
+            {
+                _mainPanel.Active = false;
+                _singlePlayerPanel.Active = true;
+            };
+            
+            multiplayerButton.OnClicked += (element) =>
+            {
+                _mainPanel.Active = false;
+                _multiplayerPanel.Active = true;
+            };
+            
+            settingsButton.OnClicked += (element) =>
+            {
+                _mainPanel.Active = false;
+                _settingsPanel.Active = true;
+            };
+        }
+
+        private void SetupSinglePlayerPanel()
+        {
+            // Second panel is for singleplayer.
+            _singlePlayerPanel = UserInterface.AddElement(new Panel
+            {
+                Active = false,
+                Anchor = Anchor.BottomLeft,
+                Size = new Vector2(300, 0)
+            });
+
+            var newGameButton = _singlePlayerPanel.AddElement(new Button("New Game")
+            {
+                Anchor = Anchor.BottomLeft,
+                Size = new Vector2(1, 60),
+                Offset = new Vector2(10, -150),
+                FillColor = new Color(210, 125, 44)
+            });
+            
+            var loadGameButton = _singlePlayerPanel.AddElement(new Button("Load Game")
+            {
+                Anchor = Anchor.BottomLeft,
+                Size = new Vector2(1, 60),
+                Offset = new Vector2(10, -80),
+                FillColor = new Color(210, 125, 44)
+            });
+            
+            var backButton = _singlePlayerPanel.AddElement(new Button("Back")
+            {
+                Anchor = Anchor.BottomLeft,
+                Size = new Vector2(1, 60),
+                Offset = new Vector2(10, -10),
+                FillColor = new Color(210, 125, 44)
+            });
+
+            newGameButton.OnHover += OnButtonHover;
+            newGameButton.OnLeave += OnHoverLeave;
+            loadGameButton.OnHover += OnButtonHover;
+            loadGameButton.OnLeave += OnHoverLeave;
+            backButton.OnHover += OnButtonHover;
+            backButton.OnLeave += OnHoverLeave;
+            backButton.OnClicked += (element) =>
+            {
+                _singlePlayerPanel.Active = false;
+                _mainPanel.Active = true;
+            };
+        }
+
+        private void SetupMultiplayerPanel()
+        {
+            _multiplayerPanel = UserInterface.AddElement(new Panel
+            {
+                Active = false,
+                Anchor = Anchor.BottomLeft,
+                Size = new Vector2(300, 0)
+            });
+
+            var startServer = _multiplayerPanel.AddElement(new Button("Start Server")
+            {
+                Anchor = Anchor.BottomLeft,
+                Size = new Vector2(1, 60),
+                Offset = new Vector2(10, -150),
+                FillColor = new Color(210, 125, 44)
+            });
+            
+            var joinGame = _multiplayerPanel.AddElement(new Button("Join Game")
+            {
+                Anchor = Anchor.BottomLeft,
+                Size = new Vector2(1, 60),
+                Offset = new Vector2(10, -80),
+                FillColor = new Color(210, 125, 44)
+            });
+            
+            var backButton = _multiplayerPanel.AddElement(new Button("Back")
+            {
+                Anchor = Anchor.BottomLeft,
+                Size = new Vector2(1, 60),
+                Offset = new Vector2(10, -10),
+                FillColor = new Color(210, 125, 44)
+            });
+
+            startServer.OnHover += OnButtonHover;
+            startServer.OnLeave += OnHoverLeave;
+            joinGame.OnHover += OnButtonHover;
+            joinGame.OnLeave += OnHoverLeave;
+            backButton.OnHover += OnButtonHover;
+            backButton.OnLeave += OnHoverLeave;
+            backButton.OnClicked += (element) =>
+            {
+                _multiplayerPanel.Active = false;
+                _mainPanel.Active = true;
+            };
+        }
+        
+        private void SetupSettingsPanel()
+        {
+            _settingsPanel = UserInterface.AddElement(new Panel
+            {
+                Active = false,
+                Anchor = Anchor.BottomLeft,
+                Size = new Vector2(300, 0)
+            });
+
+            var resizeButton = _settingsPanel.AddElement(new Button("Resize")
+            {
+                Anchor = Anchor.BottomLeft,
+                Size = new Vector2(1, 60),
+                Offset = new Vector2(10, -80),
+                FillColor = new Color(210, 125, 44)
+            });
+            
+            var backButton = _settingsPanel.AddElement(new Button("Back")
+            {
+                Anchor = Anchor.BottomLeft,
+                Size = new Vector2(1, 60),
+                Offset = new Vector2(10, -10),
+                FillColor = new Color(210, 125, 44)
+            });
+
+            resizeButton.OnHover += OnButtonHover;
+            resizeButton.OnLeave += OnHoverLeave;
+            backButton.OnHover += OnButtonHover;
+            backButton.OnLeave += OnHoverLeave;
+            backButton.OnClicked += (element) =>
+            {
+                _settingsPanel.Active = false;
+                _mainPanel.Active = true;
+            };
+
+            resizeButton.OnClicked += (element) => Game1.NextResize();
         }
 
         private void OnHoverLeave(IElement obj)
         {
-            obj.FillColor = Color.White * 0.5f;
+            obj.FillColor = new Color(210, 125, 44);
         }
 
         private void OnButtonHover(IElement obj)
         {
-            obj.FillColor = Color.White * 0.8f;
+            obj.FillColor = new Color(180, 95, 14);
         }
 
         public override void Begin()

@@ -16,6 +16,13 @@ namespace Yetiface.Engine.UI
         public IElement Parent { get; set; }
         public IList<IElement> Children { get; set; }
 
+        /// <summary>
+        /// When active, render and allow for user input.
+        /// Otherwise, don't render and don't update.
+        /// All elements are active by default.
+        /// </summary>
+        public bool Active { get; set; } = true;
+
         public Vector2 Offset { get; set; }
         
         public Vector2 Size { get; set; } = new Vector2(1, 1);
@@ -77,6 +84,8 @@ namespace Yetiface.Engine.UI
 
         public void Update(ref IElement hoverElement)
         {
+            if (!Active) return;
+            
             var wasHovering = IsHovering;
             // Set our hovering to whether or not the mouse is intersecting our render rectangle.
             IsHovering = MouseState.WindowBounds.Intersects(_renderRectangle) && CanInteractWithThisPieceOfShit;
@@ -102,7 +111,7 @@ namespace Yetiface.Engine.UI
             {
                 OnHover?.Invoke(this);
 
-                if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                if (MouseState.CurrentState.LeftButton == ButtonState.Pressed && MouseState.LastState.LeftButton == ButtonState.Released)
                 {
                     OnClicked?.Invoke(this);
                 }
@@ -117,6 +126,8 @@ namespace Yetiface.Engine.UI
 
         public void Draw()
         {
+            if (!Active) return;
+            
             CalculateRenderRectangle();
             GraphicsUtils.Instance.DrawFilledRectangle(RenderRectangle.X, RenderRectangle.Y, Width, Height, FillColor);
             DrawElement();

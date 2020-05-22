@@ -46,10 +46,8 @@ namespace Yetiface.Engine.Utils
                     null, // We can choose to flip textures as an example, but we dont, so null it.
                     Window.ViewportMatrix); // Window viewport, for nice resizing.
             else
-                SpriteBatch.Begin(
-                SpriteSortMode.Deferred, // Only render images when end has been called
-                null,  // No blending
-                SamplerState.PointClamp);
+                SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp,
+                    DepthStencilState.None, RasterizerState.CullCounterClockwise);
         }
 
         public void Draw(ISprite sprite, Vector2 position) => Draw(sprite, position, Color.White);

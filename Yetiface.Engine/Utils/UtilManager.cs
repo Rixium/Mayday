@@ -14,6 +14,11 @@ namespace Yetiface.Engine.Utils
             Time.Update(gameTime);
             MouseState.Update();
         }
+
+        public static void AfterUpdate(GameTime gameTime)
+        {
+            MouseState.AfterUpdate();
+        }
         
     }
     

@@ -28,9 +28,6 @@ namespace Mayday.Game
         protected override void Initialize()
         {
             base.Initialize();
-            InputManager.RegisterInputEvent(new KeyInputBinding(Keys.F2), () => Yetiface.Engine.Utils.Window.ResizeWindow(640, 360));
-            InputManager.RegisterInputEvent(new KeyInputBinding(Keys.F3), () => Yetiface.Engine.Utils.Window.ResizeWindow(1280, 720));
-            InputManager.RegisterInputEvent(new KeyInputBinding(Keys.F4), () => Yetiface.Engine.Utils.Window.ResizeWindow(1920, 1080));
             
 #if !DEBUG
             var music  = YetiGame.ContentManager.Load<Song>("MainMenu/menuMusic");
@@ -45,7 +42,22 @@ namespace Mayday.Game
             ScreenManager.AddScreen(new MenuScreen());
             ScreenManager.AddScreen(new GameScreen());
         }
-        
+
+        public static void NextResize()
+        {
+            switch (Yetiface.Engine.Utils.Window.WindowWidth)
+            {
+                case 640:
+                    Yetiface.Engine.Utils.Window.ResizeWindow(1280, 720);
+                    break;
+                case 1280:
+                    Yetiface.Engine.Utils.Window.ResizeWindow(1920, 1080);
+                    break;
+                case 1920:
+                    Yetiface.Engine.Utils.Window.ResizeWindow(640, 360);
+                    break;
+            }
+        }
     }
     
 }
