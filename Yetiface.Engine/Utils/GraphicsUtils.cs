@@ -126,7 +126,7 @@ namespace Yetiface.Engine.Utils
         public void Load(ContentManager content)
         {
             PixelTexture = content.Load<Texture2D>("Utils/pixel");
-            DebugFont = content.Load<SpriteFont>("Utils/debugFont");
+            DebugFont = content.Load<SpriteFont>("Fonts/debugFont");
         }
     }
 }

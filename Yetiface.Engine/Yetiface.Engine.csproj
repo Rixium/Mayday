@@ -158,6 +158,9 @@
     <Content Include="Config\inputBindings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Fonts\BitstreamVeraSansMonoRoman.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Fonts\debugFont.spritefont" />
     <Content Include="Content\Splash\splash.png" />
     <Content Include="Content\Utils\pixel.png" />

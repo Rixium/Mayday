@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Yetiface.Engine.Utils;
 
 namespace Yetiface.Engine.UI.Widgets
@@ -15,13 +16,40 @@ namespace Yetiface.Engine.UI.Widgets
 
         public override void DrawElement()
         {
+            DrawOutline();
+            
             var textSize = GraphicsUtils.Instance.DebugFont.MeasureString(Text);
 
             var newX = RenderRectangle.X + Parent.RenderRectangle.Width / 2.0f - textSize.X / 2.0f;
             var newY = RenderRectangle.Y + Parent.RenderRectangle.Height / 2.0f - textSize.Y / 2.0f;
 
-            GraphicsUtils.Instance.SpriteBatch.DrawString(
-                GraphicsUtils.Instance.DebugFont, Text, new Vector2(newX, newY), Color);
+            var position = new Vector2(newX, newY);
+            var origin = Vector2.Zero;
+            var scale = 1;
+            
+            GraphicsUtils.Instance.SpriteBatch.DrawString(GraphicsUtils.Instance.DebugFont, Text, position, Color,
+                0, origin, scale, SpriteEffects.None, 1);
+        }
+
+        private void DrawOutline()
+        {
+            var textSize = GraphicsUtils.Instance.DebugFont.MeasureString(Text);
+            var newX = RenderRectangle.X + Parent.RenderRectangle.Width / 2.0f - textSize.X / 2.0f;
+            var newY = RenderRectangle.Y + Parent.RenderRectangle.Height / 2.0f - textSize.Y / 2.0f;
+            var position = new Vector2(newX, newY);
+            var outlineWidth = 1;
+            var outlineColor = Color.Black;
+            var origin = Vector2.Zero;
+            var scale = 1;
+            
+            GraphicsUtils.Instance.SpriteBatch.DrawString(GraphicsUtils.Instance.DebugFont, Text, position + Vector2.UnitX * outlineWidth, outlineColor,
+                0, origin, scale, SpriteEffects.None, 0.5f);
+            GraphicsUtils.Instance.SpriteBatch.DrawString(GraphicsUtils.Instance.DebugFont, Text, position - Vector2.UnitX * outlineWidth, outlineColor,
+                0, origin, scale, SpriteEffects.None, 0.5f);
+            GraphicsUtils.Instance.SpriteBatch.DrawString(GraphicsUtils.Instance.DebugFont, Text, position + Vector2.UnitY * outlineWidth, outlineColor,
+                0, origin, scale, SpriteEffects.None, 0.5f);
+            GraphicsUtils.Instance.SpriteBatch.DrawString(GraphicsUtils.Instance.DebugFont, Text, position - Vector2.UnitY * outlineWidth, outlineColor,
+                0, origin, scale, SpriteEffects.None, 0.5f);
         }
     }
 }

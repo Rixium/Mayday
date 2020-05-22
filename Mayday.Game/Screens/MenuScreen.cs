@@ -50,7 +50,7 @@ namespace Mayday.Game.Screens
                 Anchor = Anchor.BottomLeft,
                 Size = new Vector2(1, 60),
                 Offset = new Vector2(10, -150),
-                FillColor = Color.Black * 0.5f,
+                FillColor = Color.White * 0.5f,
             });
             
             var settingsButton = buttonPanel.AddElement(new Button("Settings")
@@ -58,7 +58,7 @@ namespace Mayday.Game.Screens
                 Anchor = Anchor.BottomLeft,
                 Size = new Vector2(1, 60),
                 Offset = new Vector2(10, -80),
-                FillColor = Color.Black * 0.5f,
+                FillColor = Color.White * 0.5f,
             });
             
             var exitButton = buttonPanel.AddElement(new Button("Exit")
@@ -66,7 +66,7 @@ namespace Mayday.Game.Screens
                 Anchor = Anchor.BottomLeft,
                 Size = new Vector2(1, 60),
                 Offset = new Vector2(10, -10),
-                FillColor = Color.Black * 0.5f,
+                FillColor = Color.White * 0.5f,
             });
 
             playButton.OnHover += OnButtonHover;
@@ -80,12 +80,12 @@ namespace Mayday.Game.Screens
 
         private void OnHoverLeave(IElement obj)
         {
-            obj.FillColor = Color.Black * 0.5f;
+            obj.FillColor = Color.White * 0.5f;
         }
 
         private void OnButtonHover(IElement obj)
         {
-            obj.FillColor = Color.Black * 0.8f;
+            obj.FillColor = Color.White * 0.8f;
         }
 
         public override void Begin()
