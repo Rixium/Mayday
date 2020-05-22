@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Yetiface.Engine.Utils;
+using MouseState = Yetiface.Engine.Utils.MouseState;
 
 namespace Yetiface.Engine.UI
 {
@@ -15,6 +17,8 @@ namespace Yetiface.Engine.UI
         public IList<IElement> Children { get; set; }
 
         public Vector2 Offset { get; set; }
+        
+        public Vector2 Size { get; set; } = new Vector2(1, 1);
 
         public Vector2 RelativePosition { get; set; }
         
@@ -27,37 +31,31 @@ namespace Yetiface.Engine.UI
         public int Width { get; set; }
 
         public int Height { get; set; }
-
-        public Color FillColor { get; set; }
         
-        public Action OnHover { get; set; }
-
-        /// <summary>
-        ///  The constructor should currently just create a new render rectangle from the X, Y, Width and Height
-        /// that have hopefully been set as properties.
-        /// </summary>
-        protected Element(int offsetX, int offsetY, bool fillToParent = true)
-        {
-            Offset = new Vector2(offsetX, offsetY);
-            FillToParent = fillToParent;
-        }
-
         /// <summary>
         ///  The render rectangle will keep track of the actual render position of the element, and should be updated
         ///  in regards to the elements parent.
         /// </summary>
 
         public Rectangle RenderRectangle => _renderRectangle;
-
-        public bool FillToParent { get; set; }
+        
         public bool IsHovering { get; set; }
 
         private Rectangle _renderRectangle;
+
+        public Color FillColor { get; set; }
         
+        public Action OnHover { get; set; }
+        public Action OnLeave { get; set; }
+        public Action OnClicked { get; set; }
+
         public T AddElement<T>(T element) where T : IElement
         {
             if (Children == null) Children = new List<IElement>();
+            
             element.Parent = this;
+            element.UserInterface = UserInterface;
+            
             Children.Add(element);
 
             return element;
@@ -79,16 +77,17 @@ namespace Yetiface.Engine.UI
 
         public void Update(ref IElement hoverElement)
         {
+            var wasHovering = IsHovering;
             // Set our hovering to whether or not the mouse is intersecting our render rectangle.
-            IsHovering = MouseState.Bounds.Intersects(_renderRectangle);
+            IsHovering = MouseState.WindowBounds.Intersects(_renderRectangle) && CanInteractWithThisPieceOfShit;
             
             // We're going to head through the children NOW.
             // We pass a reference to the hover element. This way if the hover element changes in any of our children
             // we can see that, as it is a reference. TODO Mathias: SEE REFERENCE TYPES VS VALUE TYPES : https://www.tutorialsteacher.com/csharp/csharp-value-type-and-reference-type
             if (Children != null)
             {
-                foreach (var element in Children) 
-                    element.Update(ref hoverElement);
+                for(var i = Children.Count - 1; i >= 0; i--)
+                    Children[i].Update(ref hoverElement);
             }
 
             // If we're hovering we do this.
@@ -102,12 +101,19 @@ namespace Yetiface.Engine.UI
             if (hoverElement == this)
             {
                 OnHover?.Invoke();
+
+                if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                {
+                    OnClicked?.Invoke();
+                }
             }
-            else
+            else if (wasHovering)
             {
-                
+                OnLeave?.Invoke();
             }
         }
+
+        public bool CanInteractWithThisPieceOfShit { get; set; } = true;
 
         public void Draw()
         {
@@ -131,33 +137,27 @@ namespace Yetiface.Engine.UI
         public void CalculateRenderRectangle()
         {
             var siblingOffset = 0;
-
-
+            
             var newX = X;
             var newY = Y;
             var newWidth = Width;
             var newHeight = Height;
 
+            CalculateElementSize(ref newWidth, ref newHeight);
+            
             if (Parent != null)
-            {            
-                
-                if (Parent.Anchor == Anchor.Auto)
+            {
+                if (Anchor == Anchor.Auto)
                 {
                     var sibling = GetPreviousSibling();
                     if (sibling != null)
                     {
-                        siblingOffset = sibling.RenderRectangle.Height + (int) sibling.RelativePosition.Y;
+                        siblingOffset = (int) (sibling.RenderRectangle.Height + sibling.RelativePosition.Y);
                     }
                 }
-                
+
                 newX = Parent.RenderRectangle.X;
                 newY = Parent.RenderRectangle.Y;
-
-                if (FillToParent)
-                {
-                    newWidth = (int) (Parent.RenderRectangle.Width - (Offset.X * 2));
-                    newHeight = (int) (Parent.RenderRectangle.Height - (Offset.Y * 2));
-                }
             }
             else
             {
@@ -170,31 +170,39 @@ namespace Yetiface.Engine.UI
             Width = newWidth;
             Height = newHeight;
 
-            // We can finally apply our offset to our Y.
-
-            newY = (int) (Y + Offset.Y);
-
-            // TODO this is fucking gross, and needs a refactor, but it is something that needs to happen
-            // since the render rectangle should be affected by the anchor of the parent.
             if (Parent != null)
             {
-                switch (Parent.Anchor)
+                switch (Anchor)
                 {
-                    case Anchor.Left:
-                        newX = Parent.RenderRectangle.X + (int) Offset.X;
+                    case Anchor.TopLeft:
+                        break;
+                    case Anchor.TopCenter:
+                        newX = Parent.RenderRectangle.Width / 2 - _renderRectangle.Width / 2 + Parent.RenderRectangle.X;
+                        break;
+                    case Anchor.TopRight:
+                        newX = (int) (Parent.RenderRectangle.Width - _renderRectangle.Width + Parent.Offset.X);
+                        break;
+                    case Anchor.CenterLeft:
+                        newY = Parent.RenderRectangle.Height / 2 - _renderRectangle.Height / 2 + (int)Parent.RelativePosition.Y;
                         break;
                     case Anchor.Center:
-                        // I guess the center is the parents render x, plus half of its width, this should get our
-                        // left side lined up with the center of the parents render rectangle.
-                        // At that point we can just also take off half of our width, so that we line up in the center.
-                        newX = (int) (Parent.RenderRectangle.X + Parent.RenderRectangle.Width / 2.0f -
-                                      RenderRectangle.Width / 2.0f);
+                        newX = Parent.RenderRectangle.Width / 2 - _renderRectangle.Width / 2 + Parent.RenderRectangle.X;
+                        newY = Parent.RenderRectangle.Height / 2 - _renderRectangle.Height / 2 + Parent.RenderRectangle.Y;
                         break;
-                    case Anchor.Right:
-                        // The right should set us completely on the right side of the parents render rectangle using
-                        // parent render x + parent render width then we can take away our width, and we should have
-                        // our right side lined up with the parents right side.
-                        newX = Parent.RenderRectangle.X + Parent.RenderRectangle.Width - (int) (RenderRectangle.Width + Offset.X);
+                    case Anchor.CenterRight:
+                        newX = (int) (Parent.RenderRectangle.Width - _renderRectangle.Width + Parent.Offset.X);
+                        newY = Parent.RenderRectangle.Height / 2 - _renderRectangle.Height / 2 + Parent.RenderRectangle.Y;
+                        break;
+                    case Anchor.BottomLeft:
+                        newY = (int) (Parent.RenderRectangle.Height - _renderRectangle.Height + Parent.RelativePosition.Y);
+                        break;
+                    case Anchor.BottomCenter:
+                        newX = Parent.RenderRectangle.Width / 2 - _renderRectangle.Width / 2 + Parent.RenderRectangle.X;
+                        newY = (int) (Parent.RenderRectangle.Height - _renderRectangle.Height + Parent.RelativePosition.Y);
+                        break;
+                    case Anchor.BottomRight:
+                        newX = (int) (Parent.RenderRectangle.Width - _renderRectangle.Width + Parent.Offset.X);
+                        newY = (int) (Parent.RenderRectangle.Height - _renderRectangle.Height + Parent.RelativePosition.Y);
                         break;
                     case Anchor.Auto:
                         break;
@@ -202,13 +210,9 @@ namespace Yetiface.Engine.UI
                         throw new ArgumentOutOfRangeException();
                 }
             }
-            else
-            {
-                newX = (int) (X + Offset.X);
-            }
 
-            _renderRectangle.X = newX;
-            _renderRectangle.Y = newY;
+            _renderRectangle.X = (int) (newX + Offset.X);
+            _renderRectangle.Y = (int) (newY + Offset.Y);
             _renderRectangle.Width = Width;
             _renderRectangle.Height = Height;
 
@@ -216,6 +220,32 @@ namespace Yetiface.Engine.UI
                 ? new Vector2(RenderRectangle.X, RenderRectangle.Y) -
                   new Vector2(Parent.RenderRectangle.X, Parent.RenderRectangle.Y)
                 : new Vector2(0, 0);
+        }
+
+        /// <summary>
+        /// Calculates the width and height of this element dependant on its size vector.
+        /// </summary>
+        /// <param name="width">The width of the element.</param>
+        /// <param name="height">The height of the element.</param>
+        private void CalculateElementSize(ref int width, ref int height)
+        {
+            if (Size.X > 1) width = (int) Size.X;
+            else if (Size.X >= 0 && Size.X <= 1)
+            {
+                if (Parent != null)
+                {
+                    width = (int) (Parent.RenderRectangle.Width * Size.X);
+                }
+            }
+            
+            if (Size.Y > 1) height = (int) Size.Y;
+            else if (Size.X >= 0 && Size.X <= 1)
+            {
+                if (Parent != null)
+                {
+                    height = (int) (Parent.RenderRectangle.Height * Size.Y);
+                }
+            }
         }
 
         /// <summary>

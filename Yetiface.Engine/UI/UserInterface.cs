@@ -1,18 +1,20 @@
-﻿using Yetiface.Engine.Utils;
+﻿using Yetiface.Engine.UI.Widgets;
+using Yetiface.Engine.Utils;
 
 namespace Yetiface.Engine.UI
 {
     public class UserInterface : IUserInterface
     {
-        public IElement Root { get; set; }
-
-        public IElement SetRoot(IElement element)
+        public IElement Root { get; }
+        
+        public UserInterface()
         {
-            element.Width = Window.ViewportWidth;
-            element.Height = Window.ViewportHeight;
-            element.UserInterface = this;
-            Root = element;
-            return element;
+            Root = new Panel()
+            {
+                Width = Window.ViewportWidth,
+                Height = Window.ViewportHeight,
+                UserInterface = this
+            };
         }
 
         public void Update()
@@ -34,6 +36,15 @@ namespace Yetiface.Engine.UI
         public void DrawDebug()
         {
             Root?.DrawDebug();
+        }
+
+        public T AddElement<T>(T element) where T : IElement
+        {
+            Root.AddElement(element);
+            
+            element.UserInterface = this;
+            
+            return element;
         }
     }
 }

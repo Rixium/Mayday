@@ -14,24 +14,32 @@ namespace Yetiface.Engine.Utils
         private static Rectangle _bounds = new Rectangle(0, 0, 1, 1);
         
         /// <summary>
-        /// Bounds of the mouse. Use this for collision within the window.
+        /// Bounds of the mouse. Use this for collision within the viewport.
         /// </summary>
         public static Rectangle Bounds {
             get
             {
-                if (!_isDirty) 
-                    return _bounds;
-
                 var relativeToViewport = Vector2.Transform(_mousePosition, Window.InvertViewportMatrix);
                 _bounds.X = (int) (relativeToViewport.X);
                 _bounds.Y = (int) (relativeToViewport.Y);
                 
-                _isDirty = false;
-
                 return _bounds;
             }
         }
-
+        
+        /// <summary>
+        /// These bounds should be used for anything relative to the window. Probably UI.
+        /// </summary>
+        public static Rectangle WindowBounds {
+            get
+            {
+                _bounds.X = (int) (_mousePosition.X);
+                _bounds.Y = (int) (_mousePosition.Y);
+                
+                return _bounds;
+            }
+        }
+        
         private static bool _isDirty;
         
         public static void Update()

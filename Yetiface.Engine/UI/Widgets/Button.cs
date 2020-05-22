@@ -4,10 +4,21 @@ namespace Yetiface.Engine.UI.Widgets
 {
     public class Button : Element
     {
-        public Button(int offsetX = 0, int offsetY = 0) : base(offsetX, offsetY)
+        public Element TextElement;
+        
+        public Button(string text = null)
         {
             FillColor = Color.Black * 0.7f;
-            Anchor = Anchor.Center;
+            Height = 60;
+            Width = 175;
+            
+            if (text != null)
+            {
+                TextElement = AddElement(new TextBlock(text)
+                {
+                    CanInteractWithThisPieceOfShit = false
+                });
+            }
         }
 
         public override void DrawElement()

@@ -20,24 +20,17 @@ namespace Mayday.Game.Screens
 
         public override void Awake()
         {
-            var panel = UserInterface.SetRoot(new Panel()
-            {
-                Anchor = Anchor.Center,
-                FillToParent = true
-            });
-
             var image = YetiGame.ContentManager.Load<Texture2D>("MainMenu/planet");
-            _imageElement = panel.AddElement(
-                new Image(image, fillToParent: false)
+            _imageElement = UserInterface.AddElement(
+                new Image(image)
                 {
                     Offset = new Vector2(0,100),
                     Anchor = Anchor.Center
                 }
             );
 
-            var titlePanel = panel.AddElement(new Panel()
+            var titlePanel = UserInterface.AddElement(new Panel()
             {
-                FillToParent = false,
                 Width = 10000,
                 Height = 80,
                 FillColor = Color.Black * 0.5f
@@ -45,10 +38,9 @@ namespace Mayday.Game.Screens
             
             titlePanel.AddElement(new TextBlock("Mayday"));
 
-            var buttonPanel = panel.AddElement(new Panel(0, 400)
+            var buttonPanel = UserInterface.AddElement(new Panel
             {
                 Anchor = Anchor.Auto,
-                FillToParent = false,
                 Width = 500,
                 Height = 300,
                 FillColor = Color.Black * 0
@@ -56,7 +48,6 @@ namespace Mayday.Game.Screens
 
             var playButton = buttonPanel.AddElement(new Button()
             {
-                FillToParent = false,
                 Width = 500,
                 Height = 100,
                 FillColor = Color.Black * 0f
@@ -66,7 +57,6 @@ namespace Mayday.Game.Screens
             
             var settingsButton = buttonPanel.AddElement(new Button()
             {
-                FillToParent = false,
                 Width = 500,
                 Height = 100,
                 FillColor = Color.Black * 0f
@@ -75,7 +65,6 @@ namespace Mayday.Game.Screens
             
             var exitButton = buttonPanel.AddElement(new Button()
             {
-                FillToParent = false,
                 Width = 500,
                 Height = 100,
                 FillColor = Color.Black * 0f
