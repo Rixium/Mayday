@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Input;
 using Yetiface.Engine.Inputs;
 using Yetiface.Engine.Screens;
 using Yetiface.Engine.Screens.Transitions;
+using Yetiface.Engine.UI;
 using Yetiface.Engine.Utils;
 
 namespace Yetiface.Engine
@@ -99,6 +100,8 @@ namespace Yetiface.Engine
 
         protected override void Update(GameTime gameTime)
         {
+            if(ShouldQuit) Exit();
+            
             // Update all of our util stuff !DO FIRST ALWAYS
             UtilManager.Update(gameTime);
             
@@ -116,6 +119,12 @@ namespace Yetiface.Engine
             ScreenManager.Draw();
             base.Draw(gameTime);
         }
-        
+
+        public static void Quit()
+        {
+            ShouldQuit = true;
+        }
+
+        private static bool ShouldQuit { get; set; }
     }
 }

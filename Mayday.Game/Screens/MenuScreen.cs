@@ -74,6 +74,7 @@ namespace Mayday.Game.Screens
             settingsButton.OnLeave += OnHoverLeave;
             exitButton.OnHover += OnButtonHover;
             exitButton.OnLeave += OnHoverLeave;
+            exitButton.OnClicked += (element) => YetiGame.Quit();
         }
 
         private void OnHoverLeave(IElement obj)
