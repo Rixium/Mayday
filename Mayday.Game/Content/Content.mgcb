@@ -25,7 +25,13 @@
 /processorParam:TextureFormat=Color
 /build:Ball.png
 
-#begin MainMenu/menuImage.png
+#begin MainMenu/menuMusic.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:MainMenu/menuMusic.mp3
+
+#begin MainMenu/planet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -35,5 +41,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:MainMenu/menuImage.png
+/build:MainMenu/planet.png
 

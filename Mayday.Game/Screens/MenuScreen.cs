@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using Yetiface.Engine;
-using Yetiface.Engine.ECS.Components.Renderables;
 using Yetiface.Engine.Screens;
 using Yetiface.Engine.UI;
 using Yetiface.Engine.UI.Widgets;
@@ -11,6 +11,8 @@ namespace Mayday.Game.Screens
 {
     public class MenuScreen : Screen
     {
+        private Image _imageElement;
+
         public MenuScreen() : base("MenuScreen")
         {
             BackgroundColor = Color.Black;
@@ -18,78 +20,68 @@ namespace Mayday.Game.Screens
 
         public override void Awake()
         {
-            var ball = CreateEntity(Window.BottomRight - new Vector2(50, 50));
-            ball.AddComponent(new Animation(YetiGame.ContentManager.Load<Texture2D>("Ball"),
-                "Content/Assets/Ball.json"));
-
-            ball.Scale = 3;
-            
             var panel = UserInterface.SetRoot(new Panel()
             {
-                Anchor = Anchor.Center
+                Anchor = Anchor.Center,
+                FillToParent = true
             });
 
-            var image = YetiGame.ContentManager.Load<Texture2D>("MainMenu/menuImage");
-            var imageElement = panel.AddElement(
-                new Image(image, DrawMode.Stretch)
+            var image = YetiGame.ContentManager.Load<Texture2D>("MainMenu/planet");
+            _imageElement = panel.AddElement(
+                new Image(image, fillToParent: false)
                 {
+                    Offset = new Vector2(0,100),
                     Anchor = Anchor.Center
                 }
             );
-            
-            var titlePanel = imageElement.AddElement(new Panel
+
+            var titlePanel = panel.AddElement(new Panel()
             {
-                FillColor = Color.Black * 0.5f,
                 FillToParent = false,
-                Height = 100,
-                Width = 1280
+                Width = 10000,
+                Height = 80,
+                FillColor = Color.Black * 0.5f
             });
             
             titlePanel.AddElement(new TextBlock("Mayday"));
 
-                                    
-            var buttonPanel = panel.AddElement(new Panel
+            var buttonPanel = panel.AddElement(new Panel(0, 400)
             {
-                Offset = new Vector2(0, 720),
-                Width = 1280,
-                Height = 500,
-                FillColor = Color.Black,
+                Anchor = Anchor.Auto,
                 FillToParent = false,
-                Anchor = Anchor.Left
+                Width = 500,
+                Height = 300,
+                FillColor = Color.Black * 0
             });
 
             var playButton = buttonPanel.AddElement(new Button()
             {
-                Anchor = Anchor.Left,
-                FillColor = Color.Black,
-                Height = 50,
-                Width = 300,
-                FillToParent = false
+                FillToParent = false,
+                Width = 500,
+                Height = 100,
+                FillColor = Color.Black * 0f
             });
             
-            // playButton.AddElement(new TextBlock("Start Game"));
-            //
-            // var settingsButton = buttonPanel.AddElement(new Button()
-            // {
-            //     Anchor = Anchor.Left,
-            //     FillColor = Color.Black,
-            //     Height = 50,
-            //     Width = 300,
-            //     FillToParent = false
-            // });
-            //
-            // settingsButton.AddElement(new TextBlock("Settings"));
-            //
-            // var quitButton = buttonPanel.AddElement(new Button()
-            // {
-            //     Anchor = Anchor.Left,
-            //     FillColor = Color.Black,
-            //     Height = 50,
-            //     Width = 300,
-            //     FillToParent = false
-            // });
-            //
-            // quitButton.AddElement(new TextBlock("Quit"));
+            playButton.AddElement(new TextBlock("Start"));
+            
+            var settingsButton = buttonPanel.AddElement(new Button()
+            {
+                FillToParent = false,
+                Width = 500,
+                Height = 100,
+                FillColor = Color.Black * 0f
+            });
+            settingsButton.AddElement(new TextBlock("Settings"));
+            
+            var exitButton = buttonPanel.AddElement(new Button()
+            {
+                FillToParent = false,
+                Width = 500,
+                Height = 100,
+                FillColor = Color.Black * 0f
+            });
+            
+            exitButton.AddElement(new TextBlock("Exit"));
         }
 
         public override void Begin()
@@ -98,6 +90,13 @@ namespace Mayday.Game.Screens
 
         public override void Finish()
         {
+        }
+
+        public override void Update()
+        {
+            base.Update();
+
+            _imageElement.Rotation += Time.DeltaTime * 0.05f;
         }
     }
 }

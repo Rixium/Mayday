@@ -1,5 +1,6 @@
 ﻿using Mayday.Game.Screens;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using Yetiface.Engine;
 using Yetiface.Engine.Inputs;
 using Yetiface.Steamworks;
@@ -29,6 +30,9 @@ namespace Mayday.Game
             InputManager.RegisterInputEvent(new KeyInputBinding(Keys.F2), () => Yetiface.Engine.Utils.Window.ResizeWindow(640, 360));
             InputManager.RegisterInputEvent(new KeyInputBinding(Keys.F3), () => Yetiface.Engine.Utils.Window.ResizeWindow(1280, 720));
             InputManager.RegisterInputEvent(new KeyInputBinding(Keys.F4), () => Yetiface.Engine.Utils.Window.ResizeWindow(1920, 1080));
+            
+            var music  = YetiGame.ContentManager.Load<Song>("MainMenu/menuMusic");
+            MediaPlayer.Play(music);
         }
 
         protected override void LoadContent()

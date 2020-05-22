@@ -5,7 +5,6 @@ using Yetiface.Engine.Utils;
 
 namespace Yetiface.Engine.UI.Widgets
 {
-
     /// <summary>
     ///  Fill will stretch the image to the parents size.
     ///  Preserve maintains the image size and just places the image dependant on the parents anchor point, with an origin
@@ -16,13 +15,14 @@ namespace Yetiface.Engine.UI.Widgets
         Stretch,
         Preserve
     }
-    
+
     public class Image : Element
     {
         private readonly Texture2D _texture;
         private readonly DrawMode _drawMode;
 
-        public Image(Texture2D texture, DrawMode drawMode = DrawMode.Preserve, int offsetX = 0, int offsetY = 0, bool fillToParent = true) : base(offsetX, offsetY,
+        public Image(Texture2D texture, DrawMode drawMode = DrawMode.Preserve, int offsetX = 0, int offsetY = 0,
+            bool fillToParent = true) : base(offsetX, offsetY,
             fillToParent)
         {
             _texture = texture;
@@ -32,12 +32,12 @@ namespace Yetiface.Engine.UI.Widgets
             Height = texture.Height;
         }
 
+        public float Rotation { get; set; }
 
         public override void DrawElement()
         {
-            if (_drawMode == DrawMode.Stretch)
-                FillToParent = true;
-            
+            FillToParent = _drawMode == DrawMode.Stretch;
+
             switch (_drawMode)
             {
                 case DrawMode.Stretch:
@@ -48,7 +48,10 @@ namespace Yetiface.Engine.UI.Widgets
                 case DrawMode.Preserve:
                     GraphicsUtils.Instance.SpriteBatch.Draw(
                         _texture,
-                        new Vector2(RenderRectangle.X, RenderRectangle.Y), Color.White);
+                        new Vector2(RenderRectangle.X + Width / 2.0f, RenderRectangle.Y + Height / 2.0f),
+                        rotation: Rotation,
+                        origin: new Vector2(_texture.Width / 2.0f, _texture.Height / 2.0f),
+                        color: Color.White);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

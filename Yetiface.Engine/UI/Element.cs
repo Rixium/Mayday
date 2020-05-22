@@ -131,15 +131,7 @@ namespace Yetiface.Engine.UI
         public void CalculateRenderRectangle()
         {
             var siblingOffset = 0;
-            
-            if (Anchor == Anchor.Auto)
-            {
-                var sibling = GetPreviousSibling();
-                if (sibling != null)
-                {
-                    siblingOffset = sibling.RenderRectangle.Height + (int) sibling.RelativePosition.Y;
-                }
-            }
+
 
             var newX = X;
             var newY = Y;
@@ -147,7 +139,17 @@ namespace Yetiface.Engine.UI
             var newHeight = Height;
 
             if (Parent != null)
-            {
+            {            
+                
+                if (Parent.Anchor == Anchor.Auto)
+                {
+                    var sibling = GetPreviousSibling();
+                    if (sibling != null)
+                    {
+                        siblingOffset = sibling.RenderRectangle.Height + (int) sibling.RelativePosition.Y;
+                    }
+                }
+                
                 newX = Parent.RenderRectangle.X;
                 newY = Parent.RenderRectangle.Y;
 
@@ -193,6 +195,8 @@ namespace Yetiface.Engine.UI
                         // parent render x + parent render width then we can take away our width, and we should have
                         // our right side lined up with the parents right side.
                         newX = Parent.RenderRectangle.X + Parent.RenderRectangle.Width - (int) (RenderRectangle.Width + Offset.X);
+                        break;
+                    case Anchor.Auto:
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
