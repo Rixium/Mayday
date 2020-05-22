@@ -18,7 +18,7 @@ namespace Yetiface.Engine.UI
 
         public Vector2 Offset { get; set; }
         
-        public Vector2 Size { get; set; }
+        public Vector2 Size { get; set; } = new Vector2(1, 1);
 
         public Vector2 RelativePosition { get; set; }
         
@@ -79,7 +79,7 @@ namespace Yetiface.Engine.UI
         {
             var wasHovering = IsHovering;
             // Set our hovering to whether or not the mouse is intersecting our render rectangle.
-            IsHovering = MouseState.Bounds.Intersects(_renderRectangle) && CanInteractWithThisPieceOfShit;
+            IsHovering = MouseState.WindowBounds.Intersects(_renderRectangle) && CanInteractWithThisPieceOfShit;
             
             // We're going to head through the children NOW.
             // We pass a reference to the hover element. This way if the hover element changes in any of our children
@@ -143,6 +143,8 @@ namespace Yetiface.Engine.UI
             var newWidth = Width;
             var newHeight = Height;
 
+            CalculateElementSize(ref newWidth, ref newHeight);
+            
             if (Parent != null)
             {
                 if (Anchor == Anchor.Auto)
@@ -218,6 +220,32 @@ namespace Yetiface.Engine.UI
                 ? new Vector2(RenderRectangle.X, RenderRectangle.Y) -
                   new Vector2(Parent.RenderRectangle.X, Parent.RenderRectangle.Y)
                 : new Vector2(0, 0);
+        }
+
+        /// <summary>
+        /// Calculates the width and height of this element dependant on its size vector.
+        /// </summary>
+        /// <param name="width">The width of the element.</param>
+        /// <param name="height">The height of the element.</param>
+        private void CalculateElementSize(ref int width, ref int height)
+        {
+            if (Size.X > 1) width = (int) Size.X;
+            else if (Size.X >= 0 && Size.X <= 1)
+            {
+                if (Parent != null)
+                {
+                    width = (int) (Parent.RenderRectangle.Width * Size.X);
+                }
+            }
+            
+            if (Size.Y > 1) height = (int) Size.Y;
+            else if (Size.X >= 0 && Size.X <= 1)
+            {
+                if (Parent != null)
+                {
+                    height = (int) (Parent.RenderRectangle.Height * Size.Y);
+                }
+            }
         }
 
         /// <summary>

@@ -18,22 +18,46 @@ namespace Yetiface.Engine.Screens
             var buttonPanel = UserInterface.AddElement(new Panel
             {
                 FillColor = Color.Blue * 0.5f,
+                Anchor = Anchor.Center,
+                Size = new Vector2(0.5f, 0.5f)
+            });
+            
+            UserInterface.AddElement(new Button("CenterLeft")
+            {
+                Size = new Vector2(0.15f, 50),
                 Anchor = Anchor.CenterLeft
             });
-
-            UserInterface.AddElement(new Button("TopLeft"){Anchor = Anchor.TopLeft});
-            UserInterface.AddElement(new Button("TopCenter") {Anchor = Anchor.TopCenter});
-            UserInterface.AddElement(new Button("TopRight") {Anchor = Anchor.TopRight});
             
-            UserInterface.AddElement(new Button("CenterLeft") {Anchor = Anchor.CenterLeft});
-            UserInterface.AddElement(new Button("CenterRightDwight") {Anchor = Anchor.CenterRight});
-            UserInterface.AddElement(new Button("Center") {Anchor = Anchor.Center});
+            UserInterface.AddElement(new Button("CenterRightDwight")
+            {
+                Size = new Vector2(0.15f, 50),
+                Anchor = Anchor.CenterRight
+            });
             
-            var buttonBottomLeft = UserInterface.AddElement(new Button("BottomLeft") {Anchor = Anchor.BottomLeft});
-            UserInterface.AddElement(new Button("BottomLeftNext") {Anchor = Anchor.BottomLeft});
-            UserInterface.AddElement(new Button("BottomCenter") {Anchor = Anchor.BottomCenter});
-            UserInterface.AddElement(new Button("BottomRight") {Anchor = Anchor.BottomRight});
-
+            UserInterface.AddElement(new Button("Center")
+            {
+                Size = new Vector2(0.15f, 50),
+                Anchor = Anchor.Center
+            });
+            
+            var buttonBottomLeft = UserInterface.AddElement(new Button("BottomLeft")
+            {
+                Size = new Vector2(0.15f, 50),
+                Anchor = Anchor.BottomLeft
+            });
+            
+            UserInterface.AddElement(new Button("BottomCenter")
+            {
+                Size = new Vector2(0.15f, 50),
+                Anchor = Anchor.BottomCenter
+            });
+            
+            UserInterface.AddElement(new Button("BottomRight")
+            {
+                Size = new Vector2(0.15f, 50),
+                Anchor = Anchor.BottomRight
+            });
+            
             buttonBottomLeft.OnClicked += OnButtonClicked;
             buttonBottomLeft.OnHover += () =>
             {
@@ -43,9 +67,7 @@ namespace Yetiface.Engine.Screens
             {
                 buttonBottomLeft.FillColor = Color.Black;
             };
-
-            var topPanel = UserInterface.AddElement(new Panel(){FillColor = Color.Aqua*0.7f, Width = Window.WindowWidth, Height = 70, Anchor = Anchor.TopCenter});
-            topPanel.AddElement(new Button("Am top :D") {Anchor = Anchor.TopLeft});
+            
         }
 
         private void OnButtonClicked()
