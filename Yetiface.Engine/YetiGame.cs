@@ -77,18 +77,14 @@ namespace Yetiface.Engine
                 }
             );
             
+#if !DEBUG
             ScreenManager.AddScreen(
-                new UiTestScreen
-                {
-                    BackgroundColor = Color.White
-                }
-                /*
                 new SplashScreen
                 {
                     BackgroundColor = Color.White
                 }
-                */
              );
+#endif
 
             InputManager.RegisterInputEvent(new KeyInputBinding(Keys.F1),
                 callback: () =>

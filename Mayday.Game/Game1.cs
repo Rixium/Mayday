@@ -12,12 +12,13 @@ namespace Mayday.Game
 
         public Game1() : base("Mayday")
         {
-            // TODO Uncomment for steam support.
-            // var steam = new Steam(1323490);
-            // steam.Exit += Exit;
-            //
-            // Name = steam.GetSteamName();
-            // FriendCount = steam.GetSteamFriendCount();
+#if !DEBUG
+            var steam = new Steam(1323490);
+            steam.Exit += Exit;
+            
+            Name = steam.GetSteamName();
+            FriendCount = steam.GetSteamFriendCount();
+#endif
         }
 
         public static int FriendCount { get; set; }
@@ -31,8 +32,10 @@ namespace Mayday.Game
             InputManager.RegisterInputEvent(new KeyInputBinding(Keys.F3), () => Yetiface.Engine.Utils.Window.ResizeWindow(1280, 720));
             InputManager.RegisterInputEvent(new KeyInputBinding(Keys.F4), () => Yetiface.Engine.Utils.Window.ResizeWindow(1920, 1080));
             
+#if !DEBUG
             var music  = YetiGame.ContentManager.Load<Song>("MainMenu/menuMusic");
-            //MediaPlayer.Play(music);
+            MediaPlayer.Play(music);
+#endif
         }
 
         protected override void LoadContent()

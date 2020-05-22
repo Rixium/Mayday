@@ -41,30 +41,31 @@ namespace Mayday.Game.Screens
 
             var buttonPanel = UserInterface.AddElement(new Panel
             {
-                Anchor = Anchor.Center,
-                Size = new Vector2(0.3f, 0.2f)
+                Anchor = Anchor.BottomLeft,
+                Size = new Vector2(200, 0)
             });
 
             var playButton = buttonPanel.AddElement(new Button("Start Game")
             {
-                Anchor = Anchor.TopCenter,
+                Anchor = Anchor.BottomLeft,
                 Size = new Vector2(1, 60),
+                Offset = new Vector2(10, -150),
                 FillColor = Color.Black * 0.5f,
             });
             
             var settingsButton = buttonPanel.AddElement(new Button("Settings")
             {
-                Anchor = Anchor.TopCenter,
+                Anchor = Anchor.BottomLeft,
                 Size = new Vector2(1, 60),
-                Offset = new Vector2(0, 70),
+                Offset = new Vector2(10, -80),
                 FillColor = Color.Black * 0.5f,
             });
             
             var exitButton = buttonPanel.AddElement(new Button("Exit")
             {
-                Anchor = Anchor.TopCenter,
+                Anchor = Anchor.BottomLeft,
                 Size = new Vector2(1, 60),
-                Offset = new Vector2(0, 140),
+                Offset = new Vector2(10, -10),
                 FillColor = Color.Black * 0.5f,
             });
 
