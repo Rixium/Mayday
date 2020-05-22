@@ -45,9 +45,9 @@ namespace Yetiface.Engine.UI
 
         public Color FillColor { get; set; }
         
-        public Action OnHover { get; set; }
-        public Action OnLeave { get; set; }
-        public Action OnClicked { get; set; }
+        public Action<IElement> OnHover { get; set; }
+        public Action<IElement> OnLeave { get; set; }
+        public Action<IElement> OnClicked { get; set; }
 
         public T AddElement<T>(T element) where T : IElement
         {
@@ -100,16 +100,16 @@ namespace Yetiface.Engine.UI
             // value, so we can see it working.
             if (hoverElement == this)
             {
-                OnHover?.Invoke();
+                OnHover?.Invoke(this);
 
                 if (Mouse.GetState().LeftButton == ButtonState.Pressed)
                 {
-                    OnClicked?.Invoke();
+                    OnClicked?.Invoke(this);
                 }
             }
             else if (wasHovering)
             {
-                OnLeave?.Invoke();
+                OnLeave?.Invoke(this);
             }
         }
 
@@ -180,7 +180,7 @@ namespace Yetiface.Engine.UI
                         newX = Parent.RenderRectangle.Width / 2 - _renderRectangle.Width / 2 + Parent.RenderRectangle.X;
                         break;
                     case Anchor.TopRight:
-                        newX = (int) (Parent.RenderRectangle.Width - _renderRectangle.Width + Parent.Offset.X);
+                        newX = (int) (Parent.RenderRectangle.Width - _renderRectangle.Width + Parent.RelativePosition.X);
                         break;
                     case Anchor.CenterLeft:
                         newY = Parent.RenderRectangle.Height / 2 - _renderRectangle.Height / 2 + (int)Parent.RelativePosition.Y;
@@ -190,7 +190,7 @@ namespace Yetiface.Engine.UI
                         newY = Parent.RenderRectangle.Height / 2 - _renderRectangle.Height / 2 + Parent.RenderRectangle.Y;
                         break;
                     case Anchor.CenterRight:
-                        newX = (int) (Parent.RenderRectangle.Width - _renderRectangle.Width + Parent.Offset.X);
+                        newX = (int) (Parent.RenderRectangle.Width - _renderRectangle.Width + Parent.RelativePosition.X);
                         newY = Parent.RenderRectangle.Height / 2 - _renderRectangle.Height / 2 + Parent.RenderRectangle.Y;
                         break;
                     case Anchor.BottomLeft:
@@ -201,7 +201,7 @@ namespace Yetiface.Engine.UI
                         newY = (int) (Parent.RenderRectangle.Height - _renderRectangle.Height + Parent.RelativePosition.Y);
                         break;
                     case Anchor.BottomRight:
-                        newX = (int) (Parent.RenderRectangle.Width - _renderRectangle.Width + Parent.Offset.X);
+                        newX = (int) (Parent.RenderRectangle.Width - _renderRectangle.Width + Parent.RelativePosition.X);
                         newY = (int) (Parent.RenderRectangle.Height - _renderRectangle.Height + Parent.RelativePosition.Y);
                         break;
                     case Anchor.Auto:

@@ -34,7 +34,7 @@ namespace Yetiface.Engine.Screens
                 Anchor = Anchor.CenterRight
             });
             
-            buttonPanel.AddElement(new Button("Center")
+            var centerButton = buttonPanel.AddElement(new Button("Center")
             {
                 Size = new Vector2(0.15f, 50),
                 Anchor = Anchor.Center
@@ -124,19 +124,29 @@ namespace Yetiface.Engine.Screens
                 Anchor = Anchor.BottomRight
             });
             
+            centerButton.OnHover += (element) =>
+            {
+                centerButton.FillColor = Color.Pink;
+            };
+            
+            centerButton.OnLeave += (element) =>
+            {
+                centerButton.FillColor = Color.Black;
+            };
+            
             buttonBottomLeft.OnClicked += OnButtonClicked;
-            buttonBottomLeft.OnHover += () =>
+            buttonBottomLeft.OnHover += (element) =>
             {
                 buttonBottomLeft.FillColor = Color.Pink;
             };
-            buttonBottomLeft.OnLeave += () =>
+            buttonBottomLeft.OnLeave += (element) =>
             {
                 buttonBottomLeft.FillColor = Color.Black;
             };
             
         }
 
-        private void OnButtonClicked()
+        private void OnButtonClicked(IElement element)
         {
             ScreenManager.ChangeScreen("MenuScreen");
         }

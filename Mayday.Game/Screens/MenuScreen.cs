@@ -21,56 +21,69 @@ namespace Mayday.Game.Screens
         public override void Awake()
         {
             var image = YetiGame.ContentManager.Load<Texture2D>("MainMenu/planet");
+            
             _imageElement = UserInterface.AddElement(
                 new Image(image)
                 {
-                    Offset = new Vector2(0,100),
+                    Size = new Vector2(0.5f, 0.5f),
                     Anchor = Anchor.Center
                 }
             );
 
             var titlePanel = UserInterface.AddElement(new Panel()
             {
-                Width = 10000,
-                Height = 80,
-                FillColor = Color.Black * 0.5f
+                FillColor = Color.Black * 0.5f,
+                Anchor = Anchor.TopCenter,
+                Size = new Vector2(1, 0.2f)
             });
             
             titlePanel.AddElement(new TextBlock("Mayday"));
 
             var buttonPanel = UserInterface.AddElement(new Panel
             {
-                Anchor = Anchor.Auto,
-                Width = 500,
-                Height = 300,
-                FillColor = Color.Black * 0
+                Anchor = Anchor.Center,
+                Size = new Vector2(0.3f, 0.2f)
             });
 
-            var playButton = buttonPanel.AddElement(new Button()
+            var playButton = buttonPanel.AddElement(new Button("Start Game")
             {
-                Width = 500,
-                Height = 100,
-                FillColor = Color.Black * 0f
+                Anchor = Anchor.TopCenter,
+                Size = new Vector2(1, 60),
+                FillColor = Color.Black * 0.5f,
             });
             
-            playButton.AddElement(new TextBlock("Start"));
-            
-            var settingsButton = buttonPanel.AddElement(new Button()
+            var settingsButton = buttonPanel.AddElement(new Button("Settings")
             {
-                Width = 500,
-                Height = 100,
-                FillColor = Color.Black * 0f
-            });
-            settingsButton.AddElement(new TextBlock("Settings"));
-            
-            var exitButton = buttonPanel.AddElement(new Button()
-            {
-                Width = 500,
-                Height = 100,
-                FillColor = Color.Black * 0f
+                Anchor = Anchor.TopCenter,
+                Size = new Vector2(1, 60),
+                Offset = new Vector2(0, 70),
+                FillColor = Color.Black * 0.5f,
             });
             
-            exitButton.AddElement(new TextBlock("Exit"));
+            var exitButton = buttonPanel.AddElement(new Button("Exit")
+            {
+                Anchor = Anchor.TopCenter,
+                Size = new Vector2(1, 60),
+                Offset = new Vector2(0, 140),
+                FillColor = Color.Black * 0.5f,
+            });
+
+            playButton.OnHover += OnButtonHover;
+            playButton.OnLeave += OnHoverLeave;
+            settingsButton.OnHover += OnButtonHover;
+            settingsButton.OnLeave += OnHoverLeave;
+            exitButton.OnHover += OnButtonHover;
+            exitButton.OnLeave += OnHoverLeave;
+        }
+
+        private void OnHoverLeave(IElement obj)
+        {
+            obj.FillColor = Color.Black * 0.5f;
+        }
+
+        private void OnButtonHover(IElement obj)
+        {
+            obj.FillColor = Color.Black * 0.8f;
         }
 
         public override void Begin()
