@@ -53,6 +53,8 @@ namespace Yetiface.Engine.UI
         public Color FillColor { get; set; }
         
         public Action<IElement> OnHover { get; set; }
+        
+        public Action<IElement> OnEnter { get; set; }
         public Action<IElement> OnLeave { get; set; }
         public Action<IElement> OnClicked { get; set; }
 
@@ -109,6 +111,10 @@ namespace Yetiface.Engine.UI
             // value, so we can see it working.
             if (hoverElement == this)
             {
+                
+                if(IsHovering && !wasHovering)
+                    OnEnter?.Invoke(this);
+                
                 OnHover?.Invoke(this);
 
                 if (MouseState.CurrentState.LeftButton == ButtonState.Pressed && MouseState.LastState.LeftButton == ButtonState.Released)

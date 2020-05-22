@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Yetiface.Engine;
 using Yetiface.Engine.Screens;
@@ -15,6 +16,8 @@ namespace Mayday.Game.Screens
         private Panel _singlePlayerPanel;
         private Panel _multiplayerPanel;
         private Panel _settingsPanel;
+        private SoundEffect _clickSound;
+        private SoundEffect _tapSound;
 
         public MenuScreen() : base("MenuScreen")
         {
@@ -23,6 +26,8 @@ namespace Mayday.Game.Screens
 
         public override void Awake()
         {
+            _clickSound = YetiGame.ContentManager.Load<SoundEffect>("MainMenu/click");
+            _tapSound = YetiGame.ContentManager.Load<SoundEffect>("MainMenu/tap");
             var image = YetiGame.ContentManager.Load<Texture2D>("MainMenu/planet");
 
             _imageElement = UserInterface.AddElement(
@@ -115,6 +120,15 @@ namespace Mayday.Game.Screens
                 _mainPanel.Active = false;
                 _settingsPanel.Active = true;
             };
+            exitButton.OnClicked += OnClicked;
+            singlePlayerButton.OnClicked += OnClicked;
+            multiplayerButton.OnClicked += OnClicked;
+            settingsButton.OnClicked += OnClicked;
+            
+            exitButton.OnEnter += OnHoverEnter;
+            singlePlayerButton.OnEnter += OnHoverEnter;
+            multiplayerButton.OnEnter += OnHoverEnter;
+            settingsButton.OnEnter += OnHoverEnter;
         }
 
         private void SetupSinglePlayerPanel()
@@ -162,6 +176,14 @@ namespace Mayday.Game.Screens
                 _singlePlayerPanel.Active = false;
                 _mainPanel.Active = true;
             };
+
+            newGameButton.OnClicked += OnClicked;
+            loadGameButton.OnClicked += OnClicked;
+            backButton.OnClicked += OnClicked;
+            
+            newGameButton.OnEnter += OnHoverEnter;
+            loadGameButton.OnEnter += OnHoverEnter;
+            backButton.OnEnter += OnHoverEnter;
         }
 
         private void SetupMultiplayerPanel()
@@ -208,6 +230,14 @@ namespace Mayday.Game.Screens
                 _multiplayerPanel.Active = false;
                 _mainPanel.Active = true;
             };
+
+            startServer.OnClicked += OnClicked;
+            joinGame.OnClicked += OnClicked;
+            backButton.OnClicked += OnClicked;
+            
+            startServer.OnEnter += OnHoverEnter;
+            joinGame.OnEnter += OnHoverEnter;
+            backButton.OnEnter += OnHoverEnter;
         }
         
         private void SetupSettingsPanel()
@@ -246,17 +276,31 @@ namespace Mayday.Game.Screens
             };
 
             resizeButton.OnClicked += (element) => Game1.NextResize();
+
+            resizeButton.OnClicked += OnClicked;
+            backButton.OnClicked += OnClicked;
+
+            resizeButton.OnEnter += OnHoverEnter;
+            backButton.OnEnter += OnHoverEnter;
         }
 
-        private void OnHoverLeave(IElement obj)
+        private void OnHoverLeave(IElement obj) => obj.FillColor = new Color(210, 125, 44);
+
+        private void OnHoverEnter(IElement obj)
         {
-            obj.FillColor = new Color(210, 125, 44);
+#if !DEBUG
+            _tapSound.Play();
+#endif
+        }
+        
+        private void OnClicked(IElement obj)
+        {
+#if !DEBUG
+            _clickSound.Play();
+#endif
         }
 
-        private void OnButtonHover(IElement obj)
-        {
-            obj.FillColor = new Color(180, 95, 14);
-        }
+        private void OnButtonHover(IElement obj) => obj.FillColor = new Color(180, 95, 14);
 
         public override void Begin()
         {
