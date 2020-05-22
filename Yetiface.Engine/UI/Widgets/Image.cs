@@ -21,9 +21,7 @@ namespace Yetiface.Engine.UI.Widgets
         private readonly Texture2D _texture;
         private readonly DrawMode _drawMode;
 
-        public Image(Texture2D texture, DrawMode drawMode = DrawMode.Preserve, int offsetX = 0, int offsetY = 0,
-            bool fillToParent = true) : base(offsetX, offsetY,
-            fillToParent)
+        public Image(Texture2D texture, DrawMode drawMode = DrawMode.Preserve)
         {
             _texture = texture;
             _drawMode = drawMode;
@@ -36,8 +34,6 @@ namespace Yetiface.Engine.UI.Widgets
 
         public override void DrawElement()
         {
-            FillToParent = _drawMode == DrawMode.Stretch;
-
             switch (_drawMode)
             {
                 case DrawMode.Stretch:

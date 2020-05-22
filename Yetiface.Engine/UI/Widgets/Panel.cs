@@ -2,10 +2,6 @@
 {
     public class Panel : Element
     {
-        public Panel(int offsetX = 0, int offsetY = 0) : base(offsetX, offsetY)
-        {
-            
-        }
 
         public override void DrawElement()
         {

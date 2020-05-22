@@ -8,10 +8,9 @@ namespace Yetiface.Engine.UI.Widgets
         public string Text { get; set; }
         public Color Color { get; set; } = Color.White;
 
-        public TextBlock(string text, int offsetX = 0, int offsetY = 0) : base(offsetX, offsetY)
+        public TextBlock(string text)
         {
             Text = text;
-            FillToParent = true;
         }
 
         public override void DrawElement()

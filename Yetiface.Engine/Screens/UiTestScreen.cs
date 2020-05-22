@@ -15,25 +15,42 @@ namespace Yetiface.Engine.Screens
 
         public override void Awake()
         {
-            var rootPanel = UserInterface.SetRoot(new Panel(){FillToParent = true});
+            var buttonPanel = UserInterface.AddElement(new Panel
+            {
+                FillColor = Color.Blue * 0.5f,
+                Anchor = Anchor.CenterLeft
+            });
 
-            var buttonPanel = rootPanel.AddElement(new Panel(20){Height = (int) (rootPanel.Height * 0.7f), Width = 700, FillColor = Color.Blue*0.5f, FillToParent = false, Anchor = Anchor.CenterLeft});
+            UserInterface.AddElement(new Button("TopLeft"){Anchor = Anchor.TopLeft});
+            UserInterface.AddElement(new Button("TopCenter") {Anchor = Anchor.TopCenter});
+            UserInterface.AddElement(new Button("TopRight") {Anchor = Anchor.TopRight});
+            
+            UserInterface.AddElement(new Button("CenterLeft") {Anchor = Anchor.CenterLeft});
+            UserInterface.AddElement(new Button("CenterRightDwight") {Anchor = Anchor.CenterRight});
+            UserInterface.AddElement(new Button("Center") {Anchor = Anchor.Center});
+            
+            var buttonBottomLeft = UserInterface.AddElement(new Button("BottomLeft") {Anchor = Anchor.BottomLeft});
+            UserInterface.AddElement(new Button("BottomLeftNext") {Anchor = Anchor.BottomLeft});
+            UserInterface.AddElement(new Button("BottomCenter") {Anchor = Anchor.BottomCenter});
+            UserInterface.AddElement(new Button("BottomRight") {Anchor = Anchor.BottomRight});
 
-            rootPanel.AddElement(new Button("TopLeft"){Anchor = Anchor.TopLeft});
-            rootPanel.AddElement(new Button("TopCenter") {Anchor = Anchor.TopCenter});
-            rootPanel.AddElement(new Button("TopRight") {Anchor = Anchor.TopRight});
-            
-            rootPanel.AddElement(new Button("CenterLeft") {Anchor = Anchor.CenterLeft});
-            rootPanel.AddElement(new Button("Center") {Anchor = Anchor.Center});
-            rootPanel.AddElement(new Button("CenterRight") {Anchor = Anchor.CenterRight});
-            
-            rootPanel.AddElement(new Button("BottomLeft") {Anchor = Anchor.BottomLeft});
-            rootPanel.AddElement(new Button("BottomCenter") {Anchor = Anchor.BottomCenter});
-            rootPanel.AddElement(new Button("BottomRight") {Anchor = Anchor.BottomRight});
-            
+            buttonBottomLeft.OnClicked += OnButtonClicked;
+            buttonBottomLeft.OnHover += () =>
+            {
+                buttonBottomLeft.FillColor = Color.Pink;
+            };
+            buttonBottomLeft.OnLeave += () =>
+            {
+                buttonBottomLeft.FillColor = Color.Black;
+            };
 
-            var topPanel = rootPanel.AddElement(new Panel(){FillColor = Color.Aqua*0.7f, Width = Window.WindowWidth, Height = 70, FillToParent = false, Anchor = Anchor.TopCenter});
+            var topPanel = UserInterface.AddElement(new Panel(){FillColor = Color.Aqua*0.7f, Width = Window.WindowWidth, Height = 70, Anchor = Anchor.TopCenter});
             topPanel.AddElement(new Button("Am top :D") {Anchor = Anchor.TopLeft});
+        }
+
+        private void OnButtonClicked()
+        {
+            ScreenManager.ChangeScreen("MenuScreen");
         }
 
         public override void Begin()

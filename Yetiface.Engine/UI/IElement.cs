@@ -30,6 +30,13 @@ namespace Yetiface.Engine.UI
         IElement Parent { get; set; }
         IList<IElement> Children { get; set; }
         Vector2 Offset { get; set; }
+        
+        /// <summary>
+        /// Controls the relative size to the parent, 1 indicates full parent size on the relevant axis.
+        /// Numbers larger than 1 indicate explicit size.
+        /// Anything between 0 and 1 will indicate a certain size relative to the parents.
+        /// </summary>
+        Vector2 Size { get; set; }
 
         /// <summary>
         /// The position relative to the element' parent
@@ -43,14 +50,13 @@ namespace Yetiface.Engine.UI
         
         int X { get; set; }
         int Y { get; set; }
-        int Width { get; set; }
-        int Height { get; set; }
+        int Width { get; }
+        int Height { get; }
 
         Color FillColor { get; set; }
 
         Rectangle RenderRectangle { get; }
 
-        bool FillToParent { get; set; }
         bool IsHovering { get; set; }
 
         // This generic basically says, Add an element of some type, as long as that type is an IElement.

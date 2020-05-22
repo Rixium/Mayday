@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Yetiface.Engine.Utils;
+using MouseState = Yetiface.Engine.Utils.MouseState;
 
 namespace Yetiface.Engine.UI
 {
@@ -15,6 +17,8 @@ namespace Yetiface.Engine.UI
         public IList<IElement> Children { get; set; }
 
         public Vector2 Offset { get; set; }
+        
+        public Vector2 Size { get; set; }
 
         public Vector2 RelativePosition { get; set; }
         
@@ -27,37 +31,31 @@ namespace Yetiface.Engine.UI
         public int Width { get; set; }
 
         public int Height { get; set; }
-
-        public Color FillColor { get; set; }
         
-        public Action OnHover { get; set; }
-
-        /// <summary>
-        ///  The constructor should currently just create a new render rectangle from the X, Y, Width and Height
-        /// that have hopefully been set as properties.
-        /// </summary>
-        protected Element(int offsetX, int offsetY, bool fillToParent = false)
-        {
-            Offset = new Vector2(offsetX, offsetY);
-            FillToParent = fillToParent;
-        }
-
         /// <summary>
         ///  The render rectangle will keep track of the actual render position of the element, and should be updated
         ///  in regards to the elements parent.
         /// </summary>
 
         public Rectangle RenderRectangle => _renderRectangle;
-
-        public bool FillToParent { get; set; }
+        
         public bool IsHovering { get; set; }
 
         private Rectangle _renderRectangle;
+
+        public Color FillColor { get; set; }
         
+        public Action OnHover { get; set; }
+        public Action OnLeave { get; set; }
+        public Action OnClicked { get; set; }
+
         public T AddElement<T>(T element) where T : IElement
         {
             if (Children == null) Children = new List<IElement>();
+            
             element.Parent = this;
+            element.UserInterface = UserInterface;
+            
             Children.Add(element);
 
             return element;
@@ -79,16 +77,17 @@ namespace Yetiface.Engine.UI
 
         public void Update(ref IElement hoverElement)
         {
+            var wasHovering = IsHovering;
             // Set our hovering to whether or not the mouse is intersecting our render rectangle.
-            IsHovering = MouseState.Bounds.Intersects(_renderRectangle);
+            IsHovering = MouseState.Bounds.Intersects(_renderRectangle) && CanInteractWithThisPieceOfShit;
             
             // We're going to head through the children NOW.
             // We pass a reference to the hover element. This way if the hover element changes in any of our children
             // we can see that, as it is a reference. TODO Mathias: SEE REFERENCE TYPES VS VALUE TYPES : https://www.tutorialsteacher.com/csharp/csharp-value-type-and-reference-type
             if (Children != null)
             {
-                foreach (var element in Children) 
-                    element.Update(ref hoverElement);
+                for(var i = Children.Count - 1; i >= 0; i--)
+                    Children[i].Update(ref hoverElement);
             }
 
             // If we're hovering we do this.
@@ -102,12 +101,19 @@ namespace Yetiface.Engine.UI
             if (hoverElement == this)
             {
                 OnHover?.Invoke();
+
+                if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                {
+                    OnClicked?.Invoke();
+                }
             }
-            else
+            else if (wasHovering)
             {
-                
+                OnLeave?.Invoke();
             }
         }
+
+        public bool CanInteractWithThisPieceOfShit { get; set; } = true;
 
         public void Draw()
         {
@@ -150,12 +156,6 @@ namespace Yetiface.Engine.UI
 
                 newX = Parent.RenderRectangle.X;
                 newY = Parent.RenderRectangle.Y;
-
-                if (FillToParent)
-                {
-                    newWidth = (int) (Parent.RenderRectangle.Width - (Offset.X * 2));
-                    newHeight = (int) (Parent.RenderRectangle.Height - (Offset.Y * 2));
-                }
             }
             else
             {
@@ -168,10 +168,6 @@ namespace Yetiface.Engine.UI
             Width = newWidth;
             Height = newHeight;
 
-            // We can finally apply our offset to our Y.
-
-            newY = (int) (Y + Offset.Y);
-            
             if (Parent != null)
             {
                 switch (Anchor)
