@@ -36,11 +36,7 @@ namespace Yetiface.Engine.Tests.UI
         public void HaveNoParentIfFirstElement()
         {
             var userInterface = new UserInterface();
-            var element = new Panel();
-
-            userInterface.SetRoot(element);
-            
-            element.Parent.ShouldBeNull();
+            userInterface.Root.Parent.ShouldBeNull();
         }
         
     }
