@@ -34,12 +34,78 @@ namespace Yetiface.Engine.Screens
                 Anchor = Anchor.CenterRight
             });
             
-            UserInterface.AddElement(new Button("Center")
+            buttonPanel.AddElement(new Button("Center")
             {
                 Size = new Vector2(0.15f, 50),
                 Anchor = Anchor.Center
             });
+             
+            buttonPanel.AddElement(new Button("CenterLeft")
+            {
+                Size = new Vector2(0.15f, 50),
+                Anchor = Anchor.CenterLeft
+            });
+ 
+            buttonPanel.AddElement(new Button("CenterRight")
+            {
+                Size = new Vector2(0.15f, 50),
+                Anchor = Anchor.CenterRight
+            });
+
+            buttonPanel.AddElement(new Button("TopLeft")
+            {
+                Size = new Vector2(0.15f, 50),
+                Anchor = Anchor.TopLeft
+            });
             
+            buttonPanel.AddElement(new Button("TopCenter")
+            {
+                Size = new Vector2(0.15f, 50),
+                Anchor = Anchor.TopCenter
+            });
+            
+            buttonPanel.AddElement(new Button("TopRight")
+            {
+                Size = new Vector2(0.15f, 50),
+                Anchor = Anchor.TopRight
+            });
+            
+            buttonPanel.AddElement(new Button("BottomRight")
+            {
+                Size = new Vector2(0.15f, 50),
+                Anchor = Anchor.BottomRight
+            });
+            
+            buttonPanel.AddElement(new Button("BottomLeft")
+            {
+                Size = new Vector2(0.15f, 50),
+                Anchor = Anchor.BottomLeft
+            });
+            
+            buttonPanel.AddElement(new Button("BottomCenter")
+            {
+                Size = new Vector2(0.15f, 50),
+                Anchor = Anchor.BottomCenter
+            });
+
+            UserInterface.AddElement(new Button("TopRight")
+            {
+                Size = new Vector2(0.15f, 50),
+                Anchor = Anchor.TopRight
+            });
+            
+            UserInterface.AddElement(new Button("TopLeft")
+            {
+                Size = new Vector2(0.15f, 50),
+                Anchor = Anchor.TopLeft
+            });
+
+            UserInterface.AddElement(new Button("TopCenter")
+            {
+                Size = new Vector2(0.15f, 50),
+                Anchor = Anchor.TopCenter
+            });
+
             var buttonBottomLeft = UserInterface.AddElement(new Button("BottomLeft")
             {
                 Size = new Vector2(0.15f, 50),
