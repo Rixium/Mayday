@@ -32,6 +32,7 @@ namespace Mayday.Game
 #if !DEBUG
             var music  = YetiGame.ContentManager.Load<Song>("MainMenu/menuMusic");
             MediaPlayer.Play(music);
+            MediaPlayer.Volume = 0.1f;
 #endif
         }
 
