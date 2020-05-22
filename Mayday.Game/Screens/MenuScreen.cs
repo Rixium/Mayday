@@ -58,13 +58,13 @@ namespace Mayday.Game.Screens
             _mainPanel = UserInterface.AddElement(new Panel
             {
                 Anchor = Anchor.BottomLeft,
-                Size = new Vector2(300, 0)
+                Size = new Vector2(1, 0)
             });
 
             var singlePlayerButton = _mainPanel.AddElement(new Button("Single Player")
             {
                 Anchor = Anchor.BottomLeft,
-                Size = new Vector2(1, 60),
+                Size = new Vector2(200, 60),
                 Offset = new Vector2(10, -220),
                 FillColor = new Color(210, 125, 44)
             });
@@ -72,7 +72,7 @@ namespace Mayday.Game.Screens
             var multiplayerButton = _mainPanel.AddElement(new Button("Multiplayer")
             {
                 Anchor = Anchor.BottomLeft,
-                Size = new Vector2(1, 60),
+                Size = new Vector2(200, 60),
                 Offset = new Vector2(10, -150),
                 FillColor = new Color(210, 125, 44)
             });
@@ -80,7 +80,7 @@ namespace Mayday.Game.Screens
             var settingsButton = _mainPanel.AddElement(new Button("Settings")
             {
                 Anchor = Anchor.BottomLeft,
-                Size = new Vector2(1, 60),
+                Size = new Vector2(200, 60),
                 Offset = new Vector2(10, -80),
                 FillColor = new Color(210, 125, 44)
             });
@@ -88,7 +88,7 @@ namespace Mayday.Game.Screens
             var exitButton = _mainPanel.AddElement(new Button("Exit")
             {
                 Anchor = Anchor.BottomLeft,
-                Size = new Vector2(1, 60),
+                Size = new Vector2(200, 60),
                 Offset = new Vector2(10, -10),
                 FillColor = new Color(210, 125, 44)
             });
@@ -138,33 +138,33 @@ namespace Mayday.Game.Screens
             {
                 Active = false,
                 Anchor = Anchor.BottomLeft,
-                Size = new Vector2(300, 0)
+                Size = new Vector2(1, 0)
             });
 
             var newGameButton = _singlePlayerPanel.AddElement(new Button("New Game")
             {
                 Anchor = Anchor.BottomLeft,
-                Size = new Vector2(1, 60),
-                Offset = new Vector2(10, -150),
+                Size = new Vector2(200, 60),
+                Offset = new Vector2(10, -80),
                 FillColor = new Color(210, 125, 44)
             });
             
             var loadGameButton = _singlePlayerPanel.AddElement(new Button("Load Game")
             {
                 Anchor = Anchor.BottomLeft,
-                Size = new Vector2(1, 60),
-                Offset = new Vector2(10, -80),
+                Size = new Vector2(200, 60),
+                Offset = new Vector2(10, -10),
                 FillColor = new Color(210, 125, 44)
             });
             
             var backButton = _singlePlayerPanel.AddElement(new Button("Back")
             {
-                Anchor = Anchor.BottomLeft,
-                Size = new Vector2(1, 60),
-                Offset = new Vector2(10, -10),
+                Anchor = Anchor.BottomRight,
+                Size = new Vector2(200, 60),
+                Offset = new Vector2(-10, -10),
                 FillColor = new Color(210, 125, 44)
             });
-
+            
             newGameButton.OnHover += OnButtonHover;
             newGameButton.OnLeave += OnHoverLeave;
             loadGameButton.OnHover += OnButtonHover;
@@ -192,30 +192,31 @@ namespace Mayday.Game.Screens
             {
                 Active = false,
                 Anchor = Anchor.BottomLeft,
-                Size = new Vector2(300, 0)
+                Size = new Vector2(1, 0)
             });
 
             var startServer = _multiplayerPanel.AddElement(new Button("Start Server")
             {
                 Anchor = Anchor.BottomLeft,
-                Size = new Vector2(1, 60),
-                Offset = new Vector2(10, -150),
+                Size = new Vector2(200, 60),
+                Offset = new Vector2(10, -80),
                 FillColor = new Color(210, 125, 44)
             });
             
             var joinGame = _multiplayerPanel.AddElement(new Button("Join Game")
             {
                 Anchor = Anchor.BottomLeft,
-                Size = new Vector2(1, 60),
-                Offset = new Vector2(10, -80),
+                Size = new Vector2(200, 60),
+                Offset = new Vector2(10, -10),
                 FillColor = new Color(210, 125, 44)
             });
             
+                    
             var backButton = _multiplayerPanel.AddElement(new Button("Back")
             {
-                Anchor = Anchor.BottomLeft,
-                Size = new Vector2(1, 60),
-                Offset = new Vector2(10, -10),
+                Anchor = Anchor.BottomRight,
+                Size = new Vector2(200, 60),
+                Offset = new Vector2(-10, -10),
                 FillColor = new Color(210, 125, 44)
             });
 
@@ -246,22 +247,22 @@ namespace Mayday.Game.Screens
             {
                 Active = false,
                 Anchor = Anchor.BottomLeft,
-                Size = new Vector2(300, 0)
+                Size = new Vector2(1, 0)
             });
 
             var resizeButton = _settingsPanel.AddElement(new Button("Resize")
             {
                 Anchor = Anchor.BottomLeft,
-                Size = new Vector2(1, 60),
-                Offset = new Vector2(10, -80),
+                Size = new Vector2(200, 60),
+                Offset = new Vector2(10, -10),
                 FillColor = new Color(210, 125, 44)
             });
             
             var backButton = _settingsPanel.AddElement(new Button("Back")
             {
-                Anchor = Anchor.BottomLeft,
-                Size = new Vector2(1, 60),
-                Offset = new Vector2(10, -10),
+                Anchor = Anchor.BottomRight,
+                Size = new Vector2(200, 60),
+                Offset = new Vector2(-10, -10),
                 FillColor = new Color(210, 125, 44)
             });
 
