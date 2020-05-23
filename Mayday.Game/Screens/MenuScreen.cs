@@ -16,6 +16,9 @@ namespace Mayday.Game.Screens
         private Panel _singlePlayerPanel;
         private Panel _multiplayerPanel;
         private Panel _settingsPanel;
+        private Panel _startGamePanel;
+        private Panel _joinGamePanel;
+        
         private SoundEffect _clickSound;
         private SoundEffect _tapSound;
 
@@ -50,6 +53,8 @@ namespace Mayday.Game.Screens
             SetupMainMenuPanel();
             SetupSinglePlayerPanel();
             SetupMultiplayerPanel();
+            SetupStartGamePanel();
+            SetupJoinGamePanel();
             SetupSettingsPanel();
         }
 
@@ -195,7 +200,7 @@ namespace Mayday.Game.Screens
                 Size = new Vector2(1, 0)
             });
 
-            var startServer = _multiplayerPanel.AddElement(new Button("Start Server")
+            var startGame = _multiplayerPanel.AddElement(new Button("Start Game")
             {
                 Anchor = Anchor.BottomLeft,
                 Size = new Vector2(200, 60),
@@ -220,8 +225,8 @@ namespace Mayday.Game.Screens
                 FillColor = new Color(210, 125, 44)
             });
 
-            startServer.OnHover += OnButtonHover;
-            startServer.OnLeave += OnHoverLeave;
+            startGame.OnHover += OnButtonHover;
+            startGame.OnLeave += OnHoverLeave;
             joinGame.OnHover += OnButtonHover;
             joinGame.OnLeave += OnHoverLeave;
             backButton.OnHover += OnButtonHover;
@@ -232,11 +237,24 @@ namespace Mayday.Game.Screens
                 _mainPanel.Active = true;
             };
 
-            startServer.OnClicked += OnClicked;
+            startGame.OnClicked += OnClicked;
+            startGame.OnClicked += (element) =>
+            {
+                _multiplayerPanel.Active = false;
+                _startGamePanel.Active = true;
+            };
+            
             joinGame.OnClicked += OnClicked;
+            joinGame.OnClicked += (element) =>
+            {
+                _multiplayerPanel.Active = false;
+                _joinGamePanel.Active = true;
+            };
+            
+            
             backButton.OnClicked += OnClicked;
             
-            startServer.OnEnter += OnHoverEnter;
+            startGame.OnEnter += OnHoverEnter;
             joinGame.OnEnter += OnHoverEnter;
             backButton.OnEnter += OnHoverEnter;
         }
@@ -282,6 +300,104 @@ namespace Mayday.Game.Screens
             backButton.OnClicked += OnClicked;
 
             resizeButton.OnEnter += OnHoverEnter;
+            backButton.OnEnter += OnHoverEnter;
+        }
+
+        private void SetupStartGamePanel()
+        {
+            // Second panel is for singleplayer.
+            _startGamePanel = UserInterface.AddElement(new Panel
+            {
+                Active = false,
+                Anchor = Anchor.BottomLeft,
+                Size = new Vector2(1, 0)
+            });
+
+            var newGameButton = _startGamePanel.AddElement(new Button("New Game")
+            {
+                Anchor = Anchor.BottomLeft,
+                Size = new Vector2(200, 60),
+                Offset = new Vector2(10, -80),
+                FillColor = new Color(210, 125, 44)
+            });
+            
+            var loadGameButton = _startGamePanel.AddElement(new Button("Load Game")
+            {
+                Anchor = Anchor.BottomLeft,
+                Size = new Vector2(200, 60),
+                Offset = new Vector2(10, -10),
+                FillColor = new Color(210, 125, 44)
+            });
+            
+            var backButton = _startGamePanel.AddElement(new Button("Back")
+            {
+                Anchor = Anchor.BottomRight,
+                Size = new Vector2(200, 60),
+                Offset = new Vector2(-10, -10),
+                FillColor = new Color(210, 125, 44)
+            });
+            
+            newGameButton.OnHover += OnButtonHover;
+            newGameButton.OnLeave += OnHoverLeave;
+            loadGameButton.OnHover += OnButtonHover;
+            loadGameButton.OnLeave += OnHoverLeave;
+            backButton.OnHover += OnButtonHover;
+            backButton.OnLeave += OnHoverLeave;
+            backButton.OnClicked += (element) =>
+            {
+                _startGamePanel.Active = false;
+                _multiplayerPanel.Active = true;
+            };
+
+            newGameButton.OnClicked += OnClicked;
+            loadGameButton.OnClicked += OnClicked;
+            backButton.OnClicked += OnClicked;
+            
+            newGameButton.OnEnter += OnHoverEnter;
+            loadGameButton.OnEnter += OnHoverEnter;
+            backButton.OnEnter += OnHoverEnter;
+        }
+
+        private void SetupJoinGamePanel()
+        {
+            // Second panel is for singleplayer.
+            _joinGamePanel = UserInterface.AddElement(new Panel
+            {
+                Active = false,
+                Anchor = Anchor.BottomLeft,
+                Size = new Vector2(1, 0)
+            });
+
+            var refreshGamesButton = _joinGamePanel.AddElement(new Button("Refresh")
+            {
+                Anchor = Anchor.BottomLeft,
+                Size = new Vector2(200, 60),
+                Offset = new Vector2(10, -10),
+                FillColor = new Color(210, 125, 44)
+            });
+            
+            var backButton = _joinGamePanel.AddElement(new Button("Back")
+            {
+                Anchor = Anchor.BottomRight,
+                Size = new Vector2(200, 60),
+                Offset = new Vector2(-10, -10),
+                FillColor = new Color(210, 125, 44)
+            });
+            
+            refreshGamesButton.OnHover += OnButtonHover;
+            refreshGamesButton.OnLeave += OnHoverLeave;
+            backButton.OnHover += OnButtonHover;
+            backButton.OnLeave += OnHoverLeave;
+            backButton.OnClicked += (element) =>
+            {
+                _joinGamePanel.Active = false;
+                _multiplayerPanel.Active = true;
+            };
+
+            refreshGamesButton.OnClicked += OnClicked;
+            backButton.OnClicked += OnClicked;
+            
+            refreshGamesButton.OnEnter += OnHoverEnter;
             backButton.OnEnter += OnHoverEnter;
         }
 
