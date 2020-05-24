@@ -1,5 +1,4 @@
-﻿using GeonBit.UI;
-using Mayday.Game.UI;
+﻿using Mayday.Game.UI;
 using Microsoft.Xna.Framework;
 using Yetiface.Engine.Screens;
 

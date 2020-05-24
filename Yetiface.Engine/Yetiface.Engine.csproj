@@ -157,12 +157,6 @@
     <Content Include="Content\Splash\splash.png" />
     <Content Include="Content\Utils\pixel.png" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Users\Dan\RiderProjects\GeonBit.UI\GeonBit.UI\GeonBit.UI.csproj">
-      <Project>{dd284f36-fcd5-4265-ae4c-28b9a38b9def}</Project>
-      <Name>GeonBit.UI</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
