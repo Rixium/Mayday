@@ -47,6 +47,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Screens\GameScreen.cs" />
     <Compile Include="Screens\MenuScreen.cs" />
+    <Compile Include="UI\MenuScreenUserInterface.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework, Version=3.7.1.189, Culture=neutral, PublicKeyToken=null">
@@ -123,6 +124,10 @@
     <Content Include="Content\Ball.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GeonBit.UI\GeonBit.UI\GeonBit.UI.csproj">
+      <Project>{dd284f36-fcd5-4265-ae4c-28b9a38b9def}</Project>
+      <Name>GeonBit.UI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Yetiface.Engine\Yetiface.Engine.csproj">
       <Project>{6b7d6ee3-17d6-4e6b-ac60-d3bd2027c1cc}</Project>
       <Name>Yetiface.Engine</Name>

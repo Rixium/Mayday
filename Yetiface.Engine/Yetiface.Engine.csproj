@@ -56,10 +56,7 @@
     <Compile Include="ECS\IEntity.cs" />
     <Compile Include="Graphics\Renderers\BasicRenderer.cs" />
     <Compile Include="Graphics\Renderers\IRenderer.cs" />
-    <Compile Include="Screens\UiTestScreen.cs" />
-    <Compile Include="UI\Widgets\Button.cs" />
-    <Compile Include="UI\Widgets\Image.cs" />
-    <Compile Include="UI\Widgets\TextBlock.cs" />
+    <Compile Include="UI\IUserInterface.cs" />
     <Compile Include="Utils\FrameRate.cs" />
     <Compile Include="YetiGame.cs" />
     <Compile Include="Graphics\ISprite.cs" />
@@ -79,11 +76,6 @@
     <Compile Include="Screens\Transitions\FadeTransition.cs" />
     <Compile Include="Screens\Transitions\ITransition.cs" />
     <Compile Include="Screens\Transitions\Transition.cs" />
-    <Compile Include="UI\Element.cs" />
-    <Compile Include="UI\IElement.cs" />
-    <Compile Include="UI\IUserInterface.cs" />
-    <Compile Include="UI\UserInterface.cs" />
-    <Compile Include="UI\Widgets\Panel.cs" />
     <Compile Include="Utils\GraphicsUtils.cs" />
     <Compile Include="Utils\MouseState.cs" />
     <Compile Include="Utils\Time.cs" />

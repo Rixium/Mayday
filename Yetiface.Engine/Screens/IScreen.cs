@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
+using Mayday.Game.UI;
 using Microsoft.Xna.Framework;
 using Yetiface.Engine.ECS;
 using Yetiface.Engine.ECS.Components;
 using Yetiface.Engine.ECS.Components.Renderables;
 using Yetiface.Engine.Graphics.Renderers;
-using Yetiface.Engine.UI;
 using IUpdateable = Yetiface.Engine.ECS.Components.Updateables.IUpdateable;
 
 namespace Yetiface.Engine.Screens
@@ -31,11 +31,7 @@ namespace Yetiface.Engine.Screens
         HashSet<IEntity> Entities { get; set; }
 
         IScreenManager ScreenManager { get; set; }
-
-        /// <summary>
-        /// Use this to set up each screen user interface.
-        /// Add elements to the user interface.
-        /// </summary>
+        
         IUserInterface UserInterface { get; set; }
 
         Color BackgroundColor { get; set; }

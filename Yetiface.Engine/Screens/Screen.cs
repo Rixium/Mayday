@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
+using Mayday.Game.UI;
 using Microsoft.Xna.Framework;
 using Yetiface.Engine.ECS;
 using Yetiface.Engine.ECS.Components;
 using Yetiface.Engine.ECS.Components.Renderables;
 using Yetiface.Engine.Graphics.Renderers;
-using Yetiface.Engine.UI;
 using Yetiface.Engine.Utils;
 using IUpdateable = Yetiface.Engine.ECS.Components.Updateables.IUpdateable;
 
@@ -22,9 +22,7 @@ namespace Yetiface.Engine.Screens
         public bool IsDebug { get; set; }
         public HashSet<IEntity> Entities { get; set; }
         public IScreenManager ScreenManager { get; set; }
-
         public IUserInterface UserInterface { get; set; }
-
         public Color BackgroundColor { get; set; }
 
         public string Name { get; set; }
@@ -34,7 +32,6 @@ namespace Yetiface.Engine.Screens
         protected Screen(string name)
         {
             Renderer = new BasicRenderer(this);
-            UserInterface = new UserInterface();
             Name = name;
         }
 
@@ -59,10 +56,6 @@ namespace Yetiface.Engine.Screens
             GraphicsUtils.Instance.End();
             
             UserInterface?.Draw();
-            
-            if (!IsDebug) return;
-
-            UserInterface?.DrawDebug();
         }
 
         public abstract void Finish();

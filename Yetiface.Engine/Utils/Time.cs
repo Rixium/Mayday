@@ -16,8 +16,11 @@ namespace Yetiface.Engine.Utils
 
         public static int TimeScale { get; set; } = 1;
 
+        public static GameTime GameTime { get; set; }
+
         public static void Update(GameTime gameTime)
         {
+            GameTime = gameTime;
             DeltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds * TimeScale;
         }
         

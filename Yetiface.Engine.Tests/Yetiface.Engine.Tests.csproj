@@ -62,8 +62,6 @@
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Screens\ScreenManagerShould.cs" />
-        <Compile Include="UI\ElementShould.cs" />
-        <Compile Include="UI\UserInterfaceShould.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />
