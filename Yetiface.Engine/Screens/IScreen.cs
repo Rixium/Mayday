@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GeonBit.UI;
+using Mayday.Game.UI;
 using Microsoft.Xna.Framework;
 using Yetiface.Engine.ECS;
 using Yetiface.Engine.ECS.Components;
@@ -31,6 +32,8 @@ namespace Yetiface.Engine.Screens
         HashSet<IEntity> Entities { get; set; }
 
         IScreenManager ScreenManager { get; set; }
+        
+        IUserInterface UserInterface { get; set; }
 
         Color BackgroundColor { get; set; }
 

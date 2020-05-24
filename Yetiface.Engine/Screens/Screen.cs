@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using GeonBit.UI;
+using Mayday.Game.UI;
 using Microsoft.Xna.Framework;
 using Yetiface.Engine.ECS;
 using Yetiface.Engine.ECS.Components;
@@ -22,7 +22,7 @@ namespace Yetiface.Engine.Screens
         public bool IsDebug { get; set; }
         public HashSet<IEntity> Entities { get; set; }
         public IScreenManager ScreenManager { get; set; }
-
+        public IUserInterface UserInterface { get; set; }
         public Color BackgroundColor { get; set; }
 
         public string Name { get; set; }
@@ -41,7 +41,7 @@ namespace Yetiface.Engine.Screens
 
         public virtual void Update()
         {
-            UserInterface.Active.Update(Time.GameTime);
+            UserInterface.Update();
 
             if (Updateables == null) return;
             foreach (var updateable in Updateables) 
@@ -55,7 +55,7 @@ namespace Yetiface.Engine.Screens
             Renderer?.Draw();
             GraphicsUtils.Instance.End();
             
-            UserInterface.Active.Draw(GraphicsUtils.Instance.SpriteBatch);
+            UserInterface.Draw();
         }
 
         public abstract void Finish();
