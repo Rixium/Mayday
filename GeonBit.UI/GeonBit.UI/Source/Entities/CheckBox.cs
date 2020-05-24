@@ -1,4 +1,5 @@
 ﻿#region File Description
+
 //-----------------------------------------------------------------------------
 // CheckBoxes are inline paragraphs with a little square next to them that can either
 // be checked or unchecked.
@@ -9,20 +10,20 @@
 // Author: Ronen Ness.
 // Since: 2016.
 //-----------------------------------------------------------------------------
+
 #endregion
-using System.Collections.Generic;
+
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using GeonBit.UI.DataTypes;
 
 namespace GeonBit.UI.Entities
 {
-
     /// <summary>
     /// A checkbox entity, eg a label with a square you can mark as checked or uncheck.
     /// Holds a boolean value.
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     public class CheckBox : Entity
     {
         /// <summary>
@@ -30,7 +31,7 @@ namespace GeonBit.UI.Entities
         /// </summary>
         static CheckBox()
         {
-            Entity.MakeSerializable(typeof(CheckBox));
+            MakeSerializable(typeof(CheckBox));
         }
 
         /// <summary>CheckBox label. Use this if you want to change the checkbox text or font style.</summary>
@@ -56,7 +57,8 @@ namespace GeonBit.UI.Entities
         /// <param name="size">CheckBox size.</param>
         /// <param name="offset">Offset from anchor position.</param>
         /// <param name="isChecked">If true, this checkbox will be created as 'checked'.</param>
-        public CheckBox(string text, Anchor anchor = Anchor.Auto, Vector2? size = null, Vector2? offset = null, bool isChecked = false) :
+        public CheckBox(string text, Anchor anchor = Anchor.Auto, Vector2? size = null, Vector2? offset = null,
+            bool isChecked = false) :
             base(size, anchor, offset)
         {
             // update default style
@@ -112,7 +114,11 @@ namespace GeonBit.UI.Entities
         public bool Checked
         {
             get { return _value == true; }
-            set { _value = value; DoOnValueChange(); }
+            set
+            {
+                _value = value;
+                DoOnValueChange();
+            }
         }
 
         /// <summary>
@@ -122,7 +128,11 @@ namespace GeonBit.UI.Entities
         virtual protected Texture2D GetTexture()
         {
             EntityState state = _entityState;
-            if (state != EntityState.MouseDown && Checked) { state = EntityState.MouseDown; }
+            if (state != EntityState.MouseDown && Checked)
+            {
+                state = EntityState.MouseDown;
+            }
+
             return Resources.CheckBoxTextures[state];
         }
 
@@ -133,7 +143,6 @@ namespace GeonBit.UI.Entities
         /// <param name="phase">The phase we are currently drawing.</param>
         override protected void DrawEntity(SpriteBatch spriteBatch, DrawPhase phase)
         {
-
             // get texture based on checkbox / mouse state
             Texture2D texture = GetTexture();
 
@@ -142,9 +151,9 @@ namespace GeonBit.UI.Entities
 
             // dest rect
             Rectangle dest = new Rectangle(_destRect.X,
-                                (int)(_destRect.Y + _destRect.Height / 2 - actualSize.Y / 2),
-                                (int)(actualSize.X),
-                                (int)(actualSize.Y));
+                (int) (_destRect.Y + _destRect.Height / 2 - actualSize.Y / 2),
+                (int) (actualSize.X),
+                (int) (actualSize.Y));
             dest = UserInterface.Active.DrawUtils.ScaleRect(dest, Scale);
 
             // source rect
