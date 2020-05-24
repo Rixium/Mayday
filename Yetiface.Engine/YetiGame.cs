@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
+using GeonBit.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,7 +8,6 @@ using Microsoft.Xna.Framework.Input;
 using Yetiface.Engine.Inputs;
 using Yetiface.Engine.Screens;
 using Yetiface.Engine.Screens.Transitions;
-using Yetiface.Engine.UI;
 using Yetiface.Engine.Utils;
 
 namespace Yetiface.Engine
@@ -48,21 +47,19 @@ namespace Yetiface.Engine
 
         protected override void Initialize()
         {
+            IsMouseVisible = false;
+            
             SetWindowTitle();
-            SetupUtils();
+            
             InputManager = new InputManager();
             InputManager.Initialize(File.ReadAllText("Config/inputBindings.json"));
+
             base.Initialize();
         }
 
         private void SetWindowTitle(params string[] supplementaryText)
         {
             Window.Title = $"{GameName} - Version {GameVersion} - {string.Join(" - ", supplementaryText)}";
-        }
-
-        private void SetupUtils()
-        {
-            IsMouseVisible = true;
         }
 
         protected override void LoadContent()

@@ -29,6 +29,8 @@ namespace Mayday.Game
         {
             base.Initialize();
             
+            InputManager.RegisterInputEvent(new KeyInputBinding(Keys.F1), NextResize);
+            
 #if !DEBUG
             var music  = YetiGame.ContentManager.Load<Song>("MainMenu/menuMusic");
             MediaPlayer.Play(music);

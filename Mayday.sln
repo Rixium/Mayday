@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yetiface.Engine", "Yetiface
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yetiface.Steamworks", "Yetiface.Steamworks\Yetiface.Steamworks.csproj", "{A5B02CC5-5B93-419D-A296-40CAA402B4B9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeonBit.UI", "..\..\Users\Dan\RiderProjects\GeonBit.UI\GeonBit.UI\GeonBit.UI.csproj", "{DD284F36-FCD5-4265-AE4C-28B9A38B9DEF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{A5B02CC5-5B93-419D-A296-40CAA402B4B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5B02CC5-5B93-419D-A296-40CAA402B4B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5B02CC5-5B93-419D-A296-40CAA402B4B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD284F36-FCD5-4265-AE4C-28B9A38B9DEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD284F36-FCD5-4265-AE4C-28B9A38B9DEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD284F36-FCD5-4265-AE4C-28B9A38B9DEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD284F36-FCD5-4265-AE4C-28B9A38B9DEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

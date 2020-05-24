@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
+using GeonBit.UI;
 using Microsoft.Xna.Framework;
 using Yetiface.Engine.ECS;
 using Yetiface.Engine.ECS.Components;
 using Yetiface.Engine.ECS.Components.Renderables;
 using Yetiface.Engine.Graphics.Renderers;
-using Yetiface.Engine.UI;
 using Yetiface.Engine.Utils;
 using IUpdateable = Yetiface.Engine.ECS.Components.Updateables.IUpdateable;
 
@@ -23,8 +23,6 @@ namespace Yetiface.Engine.Screens
         public HashSet<IEntity> Entities { get; set; }
         public IScreenManager ScreenManager { get; set; }
 
-        public IUserInterface UserInterface { get; set; }
-
         public Color BackgroundColor { get; set; }
 
         public string Name { get; set; }
@@ -34,7 +32,6 @@ namespace Yetiface.Engine.Screens
         protected Screen(string name)
         {
             Renderer = new BasicRenderer(this);
-            UserInterface = new UserInterface();
             Name = name;
         }
 
@@ -44,7 +41,7 @@ namespace Yetiface.Engine.Screens
 
         public virtual void Update()
         {
-            UserInterface?.Update();
+            UserInterface.Active.Update(Time.GameTime);
 
             if (Updateables == null) return;
             foreach (var updateable in Updateables) 
@@ -58,11 +55,7 @@ namespace Yetiface.Engine.Screens
             Renderer?.Draw();
             GraphicsUtils.Instance.End();
             
-            UserInterface?.Draw();
-            
-            if (!IsDebug) return;
-
-            UserInterface?.DrawDebug();
+            UserInterface.Active.Draw(GraphicsUtils.Instance.SpriteBatch);
         }
 
         public abstract void Finish();
