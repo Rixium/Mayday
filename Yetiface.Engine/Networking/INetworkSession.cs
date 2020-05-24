@@ -1,7 +1,8 @@
 ﻿namespace Yetiface.Engine.Networking
 {
-    public class SteamNetworkManager : INetworkManager
+    public interface INetworkSession
     {
         
     }
+    
 }

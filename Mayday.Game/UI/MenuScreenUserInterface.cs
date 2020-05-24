@@ -1,14 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Linq.Expressions;
+﻿using System;
+using System.Collections.Generic;
 using GeonBit.UI;
 using GeonBit.UI.Animators;
 using GeonBit.UI.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using Steamworks;
+using Steamworks.Data;
 using Yetiface.Engine;
+using Yetiface.Engine.Networking.SteamNetworking;
 using Yetiface.Engine.Utils;
-using Yetiface.Steamworks;
+using Color = Microsoft.Xna.Framework.Color;
+using Image = GeonBit.UI.Entities.Image;
 
 namespace Mayday.Game.UI
 {
@@ -88,6 +92,8 @@ namespace Mayday.Game.UI
                 }
             }
         }
+
+        public Action HostGameClicked { get; set; }
 
         private void OnMouseClick(Entity entity) => _clickSound.Play();
 
@@ -180,9 +186,11 @@ namespace Mayday.Game.UI
                 Visible = false
             });
             
-            _hostGamePanel.AddChild(new Button("New Game"));
+            var newGameButton = _hostGamePanel.AddChild(new Button("New Game"));
             _hostGamePanel.AddChild(new Button("Load Game"));
             var backButton = _hostGamePanel.AddChild(new Button("Back"));
+
+            newGameButton.OnClick += (e) => HostGameClicked();
             
             backButton.OnClick += (e) =>
             {
@@ -201,7 +209,7 @@ namespace Mayday.Game.UI
             var joinGamePanelButtons =
                 _joinGamePanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None, Anchor.Center));
             
-            joinGamePanelButtons.AddChild(new Button("Join By IP"));
+            var joinByIp = joinGamePanelButtons.AddChild(new Button("Join By IP"));
             var joinSteamFriend = joinGamePanelButtons.AddChild(new Button("Join Steam Friend"));
             var backButton = joinGamePanelButtons.AddChild(new Button("Back"));
             
@@ -210,15 +218,43 @@ namespace Mayday.Game.UI
                 _multiplayerPanel.Visible = true;
                 _joinGamePanel.Visible = false;
             };
-            
+
+            joinByIp.OnClick += (e) =>
+            {
+                var textInput = new TextInput(false)
+                {
+                    PlaceholderText = "Enter IP:"
+                };
+                
+                GeonBit.UI.Utils.MessageBox.ShowMsgBox("Join Server by IP", "Please enter the IP address of the server you wish to join.", new[] {
+                    new GeonBit.UI.Utils.MessageBox.MsgBoxOption("Join", () => JoinServer(textInput.Value))
+                }, new Entity[] { textInput });
+                
+            };
+                
             joinSteamFriend.OnClick += (e) =>
             {
-                Game1.Steam.ShowFriends();
+                SteamFriends.OpenOverlay("friends");
+                
                 _multiplayerPanel.Visible = true;
                 _joinGamePanel.Visible = false;
             };
-        }        
-        
+        }
+
+        private bool JoinServer(string ipAddress)
+        {
+            _joinGamePanel.Visible = false;
+
+            var joinServerPanel = _rootPanel.AddChild(new Panel(new Vector2(400, 0.5f)));
+            var text = joinServerPanel.AddChild(new RichParagraph("Joining...", Anchor.Center));
+            
+            text.AttachAnimator(new TextWaveAnimator());
+
+            SteamNetworkingSockets.ConnectNormal<TestConnectionInterface>(NetAddress.From(ipAddress, 25565));
+            
+            return true;
+        }
+
         private void SetupSettingsPanel()
         {
             _settingsPanel = _rootPanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None, Anchor.Center)
@@ -252,4 +288,5 @@ namespace Mayday.Game.UI
 
         public void Update() => _active.Update(Time.GameTime);
     }
+    
 }
