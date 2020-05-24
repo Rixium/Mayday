@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Yetiface.Engine.Networking
 {
@@ -7,6 +8,8 @@ namespace Yetiface.Engine.Networking
     /// </summary>
     public interface INetworkManager
     {
+        Dictionary<ulong, string> ConnectedUsers { get; set; }
+        
         void CreateSession(Action lobbyCreatedCallback);
         Action OnUserJoined { get; set; }
     }

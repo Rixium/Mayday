@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Steamworks;
 using Steamworks.Data;
 using Yetiface.Engine;
+using Yetiface.Engine.Networking;
 using Yetiface.Engine.Networking.SteamNetworking;
 using Yetiface.Engine.Utils;
 using Color = Microsoft.Xna.Framework.Color;
@@ -290,7 +291,7 @@ namespace Mayday.Game.UI
 
         public void Update() => _active.Update(Time.GameTime);
 
-        public void ShowServer(int connectedUsers)
+        public void ShowServer(INetworkManager connectedUsers)
         {
             _hostGamePanel.Visible = false;
             
@@ -299,7 +300,13 @@ namespace Mayday.Game.UI
             
             _serverPanel = _rootPanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None));
             _serverPanel.AddChild(new Paragraph($"IP Address: {GetUser_IP()}"));
-            _serverPanel.AddChild(new Paragraph($"Connected Users: {connectedUsers}"));
+
+            _serverPanel.AddChild(new Paragraph("Connected Users: "));
+            
+            foreach (var person in connectedUsers.ConnectedUsers)
+            {
+                _serverPanel.AddChild(new Paragraph($"{person.Value}"));
+            }
         }
         
         protected string GetUser_IP()

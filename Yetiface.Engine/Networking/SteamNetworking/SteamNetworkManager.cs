@@ -1,61 +1,62 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Steamworks;
 using Steamworks.Data;
 
 namespace Yetiface.Engine.Networking.SteamNetworking
 {
-    public class SteamNetworkManager : INetworkManager
+    public class SteamNetworkManager : INetworkManager, ISocketManager
     {
         private readonly uint _appId;
+        
+        public Dictionary<ulong, string> ConnectedUsers { get; set; } = new Dictionary<ulong, string>();
 
         public SteamNetworkManager(uint appId)
         {
             _appId = appId;
         }
-        
+
         public void CreateSession(Action lobbyCreatedCallback)
         {
-            var myServer = new MyServer();
-            myServer.OnNewConnection += OnUserJoined;
-            SteamNetworkingSockets.CreateNormalSocket(NetAddress.AnyIp(25565), myServer);
+            SteamNetworkingSockets.CreateNormalSocket(NetAddress.AnyIp(25565), this);
+            ConnectedUsers.Add(SteamClient.SteamId, SteamFriends.GetPersona());
             lobbyCreatedCallback?.Invoke();
         }
 
         public Action OnUserJoined { get; set; }
-    }
 
-    public class MyServer : ISocketManager
-    {
-        public void OnConnecting(Connection connection, ConnectionInfo data)
+        public void OnConnecting(Connection connection, ConnectionInfo info)
         {
             connection.Accept();
-            Debug.WriteLine($"{data.Identity} is connecting");
+            Console.WriteLine($"{info.Identity} is connecting");
         }
 
-        public void OnConnected(Connection connection, ConnectionInfo data)
+        public void OnConnected(Connection connection, ConnectionInfo info)
         {
-            Debug.WriteLine($"{data.Identity} has joined the game");
-            OnNewConnection?.Invoke();
+            Console.WriteLine($"{info.Identity} has joined the game");
+            
+            ConnectedUsers.Add(info.Identity.SteamId.Value, SteamFriends.GetFriendPersona(info.Identity.SteamId.Value));
+            OnUserJoined?.Invoke();
         }
 
-        public void OnDisconnected(Connection connection, ConnectionInfo data)
+        public void OnDisconnected(Connection connection, ConnectionInfo info)
         {
-            Debug.WriteLine($"{data.Identity} is out of here");
+            Console.WriteLine($"{info.Identity} is out of here");
         }
 
-        public void OnMessage(Connection connection, NetIdentity identity, IntPtr data, int size,
-            long messageNum, long recvTime, int channel)
+        public void OnMessage(Connection connection, NetIdentity identity, IntPtr data, int size, long messageNum,
+            long recvTime,
+            int channel)
         {
-            Debug.WriteLine($"We got a message from {identity}!");
+            Console.WriteLine($"We got a message from {identity}!");
 
             // Send it right back
-            connection.SendMessage(data, size, SendType.Reliable);
+            connection.SendMessage(data, size);
         }
-
-        public Action OnNewConnection { get; set; }
+        
     }
-    
+
     public class TestConnectionInterface : ConnectionManager
     {
         public override void OnConnectionChanged(ConnectionInfo data)
@@ -88,6 +89,5 @@ namespace Yetiface.Engine.Networking.SteamNetworking
             Debug.WriteLine($" - OnDisconnected");
             base.OnDisconnected(data);
         }
-
     }
 }

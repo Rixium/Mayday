@@ -22,26 +22,15 @@ namespace Mayday.Game.Screens
             _networkManager.OnUserJoined += OnUserJoined;
         }
 
-        private int _connectedUsers = 1;
         
-        private void OnUserJoined()
-        {
-            _connectedUsers++;
-            ShowServer();
-        }
+        private void OnUserJoined() => ShowServer();
 
-        private void HostGame()
-        {
-            _networkManager.CreateSession(OnLobbyCreated);
-        }
+        private void HostGame() => _networkManager.CreateSession(OnLobbyCreated);
 
         private void OnLobbyCreated() => ShowServer();
 
-        public void ShowServer()
-        {
-            (UserInterface as MenuScreenUserInterface)?.ShowServer(_connectedUsers);
-        }
-        
+        public void ShowServer() => (UserInterface as MenuScreenUserInterface)?.ShowServer(_networkManager);
+
         public override void Awake()
         {
         }

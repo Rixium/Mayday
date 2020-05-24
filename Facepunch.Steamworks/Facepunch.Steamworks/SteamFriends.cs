@@ -334,5 +334,8 @@ namespace Steamworks
 
             return steamIds.ToArray();
         }
-    }
+
+        public static string GetPersona() => Internal.GetPersonaName();
+        public static string GetFriendPersona(SteamId steamId) => Internal.GetFriendPersonaName(steamId);
+	}
 }
