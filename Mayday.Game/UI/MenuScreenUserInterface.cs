@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using GeonBit.UI;
 using GeonBit.UI.Animators;
 using GeonBit.UI.Entities;
@@ -33,6 +32,9 @@ namespace Mayday.Game.UI
         private SoundEffect _clickSound;
         private SoundEffect _hoverSound;
         private Entity _serverPanel;
+        
+        private TestConnectionInterface _testInterface;
+        private MyServer _socketManager;
 
         public MenuScreenUserInterface()
         {
@@ -181,7 +183,7 @@ namespace Mayday.Game.UI
                 _joinGamePanel.Visible = true;
             };
         }
-     
+
         private void SetupHostGamePanel()
         {
             _hostGamePanel = _rootPanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None, Anchor.Center)
@@ -252,10 +254,36 @@ namespace Mayday.Game.UI
             var text = joinServerPanel.AddChild(new RichParagraph("Joining...", Anchor.Center));
             
             text.AttachAnimator(new TextWaveAnimator());
+            
+            _testInterface = SteamNetworkingSockets.ConnectNormal<TestConnectionInterface>(NetAddress.From(ipAddress, 25565));
+            
+            _testInterface.Connected += () =>
+            {
+                _rootPanel.RemoveChild(joinServerPanel);
+                OnConnectedToServer(_testInterface);
+            };
 
-            SteamNetworkingSockets.ConnectNormal<TestConnectionInterface>(NetAddress.From(ipAddress, 25565));
+            _testInterface.MessageReceived += message =>
+            {
+                _rootPanel.AddChild(new Paragraph(message));
+            };
             
             return true;
+        }
+
+        private void OnConnectedToServer(ConnectionManager manager)
+        {
+            _serverPanel = _rootPanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None));
+            _serverPanel.AddChild(new Paragraph($"Connected!"));
+            
+            var textInput = _serverPanel.AddChild(new TextInput()) as TextInput;
+            var sendButton = _serverPanel.AddChild(new Button("Send"));
+            sendButton.OnClick += (e) =>
+            {
+                manager.Connection.SendMessage(textInput.Value);
+                _rootPanel.AddChild(new Paragraph($"{SteamFriends.GetPersona()}: {textInput.Value}"));
+                textInput.Value = "";
+            };
         }
 
         private void SetupSettingsPanel()
@@ -289,10 +317,17 @@ namespace Mayday.Game.UI
 
         public void Draw() => _active.Draw(GraphicsUtils.Instance.SpriteBatch);
 
-        public void Update() => _active.Update(Time.GameTime);
-
-        public void ShowServer(INetworkManager connectedUsers)
+        public void Update()
         {
+            _active.Update(Time.GameTime);
+            
+            _testInterface?.Receive();
+            _socketManager?.Receive();
+        }
+
+        public void ShowServer(INetworkManager netManager, MyServer socketManager)
+        {
+            _socketManager = socketManager;
             _hostGamePanel.Visible = false;
             
             if(_serverPanel != null)
@@ -302,13 +337,24 @@ namespace Mayday.Game.UI
             _serverPanel.AddChild(new Paragraph($"IP Address: {GetUser_IP()}"));
 
             _serverPanel.AddChild(new Paragraph("Connected Users: "));
-            
-            foreach (var person in connectedUsers.ConnectedUsers)
+
+            socketManager.MessageReceived += (e) =>
             {
-                _serverPanel.AddChild(new Paragraph($"{person.Value}"));
-            }
+                _rootPanel.AddChild(new Paragraph(e));
+            };
+                
+            var textInput = _serverPanel.AddChild(new TextInput()) as TextInput;
+            var sendButton = _serverPanel.AddChild(new Button("Send"));
+            sendButton.OnClick += (e) =>
+            {
+                ((SteamNetworkManager) netManager).SendMessage(textInput.Value);
+                
+                _rootPanel.AddChild(new Paragraph($"{SteamFriends.GetPersona()}: {textInput.Value}"));
+                
+                textInput.Value = "";
+            };
         }
-        
+
         protected string GetUser_IP()
         {
             string url = "http://checkip.dyndns.org";

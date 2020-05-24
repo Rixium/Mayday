@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Yetiface.Engine.Networking.SteamNetworking;
 
 namespace Yetiface.Engine.Networking
 {
@@ -8,9 +9,9 @@ namespace Yetiface.Engine.Networking
     /// </summary>
     public interface INetworkManager
     {
-        Dictionary<ulong, string> ConnectedUsers { get; set; }
+        Dictionary<ulong, string> ConnectedUsers { get; }
         
-        void CreateSession(Action lobbyCreatedCallback);
+        void CreateSession(Action<MyServer> lobbyCreatedCallback);
         Action OnUserJoined { get; set; }
     }
 }

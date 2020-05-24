@@ -19,17 +19,13 @@ namespace Mayday.Game.Screens
             _networkManager = new SteamNetworkManager(Game1.AppId);
 
             menuScreenUserInterface.HostGameClicked += HostGame;
-            _networkManager.OnUserJoined += OnUserJoined;
         }
-
-        
-        private void OnUserJoined() => ShowServer();
 
         private void HostGame() => _networkManager.CreateSession(OnLobbyCreated);
 
-        private void OnLobbyCreated() => ShowServer();
+        private void OnLobbyCreated(MyServer server) => ShowServer(server);
 
-        public void ShowServer() => (UserInterface as MenuScreenUserInterface)?.ShowServer(_networkManager);
+        public void ShowServer(MyServer server) => (UserInterface as MenuScreenUserInterface)?.ShowServer(_networkManager, server);
 
         public override void Awake()
         {
