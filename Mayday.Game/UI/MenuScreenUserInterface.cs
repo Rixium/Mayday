@@ -1,27 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using GeonBit.UI;
 using GeonBit.UI.Animators;
 using GeonBit.UI.Entities;
+using GeonBit.UI.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Steamworks;
-using Steamworks.Data;
 using Yetiface.Engine;
 using Yetiface.Engine.Networking;
-using Yetiface.Engine.Networking.SteamNetworking;
 using Yetiface.Engine.Utils;
-using Color = Microsoft.Xna.Framework.Color;
-using Image = GeonBit.UI.Entities.Image;
 
 namespace Mayday.Game.UI
 {
     public class MenuScreenUserInterface : IUserInterface
     {
+        private readonly INetworkManager _networkManager;
         private readonly UserInterface _active;
         
-        private Entity _rootPanel;
+        private readonly Entity _rootPanel;
         private Entity _mainMenuButtonPanel;
         private Entity _singlePlayerPanel;
         private Entity _multiplayerPanel;
@@ -29,19 +26,18 @@ namespace Mayday.Game.UI
         private Entity _joinGamePanel;
         private Entity _settingsPanel;
         
-        private SoundEffect _clickSound;
-        private SoundEffect _hoverSound;
-        private Entity _serverPanel;
+        private readonly SoundEffect _clickSound;
+        private readonly SoundEffect _hoverSound;
         
-        private TestConnectionInterface _testInterface;
-        private MyServer _socketManager;
-
-        public MenuScreenUserInterface()
+        public MenuScreenUserInterface(INetworkManager networkManager)
         {
+            _networkManager = networkManager;
+            
             _hoverSound = YetiGame.ContentManager.Load<SoundEffect>("MainMenu/tap");
             _clickSound = YetiGame.ContentManager.Load<SoundEffect>("MainMenu/click");
 
             UserInterface.Initialize(YetiGame.ContentManager);
+            
             _active = UserInterface.Active;
             
             _rootPanel =  UserInterface.Active.AddEntity(new Panel(new Vector2(0, 0))
@@ -65,7 +61,7 @@ namespace Mayday.Game.UI
             image.AttachAnimator(new RotationAnimator());
             
             var titlePanel = _rootPanel.AddChild(new Panel(new Vector2(0, 0.1f), PanelSkin.None, Anchor.TopCenter));
-            var title = titlePanel.AddChild(new Header("Mayday", Anchor.Center)
+            titlePanel.AddChild(new Header("Mayday", Anchor.Center)
             {
                 FillColor = Color.White,
                 OutlineColor = Color.Black
@@ -98,15 +94,13 @@ namespace Mayday.Game.UI
             }
         }
 
-        public Action HostGameClicked { get; set; }
-
         private void OnMouseClick(Entity entity) => _clickSound.Play();
 
         private void OnMouseEnter(Entity entity) => _hoverSound.Play();
 
         private void SetupMainMenuPanel()
         {
-            _mainMenuButtonPanel = _rootPanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None, Anchor.Center));
+            _mainMenuButtonPanel = _rootPanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None));
             var singlePlayerButton = _mainMenuButtonPanel.AddChild(new Button("Single Player"));
             var multiplayerButton = _mainMenuButtonPanel.AddChild(new Button("Multiplayer"));
             var settingsButton = _mainMenuButtonPanel.AddChild(new Button("Settings"));
@@ -138,7 +132,7 @@ namespace Mayday.Game.UI
 
         private void SetupSinglePlayerPanel()
         {
-            _singlePlayerPanel = _rootPanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None, Anchor.Center)
+            _singlePlayerPanel = _rootPanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None)
             {
                 Visible = false
             });
@@ -156,7 +150,7 @@ namespace Mayday.Game.UI
         
         private void SetupMultiplayerPanel()
         {
-            _multiplayerPanel = _rootPanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None, Anchor.Center)
+            _multiplayerPanel = _rootPanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None)
             {
                 Visible = false
             });
@@ -186,7 +180,7 @@ namespace Mayday.Game.UI
 
         private void SetupHostGamePanel()
         {
-            _hostGamePanel = _rootPanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None, Anchor.Center)
+            _hostGamePanel = _rootPanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None)
             {
                 Visible = false
             });
@@ -195,24 +189,26 @@ namespace Mayday.Game.UI
             _hostGamePanel.AddChild(new Button("Load Game"));
             var backButton = _hostGamePanel.AddChild(new Button("Back"));
 
-            newGameButton.OnClick += (e) => HostGameClicked();
+            newGameButton.OnClick += HostGame;
             
             backButton.OnClick += (e) =>
             {
                 _multiplayerPanel.Visible = true;
                 _hostGamePanel.Visible = false;
             };
-        }     
-        
+        }
+
+        private void HostGame(Entity entity) => _networkManager.CreateSession();
+
         private void SetupJoinGamePanel()
         {
-            _joinGamePanel = _rootPanel.AddChild(new Panel(new Vector2(0, 0), PanelSkin.None, Anchor.Center)
+            _joinGamePanel = _rootPanel.AddChild(new Panel(new Vector2(0, 0), PanelSkin.None)
             {
                 Visible = false
             });
 
             var joinGamePanelButtons =
-                _joinGamePanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None, Anchor.Center));
+                _joinGamePanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None));
             
             var joinByIp = joinGamePanelButtons.AddChild(new Button("Join By IP"));
             var joinSteamFriend = joinGamePanelButtons.AddChild(new Button("Join Steam Friend"));
@@ -231,8 +227,8 @@ namespace Mayday.Game.UI
                     PlaceholderText = "Enter IP:"
                 };
                 
-                GeonBit.UI.Utils.MessageBox.ShowMsgBox("Join Server by IP", "Please enter the IP address of the server you wish to join.", new[] {
-                    new GeonBit.UI.Utils.MessageBox.MsgBoxOption("Join", () => JoinServer(textInput.Value))
+                MessageBox.ShowMsgBox("Join Server by IP", "Please enter the IP address of the server you wish to join.", new[] {
+                    new MessageBox.MsgBoxOption("Join", () => JoinServer(textInput.Value))
                 }, new Entity[] { textInput });
                 
             };
@@ -254,41 +250,15 @@ namespace Mayday.Game.UI
             var text = joinServerPanel.AddChild(new RichParagraph("Joining...", Anchor.Center));
             
             text.AttachAnimator(new TextWaveAnimator());
-            
-            _testInterface = SteamNetworkingSockets.ConnectNormal<TestConnectionInterface>(NetAddress.From(ipAddress, 25565));
-            
-            _testInterface.Connected += () =>
-            {
-                _rootPanel.RemoveChild(joinServerPanel);
-                OnConnectedToServer(_testInterface);
-            };
 
-            _testInterface.MessageReceived += message =>
-            {
-                _rootPanel.AddChild(new Paragraph(message));
-            };
-            
+            _networkManager.JoinSession(ipAddress);
+
             return true;
-        }
-
-        private void OnConnectedToServer(ConnectionManager manager)
-        {
-            _serverPanel = _rootPanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None));
-            _serverPanel.AddChild(new Paragraph($"Connected!"));
-            
-            var textInput = _serverPanel.AddChild(new TextInput()) as TextInput;
-            var sendButton = _serverPanel.AddChild(new Button("Send"));
-            sendButton.OnClick += (e) =>
-            {
-                manager.Connection.SendMessage(textInput.Value);
-                _rootPanel.AddChild(new Paragraph($"{SteamFriends.GetPersona()}: {textInput.Value}"));
-                textInput.Value = "";
-            };
         }
 
         private void SetupSettingsPanel()
         {
-            _settingsPanel = _rootPanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None, Anchor.Center)
+            _settingsPanel = _rootPanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None)
             {
                 Visible = false
             });
@@ -321,54 +291,9 @@ namespace Mayday.Game.UI
         {
             _active.Update(Time.GameTime);
             
-            _testInterface?.Receive();
-            _socketManager?.Receive();
+            _networkManager.Update();
         }
 
-        public void ShowServer(INetworkManager netManager, MyServer socketManager)
-        {
-            _socketManager = socketManager;
-            _hostGamePanel.Visible = false;
-            
-            if(_serverPanel != null)
-                _rootPanel.RemoveChild(_serverPanel);
-            
-            _serverPanel = _rootPanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None));
-            _serverPanel.AddChild(new Paragraph($"IP Address: {GetUser_IP()}"));
-
-            _serverPanel.AddChild(new Paragraph("Connected Users: "));
-
-            socketManager.MessageReceived += (e) =>
-            {
-                _rootPanel.AddChild(new Paragraph(e));
-            };
-                
-            var textInput = _serverPanel.AddChild(new TextInput()) as TextInput;
-            var sendButton = _serverPanel.AddChild(new Button("Send"));
-            sendButton.OnClick += (e) =>
-            {
-                ((SteamNetworkManager) netManager).SendMessage(textInput.Value);
-                
-                _rootPanel.AddChild(new Paragraph($"{SteamFriends.GetPersona()}: {textInput.Value}"));
-                
-                textInput.Value = "";
-            };
-        }
-
-        protected string GetUser_IP()
-        {
-            string url = "http://checkip.dyndns.org";
-            System.Net.WebRequest req = System.Net.WebRequest.Create(url);
-            System.Net.WebResponse resp = req.GetResponse();
-            System.IO.StreamReader sr = new System.IO.StreamReader(resp.GetResponseStream());
-            string response = sr.ReadToEnd().Trim();
-            string[] a = response.Split(':');
-            string a2 = a[1].Substring(1);
-            string[] a3 = a2.Split('<');
-            string a4 = a3[0];
-            return a4;
-        }
-        
     }
     
 }
