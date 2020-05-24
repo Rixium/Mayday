@@ -14,29 +14,37 @@ namespace Yetiface.Engine.Networking.SteamNetworking
             _appId = appId;
         }
         
-        public void CreateSession(Action<ILobbyInformation> lobbyCreatedCallback) => 
-            SteamNetworkingSockets.CreateNormalSocket<MyServer>(NetAddress.AnyIp(25565));
+        public void CreateSession(Action lobbyCreatedCallback)
+        {
+            var myServer = new MyServer();
+            myServer.OnNewConnection += OnUserJoined;
+            SteamNetworkingSockets.CreateNormalSocket(NetAddress.AnyIp(25565), myServer);
+            lobbyCreatedCallback?.Invoke();
+        }
+
+        public Action OnUserJoined { get; set; }
     }
 
-    public class MyServer : SocketManager
+    public class MyServer : ISocketManager
     {
-        public override void OnConnecting(Connection connection, ConnectionInfo data)
+        public void OnConnecting(Connection connection, ConnectionInfo data)
         {
             connection.Accept();
             Debug.WriteLine($"{data.Identity} is connecting");
         }
 
-        public override void OnConnected(Connection connection, ConnectionInfo data)
+        public void OnConnected(Connection connection, ConnectionInfo data)
         {
             Debug.WriteLine($"{data.Identity} has joined the game");
+            OnNewConnection?.Invoke();
         }
 
-        public override void OnDisconnected(Connection connection, ConnectionInfo data)
+        public void OnDisconnected(Connection connection, ConnectionInfo data)
         {
             Debug.WriteLine($"{data.Identity} is out of here");
         }
 
-        public override void OnMessage(Connection connection, NetIdentity identity, IntPtr data, int size,
+        public void OnMessage(Connection connection, NetIdentity identity, IntPtr data, int size,
             long messageNum, long recvTime, int channel)
         {
             Debug.WriteLine($"We got a message from {identity}!");
@@ -45,6 +53,7 @@ namespace Yetiface.Engine.Networking.SteamNetworking
             connection.SendMessage(data, size, SendType.Reliable);
         }
 
+        public Action OnNewConnection { get; set; }
     }
     
     public class TestConnectionInterface : ConnectionManager

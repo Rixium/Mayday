@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using GeonBit.UI;
 using GeonBit.UI.Animators;
 using GeonBit.UI.Entities;
@@ -30,6 +31,7 @@ namespace Mayday.Game.UI
         
         private SoundEffect _clickSound;
         private SoundEffect _hoverSound;
+        private Entity _serverPanel;
 
         public MenuScreenUserInterface()
         {
@@ -287,6 +289,33 @@ namespace Mayday.Game.UI
         public void Draw() => _active.Draw(GraphicsUtils.Instance.SpriteBatch);
 
         public void Update() => _active.Update(Time.GameTime);
+
+        public void ShowServer(int connectedUsers)
+        {
+            _hostGamePanel.Visible = false;
+            
+            if(_serverPanel != null)
+                _rootPanel.RemoveChild(_serverPanel);
+            
+            _serverPanel = _rootPanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None));
+            _serverPanel.AddChild(new Paragraph($"IP Address: {GetUser_IP()}"));
+            _serverPanel.AddChild(new Paragraph($"Connected Users: {connectedUsers}"));
+        }
+        
+        protected string GetUser_IP()
+        {
+            string url = "http://checkip.dyndns.org";
+            System.Net.WebRequest req = System.Net.WebRequest.Create(url);
+            System.Net.WebResponse resp = req.GetResponse();
+            System.IO.StreamReader sr = new System.IO.StreamReader(resp.GetResponseStream());
+            string response = sr.ReadToEnd().Trim();
+            string[] a = response.Split(':');
+            string a2 = a[1].Substring(1);
+            string[] a3 = a2.Split('<');
+            string a4 = a3[0];
+            return a4;
+        }
+        
     }
     
 }

@@ -7,6 +7,7 @@ namespace Yetiface.Engine.Networking
     /// </summary>
     public interface INetworkManager
     {
-        void CreateSession(Action<ILobbyInformation> lobbyCreatedCallback);
+        void CreateSession(Action lobbyCreatedCallback);
+        Action OnUserJoined { get; set; }
     }
 }
