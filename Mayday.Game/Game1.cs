@@ -10,15 +10,15 @@ namespace Mayday.Game
     public class Game1 : YetiGame
     {
 
+        public static Steam Steam { get; set; }
+        
         public Game1() : base("Mayday")
         {
-#if !DEBUG
-            var steam = new Steam(1323490);
-            steam.Exit += Exit;
+            Steam = new Steam(1323490);
+            Steam.Exit += Exit;
             
-            Name = steam.GetSteamName();
-            FriendCount = steam.GetSteamFriendCount();
-#endif
+            Name = Steam.GetSteamName();
+            FriendCount = Steam.GetSteamFriendCount();
         }
 
         public static int FriendCount { get; set; }
@@ -30,12 +30,10 @@ namespace Mayday.Game
             base.Initialize();
             
             InputManager.RegisterInputEvent(new KeyInputBinding(Keys.F1), NextResize);
-            
-#if !DEBUG
-            var music  = YetiGame.ContentManager.Load<Song>("MainMenu/menuMusic");
+
+            var music  = ContentManager.Load<Song>("MainMenu/menuMusic");
             MediaPlayer.Play(music);
             MediaPlayer.Volume = 0.1f;
-#endif
         }
 
         protected override void LoadContent()

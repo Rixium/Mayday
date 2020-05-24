@@ -1,10 +1,14 @@
-﻿using GeonBit.UI;
+﻿using System.Collections.Generic;
+using System.Linq.Expressions;
+using GeonBit.UI;
 using GeonBit.UI.Animators;
 using GeonBit.UI.Entities;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Yetiface.Engine;
 using Yetiface.Engine.Utils;
+using Yetiface.Steamworks;
 
 namespace Mayday.Game.UI
 {
@@ -19,9 +23,15 @@ namespace Mayday.Game.UI
         private Entity _hostGamePanel;
         private Entity _joinGamePanel;
         private Entity _settingsPanel;
+        
+        private SoundEffect _clickSound;
+        private SoundEffect _hoverSound;
 
         public MenuScreenUserInterface()
         {
+            _hoverSound = YetiGame.ContentManager.Load<SoundEffect>("MainMenu/tap");
+            _clickSound = YetiGame.ContentManager.Load<SoundEffect>("MainMenu/click");
+
             UserInterface.Initialize(YetiGame.ContentManager);
             _active = UserInterface.Active;
             
@@ -61,7 +71,27 @@ namespace Mayday.Game.UI
             
             SetupFooter();
 
+            var stack = new Stack<Entity>();
+            stack.Push(_rootPanel);
+
+            while (stack.Count > 0)
+            {
+                var current = stack.Pop();
+                foreach (var child in current.Children)
+                {
+                    stack.Push(child);
+                    
+                    if (!(child is Button)) continue;
+                
+                    child.OnMouseEnter += OnMouseEnter;
+                    child.OnClick += OnMouseClick;
+                }
+            }
         }
+
+        private void OnMouseClick(Entity entity) => _clickSound.Play();
+
+        private void OnMouseEnter(Entity entity) => _hoverSound.Play();
 
         private void SetupMainMenuPanel()
         {
@@ -168,16 +198,22 @@ namespace Mayday.Game.UI
                 Visible = false
             });
 
-            _joinGamePanel.AddChild(new SelectList(new Vector2(0.2f, 0.2f), Anchor.CenterLeft));
-            
             var joinGamePanelButtons =
                 _joinGamePanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None, Anchor.Center));
             
             joinGamePanelButtons.AddChild(new Button("Join By IP"));
+            var joinSteamFriend = joinGamePanelButtons.AddChild(new Button("Join Steam Friend"));
             var backButton = joinGamePanelButtons.AddChild(new Button("Back"));
             
             backButton.OnClick += (e) =>
             {
+                _multiplayerPanel.Visible = true;
+                _joinGamePanel.Visible = false;
+            };
+            
+            joinSteamFriend.OnClick += (e) =>
+            {
+                Game1.Steam.ShowFriends();
                 _multiplayerPanel.Visible = true;
                 _joinGamePanel.Visible = false;
             };

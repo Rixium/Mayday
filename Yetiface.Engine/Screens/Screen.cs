@@ -41,7 +41,7 @@ namespace Yetiface.Engine.Screens
 
         public virtual void Update()
         {
-            UserInterface.Update();
+            UserInterface?.Update();
 
             if (Updateables == null) return;
             foreach (var updateable in Updateables) 
@@ -55,7 +55,7 @@ namespace Yetiface.Engine.Screens
             Renderer?.Draw();
             GraphicsUtils.Instance.End();
             
-            UserInterface.Draw();
+            UserInterface?.Draw();
         }
 
         public abstract void Finish();
