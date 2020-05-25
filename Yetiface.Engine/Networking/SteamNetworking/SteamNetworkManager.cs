@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Net;
-using System.Threading;
 using Steamworks;
 using Steamworks.Data;
 
@@ -11,7 +8,7 @@ namespace Yetiface.Engine.Networking.SteamNetworking
     public class SteamNetworkManager : INetworkManager
     {
         private readonly uint _appId;
-        
+
         public INetworkServerListener NetworkServerListener;
         public INetworkClientListener NetworkClientListener;
 
@@ -29,12 +26,12 @@ namespace Yetiface.Engine.Networking.SteamNetworking
         {
             var netAddress = NetAddress.AnyIp(25565);
             Server = SteamNetworkingSockets.CreateNormalSocket<MaydayServer>(netAddress);
-            
+
             ((MaydayServer) Server).NetworkManager = this;
 
             SteamMatchmaking.OnLobbyCreated += OnLobbyCreated;
             SteamMatchmaking.CreateLobbyAsync();
-            
+
             return Server;
         }
 
@@ -48,7 +45,7 @@ namespace Yetiface.Engine.Networking.SteamNetworking
         {
             Client = SteamNetworkingSockets.ConnectNormal<MaydayClient>(NetAddress.From(ip, 25565));
             ((MaydayClient) Client).NetworkManager = this;
-            
+
             return Client;
         }
 
@@ -58,14 +55,20 @@ namespace Yetiface.Engine.Networking.SteamNetworking
             Client?.Receive();
         }
 
-        public void SetServerNetworkListener(INetworkServerListener networkServerListener) => NetworkServerListener = networkServerListener;
+        public void SetServerNetworkListener(INetworkServerListener networkServerListener) =>
+            NetworkServerListener = networkServerListener;
 
-        public void SetClientNetworkListener(INetworkClientListener clientNetworkListener) => NetworkClientListener = clientNetworkListener;
-        
-        public void SendMessage(string value)
+        public void SetClientNetworkListener(INetworkClientListener clientNetworkListener) =>
+            NetworkClientListener = clientNetworkListener;
+
+        public void SendMessage(MessageType messageType, string value = "")
         {
-            var toSend = $"{SteamClient.SteamId}:{value}";
-            
+            var toSend = $"{SteamClient.SteamId}:{(int) messageType}";
+
+            // If the value is empty, then don't add it to the to send,
+            // otherwise, add it to the it.
+            toSend = value.Equals("") ? $"{toSend}" : $"{toSend}:{value}";
+
             if (Server?.Connected != null)
                 foreach (var connection in Server.Connected)
                 {
@@ -74,6 +77,12 @@ namespace Yetiface.Engine.Networking.SteamNetworking
 
             Client?.Connection.SendMessage(toSend);
         }
-        
+    }
+
+    public enum MessageType
+    {
+        ChatMessage,
+        WorldRequest,
+        WorldSendComplete
     }
 }

@@ -6,7 +6,9 @@ using GeonBit.UI;
 using GeonBit.UI.Animators;
 using GeonBit.UI.Entities;
 using GeonBit.UI.Utils;
+using Mayday.Game.Gameplay;
 using Mayday.Game.Networking;
+using Mayday.Game.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,18 +16,21 @@ using Steamworks;
 using Steamworks.Data;
 using Yetiface.Engine;
 using Yetiface.Engine.Networking;
+using Yetiface.Engine.Networking.SteamNetworking;
+using Yetiface.Engine.Screens;
 using Yetiface.Engine.Utils;
 using Color = Microsoft.Xna.Framework.Color;
 using Image = GeonBit.UI.Entities.Image;
 
 namespace Mayday.Game.UI
 {
-    public class MenuScreenUserInterface : IUserInterface, INetworkServerListener, INetworkClientListener
+    public class MenuScreenUserInterface : IUserInterface, INetworkServerListener, INetworkClientListener, IWorldGeneratorListener
     {
         public HashSet<string> Connections { get; set; } = new HashSet<string>();
 
         
         private readonly INetworkManager _networkManager;
+        private readonly IScreenManager _screenManager;
         private readonly UserInterface _active;
         
         private readonly Entity _rootPanel;
@@ -42,10 +47,13 @@ namespace Mayday.Game.UI
         private Panel _connectedToServerPanel;
         private Entity _chatBox;
         private Entity _joinServerPanel;
+        private Entity _worldCreationParagraph;
 
-        public MenuScreenUserInterface(INetworkManager networkManager)
+        public MenuScreenUserInterface(INetworkManager networkManager, IScreenManager screenManager)
         {
             _networkManager = networkManager;
+            _screenManager = screenManager;
+            
             _networkManager.SetServerNetworkListener(this);
             _networkManager.SetClientNetworkListener(this);
             
@@ -183,7 +191,7 @@ namespace Mayday.Game.UI
                 Visible = false
             });
             
-            _singlePlayerPanel.AddChild(new Button("New Game"));
+            var newGameButton = _singlePlayerPanel.AddChild(new Button("New Game"));
             _singlePlayerPanel.AddChild(new Button("Load Game"));
             var backButton = _singlePlayerPanel.AddChild(new Button("Back"));
             
@@ -192,8 +200,38 @@ namespace Mayday.Game.UI
                 _mainMenuButtonPanel.Visible = true;
                 _singlePlayerPanel.Visible = false;
             };
+
+            newGameButton.OnClick += (e) =>
+            {
+                _singlePlayerPanel.Visible = false;
+                StartNewGame();
+            };
         }
-        
+
+        private async void StartNewGame()
+        {
+            var creatingWorldPanel = _rootPanel.AddChild(new Panel(new Vector2(400, 0.5f)));
+            _worldCreationParagraph = creatingWorldPanel.AddChild(new RichParagraph("Creating World...", Anchor.Center));
+            _worldCreationParagraph.AttachAnimator(new TextWaveAnimator());
+
+            var gameScreen = new GameScreen();
+
+            var world = await CreateWorld();
+            
+            gameScreen.SetWorld(world);
+            
+            _screenManager.AddScreen(gameScreen);
+            _screenManager.ChangeScreen(gameScreen.Name);
+        }
+
+        private async Task<IWorld> CreateWorld()
+        {
+            var worldMaker = new WorldMaker()
+                .SetWorldSize(255);
+
+            return await worldMaker.Create(this);
+        }
+
         private void SetupMultiplayerPanel()
         {
             _multiplayerPanel = _rootPanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None)
@@ -326,6 +364,17 @@ namespace Mayday.Game.UI
             return true;
         }
 
+        private async void CreateNetworkWorld()
+        {
+            var creatingWorldPanel = _rootPanel.AddChild(new Panel(new Vector2(400, 0.5f)));
+            _worldCreationParagraph = creatingWorldPanel.AddChild(new RichParagraph("Creating World...", Anchor.Center));
+            _worldCreationParagraph.AttachAnimator(new TextWaveAnimator());
+            
+            var world = await new NetworkWorldMaker(_networkManager)
+                .SetWorldSize(255)
+                .Create(this);
+        }
+
         private void SetupSettingsPanel()
         {
             _settingsPanel = _rootPanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None)
@@ -433,10 +482,17 @@ namespace Mayday.Game.UI
         {
             var result = new NetworkMessageParser().Parse(data, size);
 
-            if (result is Message message)
+            switch (result.MessageType)
             {
-                var steamName = SteamFriends.GetFriendPersona(message.SteamUserId);
-                AddMessageToChatBox($"{steamName}: {message.Text}");
+                case MessageType.ChatMessage:
+                    break;
+                case MessageType.WorldRequest:
+                    _networkManager.SendMessage(MessageType.WorldSendComplete);
+                    break;
+                case MessageType.WorldSendComplete:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -454,44 +510,28 @@ namespace Mayday.Game.UI
         {
             var result = new NetworkMessageParser().Parse(data, size);
 
-            if (result is Message message)
+            switch (result.MessageType)
             {
-                var steamName = SteamFriends.GetFriendPersona(message.SteamUserId);
-                AddMessageToChatBox($"{steamName}: {message.Text}");
+                case MessageType.ChatMessage:
+                    break;
+                case MessageType.WorldRequest:
+                    break;
+                case MessageType.WorldSendComplete:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-            
         }
 
         public void OnConnectedToServer(ConnectionInfo info)
         {
-            if(_connectedToServerPanel != null)
-                _rootPanel.RemoveChild(_connectedToServerPanel);
-            
-            _connectedToServerPanel = new Panel(new Vector2(0.8f, 0.7f));
-            _rootPanel.AddChild(_connectedToServerPanel);
-
-            _connectedToServerPanel.AddChild(new Header("Connected to Server!"));
-            _chatBox = _connectedToServerPanel.AddChild(new Panel(new Vector2(0, 0.5f), PanelSkin.Default, Anchor.TopCenter));
-            ((Panel) _chatBox).PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll;
-
-            var chatPanel =
-                _connectedToServerPanel.AddChild(new Panel(new Vector2(-1, -1), PanelSkin.None, Anchor.BottomCenter));
-            var text = chatPanel.AddChild(new TextInput(false));
-            var button = chatPanel.AddChild(new Button("Send"));
-
-            button.OnClick += (e) =>
-            {
-                var textValue = ((TextInput) text).Value;
-                _networkManager.SendMessage(textValue);
-
-                var message = $"{SteamFriends.GetPersona()}: {textValue}";
-                AddMessageToChatBox(message);
-                
-                ((TextInput) text).Value = "";
-            };
+            CreateNetworkWorld();
         }
 
-        private void AddMessageToChatBox(string message) => _chatBox.AddChild(new Paragraph(message));
+        public void OnWorldGenerationUpdate(string message)
+        {
+            ((RichParagraph) _worldCreationParagraph).Text = message;
+        }
         
     }
 

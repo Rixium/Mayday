@@ -1,4 +1,5 @@
 ﻿using Steamworks;
+using Yetiface.Engine.Networking.SteamNetworking;
 
 namespace Yetiface.Engine.Networking
 {
@@ -17,6 +18,6 @@ namespace Yetiface.Engine.Networking
         // TODO Callbacks, not sure if this is ideal.
         void SetServerNetworkListener(INetworkServerListener networkServerListener);
         void SetClientNetworkListener(INetworkClientListener clientNetworkListener);
-        void SendMessage(string value);
+        void SendMessage(MessageType messageType, string value = "");
     }
 }

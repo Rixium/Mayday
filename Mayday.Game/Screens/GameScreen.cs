@@ -1,11 +1,20 @@
-﻿using Yetiface.Engine.Screens;
+﻿using Mayday.Game.Gameplay;
+using Yetiface.Engine.Screens;
 
 namespace Mayday.Game.Screens
 {
     public class GameScreen : Screen
     {
-        public GameScreen() : base("Game")
+        
+        private IWorld _world;
+
+        public GameScreen() : base("GameScreen")
         {
+        }
+
+        public void SetWorld(IWorld world)
+        {
+            _world = world;
         }
 
         public override void Awake()

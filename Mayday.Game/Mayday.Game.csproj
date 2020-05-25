@@ -44,6 +44,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
+    <Compile Include="Gameplay\IWorld.cs" />
+    <Compile Include="Gameplay\IWorldMaker.cs" />
+    <Compile Include="Gameplay\NetworkWorldMaker.cs" />
+    <Compile Include="Gameplay\World.cs" />
+    <Compile Include="Gameplay\WorldMaker.cs" />
     <Compile Include="Networking\NetworkMessageParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

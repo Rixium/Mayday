@@ -52,7 +52,6 @@ namespace Mayday.Game
             base.LoadContent();
             
             ScreenManager.AddScreen(new MenuScreen());
-            ScreenManager.AddScreen(new GameScreen());
         }
 
         public static void NextResize()
