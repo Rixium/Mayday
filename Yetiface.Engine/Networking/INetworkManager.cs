@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Steamworks;
-using Yetiface.Engine.Networking.SteamNetworking;
+﻿using Steamworks;
 
 namespace Yetiface.Engine.Networking
 {
@@ -10,14 +7,13 @@ namespace Yetiface.Engine.Networking
     /// </summary>
     public interface INetworkManager
     {
-
         ConnectionManager Client { get; set; }
         SocketManager Server { get; set; }
         SocketManager CreateSession();
         ConnectionManager JoinSession(string ip);
 
         void Update();
-        
+
         // TODO Callbacks, not sure if this is ideal.
         void SetServerNetworkListener(INetworkServerListener networkServerListener);
         void SetClientNetworkListener(INetworkClientListener clientNetworkListener);

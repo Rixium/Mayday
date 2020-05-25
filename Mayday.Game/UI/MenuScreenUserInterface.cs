@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using GeonBit.UI;
 using GeonBit.UI.Animators;
 using GeonBit.UI.Entities;
@@ -40,6 +41,7 @@ namespace Mayday.Game.UI
         private Panel _userList;
         private Panel _connectedToServerPanel;
         private Entity _chatBox;
+        private Entity _joinServerPanel;
 
         public MenuScreenUserInterface(INetworkManager networkManager)
         {
@@ -108,6 +110,34 @@ namespace Mayday.Game.UI
                     child.OnClick += OnMouseClick;
                 }
             }
+            
+            var args = Environment.GetCommandLineArgs();
+            int num = 0;
+            
+            foreach (var param in args)
+            {
+                if (param.Equals("+connect_lobby"))
+                {
+                    ConnectToLobby(args[num + 1]);
+                    break;
+                }
+                num++;
+            }
+        }
+
+        private void ConnectToLobby(string lobbyId)
+        {
+            _mainMenuButtonPanel.Visible = false;
+            SteamMatchmaking.OnLobbyEntered += OnConnectedToLobby;
+            SteamMatchmaking.JoinLobbyAsync(ulong.Parse(lobbyId));
+        }
+
+
+        private void OnConnectedToLobby(Lobby obj)
+        {
+            var ip = obj.GetData("ip");
+            _rootPanel.AddChild(new Paragraph(ip));
+            JoinServer(ip);
         }
 
         private void OnMouseClick(Entity entity) => _clickSound.Play();
@@ -241,17 +271,25 @@ namespace Mayday.Game.UI
                 _joinGamePanel.Visible = false;
             };
 
-            joinByIp.OnClick += (e) =>
+            joinByIp.OnClick += async (e) =>
             {
                 var textInput = new TextInput(false)
                 {
                     PlaceholderText = "Enter IP:"
                 };
+
+                var result = false;
                 
                 MessageBox.ShowMsgBox("Join Server by IP", "Please enter the IP address of the server you wish to join.", new[] {
-                    new MessageBox.MsgBoxOption("Join", () => JoinServer(textInput.Value))
+                    new MessageBox.MsgBoxOption("Join", () =>
+                    {
+                        result = JoinServer(textInput.Value);
+                        return true;
+                    })
                 }, new Entity[] { textInput });
                 
+                if(result)
+                    await WaitToConnect();
             };
                 
             joinSteamFriend.OnClick += (e) =>
@@ -267,12 +305,23 @@ namespace Mayday.Game.UI
         {
             _joinGamePanel.Visible = false;
 
-            var joinServerPanel = _rootPanel.AddChild(new Panel(new Vector2(400, 0.5f)));
-            var text = joinServerPanel.AddChild(new RichParagraph("Joining...", Anchor.Center));
+            _joinServerPanel = _rootPanel.AddChild(new Panel(new Vector2(400, 0.5f)));
+            var text = _joinServerPanel.AddChild(new RichParagraph("Joining...", Anchor.Center));
             
             text.AttachAnimator(new TextWaveAnimator());
 
-            _networkManager.JoinSession(ipAddress);
+            try
+            {
+                _networkManager.JoinSession(ipAddress);
+            }
+            catch (Exception ex)
+            {
+                // Possibly a problem with the IP ADDRESS
+                // Go straight to failed.
+                OnFailedToConnect();
+                
+                return false;
+            }
 
             return true;
         }
@@ -343,6 +392,33 @@ namespace Mayday.Game.UI
             foreach (var user in Connections)
                 _userList.AddChild(new Paragraph(user));
         }
+        
+        private async Task WaitToConnect()
+        {
+            // Give them 10 seconds to try to join.
+            await Task.Delay(10000);
+            
+            if (_networkManager.Client == null)
+            {
+                OnFailedToConnect();
+            } else if (!_networkManager.Client.Connected)
+            {
+                OnFailedToConnect();
+            }
+        }
+
+        private void OnFailedToConnect()
+        {
+            if (_joinServerPanel != null)
+                _rootPanel.RemoveChild(_joinServerPanel);
+
+            _joinGamePanel.Visible = true;
+            
+            MessageBox.ShowMsgBox("Failed!", "Failed to join server!", new[]
+            {
+                new MessageBox.MsgBoxOption("Close", () => true)
+            });
+        }
 
         public void OnConnectionLeft(Connection connection, ConnectionInfo info)
         {
@@ -371,7 +447,7 @@ namespace Mayday.Game.UI
 
         public void OnDisconnectedFromServer(ConnectionInfo info)
         {
-            _mainMenuButtonPanel.Visible = true;
+            
         }
 
         public void OnMessageReceived(IntPtr data, int size, long messageNum, long recvTime, int channel)
@@ -418,5 +494,5 @@ namespace Mayday.Game.UI
         private void AddMessageToChatBox(string message) => _chatBox.AddChild(new Paragraph(message));
         
     }
-    
+
 }

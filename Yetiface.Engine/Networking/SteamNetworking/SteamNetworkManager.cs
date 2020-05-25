@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net;
 using System.Threading;
 using Steamworks;
 using Steamworks.Data;
@@ -26,25 +27,21 @@ namespace Yetiface.Engine.Networking.SteamNetworking
 
         public SocketManager CreateSession()
         {
-            Server = SteamNetworkingSockets.CreateNormalSocket<MaydayServer>(NetAddress.AnyIp(25565));
+            var netAddress = NetAddress.AnyIp(25565);
+            Server = SteamNetworkingSockets.CreateNormalSocket<MaydayServer>(netAddress);
+            
             ((MaydayServer) Server).NetworkManager = this;
 
-            
-            SteamMatchmaking.OnLobbyCreated += OnLobbyCreated;
+            SteamMatchmaking.OnLobbyCreated += (result, lobby) => OnLobbyCreated(result, lobby);
             SteamMatchmaking.CreateLobbyAsync();
-            
             
             return Server;
         }
-        
-        private void OnReady()
-        {
-        }
 
-        private void OnLobbyCreated(Result arg1, Lobby lobby)
+        private void OnLobbyCreated(Result _, Lobby lobby)
         {
             lobby.SetPublic();
-            lobby.SetGameServer("109.159.59.86", 25565);
+            lobby.SetData("ip", new WebClient().DownloadString("http://icanhazip.com"));
         }
 
         public ConnectionManager JoinSession(string ip)
@@ -76,6 +73,23 @@ namespace Yetiface.Engine.Networking.SteamNetworking
                 }
 
             Client?.Connection.SendMessage(toSend);
+        }
+        
+        private IPAddress GetExternalIPAddress()
+        {
+            var myIPHostEntry = Dns.GetHostEntry(Dns.GetHostName());
+
+            foreach (var myIPAddress in myIPHostEntry.AddressList)
+            {
+                byte[] ipBytes = myIPAddress.GetAddressBytes();
+
+                if( myIPAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork )
+                {
+                    return myIPAddress;
+                }
+            }
+
+            return null;
         }
     }
 }
