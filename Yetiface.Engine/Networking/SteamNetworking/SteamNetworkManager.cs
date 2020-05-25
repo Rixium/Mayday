@@ -41,7 +41,7 @@ namespace Yetiface.Engine.Networking.SteamNetworking
         private void OnLobbyCreated(Result _, Lobby lobby)
         {
             lobby.SetPublic();
-            lobby.SetData("ip", new WebClient().DownloadString("http://icanhazip.com"));
+            lobby.SetData("ip", new WebClient().DownloadString("http://ipv4.icanhazip.com/"));
         }
 
         public ConnectionManager JoinSession(string ip)
@@ -75,21 +75,5 @@ namespace Yetiface.Engine.Networking.SteamNetworking
             Client?.Connection.SendMessage(toSend);
         }
         
-        private IPAddress GetExternalIPAddress()
-        {
-            var myIPHostEntry = Dns.GetHostEntry(Dns.GetHostName());
-
-            foreach (var myIPAddress in myIPHostEntry.AddressList)
-            {
-                byte[] ipBytes = myIPAddress.GetAddressBytes();
-
-                if( myIPAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork )
-                {
-                    return myIPAddress;
-                }
-            }
-
-            return null;
-        }
     }
 }
