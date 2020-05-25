@@ -13,7 +13,8 @@
     <AssemblyName>Yetiface.Engine</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -56,8 +57,18 @@
     <Compile Include="ECS\IEntity.cs" />
     <Compile Include="Graphics\Renderers\BasicRenderer.cs" />
     <Compile Include="Graphics\Renderers\IRenderer.cs" />
+    <Compile Include="Networking\ILobbyInformation.cs" />
+    <Compile Include="Networking\INetworkClientListener.cs" />
+    <Compile Include="Networking\INetworkMessageParser.cs" />
+    <Compile Include="Networking\INetworkMessageValue.cs" />
+    <Compile Include="Networking\INetworkServerListener.cs" />
     <Compile Include="Networking\INetworkManager.cs" />
-    <Compile Include="Networking\SteamNetworkManager.cs" />
+    <Compile Include="Networking\INetworkSession.cs" />
+    <Compile Include="Networking\SteamNetworking\MaydayClient.cs" />
+    <Compile Include="Networking\SteamNetworking\MaydayServer.cs" />
+    <Compile Include="Networking\SteamNetworking\SteamLobbyInformation.cs" />
+    <Compile Include="Networking\SteamNetworking\SteamNetworkManager.cs" />
+    <Compile Include="Networking\SteamNetworking\SteamNetworkSession.cs" />
     <Compile Include="UI\IUserInterface.cs" />
     <Compile Include="Utils\FrameRate.cs" />
     <Compile Include="YetiGame.cs" />
@@ -158,6 +169,16 @@
     <Content Include="Content\Fonts\debugFont.spritefont" />
     <Content Include="Content\Splash\splash.png" />
     <Content Include="Content\Utils\pixel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Facepunch.Steamworks\Facepunch.Steamworks\Facepunch.Steamworks.Win64.csproj">
+      <Project>{4ebc6789-9069-427c-94cb-ebaf1095aaab}</Project>
+      <Name>Facepunch.Steamworks.Win64</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GeonBit.UI\GeonBit.UI\GeonBit.UI.csproj">
+      <Project>{dd284f36-fcd5-4265-ae4c-28b9a38b9def}</Project>
+      <Name>GeonBit.UI</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

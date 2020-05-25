@@ -1,25 +1,30 @@
 ﻿using Mayday.Game.Screens;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Steamworks;
 using Yetiface.Engine;
 using Yetiface.Engine.Inputs;
-using Yetiface.Steamworks;
 
 namespace Mayday.Game
 {
     public class Game1 : YetiGame
     {
 
-        public static Steam Steam { get; set; }
-        
         public Game1() : base("Mayday")
         {
-            Steam = new Steam(1323490);
-            Steam.Exit += Exit;
-            
-            Name = Steam.GetSteamName();
-            FriendCount = Steam.GetSteamFriendCount();
+            try 
+            {
+                SteamClient.Init(AppId);
+            }
+            catch ( System.Exception e )
+            {
+                // Couldn't init for some reason (steam is closed etc)
+            }
+
         }
+        
+        public static uint AppId { get; set; } = 1323490;
 
         public static int FriendCount { get; set; }
 
@@ -34,6 +39,12 @@ namespace Mayday.Game
             var music  = ContentManager.Load<Song>("MainMenu/menuMusic");
             MediaPlayer.Play(music);
             MediaPlayer.Volume = 0.1f;
+        }
+
+        protected override void Update(GameTime gameTime)
+        {
+            SteamClient.RunCallbacks();
+            base.Update(gameTime);
         }
 
         protected override void LoadContent()

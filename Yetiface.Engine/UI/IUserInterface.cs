@@ -6,6 +6,7 @@
         void Draw();
 
         void Update();
-        
+
+        void AfterDraw();
     }
 }

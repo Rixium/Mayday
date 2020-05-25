@@ -1,5 +1,6 @@
 ﻿using Mayday.Game.UI;
 using Microsoft.Xna.Framework;
+using Yetiface.Engine.Networking.SteamNetworking;
 using Yetiface.Engine.Screens;
 
 namespace Mayday.Game.Screens
@@ -10,7 +11,14 @@ namespace Mayday.Game.Screens
         {
             BackgroundColor = Color.Black;
 
-            UserInterface = new MenuScreenUserInterface();
+            // TODO for now this is here, but it should be moved to somewhere else
+            // like some kind of network setup manager or SOMETHING.
+            // otherwise this has to be passed between screens.
+            var networkManager = new SteamNetworkManager(Game1.AppId);
+
+            var menuScreenUserInterface = new MenuScreenUserInterface(networkManager);
+
+            UserInterface = menuScreenUserInterface;
         }
 
         public override void Awake()
