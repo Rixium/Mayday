@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GeonBit.UI;
 using GeonBit.UI.Animators;
 using GeonBit.UI.Entities;
@@ -7,14 +8,20 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Steamworks;
+using Steamworks.Data;
 using Yetiface.Engine;
 using Yetiface.Engine.Networking;
 using Yetiface.Engine.Utils;
+using Color = Microsoft.Xna.Framework.Color;
+using Image = GeonBit.UI.Entities.Image;
 
 namespace Mayday.Game.UI
 {
-    public class MenuScreenUserInterface : IUserInterface
+    public class MenuScreenUserInterface : IUserInterface, INetworkServerListener, INetworkClientListener
     {
+        public HashSet<string> Connections { get; set; } = new HashSet<string>();
+
+        
         private readonly INetworkManager _networkManager;
         private readonly UserInterface _active;
         
@@ -28,10 +35,14 @@ namespace Mayday.Game.UI
         
         private readonly SoundEffect _clickSound;
         private readonly SoundEffect _hoverSound;
-        
+        private Panel _userList;
+        private Panel _connectedToServerPanel;
+
         public MenuScreenUserInterface(INetworkManager networkManager)
         {
             _networkManager = networkManager;
+            _networkManager.SetServerNetworkListener(this);
+            _networkManager.SetClientNetworkListener(this);
             
             _hoverSound = YetiGame.ContentManager.Load<SoundEffect>("MainMenu/tap");
             _clickSound = YetiGame.ContentManager.Load<SoundEffect>("MainMenu/click");
@@ -294,6 +305,67 @@ namespace Mayday.Game.UI
             _networkManager.Update();
         }
 
+
+        public void OnNewConnection(Connection connection, ConnectionInfo info)
+        {
+            var steamName = SteamFriends.GetFriendPersona(info.Identity.SteamId);
+            Connections.Add(steamName);
+            
+            UpdateUserList();
+        }
+
+        private void UpdateUserList()
+        {
+            if(_userList != null)
+                _rootPanel.RemoveChild(_userList);
+            
+            _userList = new Panel(new Vector2(0.3f, 0.8f), PanelSkin.Default, Anchor.CenterLeft);
+            _rootPanel.AddChild(_userList);
+
+            foreach (var user in Connections)
+                _userList.AddChild(new Paragraph(user));
+        }
+
+        public void OnConnectionLeft(Connection connection, ConnectionInfo info)
+        {
+            var steamName = SteamFriends.GetFriendPersona(info.Identity.SteamId);
+            Connections.Remove(steamName);
+            
+            UpdateUserList();
+        }
+
+        public void OnMessageReceived(Connection connection, NetIdentity identity, IntPtr data, int size, long messageNum,
+            long recvTime, int channel)
+        {
+            
+        }
+
+        public void OnConnectionChanged(Connection connection, ConnectionInfo info)
+        {
+            
+        }
+
+        public void OnDisconnectedFromServer(ConnectionInfo info)
+        {
+            _mainMenuButtonPanel.Visible = true;
+        }
+
+        public void OnMessageReceived(IntPtr data, int size, long messageNum, long recvTime, int channel)
+        {
+            
+        }
+
+        public void OnConnectedToServer(ConnectionInfo info)
+        {
+            if(_connectedToServerPanel != null)
+                _rootPanel.RemoveChild(_connectedToServerPanel);
+            
+            _connectedToServerPanel = new Panel(new Vector2(400, -1), PanelSkin.None);
+            _rootPanel.AddChild(_connectedToServerPanel);
+
+            _connectedToServerPanel.AddChild(new Header("Connected to Server!"));
+        }
+        
     }
     
 }

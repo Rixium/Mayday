@@ -7,6 +7,9 @@ namespace Yetiface.Engine.Networking.SteamNetworking
     public class SteamNetworkManager : INetworkManager
     {
         private readonly uint _appId;
+        
+        public INetworkServerListener NetworkServerListener;
+        public INetworkClientListener NetworkClientListener;
 
         private List<Connection> Connections { get; set; } = new List<Connection>();
 
@@ -21,12 +24,16 @@ namespace Yetiface.Engine.Networking.SteamNetworking
         public SocketManager CreateSession()
         {
             Server = SteamNetworkingSockets.CreateNormalSocket<MaydayServer>(NetAddress.AnyIp(25565));
+            ((MaydayServer) Server).NetworkManager = this;
+            
             return Server;
         }
 
         public ConnectionManager JoinSession(string ip)
         {
-            Client = SteamNetworkingSockets.ConnectNormal<MaydayClient>(NetAddress.From(ip, 25565));
+            Client = SteamNetworkingSockets.ConnectNormal<MaydayClient>(NetAddress.From(ip, 25565)) as MaydayClient;
+            ((MaydayClient) Client).NetworkManager = this;
+            
             return Client;
         }
 
@@ -35,5 +42,10 @@ namespace Yetiface.Engine.Networking.SteamNetworking
             Server?.Receive();
             Client?.Receive();
         }
+
+        public void SetServerNetworkListener(INetworkServerListener networkServerListener) => NetworkServerListener = networkServerListener;
+
+        public void SetClientNetworkListener(INetworkClientListener clientNetworkListener) => NetworkClientListener = clientNetworkListener;
+        
     }
 }

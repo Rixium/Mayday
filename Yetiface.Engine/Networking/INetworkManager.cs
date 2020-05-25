@@ -17,5 +17,9 @@ namespace Yetiface.Engine.Networking
         ConnectionManager JoinSession(string ip);
 
         void Update();
+        
+        // TODO Callbacks, not sure if this is ideal.
+        void SetServerNetworkListener(INetworkServerListener networkServerListener);
+        void SetClientNetworkListener(INetworkClientListener clientNetworkListener);
     }
 }
