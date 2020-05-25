@@ -32,7 +32,7 @@ namespace Yetiface.Engine.Networking.SteamNetworking
             
             ((MaydayServer) Server).NetworkManager = this;
 
-            SteamMatchmaking.OnLobbyCreated += (result, lobby) => OnLobbyCreated(result, lobby);
+            SteamMatchmaking.OnLobbyCreated += OnLobbyCreated;
             SteamMatchmaking.CreateLobbyAsync();
             
             return Server;
