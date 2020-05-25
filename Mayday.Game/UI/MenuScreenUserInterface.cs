@@ -137,7 +137,7 @@ namespace Mayday.Game.UI
         {
             var ip = obj.GetData("ip");
             _rootPanel.AddChild(new Paragraph(ip));
-            JoinServer(ip);
+            JoinServer(ip.Trim());
         }
 
         private void OnMouseClick(Entity entity) => _clickSound.Play();
