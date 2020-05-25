@@ -1,7 +1,9 @@
 ﻿using Mayday.Game.UI;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Yetiface.Engine.Networking.SteamNetworking;
 using Yetiface.Engine.Screens;
+using Yetiface.Engine.Utils;
 
 namespace Mayday.Game.Screens
 {
@@ -28,6 +30,23 @@ namespace Mayday.Game.Screens
 
         public override void Begin()
         {
+        }
+
+        public override void Draw()
+        {
+            base.Draw();
+            
+            GraphicsUtils.Instance.Begin(false);
+            var args = System.Environment.GetCommandLineArgs();
+
+            int num = 0;
+            foreach (var param in args)
+            {
+                num++;
+                GraphicsUtils.Instance.SpriteBatch.DrawString(GraphicsUtils.Instance.DebugFont, param, new Vector2(10, num * 50), Color.Green);
+            }
+            
+            GraphicsUtils.Instance.End();
         }
 
         public override void Finish()

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using Steamworks;
 using Steamworks.Data;
 
@@ -24,16 +26,30 @@ namespace Yetiface.Engine.Networking.SteamNetworking
 
         public SocketManager CreateSession()
         {
-            
             Server = SteamNetworkingSockets.CreateNormalSocket<MaydayServer>(NetAddress.AnyIp(25565));
             ((MaydayServer) Server).NetworkManager = this;
+
+            
+            SteamMatchmaking.OnLobbyCreated += OnLobbyCreated;
+            SteamMatchmaking.CreateLobbyAsync();
+            
             
             return Server;
+        }
+        
+        private void OnReady()
+        {
+        }
+
+        private void OnLobbyCreated(Result arg1, Lobby lobby)
+        {
+            lobby.SetPublic();
+            lobby.SetGameServer("109.159.59.86", 25565);
         }
 
         public ConnectionManager JoinSession(string ip)
         {
-            Client = SteamNetworkingSockets.ConnectNormal<MaydayClient>(NetAddress.From(ip, 25565)) as MaydayClient;
+            Client = SteamNetworkingSockets.ConnectNormal<MaydayClient>(NetAddress.From(ip, 25565));
             ((MaydayClient) Client).NetworkManager = this;
             
             return Client;
