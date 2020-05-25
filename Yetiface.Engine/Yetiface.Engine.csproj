@@ -59,6 +59,8 @@
     <Compile Include="Graphics\Renderers\IRenderer.cs" />
     <Compile Include="Networking\ILobbyInformation.cs" />
     <Compile Include="Networking\INetworkClientListener.cs" />
+    <Compile Include="Networking\INetworkMessageParser.cs" />
+    <Compile Include="Networking\INetworkMessageValue.cs" />
     <Compile Include="Networking\INetworkServerListener.cs" />
     <Compile Include="Networking\INetworkManager.cs" />
     <Compile Include="Networking\INetworkSession.cs" />

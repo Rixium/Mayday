@@ -5,6 +5,7 @@ using GeonBit.UI;
 using GeonBit.UI.Animators;
 using GeonBit.UI.Entities;
 using GeonBit.UI.Utils;
+using Mayday.Game.Networking;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -335,7 +336,7 @@ namespace Mayday.Game.UI
             
             if(_userList != null)
                 _rootPanel.RemoveChild(_userList);
-            
+                    
             _userList = new Panel(new Vector2(0.3f, 0.8f), PanelSkin.Default, Anchor.CenterLeft);
             _rootPanel.AddChild(_userList);
 
@@ -351,14 +352,16 @@ namespace Mayday.Game.UI
             UpdateUserList();
         }
 
-        public unsafe void OnMessageReceived(Connection connection, NetIdentity identity, IntPtr data, int size, long messageNum,
+        public void OnMessageReceived(Connection connection, NetIdentity identity, IntPtr data, int size, long messageNum,
             long recvTime, int channel)
         {
-            var text = Encoding.UTF8.GetString((byte*)data, size);
-            
-            var steamName = SteamFriends.GetFriendPersona(identity.SteamId.Value);
-            
-            AddMessageToChatBox($"{steamName}: {text}");
+            var result = new NetworkMessageParser().Parse(data, size);
+
+            if (result is Message message)
+            {
+                var steamName = SteamFriends.GetFriendPersona(message.SteamUserId);
+                AddMessageToChatBox($"{steamName}: {message.Text}");
+            }
         }
 
         public void OnConnectionChanged(Connection connection, ConnectionInfo info)
@@ -371,12 +374,16 @@ namespace Mayday.Game.UI
             _mainMenuButtonPanel.Visible = true;
         }
 
-        public unsafe void OnMessageReceived(IntPtr data, int size, long messageNum, long recvTime, int channel)
+        public void OnMessageReceived(IntPtr data, int size, long messageNum, long recvTime, int channel)
         {
-            var text = Encoding.UTF8.GetString((byte*)data, size);
-            var serverPerson = SteamFriends.GetFriendPersona(_networkManager.Client.ConnectionInfo.Identity.SteamId);
+            var result = new NetworkMessageParser().Parse(data, size);
+
+            if (result is Message message)
+            {
+                var steamName = SteamFriends.GetFriendPersona(message.SteamUserId);
+                AddMessageToChatBox($"{steamName}: {message.Text}");
+            }
             
-            AddMessageToChatBox($"{serverPerson}: {text}");
         }
 
         public void OnConnectedToServer(ConnectionInfo info)
