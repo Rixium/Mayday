@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Steamworks;
 using Steamworks.Data;
 
@@ -26,7 +27,12 @@ namespace Yetiface.Engine.Networking.SteamNetworking
             int channel)
         {
             base.OnMessage(connection, identity, data, size, messageNum, recvTime, channel);
-            
+
+            foreach (var connected in Connected.Where(connected => connected != connection))
+            {
+                connected.SendMessage(data, size);
+            }
+
             NetworkManager.NetworkServerListener.OnMessageReceived(connection, identity, data, size, messageNum, recvTime, channel);
         }
 
