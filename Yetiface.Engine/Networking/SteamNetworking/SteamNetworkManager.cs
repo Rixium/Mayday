@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using Steamworks;
 using Steamworks.Data;
 
@@ -23,6 +24,7 @@ namespace Yetiface.Engine.Networking.SteamNetworking
 
         public SocketManager CreateSession()
         {
+            
             Server = SteamNetworkingSockets.CreateNormalSocket<MaydayServer>(NetAddress.AnyIp(25565));
             ((MaydayServer) Server).NetworkManager = this;
             
