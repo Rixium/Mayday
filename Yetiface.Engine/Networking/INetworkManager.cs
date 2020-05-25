@@ -21,5 +21,6 @@ namespace Yetiface.Engine.Networking
         // TODO Callbacks, not sure if this is ideal.
         void SetServerNetworkListener(INetworkServerListener networkServerListener);
         void SetClientNetworkListener(INetworkClientListener clientNetworkListener);
+        void SendMessage(string value);
     }
 }

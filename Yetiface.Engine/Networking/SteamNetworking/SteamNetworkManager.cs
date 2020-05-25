@@ -46,6 +46,15 @@ namespace Yetiface.Engine.Networking.SteamNetworking
         public void SetServerNetworkListener(INetworkServerListener networkServerListener) => NetworkServerListener = networkServerListener;
 
         public void SetClientNetworkListener(INetworkClientListener clientNetworkListener) => NetworkClientListener = clientNetworkListener;
-        
+        public void SendMessage(string value)
+        {
+            if (Server?.Connected != null)
+                foreach (var connection in Server.Connected)
+                {
+                    connection.SendMessage(value);
+                }
+
+            Client?.Connection.SendMessage(value);
+        }
     }
 }

@@ -17,7 +17,9 @@ namespace Mayday.Game.Screens
             var networkManager = new SteamNetworkManager(Game1.AppId);
             
             var menuScreenUserInterface = new MenuScreenUserInterface(networkManager);
+            
             UserInterface = menuScreenUserInterface;
+            
         }
 
         public override void Awake()

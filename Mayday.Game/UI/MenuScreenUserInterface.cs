@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using GeonBit.UI;
 using GeonBit.UI.Animators;
 using GeonBit.UI.Entities;
@@ -37,6 +38,7 @@ namespace Mayday.Game.UI
         private readonly SoundEffect _hoverSound;
         private Panel _userList;
         private Panel _connectedToServerPanel;
+        private Entity _chatBox;
 
         public MenuScreenUserInterface(INetworkManager networkManager)
         {
@@ -49,6 +51,8 @@ namespace Mayday.Game.UI
 
             UserInterface.Initialize(YetiGame.ContentManager);
             
+            UserInterface.Active.UseRenderTarget = true;
+
             _active = UserInterface.Active;
             
             _rootPanel =  UserInterface.Active.AddEntity(new Panel(new Vector2(0, 0))
@@ -209,7 +213,12 @@ namespace Mayday.Game.UI
             };
         }
 
-        private void HostGame(Entity entity) => _networkManager.CreateSession();
+        private void HostGame(Entity entity)
+        {
+            _networkManager.CreateSession();
+            _hostGamePanel.Visible = false;
+            OnConnectedToServer(new ConnectionInfo());
+        }
 
         private void SetupJoinGamePanel()
         {
@@ -305,6 +314,11 @@ namespace Mayday.Game.UI
             _networkManager.Update();
         }
 
+        public void AfterDraw()
+        {
+            UserInterface.Active.DrawMainRenderTarget(GraphicsUtils.Instance.SpriteBatch);
+        }
+
 
         public void OnNewConnection(Connection connection, ConnectionInfo info)
         {
@@ -316,6 +330,9 @@ namespace Mayday.Game.UI
 
         private void UpdateUserList()
         {
+
+            return;
+            
             if(_userList != null)
                 _rootPanel.RemoveChild(_userList);
             
@@ -334,10 +351,14 @@ namespace Mayday.Game.UI
             UpdateUserList();
         }
 
-        public void OnMessageReceived(Connection connection, NetIdentity identity, IntPtr data, int size, long messageNum,
+        public unsafe void OnMessageReceived(Connection connection, NetIdentity identity, IntPtr data, int size, long messageNum,
             long recvTime, int channel)
         {
+            var text = Encoding.UTF8.GetString((byte*)data, size);
             
+            var steamName = SteamFriends.GetFriendPersona(identity.SteamId.Value);
+            
+            AddMessageToChatBox($"{steamName}: {text}");
         }
 
         public void OnConnectionChanged(Connection connection, ConnectionInfo info)
@@ -350,9 +371,12 @@ namespace Mayday.Game.UI
             _mainMenuButtonPanel.Visible = true;
         }
 
-        public void OnMessageReceived(IntPtr data, int size, long messageNum, long recvTime, int channel)
+        public unsafe void OnMessageReceived(IntPtr data, int size, long messageNum, long recvTime, int channel)
         {
+            var text = Encoding.UTF8.GetString((byte*)data, size);
+            var serverPerson = SteamFriends.GetFriendPersona(_networkManager.Client.ConnectionInfo.Identity.SteamId);
             
+            AddMessageToChatBox($"{serverPerson}: {text}");
         }
 
         public void OnConnectedToServer(ConnectionInfo info)
@@ -360,11 +384,31 @@ namespace Mayday.Game.UI
             if(_connectedToServerPanel != null)
                 _rootPanel.RemoveChild(_connectedToServerPanel);
             
-            _connectedToServerPanel = new Panel(new Vector2(400, -1), PanelSkin.None);
+            _connectedToServerPanel = new Panel(new Vector2(0.8f, 0.7f));
             _rootPanel.AddChild(_connectedToServerPanel);
 
             _connectedToServerPanel.AddChild(new Header("Connected to Server!"));
+            _chatBox = _connectedToServerPanel.AddChild(new Panel(new Vector2(0, 0.5f), PanelSkin.Default, Anchor.TopCenter));
+            ((Panel) _chatBox).PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll;
+
+            var chatPanel =
+                _connectedToServerPanel.AddChild(new Panel(new Vector2(-1, -1), PanelSkin.None, Anchor.BottomCenter));
+            var text = chatPanel.AddChild(new TextInput(false));
+            var button = chatPanel.AddChild(new Button("Send"));
+
+            button.OnClick += (e) =>
+            {
+                var textValue = ((TextInput) text).Value;
+                _networkManager.SendMessage(textValue);
+
+                var message = $"{SteamFriends.GetPersona()}: {textValue}";
+                AddMessageToChatBox(message);
+                
+                ((TextInput) text).Value = "";
+            };
         }
+
+        private void AddMessageToChatBox(string message) => _chatBox.AddChild(new Paragraph(message));
         
     }
     
