@@ -49,6 +49,10 @@ namespace Mayday.Game.UI
         private Entity _joinServerPanel;
         private Entity _worldCreationParagraph;
 
+        public Texture2D Bitmap;
+        private WorldMaker _worldMaker;
+        private Image _image;
+
         public MenuScreenUserInterface(INetworkManager networkManager, IScreenManager screenManager)
         {
             _networkManager = networkManager;
@@ -226,10 +230,10 @@ namespace Mayday.Game.UI
 
         private async Task<IWorld> CreateWorld()
         {
-            var worldMaker = new WorldMaker()
+            _worldMaker = new WorldMaker()
                 .SetWorldSize(255);
-
-            return await worldMaker.Create(this);
+            
+            return await _worldMaker.Create(this);
         }
 
         private void SetupMultiplayerPanel()
@@ -404,7 +408,10 @@ namespace Mayday.Game.UI
             bottomText.AttachAnimator(new TextWaveAnimator());
         }
 
-        public void Draw() => _active.Draw(GraphicsUtils.Instance.SpriteBatch);
+        public void Draw()
+        {
+            _active.Draw(GraphicsUtils.Instance.SpriteBatch);
+        }
 
         public void Update()
         {
