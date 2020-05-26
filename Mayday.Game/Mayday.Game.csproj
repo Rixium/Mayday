@@ -131,6 +131,10 @@
     <Content Include="Content\Ball.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AccidentalNoise\TinkerWorX.AccidentalNoiseLibrary.csproj">
+      <Project>{e8d255f5-fe68-4720-af02-b1ad7495b322}</Project>
+      <Name>TinkerWorX.AccidentalNoiseLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Facepunch.Steamworks\Facepunch.Steamworks\Facepunch.Steamworks.Win64.csproj">
       <Project>{4ebc6789-9069-427c-94cb-ebaf1095aaab}</Project>
       <Name>Facepunch.Steamworks.Win64</Name>

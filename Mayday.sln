@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTypes", "GeonBit.UI\Geo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Facepunch.Steamworks.Win64", "Facepunch.Steamworks\Facepunch.Steamworks\Facepunch.Steamworks.Win64.csproj", "{4EBC6789-9069-427C-94CB-EBAF1095AAAB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinkerWorX.AccidentalNoiseLibrary", "AccidentalNoise\TinkerWorX.AccidentalNoiseLibrary.csproj", "{E8D255F5-FE68-4720-AF02-B1AD7495B322}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{4EBC6789-9069-427C-94CB-EBAF1095AAAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EBC6789-9069-427C-94CB-EBAF1095AAAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4EBC6789-9069-427C-94CB-EBAF1095AAAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8D255F5-FE68-4720-AF02-B1AD7495B322}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8D255F5-FE68-4720-AF02-B1AD7495B322}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8D255F5-FE68-4720-AF02-B1AD7495B322}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8D255F5-FE68-4720-AF02-B1AD7495B322}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
