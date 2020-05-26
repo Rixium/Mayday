@@ -26,8 +26,8 @@ namespace Mayday.Game.Gameplay
 
         private async Task<IWorld> GenerateWorld(IWorldGeneratorListener worldGeneratorListener)
         {
-            
             var world = new World();
+
             await Task.Delay(1000);
             worldGeneratorListener.OnWorldGenerationUpdate("Creating the World...");
             await Task.Delay(1000);
