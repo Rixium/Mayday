@@ -24,8 +24,6 @@ namespace Steamworks.Data
 
 		[FieldOffset( 8 )]
 		internal IntPtr PointerValue; // m_val_functionPtr void *
-
-
-		// TODO - support strings, maybe
+		
 	}
 }

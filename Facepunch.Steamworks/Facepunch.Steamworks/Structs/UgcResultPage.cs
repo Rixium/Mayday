@@ -63,11 +63,6 @@ namespace Steamworks.Ugc
 							}
 						}
 
-						// TODO GetQueryUGCAdditionalPreview
-						// TODO GetQueryUGCChildren
-						// TODO GetQueryUGCMetadata
-
-
 						yield return item;
 					}
 				}

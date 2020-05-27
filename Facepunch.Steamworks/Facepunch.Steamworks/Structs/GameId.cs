@@ -8,8 +8,6 @@ namespace Steamworks.Data
 {
 	public struct GameId
 	{
-		// TODO - Be able to access these vars
-
 		/*
 		 
 		enum EGameIDType
