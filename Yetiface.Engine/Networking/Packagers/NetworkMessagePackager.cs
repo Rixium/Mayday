@@ -32,6 +32,7 @@ namespace Yetiface.Engine.Networking.Packagers
             if (output == null)
                 throw new Exception("Could not convert data to string.");
 
+            // Split in to 2 strings because we know the first is going to be the packet type id.
             var split = output.Split(new[] {':'}, 2);
             var packetTypeId = int.Parse(split[0]);
             var packetDefinition = GetPacketDefinition(packetTypeId);
@@ -45,12 +46,19 @@ namespace Yetiface.Engine.Networking.Packagers
             if (output == null)
                 throw new Exception("Could not convert data to string.");
 
+            // Split in to 2 strings because we know the first is going to be the packet type id.
             var split = output.Split(new[] {':'}, 2);
             var packetTypeId = int.Parse(split[0]);
             var packetDefinition = GetPacketDefinition(packetTypeId);
             return packetDefinition.Unpack(split[1]);
         }
 
+        /// <summary>
+        /// Retrieves the packet definition from the dictionary depending on the packet type id that has been passed.
+        /// </summary>
+        /// <param name="packetTypeId">The packet type Id of the expected packet definition.</param>
+        /// <returns>The packet definition for the given packet type id.</returns>
+        ///  TODO Hate this, probably slow. If a lot of packets are flying around and we're doing dictionary look ups using LINQ every time..
         public IPacketDefinition GetPacketDefinition(int packetTypeId) =>
             _packetDefinitions.FirstOrDefault(packetDefinition => packetDefinition.Value.PacketTypeId == packetTypeId)
                 .Value;
