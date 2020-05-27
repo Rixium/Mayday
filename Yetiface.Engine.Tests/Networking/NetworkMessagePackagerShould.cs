@@ -14,9 +14,9 @@ namespace Yetiface.Engine.Tests.Networking
             var networkMessagePackager = new NetworkMessagePackager();
             var testPacketDefinition = new TestPacketDefinition();
 
-            networkMessagePackager.AddDefinition(typeof(TestPacket), testPacketDefinition);
+            networkMessagePackager.AddDefinition(testPacketDefinition);
 
-            networkMessagePackager.GetPacketDefinition(typeof(TestPacket)).ShouldBe(testPacketDefinition);
+            networkMessagePackager.GetPacketDefinition(new TestPacket().PacketTypeId).ShouldBe(testPacketDefinition);
         }
 
         [Test]
@@ -30,31 +30,64 @@ namespace Yetiface.Engine.Tests.Networking
                 Name = "Test"
             };
 
-            networkMessagePackager.AddDefinition(typeof(TestPacket), testPacketDefinition);
+            networkMessagePackager.AddDefinition(testPacketDefinition);
 
             var value = networkMessagePackager.Package(testPacket);
 
-            var expectedString = $"{testPacket.Name}:{testPacket.Number}";
+            var expectedString = $"{testPacketDefinition.PacketTypeId}:{testPacket.Name}:{testPacket.Number}";
             var outputString = Encoding.UTF8.GetString(value);
 
             outputString.ShouldBe(expectedString);
         }
+
+        [Test]
+        public void UnPackCorrectly()
+        {
+            var networkMessagePackager = new NetworkMessagePackager();
+            var testPacketDefinition = new TestPacketDefinition();
+            var testPacket = new TestPacket()
+            {
+                Number = 3,
+                Name = "Test"
+            };
+            
+            networkMessagePackager.AddDefinition(testPacketDefinition);
+            var value = networkMessagePackager.Package(testPacket);
+            var result = (TestPacket) networkMessagePackager.Unpack(value);
+            
+            result.Name.ShouldBe(testPacket.Name);
+            result.Number.ShouldBe(testPacket.Number);
+        }
+        
     }
 
     public class TestPacket : INetworkPacket
     {
         public int Number { get; set; }
         public string Name { get; set; }
+        public int PacketTypeId { get; set; } = 1;
     }
 
     public class TestPacketDefinition : IPacketDefinition
     {
-        public byte[] Create(object data)
+        public int PacketTypeId { get; set; } = 1;
+
+        public string Create(object data)
         {
             var value = (TestPacket) data;
-            var dataString = value.Name + ":" + value.Number;
-            return Encoding.UTF8.GetBytes(dataString);
+            return value.Name + ":" + value.Number;
         }
+
+        public INetworkPacket Unpack(string data)
+        {
+            var splitData = data.Split(':');
+            return new TestPacket()
+            {
+                Name = splitData[0],
+                Number = int.Parse(splitData[1])
+            };
+        }
+        
     }
     
 }

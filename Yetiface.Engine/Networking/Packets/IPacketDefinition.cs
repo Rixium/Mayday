@@ -2,8 +2,9 @@
 {
     public interface IPacketDefinition
     {
-        byte[] Create(object data);
-
+        int PacketTypeId { get; set; }
+        string Create(object data);
+        INetworkPacket Unpack(string data);
     }
     
 }

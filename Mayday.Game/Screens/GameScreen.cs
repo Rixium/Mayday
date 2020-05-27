@@ -3,10 +3,8 @@ using GeonBit.UI;
 using Mayday.Game.Gameplay;
 using Mayday.Game.Networking;
 using Mayday.Game.Networking.PacketDefinitions;
-using Mayday.Game.Networking.Packets;
 using Mayday.Game.UI;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Steamworks.Data;
 using Yetiface.Engine.Networking;
 using Yetiface.Engine.Networking.Listeners;
@@ -14,7 +12,6 @@ using Yetiface.Engine.Networking.Packagers;
 using Yetiface.Engine.Screens;
 using Yetiface.Engine.Utils;
 using Color = Microsoft.Xna.Framework.Color;
-using MouseState = Yetiface.Engine.Utils.MouseState;
 
 namespace Mayday.Game.Screens
 {
@@ -38,7 +35,10 @@ namespace Mayday.Game.Screens
             _messageParser = new NetworkMessageParser();
             _messagePackager = new NetworkMessagePackager();
             
-            _messagePackager.AddDefinition(typeof(TileTypePacket), new TileTypePacketDefinition());
+            _messagePackager.AddDefinition(new TileTypePacketDefinition()
+            {
+                PacketTypeId = 1
+            });
         }
 
         public void SetWorld(IWorld world)
@@ -105,6 +105,7 @@ namespace Mayday.Game.Screens
         public void OnMessageReceived(Connection connection, NetIdentity identity, IntPtr data, int size, long messageNum,
             long recvTime, int channel)
         {
+            var received = _messagePackager.Unpack(data, size);
             
         }
 

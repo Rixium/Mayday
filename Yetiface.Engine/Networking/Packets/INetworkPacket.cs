@@ -2,5 +2,6 @@
 {
     public interface INetworkPacket
     {
+        int PacketTypeId { get; set; }
     }
 }
