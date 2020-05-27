@@ -50,12 +50,14 @@ namespace Mayday.Game.UI
         private Entity _worldCreationParagraph;
 
         public Texture2D Bitmap;
-        private WorldMaker _worldMaker;
+        private IWorldMaker _worldMaker;
         private Image _image;
+        private INetworkMessageParser _messageParser;
 
         public MenuScreenUserInterface(INetworkManager networkManager, IScreenManager screenManager)
         {
             _networkManager = networkManager;
+            _messageParser = new NetworkMessageParser();
             _screenManager = screenManager;
             
             _networkManager.SetServerNetworkListener(this);
@@ -135,8 +137,6 @@ namespace Mayday.Game.UI
                 }
                 num++;
             }
-
-            StartNewGame();
         }
 
         private void ConnectToLobby(string lobbyId)
@@ -222,7 +222,7 @@ namespace Mayday.Game.UI
             _worldCreationParagraph = creatingWorldPanel.AddChild(new RichParagraph("Creating World...", Anchor.Center));
             _worldCreationParagraph.AttachAnimator(new TextWaveAnimator());
 
-            var gameScreen = new GameScreen();
+            var gameScreen = new GameScreen(_networkManager);
 
             var world = await CreateWorld();
             
@@ -296,7 +296,7 @@ namespace Mayday.Game.UI
         {
             _networkManager.CreateSession();
             _hostGamePanel.Visible = false;
-            OnConnectedToServer(new ConnectionInfo());
+            StartNewGame();
         }
 
         private void SetupJoinGamePanel()
@@ -380,9 +380,19 @@ namespace Mayday.Game.UI
             _worldCreationParagraph = creatingWorldPanel.AddChild(new RichParagraph("Creating World...", Anchor.Center));
             _worldCreationParagraph.AttachAnimator(new TextWaveAnimator());
             
-            var world = await new NetworkWorldMaker(_networkManager)
-                .SetWorldSize(255)
+            _worldMaker = new NetworkWorldMaker(_networkManager);
+            
+            var world = await _worldMaker
                 .Create(this);
+            
+            var gameScreen = new GameScreen(_networkManager);
+            
+            gameScreen.SetWorld(world);
+
+            gameScreen.Bitmap = _worldMaker.Bitmap;
+            
+            _screenManager.AddScreen(gameScreen);
+            _screenManager.ChangeScreen(gameScreen.Name);
         }
 
         private void SetupSettingsPanel()
@@ -493,7 +503,7 @@ namespace Mayday.Game.UI
         public void OnMessageReceived(Connection connection, NetIdentity identity, IntPtr data, int size, long messageNum,
             long recvTime, int channel)
         {
-            var result = new NetworkMessageParser().Parse(data, size);
+            var result = _messageParser.Parse(data, size);
 
             switch (result.MessageType)
             {
@@ -521,7 +531,7 @@ namespace Mayday.Game.UI
 
         public void OnMessageReceived(IntPtr data, int size, long messageNum, long recvTime, int channel)
         {
-            var result = new NetworkMessageParser().Parse(data, size);
+            var result = _messageParser.Parse(data, size);
 
             switch (result.MessageType)
             {

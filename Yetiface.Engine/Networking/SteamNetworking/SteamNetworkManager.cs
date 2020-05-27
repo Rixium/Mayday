@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
+using System.Runtime.InteropServices;
+using System.Text;
 using Steamworks;
 using Steamworks.Data;
 
@@ -68,14 +71,20 @@ namespace Yetiface.Engine.Networking.SteamNetworking
             // If the value is empty, then don't add it to the to send,
             // otherwise, add it to the it.
             toSend = value.Equals("") ? $"{toSend}" : $"{toSend}:{value}";
-
+            
+            byte[] array  = Encoding.UTF8.GetBytes(toSend);
+            IntPtr lpData = Marshal.AllocHGlobal(array.Length);
+            Marshal.Copy(array, 0, lpData, array.Length);
+            
             if (Server?.Connected != null)
                 foreach (var connection in Server.Connected)
                 {
-                    connection.SendMessage(toSend);
+                    connection.SendMessage(lpData, array.Length);
                 }
 
-            Client?.Connection.SendMessage(toSend);
+            Client?.Connection.SendMessage(lpData, array.Length);
+            
+            Marshal.FreeHGlobal(lpData);
         }
     }
 
@@ -83,6 +92,8 @@ namespace Yetiface.Engine.Networking.SteamNetworking
     {
         ChatMessage,
         WorldRequest,
-        WorldSendComplete
+        WorldSendComplete,
+        TileData,
+        TileReceived
     }
 }

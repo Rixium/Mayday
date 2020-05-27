@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Threading.Tasks;
 using AccidentalNoise;
-using Yetiface.Engine.Utils;
 
 namespace Mayday.Game.Gameplay
 {
@@ -15,9 +14,8 @@ namespace Mayday.Game.Gameplay
     {
 
         public int WorldSize { get; set; }
-
-        public Bitmap Bitmap;
-
+        public Bitmap Bitmap { get; set; }
+        
         public WorldMaker SetWorldSize(int worldSize)
         {
             WorldSize = worldSize;
@@ -36,8 +34,8 @@ namespace Mayday.Game.Gameplay
 
             var world = new World();
 
-            var worldWidth = 400;
-            var worldHeight = 400;
+            var worldWidth = 200;
+            var worldHeight = 200;
 
             var seed = (uint) DateTime.UtcNow.Ticks;
 
@@ -62,7 +60,7 @@ namespace Mayday.Game.Gameplay
                     var percent = (int) ((float) tileNumber / totalTiles * 100);
 
                     worldGeneratorListener.OnWorldGenerationUpdate(
-                        $"Creating World... {tileNumber}/{totalTiles} tiles");
+                        $"Creating World... {percent}%");
 
                     var p = x / (double) worldWidth;
                     var q = y / (double) worldHeight;
@@ -76,8 +74,8 @@ namespace Mayday.Game.Gameplay
                     bmp.SetPixel(x, y, bitmapColor);
                     
                     if(val > 0.5f)
-                        tiles[x, y] = new Tile(TileType.GROUND);
-                    else tiles[x, y] = new Tile(TileType.NONE);
+                        tiles[x, y] = new Tile(TileType.GROUND, x, y);
+                    else tiles[x, y] = new Tile(TileType.NONE, x, y);
                 }
             }
 
@@ -93,7 +91,7 @@ namespace Mayday.Game.Gameplay
                     var percent = (int) ((float) tileNumber / totalTiles * 100);
 
                     worldGeneratorListener.OnWorldGenerationUpdate(
-                        $"Creating Copper... {tileNumber}/{totalTiles} tiles");
+                        $"Creating Copper... {percent}%");
 
                     var p = x / (double) worldWidth;
                     var q = y / (double) worldHeight;
@@ -104,7 +102,7 @@ namespace Mayday.Game.Gameplay
                     var val = ores.Get(nx * scale, ny * scale);
                     if (val > 0.5f)
                     {
-                        tiles[x, y] = new Tile(TileType.COPPER);
+                        tiles[x, y] = new Tile(TileType.COPPER, x, y);
                         bmp.SetPixel(x, y, Color.Orange);
                     }
                 }
@@ -132,11 +130,16 @@ namespace Mayday.Game.Gameplay
     
     public class Tile
     {
+        
+        public int X { get; set; }
+        public int Y { get; set; }
         public TileType TileType { get; set; }
         
-        public Tile(TileType tileType)
+        public Tile(TileType tileType, int x, int y)
         {
             TileType = tileType;
+            X = x;
+            Y = y;
         }
     }
 
