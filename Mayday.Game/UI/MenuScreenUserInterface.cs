@@ -135,6 +135,8 @@ namespace Mayday.Game.UI
                 }
                 num++;
             }
+
+            StartNewGame();
         }
 
         private void ConnectToLobby(string lobbyId)
@@ -214,6 +216,8 @@ namespace Mayday.Game.UI
 
         private async void StartNewGame()
         {
+            _mainMenuButtonPanel.Visible = false;
+            
             var creatingWorldPanel = _rootPanel.AddChild(new Panel(new Vector2(400, 0.5f)));
             _worldCreationParagraph = creatingWorldPanel.AddChild(new RichParagraph("Creating World...", Anchor.Center));
             _worldCreationParagraph.AttachAnimator(new TextWaveAnimator());
@@ -223,6 +227,8 @@ namespace Mayday.Game.UI
             var world = await CreateWorld();
             
             gameScreen.SetWorld(world);
+
+            gameScreen.Bitmap = _worldMaker.Bitmap;
             
             _screenManager.AddScreen(gameScreen);
             _screenManager.ChangeScreen(gameScreen.Name);
