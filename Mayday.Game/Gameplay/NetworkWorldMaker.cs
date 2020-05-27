@@ -23,8 +23,6 @@ namespace Mayday.Game.Gameplay
         private Tile[,] _tiles;
         private bool _gotWorld;
 
-        INetworkMessageParser _messageParser = new NetworkMessageParser();
-        
         public int WorldSize { get; set; }
         public Bitmap Bitmap { get; set; }
 

@@ -49,7 +49,6 @@
     <Compile Include="Gameplay\NetworkWorldMaker.cs" />
     <Compile Include="Gameplay\World.cs" />
     <Compile Include="Gameplay\WorldMaker.cs" />
-    <Compile Include="Networking\NetworkMessageParser.cs" />
     <Compile Include="Networking\PacketDefinitions\TileTypePacketDefinition.cs" />
     <Compile Include="Networking\Packets\TileTypePacket.cs" />
     <Compile Include="Networking\SteamNetworking\MaydayClient.cs" />

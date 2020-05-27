@@ -1,8 +1,8 @@
 ﻿using System;
 using GeonBit.UI;
 using Mayday.Game.Gameplay;
-using Mayday.Game.Networking;
 using Mayday.Game.Networking.PacketDefinitions;
+using Mayday.Game.Networking.Packets;
 using Mayday.Game.UI;
 using Microsoft.Xna.Framework;
 using Steamworks.Data;
@@ -19,9 +19,6 @@ namespace Mayday.Game.Screens
     {
         
         private readonly INetworkManager _networkManager;
-        // ReSharper disable once NotAccessedField.Local
-        private readonly INetworkMessageParser _messageParser;
-        // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly INetworkMessagePackager _messagePackager;
         
         private IWorld _world;
@@ -32,13 +29,8 @@ namespace Mayday.Game.Screens
             _networkManager.SetServerNetworkListener(this);
             _networkManager.SetClientNetworkListener(this);
             
-            _messageParser = new NetworkMessageParser();
             _messagePackager = new NetworkMessagePackager();
-            
-            _messagePackager.AddDefinition(new TileTypePacketDefinition()
-            {
-                PacketTypeId = 1
-            });
+            _messagePackager.AddDefinition(typeof(TileTypePacket), new TileTypePacketDefinition());
         }
 
         public void SetWorld(IWorld world)

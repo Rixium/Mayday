@@ -6,7 +6,6 @@ using GeonBit.UI.Animators;
 using GeonBit.UI.Entities;
 using GeonBit.UI.Utils;
 using Mayday.Game.Gameplay;
-using Mayday.Game.Networking;
 using Mayday.Game.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -49,7 +48,6 @@ namespace Mayday.Game.UI
         public MenuScreenUserInterface(INetworkManager networkManager, IScreenManager screenManager)
         {
             _networkManager = networkManager;
-            _messageParser = new NetworkMessageParser();
             _screenManager = screenManager;
             
             _networkManager.SetServerNetworkListener(this);

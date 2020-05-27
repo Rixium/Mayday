@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using NUnit.Framework;
 using Shouldly;
 using Yetiface.Engine.Networking.Packagers;
@@ -14,9 +15,9 @@ namespace Yetiface.Engine.Tests.Networking
             var networkMessagePackager = new NetworkMessagePackager();
             var testPacketDefinition = new TestPacketDefinition();
 
-            networkMessagePackager.AddDefinition(testPacketDefinition);
+            networkMessagePackager.AddDefinition(typeof(TestPacket), testPacketDefinition);
 
-            networkMessagePackager.GetPacketDefinition(new TestPacket().PacketTypeId).ShouldBe(testPacketDefinition);
+            networkMessagePackager.GetPacketDefinition(0).ShouldBe(testPacketDefinition);
         }
 
         [Test]
@@ -30,7 +31,7 @@ namespace Yetiface.Engine.Tests.Networking
                 Name = "Test"
             };
 
-            networkMessagePackager.AddDefinition(testPacketDefinition);
+            networkMessagePackager.AddDefinition(typeof(TestPacket), testPacketDefinition);
 
             var value = networkMessagePackager.Package(testPacket);
 
@@ -51,7 +52,7 @@ namespace Yetiface.Engine.Tests.Networking
                 Name = "Test"
             };
             
-            networkMessagePackager.AddDefinition(testPacketDefinition);
+            networkMessagePackager.AddDefinition(typeof(TestPacket), testPacketDefinition);
             var value = networkMessagePackager.Package(testPacket);
             var result = (TestPacket) networkMessagePackager.Unpack(value);
             
@@ -65,20 +66,17 @@ namespace Yetiface.Engine.Tests.Networking
     {
         public int Number { get; set; }
         public string Name { get; set; }
-        public int PacketTypeId { get; set; } = 1;
     }
 
-    public class TestPacketDefinition : IPacketDefinition
+    public class TestPacketDefinition : PacketDefinition
     {
-        public int PacketTypeId { get; set; } = 1;
-
-        public string Create(object data)
+        public override string Pack(INetworkPacket data)
         {
             var value = (TestPacket) data;
             return value.Name + ":" + value.Number;
         }
 
-        public INetworkPacket Unpack(string data)
+        public override INetworkPacket Unpack(string data)
         {
             var splitData = data.Split(':');
             return new TestPacket()
