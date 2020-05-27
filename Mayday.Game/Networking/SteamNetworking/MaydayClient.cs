@@ -2,7 +2,7 @@ using System;
 using Steamworks;
 using Steamworks.Data;
 
-namespace Yetiface.Engine.Networking.SteamNetworking
+namespace Mayday.Game.Networking.SteamNetworking
 {
     public class MaydayClient : ConnectionManager
     {

@@ -1,8 +1,7 @@
 using System;
-using System.Threading.Tasks;
 using Steamworks.Data;
 
-namespace Yetiface.Engine.Networking
+namespace Yetiface.Engine.Networking.Listeners
 {
     public interface INetworkClientListener
     {

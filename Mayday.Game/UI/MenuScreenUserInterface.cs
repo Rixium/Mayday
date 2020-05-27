@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using GeonBit.UI;
 using GeonBit.UI.Animators;
@@ -16,7 +15,7 @@ using Steamworks;
 using Steamworks.Data;
 using Yetiface.Engine;
 using Yetiface.Engine.Networking;
-using Yetiface.Engine.Networking.SteamNetworking;
+using Yetiface.Engine.Networking.Listeners;
 using Yetiface.Engine.Screens;
 using Yetiface.Engine.Utils;
 using Color = Microsoft.Xna.Framework.Color;
@@ -26,10 +25,11 @@ namespace Mayday.Game.UI
 {
     public class MenuScreenUserInterface : IUserInterface, INetworkServerListener, INetworkClientListener, IWorldGeneratorListener
     {
-        public HashSet<string> Connections { get; set; } = new HashSet<string>();
-
         
         private readonly INetworkManager _networkManager;
+        private readonly INetworkMessageParser _messageParser;
+        private IWorldMaker _worldMaker;
+        
         private readonly IScreenManager _screenManager;
         private readonly UserInterface _active;
         
@@ -40,19 +40,11 @@ namespace Mayday.Game.UI
         private Entity _hostGamePanel;
         private Entity _joinGamePanel;
         private Entity _settingsPanel;
+        private Entity _joinServerPanel;
+        private Entity _worldCreationParagraph;
         
         private readonly SoundEffect _clickSound;
         private readonly SoundEffect _hoverSound;
-        private Panel _userList;
-        private Panel _connectedToServerPanel;
-        private Entity _chatBox;
-        private Entity _joinServerPanel;
-        private Entity _worldCreationParagraph;
-
-        public Texture2D Bitmap;
-        private IWorldMaker _worldMaker;
-        private Image _image;
-        private INetworkMessageParser _messageParser;
 
         public MenuScreenUserInterface(INetworkManager networkManager, IScreenManager screenManager)
         {
@@ -88,7 +80,6 @@ namespace Mayday.Game.UI
             
             image.SpaceBefore = new Vector2(100, 100);
             image.SpaceAfter =  new Vector2(100, 100);
-
 
             image.AttachAnimator(new RotationAnimator());
             
@@ -235,7 +226,7 @@ namespace Mayday.Game.UI
         private async Task<IWorld> CreateWorld()
         {
             _worldMaker = new WorldMaker()
-                .SetWorldSize(255);
+                .SetWorldSize(200, 200);
             
             return await _worldMaker.Create(this);
         }
@@ -317,25 +308,22 @@ namespace Mayday.Game.UI
                 _joinGamePanel.Visible = false;
             };
 
-            joinByIp.OnClick += async (e) =>
+            joinByIp.OnClick += (e) =>
             {
                 var textInput = new TextInput(false)
                 {
                     PlaceholderText = "Enter IP:"
                 };
 
-                var result = false;
-                
-                MessageBox.ShowMsgBox("Join Server by IP", "Please enter the IP address of the server you wish to join.", new[] {
-                    new MessageBox.MsgBoxOption("Join", () =>
+                MessageBox.ShowMsgBox("Join Server by IP",
+                    "Please enter the IP address of the server you wish to join.", new[]
                     {
-                        result = JoinServer(textInput.Value);
-                        return true;
-                    })
-                }, new Entity[] { textInput });
-                
-                if(result)
-                    await WaitToConnect();
+                        new MessageBox.MsgBoxOption("Join", () =>
+                        {
+                            JoinServer(textInput.Value);
+                            return true;
+                        })
+                    }, new Entity[] {textInput});
             };
                 
             joinSteamFriend.OnClick += (e) =>
@@ -347,7 +335,7 @@ namespace Mayday.Game.UI
             };
         }
 
-        private bool JoinServer(string ipAddress)
+        private void JoinServer(string ipAddress)
         {
             _joinGamePanel.Visible = false;
 
@@ -360,16 +348,15 @@ namespace Mayday.Game.UI
             {
                 _networkManager.JoinSession(ipAddress);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Possibly a problem with the IP ADDRESS
                 // Go straight to failed.
                 OnFailedToConnect();
-                
-                return false;
+                return;
             }
 
-            return true;
+            WaitToConnect();
         }
 
         private async void CreateNetworkWorld()
@@ -437,31 +424,12 @@ namespace Mayday.Game.UI
             UserInterface.Active.DrawMainRenderTarget(GraphicsUtils.Instance.SpriteBatch);
         }
 
-
         public void OnNewConnection(Connection connection, ConnectionInfo info)
         {
-            var steamName = SteamFriends.GetFriendPersona(info.Identity.SteamId);
-            Connections.Add(steamName);
             
-            UpdateUserList();
         }
 
-        private void UpdateUserList()
-        {
-
-            return;
-            
-            if(_userList != null)
-                _rootPanel.RemoveChild(_userList);
-                    
-            _userList = new Panel(new Vector2(0.3f, 0.8f), PanelSkin.Default, Anchor.CenterLeft);
-            _rootPanel.AddChild(_userList);
-
-            foreach (var user in Connections)
-                _userList.AddChild(new Paragraph(user));
-        }
-        
-        private async Task WaitToConnect()
+        private async void WaitToConnect()
         {
             // Give them 10 seconds to try to join.
             await Task.Delay(10000);
@@ -490,29 +458,14 @@ namespace Mayday.Game.UI
 
         public void OnConnectionLeft(Connection connection, ConnectionInfo info)
         {
-            var steamName = SteamFriends.GetFriendPersona(info.Identity.SteamId);
-            Connections.Remove(steamName);
             
-            UpdateUserList();
         }
 
         public void OnMessageReceived(Connection connection, NetIdentity identity, IntPtr data, int size, long messageNum,
             long recvTime, int channel)
         {
             var result = _messageParser.Parse(data, size);
-
-            switch (result.MessageType)
-            {
-                case MessageType.ChatMessage:
-                    break;
-                case MessageType.WorldRequest:
-                    _networkManager.SendMessage(MessageType.WorldSendComplete);
-                    break;
-                case MessageType.WorldSendComplete:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            
         }
 
         public void OnConnectionChanged(Connection connection, ConnectionInfo info)
@@ -527,19 +480,7 @@ namespace Mayday.Game.UI
 
         public void OnMessageReceived(IntPtr data, int size, long messageNum, long recvTime, int channel)
         {
-            var result = _messageParser.Parse(data, size);
-
-            switch (result.MessageType)
-            {
-                case MessageType.ChatMessage:
-                    break;
-                case MessageType.WorldRequest:
-                    break;
-                case MessageType.WorldSendComplete:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            
         }
 
         public void OnConnectedToServer(ConnectionInfo info)

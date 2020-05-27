@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Mayday.Game.Gameplay
 {
@@ -9,12 +8,9 @@ namespace Mayday.Game.Gameplay
     /// </summary>
     public interface IWorldMaker
     {
-        
-        int WorldSize { get; set; }
-        Bitmap Bitmap { get; set; }
+        int WorldWidth { get; set; }
+        int WorldHeight { get; set; }
 
         Task<IWorld> Create(IWorldGeneratorListener listener);
-        
     }
-    
 }

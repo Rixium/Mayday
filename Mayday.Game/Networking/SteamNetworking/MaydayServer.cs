@@ -3,7 +3,7 @@ using System.Linq;
 using Steamworks;
 using Steamworks.Data;
 
-namespace Yetiface.Engine.Networking.SteamNetworking
+namespace Mayday.Game.Networking.SteamNetworking
 {
     public class MaydayServer : SocketManager
     {

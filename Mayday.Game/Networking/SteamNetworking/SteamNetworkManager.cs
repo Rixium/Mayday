@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
-using System.Runtime.InteropServices;
-using System.Text;
 using Steamworks;
 using Steamworks.Data;
+using Yetiface.Engine.Networking;
+using Yetiface.Engine.Networking.Listeners;
+using Yetiface.Engine.Networking.Packets;
 
-namespace Yetiface.Engine.Networking.SteamNetworking
+namespace Mayday.Game.Networking.SteamNetworking
 {
     public class SteamNetworkManager : INetworkManager
     {
@@ -64,36 +64,18 @@ namespace Yetiface.Engine.Networking.SteamNetworking
         public void SetClientNetworkListener(INetworkClientListener clientNetworkListener) =>
             NetworkClientListener = clientNetworkListener;
 
-        public void SendMessage(MessageType messageType, string value = "")
+        public void SendMessage(INetworkPacket networkPacket)
         {
-            var toSend = $"{SteamClient.SteamId}:{(int) messageType}";
-
-            // If the value is empty, then don't add it to the to send,
-            // otherwise, add it to the it.
-            toSend = value.Equals("") ? $"{toSend}" : $"{toSend}:{value}";
-            
-            byte[] array  = Encoding.UTF8.GetBytes(toSend);
-            IntPtr lpData = Marshal.AllocHGlobal(array.Length);
-            Marshal.Copy(array, 0, lpData, array.Length);
-            
             if (Server?.Connected != null)
                 foreach (var connection in Server.Connected)
                 {
-                    connection.SendMessage(lpData, array.Length);
+                    connection.SendMessage(networkPacket.Data, networkPacket.Length);
                 }
 
-            Client?.Connection.SendMessage(lpData, array.Length);
-            
-            Marshal.FreeHGlobal(lpData);
+            Client?.Connection.SendMessage(networkPacket.Data, networkPacket.Length);
+
+            networkPacket.Dispose();
         }
     }
 
-    public enum MessageType
-    {
-        ChatMessage,
-        WorldRequest,
-        WorldSendComplete,
-        TileData,
-        TileReceived
-    }
 }

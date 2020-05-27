@@ -1,6 +1,6 @@
-﻿using Mayday.Game.UI;
+﻿using Mayday.Game.Networking.SteamNetworking;
+using Mayday.Game.UI;
 using Microsoft.Xna.Framework;
-using Yetiface.Engine.Networking.SteamNetworking;
 using Yetiface.Engine.Screens;
 
 namespace Mayday.Game.Screens

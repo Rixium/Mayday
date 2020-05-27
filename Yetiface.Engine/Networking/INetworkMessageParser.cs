@@ -1,11 +1,11 @@
 ﻿using System;
+using Yetiface.Engine.Networking.Packets;
 
 namespace Yetiface.Engine.Networking
 {
     public interface INetworkMessageParser
     {
-
-        INetworkMessageValue Parse(IntPtr data, int size);
+        INetworkPacket Parse(IntPtr data, int size);
         
     }
 }

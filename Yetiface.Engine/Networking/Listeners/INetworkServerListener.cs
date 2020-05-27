@@ -1,7 +1,7 @@
 using System;
 using Steamworks.Data;
 
-namespace Yetiface.Engine.Networking
+namespace Yetiface.Engine.Networking.Listeners
 {
     public interface INetworkServerListener
     {

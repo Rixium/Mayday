@@ -12,13 +12,15 @@ namespace Mayday.Game.Gameplay
     /// </summary>
     public class WorldMaker : IWorldMaker
     {
-
-        public int WorldSize { get; set; }
-        public Bitmap Bitmap { get; set; }
         
-        public WorldMaker SetWorldSize(int worldSize)
+        public int WorldWidth { get; set; }
+        public int WorldHeight { get; set; }
+
+        public WorldMaker SetWorldSize(int worthWidth, int worldHeight)
         {
-            WorldSize = worldSize;
+            WorldWidth = worthWidth;
+            WorldHeight = worldHeight;
+            
             return this;
         }
 
@@ -33,17 +35,14 @@ namespace Mayday.Game.Gameplay
             await Task.Delay(1);
 
             var world = new World();
-
-            var worldWidth = 1280 / 4;
-            var worldHeight = 720 / 4;
-
+            
             var seed = (uint) DateTime.UtcNow.Ticks;
 
-            var bmp = new Bitmap(worldWidth, worldHeight);
+            var bmp = new Bitmap(WorldWidth, WorldHeight);
 
-            var tiles = new Tile[worldWidth, worldHeight];
+            var tiles = new Tile[WorldWidth, WorldHeight];
             var tileNumber = 0;
-            var totalTiles = worldWidth * worldHeight;
+            var totalTiles = WorldWidth * WorldHeight;
             var ranges = new SMappingRanges();
 
             ModuleBase combinedTerrain = TerrainPresets.CavesAndMountains(seed);
@@ -52,9 +51,9 @@ namespace Mayday.Game.Gameplay
             int scale = 3;
 
             //finally update our image
-            for (int x = 0; x < worldWidth; x++)
+            for (int x = 0; x < WorldWidth; x++)
             {
-                for (int y = 0; y < worldHeight; y++)
+                for (int y = 0; y < WorldHeight; y++)
                 {
                     tileNumber++;
                     var percent = (int) ((float) tileNumber / totalTiles * 100);
@@ -62,8 +61,8 @@ namespace Mayday.Game.Gameplay
                     worldGeneratorListener.OnWorldGenerationUpdate(
                         $"Creating World... {percent}%");
 
-                    var p = x / (double) worldWidth;
-                    var q = y / (double) worldHeight;
+                    var p = x / (double) WorldWidth;
+                    var q = y / (double) WorldHeight;
 
                     var nx = ranges.mapx0 + p * (ranges.mapx1 - ranges.mapx0);
                     var ny = ranges.mapy0 + q * (ranges.mapy1 - ranges.mapy0);
@@ -83,9 +82,9 @@ namespace Mayday.Game.Gameplay
             var ores = TerrainPresets.CreateOres(combinedTerrain, seed);
 
             //finally update our image
-            for (int x = 0; x < worldWidth; x++)
+            for (int x = 0; x < WorldWidth; x++)
             {
-                for (int y = 0; y < worldHeight; y++)
+                for (int y = 0; y < WorldHeight; y++)
                 {
                     tileNumber++;
                     var percent = (int) ((float) tileNumber / totalTiles * 100);
@@ -93,8 +92,8 @@ namespace Mayday.Game.Gameplay
                     worldGeneratorListener.OnWorldGenerationUpdate(
                         $"Creating Copper... {percent}%");
 
-                    var p = x / (double) worldWidth;
-                    var q = y / (double) worldHeight;
+                    var p = x / (double) WorldWidth;
+                    var q = y / (double) WorldHeight;
 
                     var nx = ranges.mapx0 + p * (ranges.mapx1 - ranges.mapx0);
                     var ny = ranges.mapy0 + q * (ranges.mapy1 - ranges.mapy0);
@@ -110,11 +109,11 @@ namespace Mayday.Game.Gameplay
             
             bmp.Save("Map.png");
 
-            Bitmap = bmp;
-
             worldGeneratorListener.OnWorldGenerationUpdate("Initiating Landing Sequence...");
 
             world.Tiles = tiles;
+            world.Width = WorldWidth;
+            world.Height = WorldHeight;
             
             return world;
         }

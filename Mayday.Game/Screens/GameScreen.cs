@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Threading.Tasks;
 using GeonBit.UI;
 using Mayday.Game.Gameplay;
 using Mayday.Game.Networking;
+using Mayday.Game.Networking.PacketDefinitions;
 using Mayday.Game.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Steamworks.Data;
 using Yetiface.Engine.Networking;
-using Yetiface.Engine.Networking.SteamNetworking;
+using Yetiface.Engine.Networking.Listeners;
+using Yetiface.Engine.Networking.Packagers;
 using Yetiface.Engine.Screens;
 using Yetiface.Engine.Utils;
 using Color = Microsoft.Xna.Framework.Color;
@@ -18,11 +19,13 @@ namespace Mayday.Game.Screens
 {
     public class GameScreen : Screen, INetworkServerListener, INetworkClientListener
     {
+        
         private readonly INetworkManager _networkManager;
-        private INetworkMessageParser _messageParser;
-
+        // ReSharper disable once NotAccessedField.Local
+        private readonly INetworkMessageParser _messageParser;
+        private readonly INetworkMessagePackager _messagePackager;
+        
         private IWorld _world;
-
 
         public GameScreen(INetworkManager networkManager) : base("GameScreen")
         {
@@ -31,6 +34,9 @@ namespace Mayday.Game.Screens
             _networkManager.SetClientNetworkListener(this);
             
             _messageParser = new NetworkMessageParser();
+            _messagePackager = new NetworkMessagePackager();
+            
+            _messagePackager.AddDefinition(typeof(TileTypeUpdate), new TileTypePacketDefinition());
         }
 
         public void SetWorld(IWorld world)
@@ -47,6 +53,11 @@ namespace Mayday.Game.Screens
         {
         }
 
+        /// <summary>
+        /// Obviously a test implementation at the moment, so we can see
+        /// the world rendering. Tbh ignore everything in this class, as it has just
+        /// become a testing ground atm.
+        /// </summary>
         public override void Draw()
         {
             GraphicsUtils.Instance.SpriteBatch.GraphicsDevice.Clear(Color.Black);
@@ -112,50 +123,13 @@ namespace Mayday.Game.Screens
         public void OnMessageReceived(Connection connection, NetIdentity identity, IntPtr data, int size, long messageNum,
             long recvTime, int channel)
         {
-            var result = _messageParser.Parse(data, size);
-
-            switch (result.MessageType)
-            {
-                case MessageType.ChatMessage:
-                    break;
-                case MessageType.WorldRequest:
-                    SendMap();
-                    break;
-                case MessageType.WorldSendComplete:
-                    break;
-                case MessageType.TileData:
-                    var tileData = (TileData) result;
-                    _world.Tiles[tileData.X, tileData.Y].TileType = tileData.TileType;
-                    break;
-                case MessageType.TileReceived:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        private async void SendMap()
-        {
-            await Task.Delay(1);
             
-            for (var i = 0; i < 200; i++)
-            {
-                for (var j = 0; j < 200; j++)
-                {
-                    var currentTile = _world.Tiles[i, j];
-                    SendTile(currentTile);
-                }
-                
-                await Task.Delay(1);
-            }
-
-            _networkManager.SendMessage(MessageType.WorldSendComplete);
         }
 
         private void SendTile(Tile tile)
         {
-            var toSend = $"{tile.X}:{tile.Y}:{(int)tile.TileType}";
-            _networkManager.SendMessage(MessageType.TileData, toSend);
+            var package = _messagePackager.Package(tile);
+            _networkManager.SendMessage(package);
         }
 
         public void OnConnectionChanged(Connection connection, ConnectionInfo info)
@@ -170,26 +144,8 @@ namespace Mayday.Game.Screens
         }
 
         public void OnMessageReceived(IntPtr data, int size, long messageNum, long recvTime, int channel)
-        {           
-            var result = _messageParser.Parse(data, size);
-
-            switch (result.MessageType)
-            {
-                case MessageType.ChatMessage:
-                    break;
-                case MessageType.WorldRequest:
-                    break;
-                case MessageType.WorldSendComplete:
-                    break;
-                case MessageType.TileData:
-                    var tileData = (TileData) result;
-                    _world.Tiles[tileData.X, tileData.Y].TileType = tileData.TileType;
-                    break;
-                case MessageType.TileReceived:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+        {
+            
         }
 
         public void OnConnectedToServer(ConnectionInfo info)
