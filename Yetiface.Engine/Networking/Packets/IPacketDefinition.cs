@@ -2,7 +2,8 @@
 {
     public interface IPacketDefinition
     {
-        INetworkPacket Create<T>(T value);
+        byte[] Create(object data);
+
     }
     
 }

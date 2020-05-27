@@ -128,8 +128,8 @@ namespace Mayday.Game.Screens
 
         private void SendTile(Tile tile)
         {
-            var package = _messagePackager.Package(tile);
-            _networkManager.SendMessage(package);
+            // var package = _messagePackager.Package(tile);
+            // _networkManager.SendMessage(package);
         }
 
         public void OnConnectionChanged(Connection connection, ConnectionInfo info)

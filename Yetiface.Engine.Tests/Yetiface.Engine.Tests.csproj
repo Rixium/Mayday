@@ -60,6 +60,7 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Networking\NetworkMessagePackagerShould.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Screens\ScreenManagerShould.cs" />
     </ItemGroup>
@@ -75,9 +76,6 @@
         <Project>{6b7d6ee3-17d6-4e6b-ac60-d3bd2027c1cc}</Project>
         <Name>Yetiface.Engine</Name>
       </ProjectReference>
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Networking" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

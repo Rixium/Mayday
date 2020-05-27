@@ -4,7 +4,6 @@ using Steamworks;
 using Steamworks.Data;
 using Yetiface.Engine.Networking;
 using Yetiface.Engine.Networking.Listeners;
-using Yetiface.Engine.Networking.Packets;
 
 namespace Mayday.Game.Networking.SteamNetworking
 {
@@ -64,18 +63,15 @@ namespace Mayday.Game.Networking.SteamNetworking
         public void SetClientNetworkListener(INetworkClientListener clientNetworkListener) =>
             NetworkClientListener = clientNetworkListener;
 
-        public void SendMessage(INetworkPacket networkPacket)
+        public void SendMessage(byte[] data)
         {
             if (Server?.Connected != null)
                 foreach (var connection in Server.Connected)
                 {
-                    connection.SendMessage(networkPacket.Data, networkPacket.Length);
+                    connection.SendMessage(data);
                 }
 
-            Client?.Connection.SendMessage(networkPacket.Data, networkPacket.Length);
-
-            networkPacket.Dispose();
+            Client?.Connection.SendMessage(data);
         }
     }
-
 }

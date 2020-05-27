@@ -1,23 +1,17 @@
-﻿using Mayday.Game.Networking.Packets;
-using Yetiface.Engine.Networking;
+﻿using System.Text;
+using Mayday.Game.Networking.Packets;
 using Yetiface.Engine.Networking.Packets;
 
 namespace Mayday.Game.Networking.PacketDefinitions
 {
     public class TileTypePacketDefinition : IPacketDefinition
     {
-        public INetworkPacket Create<T>(T value)
+        public byte[] Create(object data)
         {
-            if (value is TileTypeUpdate pp)
-                return new TileTypePacket()
-                {
-                    TileType = pp.TileType,
-                    X = pp.TileX,
-                    Y = pp.TileY
-                };
-
-            return null;
+            var packet = (TileTypePacket) data;
+            var dString = $"{packet.TileType}:{packet.X}:{packet.Y}";
+            return Encoding.UTF8.GetBytes(dString);
         }
+        
     }
-    
 }
