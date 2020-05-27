@@ -36,21 +36,22 @@ namespace Mayday.Game.Gameplay
 
             var world = new World();
 
-            var worldWidth = 1280 / 2;
-            var worldHeight = 720 / 2;
+            var worldWidth = 400;
+            var worldHeight = 400;
 
-            var seed = (int) DateTime.UtcNow.Ticks;
+            var seed = (uint) DateTime.UtcNow.Ticks;
 
             var bmp = new Bitmap(worldWidth, worldHeight);
 
-            var tiles = new int[worldWidth, worldHeight];
+            var tiles = new Tile[worldWidth, worldHeight];
             var tileNumber = 0;
-            var totalTiles = worldWidth * worldWidth;
+            var totalTiles = worldWidth * worldHeight;
             var ranges = new SMappingRanges();
 
-            ModuleBase combinedTerrain = TerrainPresets.GetPreset(PresetType.cavesAndMountains);
+            ModuleBase combinedTerrain = TerrainPresets.CavesAndMountains(seed);
 
             double maxVal = 0;
+            int scale = 3;
 
             //finally update our image
             for (int x = 0; x < worldWidth; x++)
@@ -69,14 +70,19 @@ namespace Mayday.Game.Gameplay
                     var nx = ranges.mapx0 + p * (ranges.mapx1 - ranges.mapx0);
                     var ny = ranges.mapy0 + q * (ranges.mapy1 - ranges.mapy0);
 
-                    var val = combinedTerrain.Get(nx * 4, ny * 4);
+                    var val = combinedTerrain.Get(nx * scale, ny * scale);
                     var bitmapColor = Color.Black.Lerp(Color.White, val);
 
                     bmp.SetPixel(x, y, bitmapColor);
+                    
+                    if(val > 0.5f)
+                        tiles[x, y] = new Tile(TileType.GROUND);
+                    else tiles[x, y] = new Tile(TileType.NONE);
                 }
             }
 
-            var ores = TerrainPresets.CreateOres(combinedTerrain);
+            tileNumber = 0;
+            var ores = TerrainPresets.CreateOres(combinedTerrain, seed);
 
             //finally update our image
             for (int x = 0; x < worldWidth; x++)
@@ -95,9 +101,12 @@ namespace Mayday.Game.Gameplay
                     var nx = ranges.mapx0 + p * (ranges.mapx1 - ranges.mapx0);
                     var ny = ranges.mapy0 + q * (ranges.mapy1 - ranges.mapy0);
 
-                    var val = ores.Get(nx * 4, ny * 4);
+                    var val = ores.Get(nx * scale, ny * scale);
                     if (val > 0.5f)
+                    {
+                        tiles[x, y] = new Tile(TileType.COPPER);
                         bmp.SetPixel(x, y, Color.Orange);
+                    }
                 }
             }
             
@@ -107,9 +116,28 @@ namespace Mayday.Game.Gameplay
 
             worldGeneratorListener.OnWorldGenerationUpdate("Initiating Landing Sequence...");
 
+            world.Tiles = tiles;
+            
             return world;
         }
 
+    }
+
+    public enum TileType
+    {
+        NONE,
+        GROUND,
+        COPPER
+    }
+    
+    public class Tile
+    {
+        public TileType TileType { get; set; }
+        
+        public Tile(TileType tileType)
+        {
+            TileType = tileType;
+        }
     }
 
     public interface IWorldGeneratorListener
