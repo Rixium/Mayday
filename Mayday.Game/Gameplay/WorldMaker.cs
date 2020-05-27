@@ -34,8 +34,8 @@ namespace Mayday.Game.Gameplay
 
             var world = new World();
 
-            var worldWidth = 200;
-            var worldHeight = 200;
+            var worldWidth = 1280 / 4;
+            var worldHeight = 720 / 4;
 
             var seed = (uint) DateTime.UtcNow.Ticks;
 
