@@ -3,6 +3,7 @@ using GeonBit.UI;
 using Mayday.Game.Gameplay;
 using Mayday.Game.Networking;
 using Mayday.Game.Networking.PacketDefinitions;
+using Mayday.Game.Networking.Packets;
 using Mayday.Game.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -23,6 +24,7 @@ namespace Mayday.Game.Screens
         private readonly INetworkManager _networkManager;
         // ReSharper disable once NotAccessedField.Local
         private readonly INetworkMessageParser _messageParser;
+        // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly INetworkMessagePackager _messagePackager;
         
         private IWorld _world;
@@ -36,7 +38,7 @@ namespace Mayday.Game.Screens
             _messageParser = new NetworkMessageParser();
             _messagePackager = new NetworkMessagePackager();
             
-            _messagePackager.AddDefinition(typeof(TileTypeUpdate), new TileTypePacketDefinition());
+            _messagePackager.AddDefinition(typeof(TileTypePacket), new TileTypePacketDefinition());
         }
 
         public void SetWorld(IWorld world)
@@ -87,26 +89,6 @@ namespace Mayday.Game.Screens
         public override void Update()
         {
             _networkManager?.Update();
-
-            if (MouseState.CurrentState.LeftButton == ButtonState.Pressed)
-            {
-                var bound = MouseState.Bounds;
-                try
-                {
-                    var tile = _world.Tiles[bound.X / 4, bound.Y / 4];
-
-                    var lastType = tile.TileType;
-                    tile.TileType = TileType.GROUND;
-
-                    if (tile.TileType != lastType)
-                        SendTile(tile);
-                }
-                catch (Exception)
-                {
-                    // ignored
-                }
-            }
-            
             UserInterface?.Update();
         }
 
@@ -124,12 +106,6 @@ namespace Mayday.Game.Screens
             long recvTime, int channel)
         {
             
-        }
-
-        private void SendTile(Tile tile)
-        {
-            // var package = _messagePackager.Package(tile);
-            // _networkManager.SendMessage(package);
         }
 
         public void OnConnectionChanged(Connection connection, ConnectionInfo info)

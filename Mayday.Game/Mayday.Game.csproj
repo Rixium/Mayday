@@ -55,7 +55,6 @@
     <Compile Include="Networking\SteamNetworking\MaydayClient.cs" />
     <Compile Include="Networking\SteamNetworking\MaydayServer.cs" />
     <Compile Include="Networking\SteamNetworking\SteamNetworkManager.cs" />
-    <Compile Include="Networking\TileTypeUpdate.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Screens\GameScreen.cs" />
