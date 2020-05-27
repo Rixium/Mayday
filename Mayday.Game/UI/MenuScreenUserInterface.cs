@@ -227,8 +227,6 @@ namespace Mayday.Game.UI
             var world = await CreateWorld();
             
             gameScreen.SetWorld(world);
-
-            gameScreen.Bitmap = _worldMaker.Bitmap;
             
             _screenManager.AddScreen(gameScreen);
             _screenManager.ChangeScreen(gameScreen.Name);
@@ -389,8 +387,6 @@ namespace Mayday.Game.UI
             
             gameScreen.SetWorld(world);
 
-            gameScreen.Bitmap = _worldMaker.Bitmap;
-            
             _screenManager.AddScreen(gameScreen);
             _screenManager.ChangeScreen(gameScreen.Name);
         }
