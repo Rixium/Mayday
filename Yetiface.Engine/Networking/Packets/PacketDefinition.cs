@@ -13,21 +13,23 @@ namespace Yetiface.Engine.Networking.Packets
         {
             var casted = (T) data;
             var properties = casted.GetType().GetProperties();
-            var listOfValues = new List<string>();
+            var listOfValues = new string[properties.Length];
+            var curr = 0;
             foreach (var property in properties)
             {
                 var value = property.GetValue(casted);
                 if (value.GetType().IsEnum)
                 {
                     var asInt = (int) value;
-                    listOfValues.Add(asInt.ToString());
+                    listOfValues[curr] = asInt.ToString();
                     continue;
                 }
 
-                listOfValues.Add(value.ToString());
+                listOfValues[curr] = value.ToString();
+                curr++;
             }
             
-            return string.Join(":", listOfValues.ToArray());
+            return string.Join(":", listOfValues);
         }
 
         public INetworkPacket Unpack(string data)
