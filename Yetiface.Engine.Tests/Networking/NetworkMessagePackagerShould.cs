@@ -18,6 +18,18 @@ namespace Yetiface.Engine.Tests.Networking
             networkMessagePackager.GetPacketDefinition(0)
                 .PacketType.ShouldBe(typeof(TestPacket));
         }
+        
+        [Test]
+        public void CorrectlyIncrementPacketTypeIds()
+        {
+            var networkMessagePackager = new NetworkMessagePackager();
+            
+            var first = networkMessagePackager.AddDefinition<TestPacket>();
+            var second = networkMessagePackager.AddDefinition<TestPacket>();
+
+            first.PacketTypeId.ShouldNotBe(second.PacketTypeId);
+            second.PacketTypeId.ShouldBeGreaterThan(first.PacketTypeId);
+        }
 
         [Test]
         public void PackageCorrectlyBasedOnType()

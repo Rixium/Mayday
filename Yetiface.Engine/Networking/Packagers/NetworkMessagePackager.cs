@@ -20,14 +20,16 @@ namespace Yetiface.Engine.Networking.Packagers
                 PacketType = typeof(T)
             };
             
-            _packetDefinitions.Add(0, packetDefinition);
+            _packetDefinitions.Add(packetDefinition.PacketTypeId, packetDefinition);
 
             return packetDefinition;
         }
 
         public byte[] Package<T>(T value) where T : INetworkPacket
         {
-            var packetDefinition = _packetDefinitions[0];
+            var packetDefinition = _packetDefinitions
+                .FirstOrDefault(definition => definition.Value.PacketType == value.GetType()).Value;
+            
             var asString = packetDefinition.Pack(value);
             return Encoding.UTF8.GetBytes($"{packetDefinition.PacketTypeId}:{asString}");
         }
