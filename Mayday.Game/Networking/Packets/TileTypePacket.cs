@@ -1,4 +1,4 @@
-﻿using Mayday.Game.Gameplay;
+﻿using Mayday.Game.Gameplay.World;
 using Yetiface.Engine.Networking.Packets;
 
 namespace Mayday.Game.Networking.Packets

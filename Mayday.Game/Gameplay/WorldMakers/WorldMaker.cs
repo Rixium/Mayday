@@ -2,8 +2,10 @@
 using System.Drawing;
 using System.Threading.Tasks;
 using AccidentalNoise;
+using Mayday.Game.Gameplay.World;
+using Mayday.Game.Gameplay.WorldMakers.Listeners;
 
-namespace Mayday.Game.Gameplay
+namespace Mayday.Game.Gameplay.WorldMakers
 {
     /// <summary>
     /// The world maker is the main type of world maker,
@@ -24,17 +26,17 @@ namespace Mayday.Game.Gameplay
             return this;
         }
 
-        public async Task<IWorld> Create(IWorldGeneratorListener listener)
+        public async Task<IGameWorld> Create(IWorldMakerListener listener)
         {
             var world = await GenerateWorld(listener);
             return world;
         }
 
-        private async Task<IWorld> GenerateWorld(IWorldGeneratorListener worldGeneratorListener)
+        private async Task<IGameWorld> GenerateWorld(IWorldMakerListener worldGeneratorListener)
         {
             await Task.Delay(1);
 
-            var world = new World();
+            var world = new GameWorld();
             
             var seed = (uint) DateTime.UtcNow.Ticks;
 
@@ -117,35 +119,6 @@ namespace Mayday.Game.Gameplay
             
             return world;
         }
-
-    }
-
-    public enum TileType
-    {
-        NONE,
-        GROUND,
-        COPPER
-    }
-    
-    public class Tile
-    {
-        
-        public int X { get; set; }
-        public int Y { get; set; }
-        public TileType TileType { get; set; }
-        
-        public Tile(TileType tileType, int x, int y)
-        {
-            TileType = tileType;
-            X = x;
-            Y = y;
-        }
-    }
-
-    public interface IWorldGeneratorListener
-    {
-
-        void OnWorldGenerationUpdate(string message);
 
     }
 

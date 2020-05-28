@@ -44,11 +44,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
-    <Compile Include="Gameplay\IWorld.cs" />
-    <Compile Include="Gameplay\IWorldMaker.cs" />
-    <Compile Include="Gameplay\NetworkWorldMaker.cs" />
-    <Compile Include="Gameplay\World.cs" />
-    <Compile Include="Gameplay\WorldMaker.cs" />
+    <Compile Include="Gameplay\WorldMakers\IWorldMaker.cs" />
+    <Compile Include="Gameplay\WorldMakers\Listeners\IWorldMakerListener.cs" />
+    <Compile Include="Gameplay\WorldMakers\NetworkWorldMaker.cs" />
+    <Compile Include="Gameplay\WorldMakers\WorldMaker.cs" />
+    <Compile Include="Gameplay\World\GameWorld.cs" />
+    <Compile Include="Gameplay\World\IGameWorld.cs" />
+    <Compile Include="Gameplay\World\Tile.cs" />
     <Compile Include="Networking\Packets\TileTypePacket.cs" />
     <Compile Include="Networking\SteamNetworking\MaydayClient.cs" />
     <Compile Include="Networking\SteamNetworking\MaydayServer.cs" />

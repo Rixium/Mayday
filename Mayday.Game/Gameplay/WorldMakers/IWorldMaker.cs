@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
+using Mayday.Game.Gameplay.World;
+using Mayday.Game.Gameplay.WorldMakers.Listeners;
 
-namespace Mayday.Game.Gameplay
+namespace Mayday.Game.Gameplay.WorldMakers
 {
     /// <summary>
     /// Offer a common interface for all types of ways to make the world.
@@ -11,6 +13,6 @@ namespace Mayday.Game.Gameplay
         int WorldWidth { get; set; }
         int WorldHeight { get; set; }
 
-        Task<IWorld> Create(IWorldGeneratorListener listener);
+        Task<IGameWorld> Create(IWorldMakerListener listener);
     }
 }

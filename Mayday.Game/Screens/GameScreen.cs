@@ -1,6 +1,8 @@
 ﻿using System;
 using GeonBit.UI;
 using Mayday.Game.Gameplay;
+using Mayday.Game.Gameplay.World;
+using Mayday.Game.Gameplay.WorldMakers;
 using Mayday.Game.Networking;
 using Mayday.Game.Networking.Packets;
 using Mayday.Game.UI;
@@ -21,7 +23,7 @@ namespace Mayday.Game.Screens
         private readonly INetworkManager _networkManager;
         private readonly INetworkMessagePackager _messagePackager;
         
-        private IWorld _world;
+        private IGameWorld _gameWorld;
 
         public GameScreen(INetworkManager networkManager) : base("GameScreen")
         {
@@ -33,9 +35,9 @@ namespace Mayday.Game.Screens
             _messagePackager.AddDefinition<TileTypePacket>();
         }
 
-        public void SetWorld(IWorld world)
+        public void SetWorld(IGameWorld gameWorld)
         {
-            _world = world;
+            _gameWorld = gameWorld;
         }
 
         public override void Awake()
@@ -57,7 +59,7 @@ namespace Mayday.Game.Screens
             GraphicsUtils.Instance.SpriteBatch.GraphicsDevice.Clear(Color.Black);
             GraphicsUtils.Instance.Begin();
 
-            foreach (var tile in _world.Tiles)
+            foreach (var tile in _gameWorld.Tiles)
             {
                 if (tile.TileType == TileType.NONE) continue;
                 var color = tile.TileType == TileType.GROUND ? Color.White : Color.Orange;

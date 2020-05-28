@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Drawing;
 using System.Threading.Tasks;
-using Mayday.Game.Networking;
-using Mayday.Game.Networking.SteamNetworking;
+using Mayday.Game.Gameplay.World;
+using Mayday.Game.Gameplay.WorldMakers.Listeners;
 using Steamworks.Data;
 using Yetiface.Engine.Networking;
 using Yetiface.Engine.Networking.Listeners;
 using Color = System.Drawing.Color;
 
-namespace Mayday.Game.Gameplay
+namespace Mayday.Game.Gameplay.WorldMakers
 {
+    
+    /// <summary>
+    /// The network world maker will just instead of making a map manually, will request the tiles from a
+    /// host using a network manager.
+    /// </summary>
     public class NetworkWorldMaker : IWorldMaker, INetworkClientListener
     {
         private readonly INetworkManager _networkManager;
@@ -38,15 +43,15 @@ namespace Mayday.Game.Gameplay
             _networkManager.SetClientNetworkListener(this);
         }
 
-        public async Task<IWorld> Create(IWorldGeneratorListener listener)
+        public async Task<IGameWorld> Create(IWorldMakerListener listener)
         {
             // Once we sent the message, we can run a task to check for how long it's going to take
             return await GetWorldFromNetwork(listener);
         }
 
-        private async Task<IWorld> GetWorldFromNetwork(IWorldGeneratorListener worldGeneratorListener)
+        private async Task<IGameWorld> GetWorldFromNetwork(IWorldMakerListener worldGeneratorListener)
         {
-            var world = new World();
+            var world = new GameWorld();
 
             _worldRequesting = true;
             

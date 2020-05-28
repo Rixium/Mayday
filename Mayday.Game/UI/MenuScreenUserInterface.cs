@@ -5,7 +5,9 @@ using GeonBit.UI;
 using GeonBit.UI.Animators;
 using GeonBit.UI.Entities;
 using GeonBit.UI.Utils;
-using Mayday.Game.Gameplay;
+using Mayday.Game.Gameplay.World;
+using Mayday.Game.Gameplay.WorldMakers;
+using Mayday.Game.Gameplay.WorldMakers.Listeners;
 using Mayday.Game.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -22,7 +24,7 @@ using Image = GeonBit.UI.Entities.Image;
 
 namespace Mayday.Game.UI
 {
-    public class MenuScreenUserInterface : IUserInterface, INetworkServerListener, INetworkClientListener, IWorldGeneratorListener
+    public class MenuScreenUserInterface : IUserInterface, INetworkServerListener, INetworkClientListener, IWorldMakerListener
     {
         
         private readonly INetworkManager _networkManager;
@@ -221,7 +223,7 @@ namespace Mayday.Game.UI
             _screenManager.ChangeScreen(gameScreen.Name);
         }
 
-        private async Task<IWorld> CreateWorld()
+        private async Task<IGameWorld> CreateWorld()
         {
             _worldMaker = new WorldMaker()
                 .SetWorldSize(200, 200);

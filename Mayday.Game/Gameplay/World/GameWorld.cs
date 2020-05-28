@@ -1,6 +1,8 @@
-﻿namespace Mayday.Game.Gameplay
+﻿using Mayday.Game.Gameplay.WorldMakers;
+
+namespace Mayday.Game.Gameplay.World
 {
-    public class World : IWorld
+    public class GameWorld : IGameWorld
     {
         
         public Tile[,] Tiles { get; set; }
