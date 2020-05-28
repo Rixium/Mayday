@@ -15,6 +15,7 @@ namespace Yetiface.Engine.Networking.Packagers
 
         public NetworkMessagePackager()
         {
+            _packetTypeCounter = 0;
             _packetDefinitions = new Dictionary<int, IPacketDefinition>();
             _typeIdDictionary = new Dictionary<Type, int>();
         }
@@ -41,9 +42,10 @@ namespace Yetiface.Engine.Networking.Packagers
             return Encoding.UTF8.GetBytes($"{packetDefinition.PacketTypeId}:{asString}");
         }
 
-        public INetworkPacket Unpack(IntPtr data, int size)
+        public unsafe INetworkPacket Unpack(IntPtr data, int size)
         {
-            var output = Marshal.PtrToStringAuto(data);
+            var output = Encoding.UTF8.GetString((byte*)data, size);
+        
             if (output == null)
                 throw new Exception("Could not convert data to string.");
 

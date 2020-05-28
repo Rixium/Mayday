@@ -20,12 +20,11 @@ namespace Yetiface.Engine.Networking.Packets
                 if (value.GetType().IsEnum)
                 {
                     var asInt = (int) value;
-                    listOfValues[curr] = asInt.ToString();
+                    listOfValues[curr++] = asInt.ToString();
                     continue;
                 }
 
-                listOfValues[curr] = value.ToString();
-                curr++;
+                listOfValues[curr++] = value.ToString();
             }
 
             return string.Join(":", listOfValues);
@@ -37,6 +36,8 @@ namespace Yetiface.Engine.Networking.Packets
             var split = data.Split(':');
             var properties = obj.GetType().GetProperties();
 
+            if (properties.Length == 0) return obj;
+            
             for (var i = 0; i < split.Length; i++)
             {
                 var property = properties[i];

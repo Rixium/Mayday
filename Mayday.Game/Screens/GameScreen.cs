@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using GeonBit.UI;
 using Mayday.Game.Gameplay;
 using Mayday.Game.Gameplay.World;
@@ -33,6 +34,7 @@ namespace Mayday.Game.Screens
             
             _messagePackager = new NetworkMessagePackager();
             _messagePackager.AddDefinition<TileTypePacket>();
+            _messagePackager.AddDefinition<MapRequestPacket>();
         }
 
         public void SetWorld(IGameWorld gameWorld)
@@ -100,7 +102,32 @@ namespace Mayday.Game.Screens
             long recvTime, int channel)
         {
             var received = _messagePackager.Unpack(data, size);
-            
+
+            if (received.GetType() == typeof(MapRequestPacket))
+            {
+                SendMap();
+            }
+        }
+
+        private async void SendMap()
+        {
+            for (var i = 0; i < _gameWorld.Width; i++)
+            {
+                for (var j = 0; j < _gameWorld.Height; j++)
+                {
+                    var tileToSend = _gameWorld.Tiles[i, j];
+                    var tileTypePacket = new TileTypePacket()
+                    {
+                        X = tileToSend.X,
+                        Y = tileToSend.Y,
+                        TileType = tileToSend.TileType
+                    };
+                    var packet = _messagePackager.Package(tileTypePacket);
+                    _networkManager.SendMessage(packet);
+                }
+
+                await Task.Delay(1);
+            }
         }
 
         public void OnConnectionChanged(Connection connection, ConnectionInfo info)

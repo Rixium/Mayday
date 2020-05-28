@@ -3,9 +3,11 @@ using System.Drawing;
 using System.Threading.Tasks;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Gameplay.WorldMakers.Listeners;
+using Mayday.Game.Networking.Packets;
 using Steamworks.Data;
 using Yetiface.Engine.Networking;
 using Yetiface.Engine.Networking.Listeners;
+using Yetiface.Engine.Networking.Packagers;
 using Color = System.Drawing.Color;
 
 namespace Mayday.Game.Gameplay.WorldMakers
@@ -18,7 +20,8 @@ namespace Mayday.Game.Gameplay.WorldMakers
     public class NetworkWorldMaker : IWorldMaker, INetworkClientListener
     {
         private readonly INetworkManager _networkManager;
-        private bool _worldRequesting;
+        private readonly NetworkMessagePackager _networkMessagePackager;
+        
         private int _tilesReceived;
         
         public int WorldWidth { get; set; }
@@ -26,10 +29,9 @@ namespace Mayday.Game.Gameplay.WorldMakers
         public int WorldHeight { get; set; }
 
         private Tile[,] _tiles;
-        private bool _gotWorld;
 
-        public int WorldSize { get; set; }
-        public Bitmap Bitmap { get; set; }
+        private int WorldSize { get; set; }
+        private Bitmap Bitmap { get; set; }
 
         public IWorldMaker SetWorldSize(int worldSize)
         {
@@ -41,6 +43,10 @@ namespace Mayday.Game.Gameplay.WorldMakers
         {
             _networkManager = networkManager;
             _networkManager.SetClientNetworkListener(this);
+            
+            _networkMessagePackager = new NetworkMessagePackager();
+            _networkMessagePackager.AddDefinition<TileTypePacket>();
+            _networkMessagePackager.AddDefinition<MapRequestPacket>();
         }
 
         public async Task<IGameWorld> Create(IWorldMakerListener listener)
@@ -53,8 +59,6 @@ namespace Mayday.Game.Gameplay.WorldMakers
         {
             var world = new GameWorld();
 
-            _worldRequesting = true;
-            
             await Task.Delay(1000);
             
             _tilesReceived = 0;
@@ -72,6 +76,10 @@ namespace Mayday.Game.Gameplay.WorldMakers
             
             Bitmap = new Bitmap(WorldWidth, WorldHeight);
 
+            var mapRequest = new MapRequestPacket();
+            var toSend = _networkMessagePackager.Package(mapRequest);
+            _networkManager.SendMessage(toSend);
+            
             while (_tilesReceived < WorldWidth * WorldHeight)
             {
                 var percent = ((float)_tilesReceived / (WorldWidth * WorldHeight)) * 100;
@@ -100,7 +108,20 @@ namespace Mayday.Game.Gameplay.WorldMakers
 
         public void OnMessageReceived(IntPtr data, int size, long messageNum, long recvTime, int channel)
         {
+            var packet = _networkMessagePackager.Unpack(data, size);
             
+            if (packet.GetType() == typeof(TileTypePacket))
+            {
+                var tileTypePacket = (TileTypePacket) packet;
+                var x = tileTypePacket.X;
+                var y = tileTypePacket.Y;
+                var tileType = tileTypePacket.TileType;
+                
+                _tiles[x, y] = new Tile(tileType, x, y);
+            }
+            
+            
+            _tilesReceived++;
         }
 
         public void OnConnectedToServer(ConnectionInfo info)

@@ -1,6 +1,5 @@
 ﻿using Steamworks;
 using Yetiface.Engine.Networking.Listeners;
-using Yetiface.Engine.Networking.Packets;
 
 namespace Yetiface.Engine.Networking
 {
