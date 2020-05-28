@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using NUnit.Framework;
 using Shouldly;
 using Yetiface.Engine.Networking.Packagers;
@@ -13,31 +12,31 @@ namespace Yetiface.Engine.Tests.Networking
         public void AddPacketDefinitionToDictionaryCorrectly()
         {
             var networkMessagePackager = new NetworkMessagePackager();
-            var testPacketDefinition = new TestPacketDefinition();
+            
+            networkMessagePackager.AddDefinition<TestPacket>();
 
-            networkMessagePackager.AddDefinition(typeof(TestPacket), testPacketDefinition);
-
-            networkMessagePackager.GetPacketDefinition(0).ShouldBe(testPacketDefinition);
+            networkMessagePackager.GetPacketDefinition(0)
+                .PacketType.ShouldBe(typeof(TestPacket));
         }
 
         [Test]
         public void PackageCorrectlyBasedOnType()
         {
             var networkMessagePackager = new NetworkMessagePackager();
-            var testPacketDefinition = new TestPacketDefinition();
+            
             var testPacket = new TestPacket()
             {
                 Number = 3,
                 Name = "Test"
             };
 
-            networkMessagePackager.AddDefinition(typeof(TestPacket), testPacketDefinition);
+            var definition = networkMessagePackager.AddDefinition<TestPacket>();
 
             var value = networkMessagePackager.Package(testPacket);
-
-            var expectedString = $"{testPacketDefinition.PacketTypeId}:{testPacket.Name}:{testPacket.Number}";
+            
+            var expectedString = $"{definition.PacketTypeId}:{testPacket.Number}:{testPacket.Name}";
             var outputString = Encoding.UTF8.GetString(value);
-
+            
             outputString.ShouldBe(expectedString);
         }
 
@@ -45,14 +44,15 @@ namespace Yetiface.Engine.Tests.Networking
         public void UnPackCorrectly()
         {
             var networkMessagePackager = new NetworkMessagePackager();
-            var testPacketDefinition = new TestPacketDefinition();
+            
             var testPacket = new TestPacket()
             {
                 Number = 3,
                 Name = "Test"
             };
+
+            networkMessagePackager.AddDefinition<TestPacket>();
             
-            networkMessagePackager.AddDefinition(typeof(TestPacket), testPacketDefinition);
             var value = networkMessagePackager.Package(testPacket);
             var result = (TestPacket) networkMessagePackager.Unpack(value);
             
@@ -66,26 +66,6 @@ namespace Yetiface.Engine.Tests.Networking
     {
         public int Number { get; set; }
         public string Name { get; set; }
-    }
-
-    public class TestPacketDefinition : PacketDefinition
-    {
-        public override string Pack(INetworkPacket data)
-        {
-            var value = (TestPacket) data;
-            return value.Name + ":" + value.Number;
-        }
-
-        public override INetworkPacket Unpack(string data)
-        {
-            var splitData = data.Split(':');
-            return new TestPacket()
-            {
-                Name = splitData[0],
-                Number = int.Parse(splitData[1])
-            };
-        }
-        
     }
     
 }

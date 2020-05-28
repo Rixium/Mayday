@@ -9,19 +9,25 @@ namespace Yetiface.Engine.Networking.Packagers
 {
     public class NetworkMessagePackager : INetworkMessagePackager
     {
-        private readonly Dictionary<Type, IPacketDefinition> _packetDefinitions;
+        private readonly Dictionary<int, IPacketDefinition> _packetDefinitions;
 
-        public NetworkMessagePackager() => _packetDefinitions = new Dictionary<Type, IPacketDefinition>();
+        public NetworkMessagePackager() => _packetDefinitions = new Dictionary<int, IPacketDefinition>();
 
-        public void AddDefinition(Type packetType, IPacketDefinition packetDefinition)
+        public IPacketDefinition AddDefinition<T>() where T : INetworkPacket, new()
         {
-            packetDefinition.PacketType = packetType;
-            _packetDefinitions.Add(packetType, packetDefinition);
+            var packetDefinition = new PacketDefinition<T>()
+            {
+                PacketType = typeof(T)
+            };
+            
+            _packetDefinitions.Add(0, packetDefinition);
+
+            return packetDefinition;
         }
 
         public byte[] Package<T>(T value) where T : INetworkPacket
         {
-            var packetDefinition = _packetDefinitions[value.GetType()];
+            var packetDefinition = _packetDefinitions[0];
             var asString = packetDefinition.Pack(value);
             return Encoding.UTF8.GetBytes($"{packetDefinition.PacketTypeId}:{asString}");
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using GeonBit.UI;
 using Mayday.Game.Gameplay;
-using Mayday.Game.Networking.PacketDefinitions;
 using Mayday.Game.Networking.Packets;
 using Mayday.Game.UI;
 using Microsoft.Xna.Framework;
@@ -30,7 +29,7 @@ namespace Mayday.Game.Screens
             _networkManager.SetClientNetworkListener(this);
             
             _messagePackager = new NetworkMessagePackager();
-            _messagePackager.AddDefinition(typeof(TileTypePacket), new TileTypePacketDefinition());
+            _messagePackager.AddDefinition<TileTypePacket>();
         }
 
         public void SetWorld(IWorld world)

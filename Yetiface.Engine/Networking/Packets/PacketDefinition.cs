@@ -1,15 +1,34 @@
 ﻿using System;
+using System.Linq;
 
 namespace Yetiface.Engine.Networking.Packets
 {
-    public abstract class PacketDefinition : IPacketDefinition
+    public class PacketDefinition<T> : IPacketDefinition where T : INetworkPacket, new()
     {
         private static int _packetTypeIdCounter;
         public int PacketTypeId { get; set; } = _packetTypeIdCounter++;
         public Type PacketType { get; set; }
 
-        public abstract string Pack(INetworkPacket data);
+        public string Pack(INetworkPacket data)
+        {
+            var casted = (T) data;
+            var propertyValues = casted.GetType().GetProperties()
+                .Select(property => property.GetValue(casted).ToString()).ToList();
+            return string.Join(":", propertyValues.ToArray());
+        }
 
-        public abstract INetworkPacket Unpack(string data);
+        public INetworkPacket Unpack(string data)
+        {
+            var obj = new T();
+            var split = data.Split(':');
+            var properties = obj.GetType().GetProperties();
+            for(var i = 0; i < split.Length; i++)
+            {
+                var property = properties[i];
+                property.SetValue(obj, Convert.ChangeType(split[i], obj.GetType().GetProperties()[i].PropertyType), null);
+            }
+            return obj;
+        }
+        
     }
 }
