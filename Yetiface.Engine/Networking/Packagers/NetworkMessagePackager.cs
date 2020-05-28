@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using Yetiface.Engine.Networking.Packets;
@@ -9,27 +8,35 @@ namespace Yetiface.Engine.Networking.Packagers
 {
     public class NetworkMessagePackager : INetworkMessagePackager
     {
-        private readonly Dictionary<int, IPacketDefinition> _packetDefinitions;
 
-        public NetworkMessagePackager() => _packetDefinitions = new Dictionary<int, IPacketDefinition>();
+        private static int _packetTypeCounter;
+        private readonly Dictionary<int, IPacketDefinition> _packetDefinitions;
+        private readonly Dictionary<Type, int> _typeIdDictionary;
+
+        public NetworkMessagePackager()
+        {
+            _packetDefinitions = new Dictionary<int, IPacketDefinition>();
+            _typeIdDictionary = new Dictionary<Type, int>();
+        }
 
         public IPacketDefinition AddDefinition<T>() where T : INetworkPacket, new()
         {
             var packetDefinition = new PacketDefinition<T>()
             {
+                PacketTypeId = _packetTypeCounter++,
                 PacketType = typeof(T)
             };
-            
+
             _packetDefinitions.Add(packetDefinition.PacketTypeId, packetDefinition);
+            _typeIdDictionary.Add(typeof(T), packetDefinition.PacketTypeId);
 
             return packetDefinition;
         }
 
         public byte[] Package<T>(T value) where T : INetworkPacket
         {
-            var packetDefinition = _packetDefinitions
-                .FirstOrDefault(definition => definition.Value.PacketType == value.GetType()).Value;
-            
+            var packetTypeId = _typeIdDictionary[value.GetType()];
+            var packetDefinition = GetPacketDefinition(packetTypeId);
             var asString = packetDefinition.Pack(value);
             return Encoding.UTF8.GetBytes($"{packetDefinition.PacketTypeId}:{asString}");
         }
@@ -66,10 +73,6 @@ namespace Yetiface.Engine.Networking.Packagers
         /// </summary>
         /// <param name="packetTypeId">The packet type Id of the expected packet definition.</param>
         /// <returns>The packet definition for the given packet type id.</returns>
-        ///  TODO Hate this, probably slow. If a lot of packets are flying around and we're doing dictionary look ups using LINQ every time..
-        public IPacketDefinition GetPacketDefinition(int packetTypeId) =>
-            _packetDefinitions.FirstOrDefault(packetDefinition => packetDefinition.Value.PacketTypeId == packetTypeId)
-                .Value;
-        
+        public IPacketDefinition GetPacketDefinition(int packetTypeId) => _packetDefinitions[packetTypeId];
     }
 }

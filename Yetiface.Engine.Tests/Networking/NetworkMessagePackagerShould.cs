@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using NSubstitute;
 using NUnit.Framework;
 using Shouldly;
 using Yetiface.Engine.Networking.Packagers;
@@ -23,9 +24,9 @@ namespace Yetiface.Engine.Tests.Networking
         public void CorrectlyIncrementPacketTypeIds()
         {
             var networkMessagePackager = new NetworkMessagePackager();
-            
+
             var first = networkMessagePackager.AddDefinition<TestPacket>();
-            var second = networkMessagePackager.AddDefinition<TestPacket>();
+            var second = networkMessagePackager.AddDefinition<TestPacket2>();
 
             first.PacketTypeId.ShouldNotBe(second.PacketTypeId);
             second.PacketTypeId.ShouldBeGreaterThan(first.PacketTypeId);
@@ -80,4 +81,10 @@ namespace Yetiface.Engine.Tests.Networking
         public string Name { get; set; }
     }
     
+    public class TestPacket2 : INetworkPacket
+    {
+        public int Number { get; set; }
+        public string Name { get; set; }
+    }
+
 }

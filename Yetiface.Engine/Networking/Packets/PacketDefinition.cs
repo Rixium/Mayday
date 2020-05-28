@@ -5,8 +5,7 @@ namespace Yetiface.Engine.Networking.Packets
 {
     public class PacketDefinition<T> : IPacketDefinition where T : INetworkPacket, new()
     {
-        private static int _packetTypeIdCounter;
-        public int PacketTypeId { get; set; } = _packetTypeIdCounter++;
+        public int PacketTypeId { get; set; }
         public Type PacketType { get; set; }
 
         public string Pack(INetworkPacket data)
