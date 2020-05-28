@@ -1,6 +1,7 @@
 ﻿using System;
 using GeonBit.UI;
 using Mayday.Game.Gameplay;
+using Mayday.Game.Networking;
 using Mayday.Game.Networking.Packets;
 using Mayday.Game.UI;
 using Microsoft.Xna.Framework;

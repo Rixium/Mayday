@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using NSubstitute;
+using Mayday.Game.Networking;
 using NUnit.Framework;
 using Shouldly;
 using Yetiface.Engine.Networking.Packagers;
@@ -73,6 +73,23 @@ namespace Yetiface.Engine.Tests.Networking
             result.Number.ShouldBe(testPacket.Number);
         }
         
+        [Test]
+        public void UnPackEnumPropertyCorrectly()
+        {
+            var networkMessagePackager = new NetworkMessagePackager();
+            
+            var testPacket = new EnumPacket()
+            {
+                TestEnum = TestEnum.Test
+            };
+
+            networkMessagePackager.AddDefinition<EnumPacket>();
+            
+            var value = networkMessagePackager.Package(testPacket);
+            var result = (EnumPacket) networkMessagePackager.Unpack(value);
+            
+            result.TestEnum.ShouldBe(testPacket.TestEnum);
+        }
     }
 
     public class TestPacket : INetworkPacket
@@ -85,6 +102,17 @@ namespace Yetiface.Engine.Tests.Networking
     {
         public int Number { get; set; }
         public string Name { get; set; }
+    }
+    
+    public enum TestEnum
+    {
+        None,
+        Test
+    }
+    
+    public class EnumPacket : INetworkPacket
+    {
+        public TestEnum TestEnum { get; set; }
     }
 
 }
