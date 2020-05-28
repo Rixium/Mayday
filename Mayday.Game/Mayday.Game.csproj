@@ -52,6 +52,7 @@
     <Compile Include="Gameplay\World\IGameWorld.cs" />
     <Compile Include="Gameplay\World\Tile.cs" />
     <Compile Include="Networking\Packets\MapRequestPacket.cs" />
+    <Compile Include="Networking\Packets\PlayerMovePacket.cs" />
     <Compile Include="Networking\Packets\TileTypePacket.cs" />
     <Compile Include="Networking\SteamNetworking\MaydayClient.cs" />
     <Compile Include="Networking\SteamNetworking\MaydayServer.cs" />
