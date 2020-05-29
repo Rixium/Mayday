@@ -3,13 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GeonBit.UI;
-using Mayday.Game.Gameplay;
 using Mayday.Game.Gameplay.World;
-using Mayday.Game.Gameplay.WorldMakers;
-using Mayday.Game.Networking;
 using Mayday.Game.Networking.Packets;
 using Mayday.Game.UI;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Steamworks;
 using Steamworks.Data;
@@ -27,18 +23,20 @@ namespace Mayday.Game.Screens
 
     public class Player
     {
-        public uint SteamId { get; set; }
+        public ulong SteamId { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
     }
     public class GameScreen : Screen, INetworkServerListener, INetworkClientListener
     {
 
-        private Dictionary<uint, Player> Players { get; set; }
         private readonly INetworkManager _networkManager;
         private readonly INetworkMessagePackager _messagePackager;
         
         private IGameWorld _gameWorld;
+        public Camera Camera = new Camera();
+        
+        private Dictionary<ulong, Player> Players { get; set; }
 
         public GameScreen(INetworkManager networkManager) : base("GameScreen")
         {
@@ -51,11 +49,11 @@ namespace Mayday.Game.Screens
             _messagePackager.AddDefinition<MapRequestPacket>();
             _messagePackager.AddDefinition<PlayerMovePacket>();
 
-            Players = new Dictionary<uint, Player> {
+            Players = new Dictionary<ulong, Player> {
             {
-                (uint) SteamClient.SteamId, new Player()
+                SteamClient.SteamId, new Player()
                 {
-                    SteamId = (uint) SteamClient.SteamId
+                    SteamId = SteamClient.SteamId
                 }
             }};
         }
@@ -71,24 +69,22 @@ namespace Mayday.Game.Screens
             
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D), () => Move(1, 0), InputEventType.Held);
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.A), () => Move(-1, 0), InputEventType.Held);
-            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.W), () => Move(0, -1), InputEventType.Held);
-            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.S), () => Move(0, 1), InputEventType.Held);
         }
 
         private void Move(int x, int y)
         {
-            var myPlayer = Players[(uint) SteamClient.SteamId];
-            myPlayer.X += x;
-            myPlayer.Y += y;
+            var player = Players[SteamClient.SteamId];
+            player.X += x;
 
-            var packet = _messagePackager.Package(new PlayerMovePacket()
+            var data = new PlayerMovePacket()
             {
-                SteamId = (uint) SteamClient.SteamId,
-                X = myPlayer.X,
-                Y = myPlayer.Y
-            });
-            
-            _networkManager.SendMessage(packet);
+                X = player.X,
+                Y = player.Y,
+                SteamId = SteamClient.SteamId
+            };
+
+            var package = _messagePackager.Package(data);
+            _networkManager.SendMessage(package);
         }
 
         public override void Begin()
@@ -103,34 +99,9 @@ namespace Mayday.Game.Screens
         public override void Draw()
         {
             GraphicsUtils.Instance.SpriteBatch.GraphicsDevice.Clear(Color.Black);
-            GraphicsUtils.Instance.Begin();
+            
+            GraphicsUtils.Instance.Begin(true);
 
-            foreach (var tile in _gameWorld.Tiles)
-            {
-                if (tile.TileType == TileType.NONE) continue;
-                var color = tile.TileType == TileType.GROUND ? Color.White : Color.Orange;
-                
-                GraphicsUtils.Instance.SpriteBatch.Draw(
-                    GraphicsUtils.Instance.PixelTexture, 
-                    new Rectangle(tile.X * 4, tile.Y * 4,
-                        4, 4), 
-                    color);
-            }
-            
-            foreach (var player in Players.Select(playerKeyValuePair => playerKeyValuePair.Value))
-            {
-                var name = player.SteamId == (uint) SteamClient.SteamId ? 
-                    SteamFriends.GetPersona() : 
-                    SteamFriends.GetFriendPersona(player.SteamId);
-                
-                var text = $"{name}";
-                var size = GraphicsUtils.Instance.DebugFont.MeasureString(text);
-                
-                GraphicsUtils.Instance.SpriteBatch.DrawString(
-                    GraphicsUtils.Instance.DebugFont, $"{text}", new Vector2(player.X + 5 - size.X / 2.0f, player.Y - size.Y - 5), Color.Aqua);
-                GraphicsUtils.Instance.DrawRectangle(player.X, player.Y, 10, 10, Color.Aqua);
-            }
-            
             GraphicsUtils.Instance.End();
             
             UserInterface?.Draw();
@@ -144,13 +115,12 @@ namespace Mayday.Game.Screens
         {
             _networkManager?.Update();
             UserInterface?.Update();
-            
         }
 
         public void OnNewConnection(Connection connection, ConnectionInfo info) => 
-            Players.Add((uint) info.Identity.SteamId, new Player()
+            Players.Add(info.Identity.SteamId, new Player()
             {
-                SteamId = (uint) SteamClient.SteamId
+                SteamId = info.Identity.SteamId
             });
 
         public void OnConnectionLeft(Connection connection, ConnectionInfo info)

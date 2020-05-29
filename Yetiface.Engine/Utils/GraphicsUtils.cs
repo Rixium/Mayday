@@ -34,7 +34,7 @@ namespace Yetiface.Engine.Utils
         /// <summary>
         /// Wrapping this so we don't have to stare at the ugly ass.
         /// </summary>
-        public void Begin(bool useViewportMatrix = true)
+        public void Begin(bool useViewportMatrix = true, Matrix? supplementMatrix = null)
         {
             if(useViewportMatrix)
                 SpriteBatch.Begin(
@@ -44,7 +44,7 @@ namespace Yetiface.Engine.Utils
                     null, // We don't care about this. Tbh, I don't even understand it.
                     null, // I don't even know what this it.
                     null, // We can choose to flip textures as an example, but we dont, so null it.
-                    Window.ViewportMatrix); // Window viewport, for nice resizing.
+                    supplementMatrix != null ?  supplementMatrix * Window.ViewportMatrix : Window.ViewportMatrix); // Window viewport, for nice resizing.
             else
                 SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp,
                     DepthStencilState.None, RasterizerState.CullCounterClockwise);
