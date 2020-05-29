@@ -43,6 +43,10 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Assets\AssetChest.cs" />
+    <Compile Include="Assets\AssetManager.cs" />
+    <Compile Include="Assets\IAssetChest.cs" />
+    <Compile Include="Assets\IAssetManager.cs" />
     <Compile Include="Data\AsepriteAnimationData.cs" />
     <Compile Include="Data\AsepriteFrameData.cs" />
     <Compile Include="Data\AsepriteSheet.cs" />

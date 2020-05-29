@@ -1,4 +1,4 @@
-﻿namespace Mayday.Game.UI
+﻿namespace Yetiface.Engine.UI
 {
     public interface IUserInterface
     {

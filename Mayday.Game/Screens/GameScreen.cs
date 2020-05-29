@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using GeonBit.UI;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Networking.Packets;
-using Mayday.Game.UI;
 using Microsoft.Xna.Framework.Input;
 using Steamworks;
 using Steamworks.Data;
@@ -15,6 +14,7 @@ using Yetiface.Engine.Networking;
 using Yetiface.Engine.Networking.Listeners;
 using Yetiface.Engine.Networking.Packagers;
 using Yetiface.Engine.Screens;
+using Yetiface.Engine.UI;
 using Yetiface.Engine.Utils;
 using Color = Microsoft.Xna.Framework.Color;
 
@@ -27,6 +27,7 @@ namespace Mayday.Game.Screens
         public int X { get; set; }
         public int Y { get; set; }
     }
+    
     public class GameScreen : Screen, INetworkServerListener, INetworkClientListener
     {
 

@@ -1,4 +1,5 @@
-﻿using Mayday.Game.Screens;
+﻿using Mayday.Game.Assets;
+using Mayday.Game.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
@@ -22,6 +23,7 @@ namespace Mayday.Game
                 // Couldn't init for some reason (steam is closed etc)
             }
 
+            AssetManager = new MaydayAssetManager();
         }
         
         public static uint AppId { get; set; } = 1323490;

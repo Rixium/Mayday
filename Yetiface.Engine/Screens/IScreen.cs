@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using GeonBit.UI;
-using Mayday.Game.UI;
 using Microsoft.Xna.Framework;
 using Yetiface.Engine.ECS;
 using Yetiface.Engine.ECS.Components;
 using Yetiface.Engine.ECS.Components.Renderables;
 using Yetiface.Engine.Graphics.Renderers;
 using IUpdateable = Yetiface.Engine.ECS.Components.Updateables.IUpdateable;
+using IUserInterface = Yetiface.Engine.UI.IUserInterface;
 
 namespace Yetiface.Engine.Screens
 {

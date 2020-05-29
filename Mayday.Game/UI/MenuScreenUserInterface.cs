@@ -18,6 +18,7 @@ using Yetiface.Engine;
 using Yetiface.Engine.Networking;
 using Yetiface.Engine.Networking.Listeners;
 using Yetiface.Engine.Screens;
+using Yetiface.Engine.UI;
 using Yetiface.Engine.Utils;
 using Color = Microsoft.Xna.Framework.Color;
 using Image = GeonBit.UI.Entities.Image;
