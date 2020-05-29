@@ -6,8 +6,8 @@ namespace Mayday.Game.Networking.Packets
     {
         
         public ulong SteamId { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
+        public int XDirection { get; set; }
+        public int YDirection { get; set; }
         
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using GeonBit.UI;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.World;
+using Mayday.Game.Graphics;
 using Mayday.Game.Networking.Packets;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -34,6 +35,7 @@ namespace Mayday.Game.Screens
         public Camera Camera = new Camera();
         
         private Dictionary<ulong, Player> Players { get; set; }
+        public Player MyPlayer { get; set; }
 
         public GameScreen(INetworkManager networkManager) : base("GameScreen")
         {
@@ -45,26 +47,7 @@ namespace Mayday.Game.Screens
             _messagePackager.AddDefinition<TileTypePacket>();
             _messagePackager.AddDefinition<MapRequestPacket>();
             _messagePackager.AddDefinition<PlayerMovePacket>();
-
-            MyPlayer = new Player()
-            {
-                SteamId = SteamClient.SteamId,
-                X = 1000,
-                Y = 1000
-            };
-            
-            Players = new Dictionary<ulong, Player> {
-            {
-                MyPlayer.SteamId, MyPlayer
-            }};
-
-            MyPlayer.Animation = "Walk";
-            
-            BackgroundColor = Color.White;
-            Camera.Goto(new Vector2(MyPlayer.X, MyPlayer.Y));
         }
-
-        public Player MyPlayer { get; set; }
 
         public void SetWorld(IGameWorld gameWorld)
         {
@@ -75,27 +58,49 @@ namespace Mayday.Game.Screens
         {
             UserInterface = new GameUserInterface();
             
-            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D), () => Move(1, 0), InputEventType.Held);
-            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.A), () => Move(-1, 0), InputEventType.Held);
-            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.S), () => Move(0, 1), InputEventType.Held);
-            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.W), () => Move(0, -1), InputEventType.Held);
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D), () => Move(1), InputEventType.Held);
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.A), () => Move(-1), InputEventType.Held);
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D), () => Move(0), InputEventType.Released);
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.A), () => Move(0), InputEventType.Released);
+
+            MyPlayer = new Player
+            {
+                SteamId = SteamClient.SteamId,
+                X = 1000,
+                Y = 1000
+            };
+            
+            MyPlayer.HeadAnimator = new Animator(ContentChest.Heads[MyPlayer.HeadId].Animations);
+            MyPlayer.BodyAnimator = new Animator(ContentChest.Bodies[MyPlayer.BodyId].Animations);
+            MyPlayer.ArmsAnimator = new Animator(ContentChest.Arms[MyPlayer.ArmsId].Animations);
+            MyPlayer.LegsAnimator = new Animator(ContentChest.Legs[MyPlayer.LegsId].Animations);
+            
+            Players = new Dictionary<ulong, Player> {
+            {
+                MyPlayer.SteamId, MyPlayer
+            }};
+
+            BackgroundColor = Color.White;
+            Camera.Goto(new Vector2(MyPlayer.X, MyPlayer.Y));
         }
 
-        private void Move(int x, int y)
+        private void Move(int x)
         {
             var player = Players[SteamClient.SteamId];
-            player.X += x;
-            player.Y += y;
 
-            var data = new PlayerMovePacket()
+            if (player.XDirection != x)
             {
-                X = player.X,
-                Y = player.Y,
-                SteamId = SteamClient.SteamId
-            };
+                var data = new PlayerMovePacket()
+                {
+                    XDirection = x,
+                    SteamId = SteamClient.SteamId
+                };
 
-            var package = _messagePackager.Package(data);
-            _networkManager.SendMessage(package);
+                var package = _messagePackager.Package(data);
+                _networkManager.SendMessage(package);
+            }
+            
+            player.XDirection = x;
         }
 
         public override void Begin()
@@ -113,45 +118,42 @@ namespace Mayday.Game.Screens
 
             GraphicsUtils.Instance.Begin(true, Camera.GetMatrix());
 
-            var head = ContentChest.Heads[MyPlayer.HeadId];
-            var body = ContentChest.Bodies[MyPlayer.BodyId];
-            var legs = ContentChest.Legs[MyPlayer.LegsId];
-            var arms = ContentChest.Arms[MyPlayer.ArmsId];
-
-            var headAnimation = head.Animations["Walk"].Sprite;
-            var bodyAnimation = body.Animations["Walk"].Sprite;
-            var legsAnimation = legs.Animations["Walk"].Sprite;
-            var armsAnimation = arms.Animations["Walk"].Sprite;
-            
-            GraphicsUtils.Instance.SpriteBatch.Draw(
-                armsAnimation.Texture, new Vector2(MyPlayer.X, MyPlayer.Y),
-                armsAnimation.SourceRectangle, Color.White, 0, Vector2.Zero, 1,
-                SpriteEffects.FlipHorizontally, 0F);
-            GraphicsUtils.Instance.SpriteBatch.Draw(
-                bodyAnimation.Texture, new Vector2(MyPlayer.X, MyPlayer.Y),
-                bodyAnimation.SourceRectangle, Color.White);
-            GraphicsUtils.Instance.SpriteBatch.Draw(
-                legsAnimation.Texture, new Vector2(MyPlayer.X, MyPlayer.Y),
-                legsAnimation.SourceRectangle, Color.White);
-            GraphicsUtils.Instance.SpriteBatch.Draw(
-                armsAnimation.Texture, new Vector2(MyPlayer.X, MyPlayer.Y),
-                armsAnimation.SourceRectangle, Color.White);
-            GraphicsUtils.Instance.SpriteBatch.Draw(
-                headAnimation.Texture, new Vector2(MyPlayer.X, MyPlayer.Y),
-                headAnimation.SourceRectangle, Color.White);
-
-            var playerName = SteamFriends.GetPersona();
-            var playerNameSize = GraphicsUtils.Instance.DebugFont.MeasureString(playerName);
-            
-            GraphicsUtils.Instance.SpriteBatch.DrawString(GraphicsUtils.Instance.DebugFont,
-                playerName, 
-                new Vector2((int)(MyPlayer.X + (headAnimation.SourceRectangle.Value.Width / 2.0f) - (playerNameSize.X / 2.0f)), 
-                    (int)(MyPlayer.Y - 10 - playerNameSize.Y)), 
-                Color.Black);
+            foreach (var player in Players.Select(pair => pair.Value))
+            {
+                DrawPlayer(player);
+            }
             
             GraphicsUtils.Instance.End();
             
             UserInterface?.Draw();
+        }
+
+        private void DrawPlayer(Player player)
+        {
+            var headSprite = player.HeadAnimator?.Current;
+            var bodySprite = player.BodyAnimator?.Current;
+            var armSprite = player.ArmsAnimator?.Current;
+            var legSprite = player.LegsAnimator?.Current;
+            var playerPosition = new Vector2(player.X, player.Y);
+
+            if(armSprite != null)
+                GraphicsUtils.Instance.SpriteBatch.Draw(
+                    armSprite.Texture, playerPosition, armSprite.SourceRectangle, Color.White,
+                    0, armSprite.Origin, 1f, SpriteEffects.FlipHorizontally, 0F);
+            if (legSprite != null)
+                GraphicsUtils.Instance.Draw(legSprite, playerPosition, Color.White);
+            if(bodySprite != null)
+                GraphicsUtils.Instance.Draw(bodySprite, playerPosition, Color.White);
+            if(headSprite != null)
+                GraphicsUtils.Instance.Draw(headSprite, playerPosition, Color.White);
+            if(armSprite != null)
+                GraphicsUtils.Instance.Draw(armSprite, playerPosition, Color.White);
+
+            var name = SteamFriends.GetFriendPersona(player.SteamId);
+            var nameSize = GraphicsUtils.Instance.DebugFont.MeasureString(name);
+            GraphicsUtils.Instance.SpriteBatch.DrawString(GraphicsUtils.Instance.DebugFont,
+                name, new Vector2(player.X + headSprite.Texture.Width / 2.0f - nameSize.X / 2.0f, player.Y - 20 - nameSize.Y), Color.Black, 0, new Vector2(nameSize.X / 2.0f, nameSize.
+                    Y / 2.0f), 1, SpriteEffects.None, 0F);
         }
 
         public override void Finish()
@@ -160,17 +162,30 @@ namespace Mayday.Game.Screens
 
         public override void Update()
         {
-            MyPlayer.Animation = "";
-            
             _networkManager?.Update();
             UserInterface?.Update();
+            
+            foreach(var player in Players)
+                player.Value.Update();
         }
 
-        public void OnNewConnection(Connection connection, ConnectionInfo info) => 
-            Players.Add(info.Identity.SteamId, new Player()
+        public void OnNewConnection(Connection connection, ConnectionInfo info)
+        {
+            var newPlayer = new Player
             {
-                SteamId = info.Identity.SteamId
-            });
+                SteamId = info.Identity.SteamId,
+                X = 1000,
+                Y = 1000
+            };
+            
+            newPlayer.HeadAnimator = new Animator(ContentChest.Heads[newPlayer.HeadId].Animations);
+            newPlayer.BodyAnimator = new Animator(ContentChest.Bodies[newPlayer.BodyId].Animations);
+            newPlayer.ArmsAnimator = new Animator(ContentChest.Arms[newPlayer.ArmsId].Animations);
+            newPlayer.LegsAnimator = new Animator(ContentChest.Legs[newPlayer.LegsId].Animations);
+            
+            Players.Add(newPlayer.SteamId, newPlayer);
+        }
+
 
         public void OnConnectionLeft(Connection connection, ConnectionInfo info)
         {
@@ -189,8 +204,8 @@ namespace Mayday.Game.Screens
             {
                 var movePacket = (PlayerMovePacket) received;
                 var player = Players[movePacket.SteamId];
-                player.X = movePacket.X;
-                player.Y = movePacket.Y;
+                var xDir = movePacket.XDirection;
+                player.XDirection = xDir;
             }
         }
 
@@ -237,16 +252,19 @@ namespace Mayday.Game.Screens
                 if (Players.ContainsKey(movePacket.SteamId))
                 {
                     var player = Players[movePacket.SteamId];
-                    player.X = movePacket.X;
-                    player.Y = movePacket.Y;
+                    player.XDirection = movePacket.XDirection;
                 }
                 else
                 {
                     var player = new Player()
                     {
                         SteamId = movePacket.SteamId,
-                        X = movePacket.X,
-                        Y = movePacket.Y
+                        X = 1000,
+                        Y = 1000,
+                        HeadAnimator = new Animator(ContentChest.Heads[MyPlayer.HeadId].Animations),
+                        BodyAnimator = new Animator(ContentChest.Bodies[MyPlayer.BodyId].Animations),
+                        ArmsAnimator = new Animator(ContentChest.Arms[MyPlayer.ArmsId].Animations),
+                        LegsAnimator = new Animator(ContentChest.Legs[MyPlayer.LegsId].Animations)
                     };
                     
                     Players.Add(player.SteamId, player);

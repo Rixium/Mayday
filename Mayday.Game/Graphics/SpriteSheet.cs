@@ -8,7 +8,7 @@ namespace Mayday.Game.Graphics
     {
         
         public Texture2D Texture { get; set; }
-        public Dictionary<string, Animation> Animations = new Dictionary<string, Animation>();
+        public Dictionary<string, Animation> Animations { get; }= new Dictionary<string, Animation>();
         
     }
 }
