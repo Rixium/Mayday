@@ -123,15 +123,10 @@ namespace Mayday.Game.Screens
             var legsAnimation = legs.Animations["Walk"].Sprite;
             var armsAnimation = arms.Animations["Walk"].Sprite;
             
-            
             GraphicsUtils.Instance.SpriteBatch.Draw(
                 armsAnimation.Texture, new Vector2(MyPlayer.X, MyPlayer.Y),
                 armsAnimation.SourceRectangle, Color.White, 0, Vector2.Zero, 1,
                 SpriteEffects.FlipHorizontally, 0F);
-            
-            GraphicsUtils.Instance.SpriteBatch.Draw(
-                headAnimation.Texture, new Vector2(MyPlayer.X, MyPlayer.Y),
-                headAnimation.SourceRectangle, Color.White);
             GraphicsUtils.Instance.SpriteBatch.Draw(
                 bodyAnimation.Texture, new Vector2(MyPlayer.X, MyPlayer.Y),
                 bodyAnimation.SourceRectangle, Color.White);
@@ -141,6 +136,18 @@ namespace Mayday.Game.Screens
             GraphicsUtils.Instance.SpriteBatch.Draw(
                 armsAnimation.Texture, new Vector2(MyPlayer.X, MyPlayer.Y),
                 armsAnimation.SourceRectangle, Color.White);
+            GraphicsUtils.Instance.SpriteBatch.Draw(
+                headAnimation.Texture, new Vector2(MyPlayer.X, MyPlayer.Y),
+                headAnimation.SourceRectangle, Color.White);
+
+            var playerName = SteamFriends.GetPersona();
+            var playerNameSize = GraphicsUtils.Instance.DebugFont.MeasureString(playerName);
+            
+            GraphicsUtils.Instance.SpriteBatch.DrawString(GraphicsUtils.Instance.DebugFont,
+                playerName, 
+                new Vector2((int)(MyPlayer.X + (headAnimation.SourceRectangle.Value.Width / 2.0f) - (playerNameSize.X / 2.0f)), 
+                    (int)(MyPlayer.Y - 10 - playerNameSize.Y)), 
+                Color.Black);
             
             GraphicsUtils.Instance.End();
             

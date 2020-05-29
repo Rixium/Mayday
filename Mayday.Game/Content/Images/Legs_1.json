@@ -1,6 +1,6 @@
 { "frames": [
    {
-    "filename": "Legs_1 0.png",
+    "filename": "Legs_1 0.aseprite",
     "frame": { "x": 0, "y": 0, "w": 42, "h": 62 },
     "rotated": false,
     "trimmed": false,
@@ -9,62 +9,8 @@
     "duration": 100
    },
    {
-    "filename": "Legs_1 1.png",
+    "filename": "Legs_1 1.aseprite",
     "frame": { "x": 42, "y": 0, "w": 42, "h": 62 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 62 },
-    "sourceSize": { "w": 42, "h": 62 },
-    "duration": 100
-   },
-   {
-    "filename": "Legs_1 2.png",
-    "frame": { "x": 84, "y": 0, "w": 42, "h": 62 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 62 },
-    "sourceSize": { "w": 42, "h": 62 },
-    "duration": 100
-   },
-   {
-    "filename": "Legs_1 3.png",
-    "frame": { "x": 126, "y": 0, "w": 42, "h": 62 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 62 },
-    "sourceSize": { "w": 42, "h": 62 },
-    "duration": 100
-   },
-   {
-    "filename": "Legs_1 4.png",
-    "frame": { "x": 168, "y": 0, "w": 42, "h": 62 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 62 },
-    "sourceSize": { "w": 42, "h": 62 },
-    "duration": 100
-   },
-   {
-    "filename": "Legs_1 5.png",
-    "frame": { "x": 210, "y": 0, "w": 42, "h": 62 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 62 },
-    "sourceSize": { "w": 42, "h": 62 },
-    "duration": 100
-   },
-   {
-    "filename": "Legs_1 6.png",
-    "frame": { "x": 252, "y": 0, "w": 42, "h": 62 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 62 },
-    "sourceSize": { "w": 42, "h": 62 },
-    "duration": 100
-   },
-   {
-    "filename": "Legs_1 7.png",
-    "frame": { "x": 294, "y": 0, "w": 42, "h": 62 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 62 },
@@ -74,13 +20,13 @@
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.2.18-x64",
+  "version": "1.2.19-x64",
   "image": "Legs_1.png",
   "format": "RGBA8888",
-  "size": { "w": 336, "h": 62 },
+  "size": { "w": 84, "h": 62 },
   "scale": "1",
   "frameTags": [
-   { "name": "Walk", "from": 0, "to": 7, "direction": "forward" }
+   { "name": "Walk", "from": 0, "to": 1, "direction": "forward" }
   ],
   "layers": [
    { "name": "Layer", "opacity": 255, "blendMode": "normal" }
