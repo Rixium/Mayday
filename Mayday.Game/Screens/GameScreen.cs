@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GeonBit.UI;
+using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Networking.Packets;
 using Microsoft.Xna.Framework.Input;
@@ -21,13 +22,6 @@ using Color = Microsoft.Xna.Framework.Color;
 namespace Mayday.Game.Screens
 {
 
-    public class Player
-    {
-        public ulong SteamId { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
-    }
-    
     public class GameScreen : Screen, INetworkServerListener, INetworkClientListener
     {
 

@@ -46,6 +46,7 @@
     <Compile Include="Assets\MaydayAssetManager.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Gameplay\Entities\Player.cs" />
     <Compile Include="Gameplay\WorldMakers\IWorldMaker.cs" />
     <Compile Include="Gameplay\WorldMakers\Listeners\IWorldMakerListener.cs" />
     <Compile Include="Gameplay\WorldMakers\NetworkWorldMaker.cs" />
