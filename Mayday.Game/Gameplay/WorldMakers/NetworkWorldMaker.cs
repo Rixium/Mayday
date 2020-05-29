@@ -73,26 +73,26 @@ namespace Mayday.Game.Gameplay.WorldMakers
                     _tiles[i, j] = new Tile(TileType.NONE, i, j);
                 }
             }
-            
-            Bitmap = new Bitmap(WorldWidth, WorldHeight);
-
+            //
+            // Bitmap = new Bitmap(WorldWidth, WorldHeight);
+            //
             var mapRequest = new MapRequestPacket();
             var toSend = _networkMessagePackager.Package(mapRequest);
             _networkManager.SendMessage(toSend);
-            
-            while (_tilesReceived < WorldWidth * WorldHeight)
-            {
-                var percent = ((float)_tilesReceived / (WorldWidth * WorldHeight)) * 100;
-                worldGeneratorListener.OnWorldGenerationUpdate($"Receiving tiles... {percent}%");
-            }
-            
-            worldGeneratorListener.OnWorldGenerationUpdate("Got tiles...");
-
-            foreach (var tile in _tiles)
-            {
-                Bitmap.SetPixel(tile.X, tile.Y, tile.TileType == TileType.NONE ? Color.Black :
-                    tile.TileType == TileType.GROUND ? Color.White : Color.Orange);
-            }
+            //
+            // while (_tilesReceived < WorldWidth * WorldHeight)
+            // {
+            //     var percent = ((float)_tilesReceived / (WorldWidth * WorldHeight)) * 100;
+            //     worldGeneratorListener.OnWorldGenerationUpdate($"Receiving tiles... {percent}%");
+            // }
+            //
+            // worldGeneratorListener.OnWorldGenerationUpdate("Got tiles...");
+            //
+            // foreach (var tile in _tiles)
+            // {
+            //     Bitmap.SetPixel(tile.X, tile.Y, tile.TileType == TileType.NONE ? Color.Black :
+            //         tile.TileType == TileType.GROUND ? Color.White : Color.Orange);
+            // }
 
             world.Tiles = _tiles;
             world.Width = WorldWidth;

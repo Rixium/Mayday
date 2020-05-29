@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GeonBit.UI;
+using Mayday.Game.Assets;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Networking.Packets;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Steamworks;
 using Steamworks.Data;
@@ -48,7 +50,9 @@ namespace Mayday.Game.Screens
             {
                 SteamClient.SteamId, new Player()
                 {
-                    SteamId = SteamClient.SteamId
+                    SteamId = SteamClient.SteamId,
+                    X = 1000,
+                    Y = 1000
                 }
             }};
         }
@@ -64,12 +68,15 @@ namespace Mayday.Game.Screens
             
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D), () => Move(1, 0), InputEventType.Held);
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.A), () => Move(-1, 0), InputEventType.Held);
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.S), () => Move(0, 1), InputEventType.Held);
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.W), () => Move(0, -1), InputEventType.Held);
         }
 
         private void Move(int x, int y)
         {
             var player = Players[SteamClient.SteamId];
             player.X += x;
+            player.Y += y;
 
             var data = new PlayerMovePacket()
             {
@@ -95,11 +102,46 @@ namespace Mayday.Game.Screens
         {
             GraphicsUtils.Instance.SpriteBatch.GraphicsDevice.Clear(Color.Black);
             
-            GraphicsUtils.Instance.Begin(true);
+            GraphicsUtils.Instance.Begin(true, Camera.GetMatrix());
 
+            DrawPlayers();
+            
             GraphicsUtils.Instance.End();
             
             UserInterface?.Draw();
+        }
+
+        private void DrawPlayers()
+        {
+            foreach (var playerValue in Players.Select(player => player.Value))
+            {
+                DrawPlayer(playerValue);
+            }
+        }
+
+        private void DrawPlayer(Player player)
+        {
+            var head = MaydayAssetManager.Heads[player.HeadId];
+            var torso = MaydayAssetManager.Torsos[player.TorsoId];
+            var arm = MaydayAssetManager.Arms[player.ArmsId];
+            var legs = MaydayAssetManager.Legs[player.LegsId];
+            
+            var legsPos = new Vector2(player.X, player.Y - legs.Height);
+            var armsPos = new Vector2(player.X, legsPos.Y - torso.Height + 2);
+            var torsoPos = new Vector2(player.X, legsPos.Y - torso.Height + 2);
+            var headPos = new Vector2(torsoPos.X + torso.Width / 2.0f - head.Width / 2.0f, torsoPos.Y - head.Height + 2);
+            
+            GraphicsUtils.Instance.SpriteBatch.Draw(arm, armsPos + new Vector2(torso.Width - 2, 0), Color.White);
+            GraphicsUtils.Instance.SpriteBatch.Draw(legs, legsPos, Color.White);
+            GraphicsUtils.Instance.SpriteBatch.Draw(head, headPos, Color.White);
+            GraphicsUtils.Instance.SpriteBatch.Draw(torso, torsoPos, Color.White);
+            GraphicsUtils.Instance.SpriteBatch.Draw(arm, armsPos + new Vector2(-arm.Width + 2, 0), Color.White);
+
+            var text = SteamFriends.GetFriendPersona(player.SteamId);
+            var textSize = GraphicsUtils.Instance.DebugFont.MeasureString(text);
+            GraphicsUtils.Instance.SpriteBatch.DrawString(
+                GraphicsUtils.Instance.DebugFont, text,
+                new Vector2(headPos.X + head.Width / 2.0f - textSize.X / 2.0f, headPos.Y - textSize.Y - 5), Color.White);
         }
 
         public override void Finish()
@@ -110,6 +152,8 @@ namespace Mayday.Game.Screens
         {
             _networkManager?.Update();
             UserInterface?.Update();
+            var me = Players[SteamClient.SteamId];
+            Camera.Goto(new Vector2(me.X, me.Y));
         }
 
         public void OnNewConnection(Connection connection, ConnectionInfo info) => 
@@ -130,7 +174,7 @@ namespace Mayday.Game.Screens
 
             if (received.GetType() == typeof(MapRequestPacket))
             {
-                SendMap();
+                //SendMap();
             } else if (received.GetType() == typeof(PlayerMovePacket))
             {
                 var movePacket = (PlayerMovePacket) received;
