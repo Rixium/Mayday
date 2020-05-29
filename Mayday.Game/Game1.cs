@@ -1,4 +1,4 @@
-﻿using Mayday.Game.Assets;
+﻿using System;
 using Mayday.Game.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -18,12 +18,10 @@ namespace Mayday.Game
             {
                 SteamClient.Init(AppId);
             }
-            catch ( System.Exception e )
+            catch ( Exception)
             {
                 // Couldn't init for some reason (steam is closed etc)
             }
-
-            AssetManager = new MaydayAssetManager();
         }
         
         public static uint AppId { get; set; } = 1323490;

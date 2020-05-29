@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Yetiface.Engine.Assets;
 using Yetiface.Engine.Inputs;
 using Yetiface.Engine.Screens;
 using Yetiface.Engine.Screens.Transitions;
@@ -31,8 +30,6 @@ namespace Yetiface.Engine
 
         private FrameRate _frameRate;
 
-        public IAssetManager AssetManager { get; set; }
-
         public YetiGame(string gameName)
         {
             GameName = gameName;
@@ -55,8 +52,6 @@ namespace Yetiface.Engine
             InputManager = new InputManager();
             InputManager.Initialize(File.ReadAllText("Config/inputBindings.json"));
 
-            AssetManager.Load(ContentManager);
-            
             base.Initialize();
         }
 
