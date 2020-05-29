@@ -39,6 +39,8 @@ namespace Mayday.Game
             var music  = ContentManager.Load<Song>("MainMenu/menuMusic");
             MediaPlayer.Play(music);
             MediaPlayer.Volume = 0.1f;
+
+            new ContentChest().Load(ContentManager);
         }
 
         protected override void Update(GameTime gameTime)

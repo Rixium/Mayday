@@ -45,7 +45,10 @@
   <ItemGroup>
     <Compile Include="Data\AsepriteAnimationData.cs" />
     <Compile Include="Data\AsepriteFrameData.cs" />
+    <Compile Include="Data\AsepriteFrameTag.cs" />
+    <Compile Include="Data\AsepriteMetaData.cs" />
     <Compile Include="Data\AsepriteSheet.cs" />
+    <Compile Include="Data\AsepriteSlice.cs" />
     <Compile Include="ECS\Components\Component.cs" />
     <Compile Include="ECS\Components\IComponent.cs" />
     <Compile Include="ECS\Components\Renderables\Animation.cs" />

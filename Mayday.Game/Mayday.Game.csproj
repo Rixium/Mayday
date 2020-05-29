@@ -44,6 +44,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
+    <Compile Include="ContentChest.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Gameplay\Entities\Player.cs" />
     <Compile Include="Gameplay\WorldMakers\IWorldMaker.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="Gameplay\World\GameWorld.cs" />
     <Compile Include="Gameplay\World\IGameWorld.cs" />
     <Compile Include="Gameplay\World\Tile.cs" />
+    <Compile Include="Graphics\SpriteSheet.cs" />
     <Compile Include="Networking\Packets\MapRequestPacket.cs" />
     <Compile Include="Networking\Packets\PlayerMovePacket.cs" />
     <Compile Include="Networking\Packets\TileTypePacket.cs" />
@@ -131,6 +133,9 @@
     </None>
     <None Include="app.manifest" />
     <None Include="packages.config" />
+    <Content Include="Content\Images\Legs_1.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="steam_appid.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
