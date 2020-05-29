@@ -16,6 +16,7 @@ namespace Yetiface.Engine.ECS.Components.Renderables
         public Animation(IList<ISprite> sprites) : base(null)
         {
             _sprites = sprites;
+            Sprite = _sprites[0];
         }
 
         public void Update()

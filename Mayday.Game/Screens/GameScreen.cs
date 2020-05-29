@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using GeonBit.UI;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Networking.Packets;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Steamworks;
 using Steamworks.Data;
@@ -43,18 +46,25 @@ namespace Mayday.Game.Screens
             _messagePackager.AddDefinition<MapRequestPacket>();
             _messagePackager.AddDefinition<PlayerMovePacket>();
 
+            MyPlayer = new Player()
+            {
+                SteamId = SteamClient.SteamId,
+                X = 1000,
+                Y = 1000
+            };
+            
             Players = new Dictionary<ulong, Player> {
             {
-                SteamClient.SteamId, new Player()
-                {
-                    SteamId = SteamClient.SteamId,
-                    X = 1000,
-                    Y = 1000
-                }
+                MyPlayer.SteamId, MyPlayer
             }};
 
+            MyPlayer.Animation = "Walk";
+            
             BackgroundColor = Color.White;
+            Camera.Goto(new Vector2(MyPlayer.X, MyPlayer.Y));
         }
+
+        public Player MyPlayer { get; set; }
 
         public void SetWorld(IGameWorld gameWorld)
         {
@@ -100,9 +110,38 @@ namespace Mayday.Game.Screens
         public override void Draw()
         {
             GraphicsUtils.Instance.SpriteBatch.GraphicsDevice.Clear(BackgroundColor);
-            
+
             GraphicsUtils.Instance.Begin(true, Camera.GetMatrix());
 
+            var head = ContentChest.Heads[MyPlayer.HeadId];
+            var body = ContentChest.Bodies[MyPlayer.BodyId];
+            var legs = ContentChest.Legs[MyPlayer.LegsId];
+            var arms = ContentChest.Arms[MyPlayer.ArmsId];
+
+            var headAnimation = head.Animations["Walk"].Sprite;
+            var bodyAnimation = body.Animations["Walk"].Sprite;
+            var legsAnimation = legs.Animations["Walk"].Sprite;
+            var armsAnimation = arms.Animations["Walk"].Sprite;
+            
+            
+            GraphicsUtils.Instance.SpriteBatch.Draw(
+                armsAnimation.Texture, new Vector2(MyPlayer.X, MyPlayer.Y),
+                armsAnimation.SourceRectangle, Color.White, 0, Vector2.Zero, 1,
+                SpriteEffects.FlipHorizontally, 0F);
+            
+            GraphicsUtils.Instance.SpriteBatch.Draw(
+                headAnimation.Texture, new Vector2(MyPlayer.X, MyPlayer.Y),
+                headAnimation.SourceRectangle, Color.White);
+            GraphicsUtils.Instance.SpriteBatch.Draw(
+                bodyAnimation.Texture, new Vector2(MyPlayer.X, MyPlayer.Y),
+                bodyAnimation.SourceRectangle, Color.White);
+            GraphicsUtils.Instance.SpriteBatch.Draw(
+                legsAnimation.Texture, new Vector2(MyPlayer.X, MyPlayer.Y),
+                legsAnimation.SourceRectangle, Color.White);
+            GraphicsUtils.Instance.SpriteBatch.Draw(
+                armsAnimation.Texture, new Vector2(MyPlayer.X, MyPlayer.Y),
+                armsAnimation.SourceRectangle, Color.White);
+            
             GraphicsUtils.Instance.End();
             
             UserInterface?.Draw();
@@ -114,6 +153,8 @@ namespace Mayday.Game.Screens
 
         public override void Update()
         {
+            MyPlayer.Animation = "";
+            
             _networkManager?.Update();
             UserInterface?.Update();
         }

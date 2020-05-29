@@ -68,7 +68,7 @@ namespace Mayday.Game
             {
                 // Create a new list of sprites to store information about each frame.
 
-                for (var i = frameTag.From; i < frameTag.To; i++)
+                for (var i = frameTag.From; i <= frameTag.To; i++)
                 {
                     var frameData = sheetData.Frames[i];
                     var sprite = new Sprite(texture,
