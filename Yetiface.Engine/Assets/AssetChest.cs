@@ -11,6 +11,15 @@ namespace Yetiface.Engine.Assets
         
         private Dictionary<int, T> _assets = new Dictionary<int,T>();
         
+        public T this[int index]
+        {
+            get
+            {
+                _assets.TryGetValue(index, out var texture);
+                return texture;
+            }
+        }
+        
         public void Load(ContentManager contentManager, string path)
         {
             var allFiles = Directory.GetFiles(contentManager.RootDirectory, "*.xnb", SearchOption.AllDirectories)
