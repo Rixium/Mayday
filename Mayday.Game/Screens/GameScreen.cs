@@ -33,6 +33,8 @@ namespace Mayday.Game.Screens
     {
 
         private readonly IWorldRenderer _worldRenderer;
+        private readonly IPlayerRenderer _playerRenderer;
+        
         private readonly INetworkManager _networkManager;
         private readonly INetworkMessagePackager _messagePackager;
         
@@ -55,6 +57,7 @@ namespace Mayday.Game.Screens
             _messagePackager.AddDefinition<PlayerPositionPacket>();
             
             _worldRenderer = new WorldRenderer();
+            _playerRenderer = new PlayerRenderer();
         }
 
         public void SetWorld(IGameWorld gameWorld)
@@ -151,43 +154,11 @@ namespace Mayday.Game.Screens
             GraphicsUtils.Instance.Begin(true, Camera.GetMatrix());
 
             _worldRenderer.Draw(_gameWorld, Camera);
-            
-            foreach (var player in Players.Select(pair => pair.Value))
-            {
-                DrawPlayer(player);
-            }
+            _playerRenderer.DrawPlayers(Players);
             
             GraphicsUtils.Instance.End();
             
             UserInterface?.Draw();
-        }
-
-        private void DrawPlayer(Player player)
-        {
-            var headSprite = player.HeadAnimator?.Current;
-            var bodySprite = player.BodyAnimator?.Current;
-            var armSprite = player.ArmsAnimator?.Current;
-            var legSprite = player.LegsAnimator?.Current;
-            var playerPosition = new Vector2(player.X, player.Y);
-
-            if(armSprite != null)
-                GraphicsUtils.Instance.SpriteBatch.Draw(
-                    armSprite.Texture, playerPosition, armSprite.SourceRectangle, Color.White,
-                    0, armSprite.Origin, 1f, SpriteEffects.FlipHorizontally, 0F);
-            if (legSprite != null)
-                GraphicsUtils.Instance.Draw(legSprite, playerPosition, Color.White);
-            if(bodySprite != null)
-                GraphicsUtils.Instance.Draw(bodySprite, playerPosition, Color.White);
-            if(headSprite != null)
-                GraphicsUtils.Instance.Draw(headSprite, playerPosition, Color.White);
-            if(armSprite != null)
-                GraphicsUtils.Instance.Draw(armSprite, playerPosition, Color.White);
-
-            var name = SteamFriends.GetFriendPersona(player.SteamId);
-            var nameSize = GraphicsUtils.Instance.DebugFont.MeasureString(name);
-            GraphicsUtils.Instance.SpriteBatch.DrawString(GraphicsUtils.Instance.DebugFont,
-                name, new Vector2(player.X + headSprite.Texture.Width / 2.0f - nameSize.X / 2.0f, player.Y - 20 - nameSize.Y), Color.Black, 0, new Vector2(nameSize.X / 2.0f, nameSize.
-                    Y / 2.0f), 1, SpriteEffects.None, 0F);
         }
 
         public override void Finish()
