@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using GeonBit.UI;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Graphics;
@@ -39,10 +36,10 @@ namespace Mayday.Game.Screens
         private readonly INetworkMessagePackager _messagePackager;
         
         private IGameWorld _gameWorld;
-        public Camera Camera = new Camera();
-        
-        private Dictionary<ulong, Player> Players { get; set; }
-        public Player MyPlayer { get; set; }
+        private readonly Camera _camera = new Camera();
+
+        private Dictionary<ulong, Player> _players;
+        private Player _myPlayer;
 
         public GameScreen(INetworkManager networkManager) : base("GameScreen")
         {
@@ -72,28 +69,26 @@ namespace Mayday.Game.Screens
 
             var spawnTile = GetSpawnPosition();
             
-            MyPlayer = new Player
+            _myPlayer = new Player
             {
                 SteamId = SteamClient.SteamId,
-                X = spawnTile.X * DrawTileSize,
-                Y = spawnTile.Y * DrawTileSize - (int)(62 / 2f)
+                X = spawnTile.X * _gameWorld.TileSize,
+                Y = spawnTile.Y * _gameWorld.TileSize - (int)(62 / 2f)
             };
             
-            MyPlayer.HeadAnimator = new Animator(ContentChest.Heads[MyPlayer.HeadId].Animations);
-            MyPlayer.BodyAnimator = new Animator(ContentChest.Bodies[MyPlayer.BodyId].Animations);
-            MyPlayer.ArmsAnimator = new Animator(ContentChest.Arms[MyPlayer.ArmsId].Animations);
-            MyPlayer.LegsAnimator = new Animator(ContentChest.Legs[MyPlayer.LegsId].Animations);
+            _myPlayer.HeadAnimator = new Animator(ContentChest.Heads[_myPlayer.HeadId].Animations);
+            _myPlayer.BodyAnimator = new Animator(ContentChest.Bodies[_myPlayer.BodyId].Animations);
+            _myPlayer.ArmsAnimator = new Animator(ContentChest.Arms[_myPlayer.ArmsId].Animations);
+            _myPlayer.LegsAnimator = new Animator(ContentChest.Legs[_myPlayer.LegsId].Animations);
             
-            Players = new Dictionary<ulong, Player> {
+            _players = new Dictionary<ulong, Player> {
             {
-                MyPlayer.SteamId, MyPlayer
+                _myPlayer.SteamId, _myPlayer
             }};
 
             BackgroundColor = Color.White;
-            Camera.Goto(new Vector2(MyPlayer.X, MyPlayer.Y));
+            _camera.Goto(new Vector2(_myPlayer.X, _myPlayer.Y));
         }
-
-        public int DrawTileSize { get; set; } = 12;
 
         private Tile GetSpawnPosition() =>
             (from Tile tile in _gameWorld.Tiles
@@ -103,7 +98,7 @@ namespace Mayday.Game.Screens
 
         private void Move(int x)
         {
-            var player = Players[SteamClient.SteamId];
+            var player = _players[SteamClient.SteamId];
 
             if (player.XDirection != x)
             {
@@ -147,10 +142,10 @@ namespace Mayday.Game.Screens
         {
             GraphicsUtils.Instance.SpriteBatch.GraphicsDevice.Clear(BackgroundColor);
 
-            GraphicsUtils.Instance.Begin(true, Camera.GetMatrix());
+            GraphicsUtils.Instance.Begin(true, _camera.GetMatrix());
 
-            _worldRenderer.Draw(_gameWorld, Camera);
-            _playerRenderer.DrawPlayers(Players);
+            _worldRenderer.Draw(_gameWorld, _camera);
+            _playerRenderer.DrawPlayers(_players);
             
             GraphicsUtils.Instance.End();
             
@@ -166,16 +161,16 @@ namespace Mayday.Game.Screens
             _networkManager?.Update();
             UserInterface?.Update();
             
-            foreach(var player in Players)
+            foreach(var player in _players)
                 player.Value.Update();
 
-            Camera.Goto(new Vector2(MyPlayer.X, MyPlayer.Y));
+            _camera.Goto(new Vector2(_myPlayer.X, _myPlayer.Y));
             
             if (MouseState.CurrentState.LeftButton == ButtonState.Pressed)
             {
-                var mousePosition = MouseState.Bounds(Camera.GetMatrix());
-                var mouseTileX = mousePosition.X / DrawTileSize;
-                var mouseTileY = mousePosition.Y / DrawTileSize;
+                var mousePosition = MouseState.Bounds(_camera.GetMatrix());
+                var mouseTileX = mousePosition.X / _gameWorld.TileSize;
+                var mouseTileY = mousePosition.Y / _gameWorld.TileSize;
                 if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > _gameWorld.Width - 1 ||
                     mouseTileY > _gameWorld.Height - 1) return;
                 var tile = _gameWorld.Tiles[mouseTileX, mouseTileY];
@@ -190,9 +185,9 @@ namespace Mayday.Game.Screens
                 
             } else if (MouseState.CurrentState.RightButton == ButtonState.Pressed)
             {
-                var mousePosition = MouseState.Bounds(Camera.GetMatrix());
-                var mouseTileX = mousePosition.X / DrawTileSize;
-                var mouseTileY = mousePosition.Y / DrawTileSize;
+                var mousePosition = MouseState.Bounds(_camera.GetMatrix());
+                var mouseTileX = mousePosition.X / _gameWorld.TileSize;
+                var mouseTileY = mousePosition.Y / _gameWorld.TileSize;
                 if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > _gameWorld.Width - 1 ||
                     mouseTileY > _gameWorld.Height - 1) return;
                 var tile = _gameWorld.Tiles[mouseTileX, mouseTileY];
@@ -238,7 +233,7 @@ namespace Mayday.Game.Screens
             newPlayer.ArmsAnimator = new Animator(ContentChest.Arms[newPlayer.ArmsId].Animations);
             newPlayer.LegsAnimator = new Animator(ContentChest.Legs[newPlayer.LegsId].Animations);
             
-            Players.Add(newPlayer.SteamId, newPlayer);
+            _players.Add(newPlayer.SteamId, newPlayer);
         }
 
 
@@ -258,13 +253,13 @@ namespace Mayday.Game.Screens
             } else if (received.GetType() == typeof(PlayerMovePacket))
             {
                 var movePacket = (PlayerMovePacket) received;
-                var player = Players[movePacket.SteamId];
+                var player = _players[movePacket.SteamId];
                 var xDir = movePacket.XDirection;
                 player.XDirection = xDir;
             } else if (received.GetType() == typeof(PlayerPositionPacket))
             {
                 var positionPacket = (PlayerPositionPacket) received;
-                var player = Players[positionPacket.SteamId];
+                var player = _players[positionPacket.SteamId];
                 player.X = positionPacket.X;
                 player.Y = positionPacket.Y;
             } 
@@ -315,9 +310,9 @@ namespace Mayday.Game.Screens
             if (received.GetType() == typeof(PlayerMovePacket))
             {
                 var movePacket = (PlayerMovePacket) received;
-                if (Players.ContainsKey(movePacket.SteamId))
+                if (_players.ContainsKey(movePacket.SteamId))
                 {
-                    var player = Players[movePacket.SteamId];
+                    var player = _players[movePacket.SteamId];
                     player.XDirection = movePacket.XDirection;
                 }
                 else
@@ -335,16 +330,16 @@ namespace Mayday.Game.Screens
                     player.ArmsAnimator = new Animator(ContentChest.Arms[player.ArmsId].Animations);
                     player.LegsAnimator = new Animator(ContentChest.Legs[player.LegsId].Animations);
                     
-                    Players.Add(player.SteamId, player);
+                    _players.Add(player.SteamId, player);
                 }
             } 
             else if (received.GetType() == typeof(PlayerPositionPacket))
             {
                 var positionPacket = (PlayerPositionPacket) received;
                 
-                if (Players.ContainsKey(positionPacket.SteamId))
+                if (_players.ContainsKey(positionPacket.SteamId))
                 {
-                    var player = Players[positionPacket.SteamId];
+                    var player = _players[positionPacket.SteamId];
                     player.X = positionPacket.X;
                     player.Y = positionPacket.Y;
                 }
@@ -362,7 +357,7 @@ namespace Mayday.Game.Screens
                     player.ArmsAnimator = new Animator(ContentChest.Arms[player.ArmsId].Animations);
                     player.LegsAnimator = new Animator(ContentChest.Legs[player.LegsId].Animations);
                     
-                    Players.Add(player.SteamId, player);
+                    _players.Add(player.SteamId, player);
                 }
             }
             else if (received.GetType() == typeof(TileTypePacket))
