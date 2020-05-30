@@ -46,7 +46,10 @@ namespace Mayday.Game.Gameplay.WorldMakers
             {
                 for (var j = 0; j < WorldHeight; j++)
                 {
-                    tiles[i, j] = new Tile(TileType.NONE, i, j);
+                    tiles[i, j] = new Tile(TileType.NONE, i, j)
+                    {
+                        GameWorld = world
+                    };
                 }
             }
 
@@ -66,6 +69,7 @@ namespace Mayday.Game.Gameplay.WorldMakers
             world.Tiles = tiles;
             world.Width = WorldWidth;
             world.Height = WorldHeight;
+            world.TileSize = 12;
             
             return world;
         }

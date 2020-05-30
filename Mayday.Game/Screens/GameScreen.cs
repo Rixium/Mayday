@@ -8,6 +8,7 @@ using GeonBit.UI;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Graphics;
+using Mayday.Game.Graphics.Renderers;
 using Mayday.Game.Networking.Packets;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -31,15 +32,7 @@ namespace Mayday.Game.Screens
     public class GameScreen : Screen, INetworkServerListener, INetworkClientListener
     {
 
-        public Dictionary<int, int> TileBlobMap = new Dictionary<int, int>
-        {
-            {28, 0}, {124, 1}, {112, 2}, {16, 3}, {20, 4}, {116, 5}, {92, 6}, {80, 7}, {84, 8}, {221, 9}, 
-            {31, 11}, {255, 12}, {241, 13}, {17, 14}, {23, 15}, {247, 16}, {223, 17}, {209, 18}, {215, 19}, {119, 20},
-            {7, 22}, {199, 23}, {193, 24}, {1, 25}, {29, 26}, {253, 27}, {127, 28}, {113, 29}, {125, 30}, {93, 31}, {117, 32},
-            {4, 33}, {68, 34}, {64, 35}, {0, 36}, {5, 37}, {197, 38}, {71, 39}, {65, 40}, {69, 41}, {87, 42}, {213, 43},
-            {21, 48}, {245, 49}, {95, 50}, {81, 51}, {85, 52}
-        };
-
+        private readonly IWorldRenderer _worldRenderer;
         private readonly INetworkManager _networkManager;
         private readonly INetworkMessagePackager _messagePackager;
         
@@ -60,6 +53,8 @@ namespace Mayday.Game.Screens
             _messagePackager.AddDefinition<MapRequestPacket>();
             _messagePackager.AddDefinition<PlayerMovePacket>();
             _messagePackager.AddDefinition<PlayerPositionPacket>();
+            
+            _worldRenderer = new WorldRenderer();
         }
 
         public void SetWorld(IGameWorld gameWorld)
@@ -155,7 +150,7 @@ namespace Mayday.Game.Screens
 
             GraphicsUtils.Instance.Begin(true, Camera.GetMatrix());
 
-            DrawMap();
+            _worldRenderer.Draw(_gameWorld, Camera);
             
             foreach (var player in Players.Select(pair => pair.Value))
             {
@@ -165,97 +160,6 @@ namespace Mayday.Game.Screens
             GraphicsUtils.Instance.End();
             
             UserInterface?.Draw();
-        }
-
-        private void DrawMap()
-        {
-            var tileSize = 16;
-            var startTileX = (int)(Camera.Position.X - Window.ViewportWidth / 2.0f) / DrawTileSize - 1;
-            var startTileY = (int)(Camera.Position.Y - Window.ViewportHeight / 2.0f) / DrawTileSize - 1;
-            var endTileX = (int)(Camera.Position.X + Window.ViewportWidth / 2.0f) / DrawTileSize - 1;
-            var endTileY = (int)(Camera.Position.Y + Window.ViewportHeight / 2.0f) / DrawTileSize - 1;
-
-            for (var i = startTileX; i < endTileX; i++)
-            {
-                for (var j = startTileY; j < endTileY; j++)
-                {
-                    if (i < 0 || j < 0 || i > _gameWorld.Width - 1 || j > _gameWorld.Height - 1) continue;
-                    var tile = _gameWorld.Tiles[i, j];
-                    
-                    if (tile.TileType == TileType.NONE) continue;
-
-                
-                    var blobSelect = GetTileNumberFor(tile);
-
-                    TileBlobMap.TryGetValue(blobSelect, out var tileNumber);
-
-                    if (tileNumber == -1)
-                        tileNumber = 36;
-                
-                    var tileSet = ContentChest.Tiles[(int) tile.TileType];
-                
-                    IndexConvert(tileNumber, tileSet.Width / tileSize, out var x, out var y);
-                    var rect = new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize);
-                    GraphicsUtils.Instance.SpriteBatch.Draw(tileSet, 
-                        new Rectangle(tile.X * DrawTileSize, tile.Y * DrawTileSize, DrawTileSize, DrawTileSize), 
-                        rect, Color.White);
-                }
-            }
-        }
-
-        private int GetTileNumberFor(Tile tile)
-        {
-            var x = tile.X;
-            var y = tile.Y;
-            byte bitSum = 0;
-
-            var n = TryGetTile(tile.X, tile.Y - 1);
-            var e  = TryGetTile(tile.X + 1, tile.Y);
-            var s = TryGetTile(tile.X, tile.Y + 1);
-            var w = TryGetTile(tile.X - 1, tile.Y);
-            var nw = TryGetTile(tile.X - 1, tile.Y - 1);
-            var ne = TryGetTile(tile.X + 1, tile.Y - 1);
-            var se = TryGetTile(tile.X + 1, tile.Y + 1);
-            var sw = TryGetTile(tile.X - 1, tile.Y + 1);
-
-            TileTypeMatch(ref bitSum, tile, n, 1);
-            TileTypeMatch(ref bitSum, tile, e, 4);
-            TileTypeMatch(ref bitSum, tile, s, 16);
-            TileTypeMatch(ref bitSum, tile, w, 64);
-            TileTypeMatch(ref bitSum, tile, se, 8, e, s);
-            TileTypeMatch(ref bitSum, tile, ne, 2, n, e);
-            TileTypeMatch(ref bitSum, tile, sw, 32, s, w);
-            TileTypeMatch(ref bitSum, tile, nw, 128, n, w);
-            
-            return bitSum;
-        }
-
-        private Tile TryGetTile(int tileX, int tileY)
-        {
-            if (tileX < 0 || tileY < 0) return null;
-            if (tileX > _gameWorld.Width - 1 || tileY > _gameWorld.Height - 1) return null;
-            return _gameWorld.Tiles[tileX, tileY];
-        }
-
-        public void IndexConvert(int index, int arrayWidth, out int x, out int y)
-        {
-            x = index % arrayWidth;
-            y = index / arrayWidth;
-        }
-
-        private void TileTypeMatch(ref byte bitSum, Tile tile1, Tile tile2, byte bitValue, params Tile[] assureNot)
-        {
-            if (tile2 == null) return;
-            if (tile1 == null) return;
-
-            if (tile1.TileType.Equals(tile2.TileType))
-            {
-                foreach(var tile in assureNot)
-                    if (tile.TileType != tile1.TileType)
-                        return;
-                
-                bitSum += bitValue;
-            }
         }
 
         private void DrawPlayer(Player player)

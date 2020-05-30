@@ -56,6 +56,8 @@
     <Compile Include="Gameplay\World\Tile.cs" />
     <Compile Include="Graphics\Animator.cs" />
     <Compile Include="Graphics\IAnimator.cs" />
+    <Compile Include="Graphics\Renderers\IWorldRenderer.cs" />
+    <Compile Include="Graphics\Renderers\WorldRenderer.cs" />
     <Compile Include="Graphics\SpriteSheet.cs" />
     <Compile Include="Networking\Packets\MapRequestPacket.cs" />
     <Compile Include="Networking\Packets\PlayerMovePacket.cs" />

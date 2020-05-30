@@ -62,15 +62,20 @@ namespace Mayday.Game.Gameplay.WorldMakers
             await Task.Delay(1000);
             
             _tilesReceived = 0;
+            
             WorldWidth = 200;
             WorldHeight = 200;
+            
             _tiles = new Tile[WorldWidth, WorldHeight];
 
             for (var i = 0; i < WorldWidth; i++)
             {
                 for (var j = 0; j < WorldHeight; j++)
                 {
-                    _tiles[i, j] = new Tile(TileType.NONE, i, j);
+                    _tiles[i, j] = new Tile(TileType.NONE, i, j)
+                    {
+                        GameWorld = world
+                    };
                 }
             }
             
@@ -97,6 +102,7 @@ namespace Mayday.Game.Gameplay.WorldMakers
             world.Tiles = _tiles;
             world.Width = WorldWidth;
             world.Height = WorldHeight;
+            world.TileSize = 12;
             
             return world;
         }
@@ -117,7 +123,7 @@ namespace Mayday.Game.Gameplay.WorldMakers
                 var y = tileTypePacket.Y;
                 var tileType = tileTypePacket.TileType;
                 
-                _tiles[x, y] = new Tile(tileType, x, y);
+                _tiles[x, y].TileType = tileType;
             }
             
             _tilesReceived++;
