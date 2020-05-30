@@ -6,6 +6,12 @@
         GROUND,
         COPPER
     }
+    
+    public enum WallType
+    {
+        NONE,
+        GROUND
+    }
 
     public class Tile
     {
@@ -17,6 +23,7 @@
         public int X { get; set; }
         public int Y { get; set; }
         public TileType TileType { get; set; }
+        public WallType WallType { get; set; }
 
         public Tile(TileType tileType, int x, int y)
         {
@@ -24,5 +31,6 @@
             X = x;
             Y = y;
         }
+        
     }
 }
