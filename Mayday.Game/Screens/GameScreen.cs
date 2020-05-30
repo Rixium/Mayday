@@ -9,6 +9,7 @@ using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Graphics;
 using Mayday.Game.Graphics.Renderers;
+using Mayday.Game.Networking.Packagers;
 using Mayday.Game.Networking.Packets;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -49,11 +50,7 @@ namespace Mayday.Game.Screens
             _networkManager.SetServerNetworkListener(this);
             _networkManager.SetClientNetworkListener(this);
             
-            _messagePackager = new NetworkMessagePackager();
-            _messagePackager.AddDefinition<TileTypePacket>();
-            _messagePackager.AddDefinition<MapRequestPacket>();
-            _messagePackager.AddDefinition<PlayerMovePacket>();
-            _messagePackager.AddDefinition<PlayerPositionPacket>();
+            _messagePackager = new MaydayMessagePackager();
             
             _worldRenderer = new WorldRenderer();
             _playerRenderer = new PlayerRenderer();

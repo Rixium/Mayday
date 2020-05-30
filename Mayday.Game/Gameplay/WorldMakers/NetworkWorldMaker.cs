@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Gameplay.WorldMakers.Listeners;
+using Mayday.Game.Networking.Packagers;
 using Mayday.Game.Networking.Packets;
 using Steamworks.Data;
 using Yetiface.Engine.Networking;
@@ -43,10 +44,7 @@ namespace Mayday.Game.Gameplay.WorldMakers
         {
             _networkManager = networkManager;
             _networkManager.SetClientNetworkListener(this);
-            
-            _networkMessagePackager = new NetworkMessagePackager();
-            _networkMessagePackager.AddDefinition<TileTypePacket>();
-            _networkMessagePackager.AddDefinition<MapRequestPacket>();
+            _networkMessagePackager = new MaydayMessagePackager();
         }
 
         public async Task<IGameWorld> Create(IWorldMakerListener listener)
