@@ -11,6 +11,7 @@ using Mayday.Game.Graphics;
 using Mayday.Game.Graphics.Renderers;
 using Mayday.Game.Networking.Packagers;
 using Mayday.Game.Networking.Packets;
+using Mayday.Game.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Steamworks;
@@ -63,7 +64,7 @@ namespace Mayday.Game.Screens
 
         public override void Awake()
         {
-            UserInterface = new GameUserInterface();
+            UserInterface = new GameScreenUserInterface();
             
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D), () => Move(1), InputEventType.Held);
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.A), () => Move(-1), InputEventType.Held);
@@ -378,28 +379,4 @@ namespace Mayday.Game.Screens
         }
     }
 
-    public class GameUserInterface : IUserInterface
-    {
-
-        public GameUserInterface()
-        {
-            UserInterface.Active.Clear();
-            UserInterface.Active.UseRenderTarget = false;
-        }
-        
-        public void Draw()
-        {
-            UserInterface.Active.Draw(GraphicsUtils.Instance.SpriteBatch);
-        }
-
-        public void Update()
-        {
-            UserInterface.Active.Update(Time.GameTime);
-        }
-
-        public void AfterDraw()
-        {
-            
-        }
-    }
 }
