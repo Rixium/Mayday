@@ -22,7 +22,6 @@ using Yetiface.Engine.Networking;
 using Yetiface.Engine.Networking.Listeners;
 using Yetiface.Engine.Networking.Packagers;
 using Yetiface.Engine.Screens;
-using Yetiface.Engine.UI;
 using Yetiface.Engine.Utils;
 using Color = Microsoft.Xna.Framework.Color;
 using MouseState = Yetiface.Engine.Utils.MouseState;
