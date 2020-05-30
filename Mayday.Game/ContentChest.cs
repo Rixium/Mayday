@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -21,7 +22,8 @@ namespace Mayday.Game
         public static Dictionary<int, SpriteSheet> Bodies { get; set; } = new Dictionary<int, SpriteSheet>();
         public static Dictionary<int, SpriteSheet> Legs { get; set; } = new Dictionary<int, SpriteSheet>();
         public static Dictionary<int, SpriteSheet> Arms { get; set; } = new Dictionary<int, SpriteSheet>();
-        
+        public static Dictionary<int, Texture2D> Tiles { get; set; } = new Dictionary<int, Texture2D>();
+
         public void Load(ContentManager contentManager)
         {
             LoadImages(contentManager);
@@ -47,6 +49,19 @@ namespace Mayday.Game
                 if (jsonFiles.Contains(file))
                 {
                     LoadAnimation(contentManager, directory, file, texture);
+                }
+                else
+                {
+                    var properties = typeof(ContentChest).GetProperties();
+                    var nameOf = file.Split('_');
+
+                    foreach (var property in properties)
+                    {
+                        if (!property.Name.Equals(nameOf[0], StringComparison.OrdinalIgnoreCase)) continue;
+                        var actualProperty = (Dictionary<int, Texture2D>) property.GetValue(this, null);
+                        actualProperty.Add(int.Parse(nameOf[1]), texture);
+                        break;
+                    }
                 }
             }
         }
@@ -84,7 +99,7 @@ namespace Mayday.Game
 
             foreach (var property in properties)
             {
-                if (!property.Name.Equals(nameOf[0])) continue;
+                if (!property.Name.Equals(nameOf[0], StringComparison.OrdinalIgnoreCase)) continue;
                 var actualProperty = (Dictionary<int, SpriteSheet>) property.GetValue(this, null);
                 actualProperty.Add(int.Parse(nameOf[1]), spriteSheet);
                 break;

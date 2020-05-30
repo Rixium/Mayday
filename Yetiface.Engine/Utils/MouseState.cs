@@ -16,15 +16,18 @@ namespace Yetiface.Engine.Utils
         /// <summary>
         /// Bounds of the mouse. Use this for collision within the viewport.
         /// </summary>
-        public static Rectangle Bounds {
-            get
-            {
-                var relativeToViewport = Vector2.Transform(_mousePosition, Window.InvertViewportMatrix);
-                _bounds.X = (int) (relativeToViewport.X);
-                _bounds.Y = (int) (relativeToViewport.Y);
-                
-                return _bounds;
-            }
+        public static Rectangle Bounds(Matrix? supplementMatrix = null)
+        {
+
+            var matrix1 = Window.InvertViewportMatrix;
+            if (supplementMatrix != null)
+                matrix1 *= Matrix.Invert(supplementMatrix.Value);
+            
+            var relativeToViewport = Vector2.Transform(_mousePosition, matrix1);
+            _bounds.X = (int) (relativeToViewport.X);
+            _bounds.Y = (int) (relativeToViewport.Y);
+            
+            return _bounds;
         }
         
         /// <summary>
@@ -63,7 +66,7 @@ namespace Yetiface.Engine.Utils
             LastState = CurrentState;
         }
 
-        public static bool Intersects(Rectangle rectangle) => Bounds.Intersects(rectangle);
+        public static bool Intersects(Rectangle rectangle) => Bounds().Intersects(rectangle);
 
     }
 }
