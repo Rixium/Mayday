@@ -10,13 +10,13 @@ namespace Mayday.Game.Graphics.Renderers
     public class PlayerRenderer : IPlayerRenderer
     {
         
-        public void DrawPlayers(Dictionary<ulong, Player> players)
+        public void DrawPlayers(Dictionary<ulong, IPlayer> players)
         {
             foreach(var player in players)
                 DrawPlayer(player.Value);
         }
 
-        public void DrawPlayer(Player player)
+        public void DrawPlayer(IPlayer player)
         {
             var headSprite = player.HeadAnimator?.Current;
             var bodySprite = player.BodyAnimator?.Current;

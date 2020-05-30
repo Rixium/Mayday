@@ -2,7 +2,7 @@
 
 namespace Mayday.Game.Gameplay.Entities
 {
-    public class Player
+    public class Player : IPlayer
     {
         public ulong SteamId { get; set; }
         public int X { get; set; }

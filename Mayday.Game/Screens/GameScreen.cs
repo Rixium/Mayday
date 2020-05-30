@@ -38,8 +38,8 @@ namespace Mayday.Game.Screens
         private IGameWorld _gameWorld;
         private readonly Camera _camera = new Camera();
 
-        private Dictionary<ulong, Player> _players;
-        private Player _myPlayer;
+        private Dictionary<ulong, IPlayer> _players;
+        private IPlayer _myPlayer;
 
         public GameScreen(INetworkManager networkManager) : base("GameScreen")
         {
@@ -57,6 +57,21 @@ namespace Mayday.Game.Screens
         {
             _gameWorld = gameWorld;
         }
+        
+        public void SetPlayer(IPlayer player)
+        {
+            _myPlayer = player;
+            
+            _players = new Dictionary<ulong, IPlayer> {
+            {
+                player.SteamId, player
+            }};
+            
+            _myPlayer.HeadAnimator = new Animator(ContentChest.Heads[_myPlayer.HeadId].Animations);
+            _myPlayer.BodyAnimator = new Animator(ContentChest.Bodies[_myPlayer.BodyId].Animations);
+            _myPlayer.ArmsAnimator = new Animator(ContentChest.Arms[_myPlayer.ArmsId].Animations);
+            _myPlayer.LegsAnimator = new Animator(ContentChest.Legs[_myPlayer.LegsId].Animations);
+        }
 
         public override void Awake()
         {
@@ -66,25 +81,15 @@ namespace Mayday.Game.Screens
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.A), () => Move(-1), InputEventType.Held);
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D), () => Move(0), InputEventType.Released);
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.A), () => Move(0), InputEventType.Released);
-
-            var spawnTile = GetSpawnPosition();
             
-            _myPlayer = new Player
+            var spawnTile = GetSpawnPosition();
+
+            SetPlayer(new Player
             {
                 SteamId = SteamClient.SteamId,
                 X = spawnTile.X * _gameWorld.TileSize,
-                Y = spawnTile.Y * _gameWorld.TileSize - (int)(62 / 2f)
-            };
-            
-            _myPlayer.HeadAnimator = new Animator(ContentChest.Heads[_myPlayer.HeadId].Animations);
-            _myPlayer.BodyAnimator = new Animator(ContentChest.Bodies[_myPlayer.BodyId].Animations);
-            _myPlayer.ArmsAnimator = new Animator(ContentChest.Arms[_myPlayer.ArmsId].Animations);
-            _myPlayer.LegsAnimator = new Animator(ContentChest.Legs[_myPlayer.LegsId].Animations);
-            
-            _players = new Dictionary<ulong, Player> {
-            {
-                _myPlayer.SteamId, _myPlayer
-            }};
+                Y = spawnTile.Y * _gameWorld.TileSize - (int) (62 / 2f)
+            });
 
             BackgroundColor = Color.White;
             _camera.Goto(new Vector2(_myPlayer.X, _myPlayer.Y));
