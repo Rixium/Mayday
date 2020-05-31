@@ -29,12 +29,25 @@ namespace Mayday.Game {
         public void Goto(Vector2 pos) {
             _minX = Window.WindowWidth / 2 / 2;
             _minY = Window.WindowHeight / 2 / 2;
-            _position = pos;
+
+            ToGo = pos;
+        }
+
+        public Vector2 ToGo { get; set; }
+
+        public void Update()
+        {
+            var dir = ToGo - Position;
+            dir.Normalize();
+
+            _position = Vector2.Lerp(Position, ToGo,0.1f);
+            
             _position.X = MathHelper.Clamp(_position.X, _minX, _maxX);
             _position.Y = MathHelper.Clamp(_position.Y, _minY, _maxY);
         }
-
-        public Vector2 Position {
+        
+        public Vector2 Position
+        {
             get => _position;
             set => _position = value;
         }

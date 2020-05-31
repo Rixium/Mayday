@@ -71,6 +71,7 @@
     <Compile Include="Networking\Packets\PacketDefinition.cs" />
     <Compile Include="UI\IUserInterface.cs" />
     <Compile Include="Utils\FrameRate.cs" />
+    <Compile Include="Utils\RectangleExtensions.cs" />
     <Compile Include="YetiGame.cs" />
     <Compile Include="Graphics\ISprite.cs" />
     <Compile Include="Graphics\Sprite.cs" />

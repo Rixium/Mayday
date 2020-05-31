@@ -77,8 +77,9 @@ namespace Mayday.Game.Screens
         {
             UserInterface = new GameScreenUserInterface();
             
-            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D), () => Move(1), InputEventType.Held);
-            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.A), () => Move(-1), InputEventType.Held);
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D), () => Move(2), InputEventType.Held);
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.A), () => Move(-2), InputEventType.Held);
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.Space), Jump);
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D), () => Move(0), InputEventType.Released);
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.A), () => Move(0), InputEventType.Released);
             
@@ -88,11 +89,25 @@ namespace Mayday.Game.Screens
             {
                 SteamId = SteamClient.SteamId,
                 X = spawnTile.X * _gameWorld.TileSize,
-                Y = spawnTile.Y * _gameWorld.TileSize - (int) (62 / 2f)
+                Y = spawnTile.Y * _gameWorld.TileSize - 70,
+                GameWorld = _gameWorld
             });
 
             BackgroundColor = Color.White;
-            _camera.Goto(new Vector2(_myPlayer.X, _myPlayer.Y));
+            _camera.Position = (new Vector2(_myPlayer.X, _myPlayer.Y - 100));
+        }
+
+        private void Jump()
+        {
+            var jumpPacket = new JumpPacket
+            {
+                SteamId = _myPlayer.SteamId
+            };
+
+            var package = _messagePackager.Package(jumpPacket);
+            _networkManager.SendMessage(package);
+            
+            _myPlayer.Jump();
         }
 
         private Tile GetSpawnPosition() =>
@@ -151,7 +166,7 @@ namespace Mayday.Game.Screens
 
             _worldRenderer.Draw(_gameWorld, _camera);
             _playerRenderer.DrawPlayers(_players);
-            
+
             GraphicsUtils.Instance.End();
             
             UserInterface?.Draw();
@@ -205,7 +220,8 @@ namespace Mayday.Game.Screens
                     SendTileChangePacket(tile);
                 }
             }
-
+            
+            _camera.Update();
         }
 
         private void SendTileChangePacket(Tile tile)
@@ -230,7 +246,8 @@ namespace Mayday.Game.Screens
             {
                 SteamId = info.Identity.SteamId,
                 X = spawnTile.X * 16,
-                Y = spawnTile.Y * 16- (int)(62 / 2f)
+                Y = spawnTile.Y * 16- (int)(62 / 2f),
+                GameWorld = _gameWorld
             };
             
             newPlayer.HeadAnimator = new Animator(ContentChest.Heads[newPlayer.HeadId].Animations);
@@ -272,6 +289,10 @@ namespace Mayday.Game.Screens
             {
                 var typePacket = (TileTypePacket) received;
                 _gameWorld.Tiles[typePacket.X, typePacket.Y].TileType = typePacket.TileType;
+            } else if (received.GetType() == typeof(JumpPacket))
+            {
+                var jumpPacket = (JumpPacket) received;
+                _players[jumpPacket.SteamId].Jump();
             }
         }
 
@@ -327,7 +348,8 @@ namespace Mayday.Game.Screens
                     {
                         SteamId = movePacket.SteamId,
                         X = spawnTile.X * 16,
-                        Y = spawnTile.Y * 16 - (int)(62 / 2f)
+                        Y = spawnTile.Y * 16 - (int)(62 / 2f),
+                        GameWorld = _gameWorld
                     };
 
                     player.HeadAnimator = new Animator(ContentChest.Heads[player.HeadId].Animations);
@@ -354,7 +376,8 @@ namespace Mayday.Game.Screens
                     {
                         SteamId = positionPacket.SteamId,
                         X = positionPacket.X,
-                        Y = positionPacket.Y
+                        Y = positionPacket.Y,
+                        GameWorld = _gameWorld
                     };
 
                     player.HeadAnimator = new Animator(ContentChest.Heads[player.HeadId].Animations);
@@ -369,6 +392,10 @@ namespace Mayday.Game.Screens
             {
                 var typePacket = (TileTypePacket) received;
                 _gameWorld.Tiles[typePacket.X, typePacket.Y].TileType = typePacket.TileType;
+            } else if (received.GetType() == typeof(JumpPacket))
+            {
+                var jumpPacket = (JumpPacket) received;
+                _players[jumpPacket.SteamId].Jump();
             }
         }
 

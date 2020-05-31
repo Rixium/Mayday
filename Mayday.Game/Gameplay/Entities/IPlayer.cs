@@ -21,6 +21,6 @@ namespace Mayday.Game.Gameplay.Entities
         int XDirection { get; set; }
 
         void Update();
-
+        void Jump();
     }
 }

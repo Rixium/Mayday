@@ -1,4 +1,6 @@
-﻿namespace Mayday.Game.Gameplay.World
+﻿using Microsoft.Xna.Framework;
+
+namespace Mayday.Game.Gameplay.World
 {
     public enum TileType
     {
@@ -31,6 +33,12 @@
             X = x;
             Y = y;
         }
+
+        public bool ContainsX(int boundsX,int width) => RenderX >= boundsX && RenderX + TileSize >= boundsX + width;
+
+        public bool ContainsY(int boundsY, int height) => RenderY >= boundsY && RenderY + TileSize >= boundsY + height;
+
+        public Rectangle GetBounds() => new Rectangle(RenderX, RenderY, TileSize, TileSize);
         
     }
 }

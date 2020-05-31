@@ -12,6 +12,7 @@ namespace Mayday.Game.Networking.Packagers
             AddDefinition<MapRequestPacket>();
             AddDefinition<PlayerMovePacket>();
             AddDefinition<PlayerPositionPacket>();
+            AddDefinition<JumpPacket>();
         }
         
     }

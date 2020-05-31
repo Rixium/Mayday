@@ -3,6 +3,7 @@ using Mayday.Game.Gameplay.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Steamworks;
+using Yetiface.Engine.Graphics;
 using Yetiface.Engine.Utils;
 
 namespace Mayday.Game.Graphics.Renderers
@@ -23,25 +24,36 @@ namespace Mayday.Game.Graphics.Renderers
             var armSprite = player.ArmsAnimator?.Current;
             var legSprite = player.LegsAnimator?.Current;
             var playerPosition = new Vector2(player.X, player.Y);
-
+            var flip = player.XDirection < 0;
+            
             if(armSprite != null)
                 GraphicsUtils.Instance.SpriteBatch.Draw(
                     armSprite.Texture, playerPosition, armSprite.SourceRectangle, Color.White,
-                    0, armSprite.Origin, 1f, SpriteEffects.FlipHorizontally, 0F);
+                    0, Vector2.Zero, 1f, flip ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0F);
             if (legSprite != null)
-                GraphicsUtils.Instance.Draw(legSprite, playerPosition, Color.White);
+                DrawSprite(legSprite, playerPosition, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
             if(bodySprite != null)
-                GraphicsUtils.Instance.Draw(bodySprite, playerPosition, Color.White);
+                DrawSprite(bodySprite, playerPosition, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
             if(headSprite != null)
-                GraphicsUtils.Instance.Draw(headSprite, playerPosition, Color.White);
+                DrawSprite(headSprite, playerPosition, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
             if(armSprite != null)
-                GraphicsUtils.Instance.Draw(armSprite, playerPosition, Color.White);
+                DrawSprite(armSprite, playerPosition, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
 
             var name = SteamFriends.GetFriendPersona(player.SteamId);
             var nameSize = GraphicsUtils.Instance.DebugFont.MeasureString(name);
+            var drawX = new Vector2(player.X + headSprite.Texture.Width / 2.0f - nameSize.X / 2.0f,
+                player.Y - 5 - nameSize.Y * 0.5f);
+            
+            GraphicsUtils.Instance.DrawFilledRectangle((int) drawX.X - 5, (int) drawX.Y - 5, (int)( nameSize.X * 0.5f) + 10, (int) (nameSize.Y * 0.5f) + 10, Color.Black * 0.5f);
             GraphicsUtils.Instance.SpriteBatch.DrawString(GraphicsUtils.Instance.DebugFont,
-                name, new Vector2(player.X + headSprite.Texture.Width / 2.0f - nameSize.X / 2.0f, player.Y - 20 - nameSize.Y), Color.Black, 0, new Vector2(nameSize.X / 2.0f, nameSize.
-                    Y / 2.0f), 1, SpriteEffects.None, 0F);
+                name, new Vector2(player.X + headSprite.Texture.Width / 2.0f - nameSize.X / 2.0f, player.Y - 5 - nameSize.Y * 0.5f), Color.White, 0, Vector2.Zero, 0.5f, SpriteEffects.None, 0F);
+        }
+
+        private void DrawSprite(ISprite sprite, Vector2 playerPosition, SpriteEffects flip)
+        {
+            GraphicsUtils.Instance.SpriteBatch.Draw(
+                sprite.Texture, playerPosition, sprite.SourceRectangle, Color.White,
+                0, Vector2.Zero, 1f, flip, 0F);
         }
     }
 }
