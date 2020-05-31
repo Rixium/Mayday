@@ -198,10 +198,10 @@ namespace GeonBit.UI.Entities
                 // stretch mode
                 case ImageDrawMode.Stretch:
                     var actualDest = new Rectangle((int)(_destRect.X + _destRect.Width / 2.0f),(int)(_destRect.Y + _destRect.Height / 2.0f), _destRect.Width, _destRect.Height);
-
                     UserInterface.Active.DrawUtils.DrawImage(spriteBatch, Texture, actualDest, FillColor, Scale,
                         SourceRectangle, Rotation,
-                        new Vector2(Texture.Width / 2.0f, Texture.Height / 2.0f));
+                        new Vector2(SourceRectangle?.Width / 2.0f ?? Texture.Width / 2.0f, 
+                            SourceRectangle?.Height / 2.0f ?? Texture.Height / 2.0f));
                     break;
             }
 

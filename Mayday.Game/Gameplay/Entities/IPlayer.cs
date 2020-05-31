@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Mayday.Game.Gameplay.World;
 using Mayday.Game.Graphics;
 using Microsoft.Xna.Framework;
 
@@ -22,6 +23,7 @@ namespace Mayday.Game.Gameplay.Entities
         
         int XDirection { get; set; }
         int FacingDirection { get; set; }
+        IGameWorld GameWorld { get; set; }
 
         void Update();
         void Jump();

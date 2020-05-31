@@ -62,17 +62,21 @@ namespace Mayday.Game.Screens
         {
             _myPlayer = player;
             
-            _players = new Dictionary<ulong, IPlayer> {
-            {
-                player.SteamId, player
-            }};
+            var spawnTile = GetSpawnPosition();
             
-            var random = new Random();
-            _myPlayer.HeadId = random.Next(0, ContentChest.Heads.Count) + 1;
+            _myPlayer.SteamId = SteamClient.SteamId;
+            _myPlayer.X = spawnTile.X * _gameWorld.TileSize;
+            _myPlayer.Y = spawnTile.Y * _gameWorld.TileSize - 70;
+            _myPlayer.GameWorld = _gameWorld;
             
             _myPlayer.HeadAnimator = new Animator(ContentChest.Heads[_myPlayer.HeadId].Animations);
             _myPlayer.BodyAnimator = new Animator(ContentChest.Bodies[_myPlayer.BodyId].Animations);
             _myPlayer.LegsAnimator = new Animator(ContentChest.Legs[_myPlayer.LegsId].Animations);
+            
+            _players = new Dictionary<ulong, IPlayer> {
+            {
+                player.SteamId, player
+            }};
         }
 
         public override void Awake()
@@ -84,16 +88,6 @@ namespace Mayday.Game.Screens
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.Space), Jump);
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D), () => Move(0), InputEventType.Released);
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.A), () => Move(0), InputEventType.Released);
-            
-            var spawnTile = GetSpawnPosition();
-
-            SetPlayer(new Player
-            {
-                SteamId = SteamClient.SteamId,
-                X = spawnTile.X * _gameWorld.TileSize,
-                Y = spawnTile.Y * _gameWorld.TileSize - 70,
-                GameWorld = _gameWorld
-            });
 
             BackgroundColor = new Color(47, 39, 54);
             _camera.Position = (new Vector2(_myPlayer.X, _myPlayer.Y - 100));

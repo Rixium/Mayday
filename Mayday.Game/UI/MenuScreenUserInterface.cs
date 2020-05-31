@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using GeonBit.UI;
 using GeonBit.UI.Animators;
 using GeonBit.UI.Entities;
 using GeonBit.UI.Utils;
+using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Gameplay.WorldMakers;
 using Mayday.Game.Gameplay.WorldMakers.Listeners;
@@ -44,6 +46,8 @@ namespace Mayday.Game.UI
         private Entity _settingsPanel;
         private Entity _joinServerPanel;
         private Entity _worldCreationParagraph;
+
+        private Entity _characterCreationPanel;
         
         private readonly SoundEffect _clickSound;
         private readonly SoundEffect _hoverSound;
@@ -219,9 +223,48 @@ namespace Mayday.Game.UI
             var world = await CreateWorld();
             
             gameScreen.SetWorld(world);
+
+            _rootPanel.RemoveChild(creatingWorldPanel);
             
-            _screenManager.AddScreen(gameScreen);
-            _screenManager.ChangeScreen(gameScreen.Name);
+            _characterCreationPanel = _rootPanel.AddChild(new Panel(new Vector2(400, 0.5f)));       
+            
+            SelectedHair = 1;
+            
+            var selectedHairSprite = ContentChest.Heads[SelectedHair].Animations.FirstOrDefault().Value
+                .Sprites[0];
+
+            var image = _characterCreationPanel.AddChild(new Image(selectedHairSprite.Texture,
+                new Vector2(100, 100), ImageDrawMode.Stretch, Anchor.TopCenter)
+            {
+                SourceRectangle = selectedHairSprite.SourceRectangle
+            });
+            
+            var buttonHair = _characterCreationPanel.AddChild(new Button("Hair Select"));
+            
+            buttonHair.OnClick += (e) =>
+            {
+                SelectedHair++;
+                if (SelectedHair >= ContentChest.Heads.Count + 1)
+                    SelectedHair = 1;
+
+                selectedHairSprite = ContentChest.Heads[SelectedHair].Animations.FirstOrDefault().Value
+                    .Sprites[0];
+
+                ((Image) image).Texture = selectedHairSprite.Texture;
+                ((Image) image).SourceRectangle = selectedHairSprite.SourceRectangle;
+            };
+                
+            var button = _characterCreationPanel.AddChild(new Button("Start"));
+            button.OnClick += (e) =>
+            {
+                gameScreen.SetPlayer(new Player()
+                {
+                    HeadId = SelectedHair
+                });
+                
+                _screenManager.AddScreen(gameScreen);
+                _screenManager.ChangeScreen(gameScreen.Name);
+            };
         }
 
         private async Task<IGameWorld> CreateWorld()
@@ -375,9 +418,50 @@ namespace Mayday.Game.UI
             
             gameScreen.SetWorld(world);
 
-            _screenManager.AddScreen(gameScreen);
-            _screenManager.ChangeScreen(gameScreen.Name);
+            _rootPanel.RemoveChild(creatingWorldPanel);
+            
+            _characterCreationPanel = _rootPanel.AddChild(new Panel(new Vector2(400, 0.5f)));       
+            
+            SelectedHair = 1;
+            
+            var selectedHairSprite = ContentChest.Heads[SelectedHair].Animations.FirstOrDefault().Value
+                .Sprites[0];
+
+            var image = _characterCreationPanel.AddChild(new Image(selectedHairSprite.Texture, 
+                new Vector2(100, 100))
+            {
+                SourceRectangle = selectedHairSprite.SourceRectangle
+            });
+            
+            var buttonHair = _characterCreationPanel.AddChild(new Button("Hair Select"));
+            
+            buttonHair.OnClick += (e) =>
+            {
+                SelectedHair++;
+                if (SelectedHair > ContentChest.Heads.Count + 1)
+                    SelectedHair = 1;
+
+                selectedHairSprite = ContentChest.Heads[SelectedHair].Animations.FirstOrDefault().Value
+                    .Sprites[0];
+
+                ((Image) image).Texture = selectedHairSprite.Texture;
+                ((Image) image).SourceRectangle = selectedHairSprite.SourceRectangle;
+            };
+                
+            var button = _characterCreationPanel.AddChild(new Button("Start"));
+            button.OnClick += (e) =>
+            {
+                gameScreen.SetPlayer(new Player()
+                {
+                    HeadId = SelectedHair
+                });
+                
+                _screenManager.AddScreen(gameScreen);
+                _screenManager.ChangeScreen(gameScreen.Name);
+            };
         }
+
+        public int SelectedHair { get; set; }
 
         private void SetupSettingsPanel()
         {
