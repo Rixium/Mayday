@@ -13,22 +13,18 @@ namespace Mayday.Game {
         private int _minY;
         private readonly int _maxY;
 
+        private int _zoom = 3;
+
         public Camera() {
             _position = Vector2.Zero;
             _maxX = 2000000;
             _maxY = 1000000;
         }
 
-        public void Move(Vector2 amount)
+        public void Goto(Vector2 pos)
         {
-            _position += amount * 4;
-            _position.X = MathHelper.Clamp(_position.X, _minX, _maxX);
-            _position.Y = MathHelper.Clamp(_position.Y, _minY, _maxY);
-        }
-
-        public void Goto(Vector2 pos) {
-            _minX = Window.WindowWidth / 2 / 2;
-            _minY = Window.WindowHeight / 2 / 2;
+            _minX = (int) (Window.Center.X / _zoom);
+            _minY = (int) (Window.Center.Y / _zoom);
 
             ToGo = pos;
         }
@@ -55,8 +51,8 @@ namespace Mayday.Game {
         public Matrix GetMatrix() {
             _transform =
                 Matrix.CreateTranslation(new Vector3(-_position.X, -_position.Y, 0)) *
-                Matrix.CreateScale(2, 2, 1) *
-                Matrix.CreateTranslation(new Vector3(Window.ViewportWidth / 2.0f, Window.ViewportHeight / 2.0f, 0));
+                Matrix.CreateScale(_zoom, _zoom, 1) *
+                Matrix.CreateTranslation(new Vector3(Window.Center.X, Window.Center.Y, 0));
 
             return _transform;
         }

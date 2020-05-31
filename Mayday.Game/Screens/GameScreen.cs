@@ -69,7 +69,6 @@ namespace Mayday.Game.Screens
             
             _myPlayer.HeadAnimator = new Animator(ContentChest.Heads[_myPlayer.HeadId].Animations);
             _myPlayer.BodyAnimator = new Animator(ContentChest.Bodies[_myPlayer.BodyId].Animations);
-            _myPlayer.ArmsAnimator = new Animator(ContentChest.Arms[_myPlayer.ArmsId].Animations);
             _myPlayer.LegsAnimator = new Animator(ContentChest.Legs[_myPlayer.LegsId].Animations);
         }
 
@@ -93,7 +92,7 @@ namespace Mayday.Game.Screens
                 GameWorld = _gameWorld
             });
 
-            BackgroundColor = Color.White;
+            BackgroundColor = new Color(47, 39, 54);
             _camera.Position = (new Vector2(_myPlayer.X, _myPlayer.Y - 100));
         }
 
@@ -144,6 +143,10 @@ namespace Mayday.Game.Screens
                     
                     _networkManager.SendMessage(package);
                 }
+                else
+                {
+                    player.FacingDirection = x;
+                }
             }
             
             player.XDirection = x;
@@ -184,7 +187,10 @@ namespace Mayday.Game.Screens
             foreach(var player in _players)
                 player.Value.Update();
 
-            _camera.Goto(new Vector2(_myPlayer.X, _myPlayer.Y));
+            _camera.Goto(
+                new Vector2(
+                    _myPlayer.GetBounds().X + _myPlayer.GetBounds().Width / 2.0f, 
+                    _myPlayer.GetBounds().Y + _myPlayer.GetBounds().Height / 2.0f));
             
             if (MouseState.CurrentState.LeftButton == ButtonState.Pressed)
             {
@@ -252,7 +258,6 @@ namespace Mayday.Game.Screens
             
             newPlayer.HeadAnimator = new Animator(ContentChest.Heads[newPlayer.HeadId].Animations);
             newPlayer.BodyAnimator = new Animator(ContentChest.Bodies[newPlayer.BodyId].Animations);
-            newPlayer.ArmsAnimator = new Animator(ContentChest.Arms[newPlayer.ArmsId].Animations);
             newPlayer.LegsAnimator = new Animator(ContentChest.Legs[newPlayer.LegsId].Animations);
             
             _players.Add(newPlayer.SteamId, newPlayer);
@@ -278,6 +283,8 @@ namespace Mayday.Game.Screens
                 var player = _players[movePacket.SteamId];
                 var xDir = movePacket.XDirection;
                 player.XDirection = xDir;
+                player.FacingDirection = movePacket.XDirection != 0 ? movePacket.XDirection :
+                    player.FacingDirection;
             } else if (received.GetType() == typeof(PlayerPositionPacket))
             {
                 var positionPacket = (PlayerPositionPacket) received;
@@ -340,6 +347,8 @@ namespace Mayday.Game.Screens
                 {
                     var player = _players[movePacket.SteamId];
                     player.XDirection = movePacket.XDirection;
+                    player.FacingDirection = movePacket.XDirection != 0 ? movePacket.XDirection :
+                    player.FacingDirection;
                 }
                 else
                 {
@@ -354,7 +363,6 @@ namespace Mayday.Game.Screens
 
                     player.HeadAnimator = new Animator(ContentChest.Heads[player.HeadId].Animations);
                     player.BodyAnimator = new Animator(ContentChest.Bodies[player.BodyId].Animations);
-                    player.ArmsAnimator = new Animator(ContentChest.Arms[player.ArmsId].Animations);
                     player.LegsAnimator = new Animator(ContentChest.Legs[player.LegsId].Animations);
                     
                     _players.Add(player.SteamId, player);
@@ -382,7 +390,6 @@ namespace Mayday.Game.Screens
 
                     player.HeadAnimator = new Animator(ContentChest.Heads[player.HeadId].Animations);
                     player.BodyAnimator = new Animator(ContentChest.Bodies[player.BodyId].Animations);
-                    player.ArmsAnimator = new Animator(ContentChest.Arms[player.ArmsId].Animations);
                     player.LegsAnimator = new Animator(ContentChest.Legs[player.LegsId].Animations);
                     
                     _players.Add(player.SteamId, player);

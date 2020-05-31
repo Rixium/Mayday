@@ -22,8 +22,10 @@ namespace Mayday.Game.Gameplay.Entities
         public IAnimator HeadAnimator { get; set; }
         public IAnimator BodyAnimator { get; set; }
         public IAnimator LegsAnimator { get; set; }
-        public IAnimator ArmsAnimator { get; set; }
+        
         public int XDirection { get; set; }
+        
+        public int FacingDirection { get; set; } = 1;
         public IGameWorld GameWorld { get; set; }
 
         public void Update()
@@ -31,27 +33,29 @@ namespace Mayday.Game.Gameplay.Entities
             HeadAnimator?.Update();
             BodyAnimator?.Update();
             LegsAnimator?.Update();
-            ArmsAnimator?.Update();
-
+            
             var oldX = X;
-            
-            if (_yVelocity > -11)
-                _yVelocity -= 10 * Time.DeltaTime;
 
-            if (XDirection > 0)
-                _xVelocity += 10 * Time.DeltaTime;
-            else if (XDirection < 0)
-                _xVelocity -= 10 * Time.DeltaTime;
-            else _xVelocity = Vector2.Lerp(new Vector2(0, 0), new Vector2(_xVelocity, 0), 0.95f).X;
+            _yVelocity = MathHelper.Lerp(-11, _yVelocity, 0.99f);
 
-            _xVelocity = MathHelper.Clamp(_xVelocity, -2, 2);
-            
             var tileBelow = GameWorld.GetTileAt(GetBounds().X / GameWorld.TileSize,
                 (GetBounds().Bottom - (int) _yVelocity) / GameWorld.TileSize);
             
             if (tileBelow == null || 
                 tileBelow.TileType != TileType.NONE)
                 _yVelocity = 0;
+
+            tileBelow = GameWorld.GetTileAt(GetBounds().X / GameWorld.TileSize,
+                (GetBounds().Bottom) / GameWorld.TileSize + 1);
+
+            if (XDirection != 0 && tileBelow != null && tileBelow.TileType != TileType.NONE)
+                _xVelocity += XDirection * 5 * Time.DeltaTime;
+            else if(tileBelow == null || tileBelow.TileType != TileType.NONE)
+                _xVelocity = MathHelper.Lerp(0, _xVelocity, 0.5f);
+            else
+                _xVelocity = MathHelper.Lerp(0, _xVelocity, 0.99999f);
+
+            _xVelocity = MathHelper.Clamp(_xVelocity, -2, 2);
 
             var xMove = (int)_xVelocity;
 
@@ -64,25 +68,23 @@ namespace Mayday.Game.Gameplay.Entities
                 HeadAnimator?.SetAnimation("Walk");
                 BodyAnimator?.SetAnimation("Walk");
                 LegsAnimator?.SetAnimation("Walk");
-                ArmsAnimator?.SetAnimation("Walk");
             }
             else
             {
                 HeadAnimator?.StopAnimation();
                 BodyAnimator?.StopAnimation();
                 LegsAnimator?.StopAnimation();
-                ArmsAnimator?.StopAnimation();
             }
         }
 
         public void Jump()
         {
-            _yVelocity = 6;
+            _yVelocity = 5;
         }
 
         public Rectangle GetBounds() =>
-            new Rectangle(X + 16, Y + 3,
-                HeadAnimator.Current.SourceRectangle.Value.Width - 31,
-                HeadAnimator.Current.SourceRectangle.Value.Height - 4);
+            new Rectangle(X + 18, Y + 18,
+                LegsAnimator.Current.SourceRectangle.Value.Width - 17 - 18,
+                LegsAnimator.Current.SourceRectangle.Value.Height - 19);
     }
 }

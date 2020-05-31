@@ -1,38 +1,65 @@
 { "frames": [
    {
     "filename": "Legs_1 0.aseprite",
-    "frame": { "x": 0, "y": 0, "w": 42, "h": 62 },
+    "frame": { "x": 0, "y": 0, "w": 42, "h": 33 },
     "rotated": false,
     "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 62 },
-    "sourceSize": { "w": 42, "h": 62 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 33 },
+    "sourceSize": { "w": 42, "h": 33 },
     "duration": 100
    },
    {
     "filename": "Legs_1 1.aseprite",
-    "frame": { "x": 42, "y": 0, "w": 42, "h": 62 },
+    "frame": { "x": 42, "y": 0, "w": 42, "h": 33 },
     "rotated": false,
     "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 62 },
-    "sourceSize": { "w": 42, "h": 62 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 33 },
+    "sourceSize": { "w": 42, "h": 33 },
     "duration": 100
    },
    {
     "filename": "Legs_1 2.aseprite",
-    "frame": { "x": 84, "y": 0, "w": 42, "h": 62 },
+    "frame": { "x": 84, "y": 0, "w": 42, "h": 33 },
     "rotated": false,
     "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 62 },
-    "sourceSize": { "w": 42, "h": 62 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 33 },
+    "sourceSize": { "w": 42, "h": 33 },
     "duration": 100
    },
    {
     "filename": "Legs_1 3.aseprite",
-    "frame": { "x": 126, "y": 0, "w": 42, "h": 62 },
+    "frame": { "x": 126, "y": 0, "w": 42, "h": 33 },
     "rotated": false,
     "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 62 },
-    "sourceSize": { "w": 42, "h": 62 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 33 },
+    "sourceSize": { "w": 42, "h": 33 },
+    "duration": 100
+   },
+   {
+    "filename": "Legs_1 4.aseprite",
+    "frame": { "x": 168, "y": 0, "w": 42, "h": 33 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 33 },
+    "sourceSize": { "w": 42, "h": 33 },
+    "duration": 100
+   },
+   {
+    "filename": "Legs_1 5.aseprite",
+    "frame": { "x": 210, "y": 0, "w": 42, "h": 33 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 33 },
+    "sourceSize": { "w": 42, "h": 33 },
+    "duration": 100
+   },
+   {
+    "filename": "Legs_1 6.aseprite",
+    "frame": { "x": 252, "y": 0, "w": 42, "h": 33 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 33 },
+    "sourceSize": { "w": 42, "h": 33 },
     "duration": 100
    }
  ],
@@ -41,13 +68,13 @@
   "version": "1.2.19.2-x64",
   "image": "Legs_1.png",
   "format": "RGBA8888",
-  "size": { "w": 168, "h": 62 },
+  "size": { "w": 294, "h": 33 },
   "scale": "1",
   "frameTags": [
-   { "name": "Walk", "from": 0, "to": 3, "direction": "forward" }
+   { "name": "Walk", "from": 0, "to": 6, "direction": "forward" }
   ],
   "layers": [
-   { "name": "Layer", "opacity": 255, "blendMode": "normal" }
+   { "name": "Legs", "opacity": 255, "blendMode": "normal" }
   ],
   "slices": [
   ]

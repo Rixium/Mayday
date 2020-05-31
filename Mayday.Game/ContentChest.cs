@@ -21,7 +21,6 @@ namespace Mayday.Game
         public static Dictionary<int, SpriteSheet> Heads { get; set; } = new Dictionary<int, SpriteSheet>();
         public static Dictionary<int, SpriteSheet> Bodies { get; set; } = new Dictionary<int, SpriteSheet>();
         public static Dictionary<int, SpriteSheet> Legs { get; set; } = new Dictionary<int, SpriteSheet>();
-        public static Dictionary<int, SpriteSheet> Arms { get; set; } = new Dictionary<int, SpriteSheet>();
         public static Dictionary<int, Texture2D> Tiles { get; set; } = new Dictionary<int, Texture2D>();
 
         public void Load(ContentManager contentManager)
@@ -104,8 +103,6 @@ namespace Mayday.Game
                 actualProperty.Add(int.Parse(nameOf[1]), spriteSheet);
                 break;
             }
-            
-            Debug.WriteLine("HLLO");
         }
         
     }

@@ -38,9 +38,36 @@ namespace Mayday.Game.Gameplay.World
 
                     if (!bounds.Intersects(tileBounds)) continue;
 
-                    var depth = bounds.GetIntersectionDepth(tileBounds);
-                    player.X += (int) depth.X;
-                    bounds = player.GetBounds();
+                    var canMoveUp = true;
+
+                    if (j >= tileEndY - 2)
+                    {
+                        for (var k = j - 1; k > j - 4; k--)
+                        {
+                            var above = GetTileAt(i, k);
+
+                            if (above.TileType == TileType.NONE)
+                                continue;
+
+                            canMoveUp = false;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        canMoveUp = false;
+                    }
+
+                    if (canMoveUp)
+                    {
+                        yMove--;
+                    }
+                    else
+                    {
+                        var depth = bounds.GetIntersectionDepth(tileBounds);
+                        player.X += (int) depth.X;
+                        bounds = player.GetBounds();
+                    }
                 }
             }
 

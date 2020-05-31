@@ -21,32 +21,24 @@ namespace Mayday.Game.Graphics.Renderers
         {
             var headSprite = player.HeadAnimator?.Current;
             var bodySprite = player.BodyAnimator?.Current;
-            var armSprite = player.ArmsAnimator?.Current;
             var legSprite = player.LegsAnimator?.Current;
             var playerPosition = new Vector2(player.X, player.Y);
-            var flip = player.XDirection < 0;
-            
-            if(armSprite != null)
-                GraphicsUtils.Instance.SpriteBatch.Draw(
-                    armSprite.Texture, playerPosition, armSprite.SourceRectangle, Color.White,
-                    0, Vector2.Zero, 1f, flip ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0F);
+            var flip = player.FacingDirection < 0;
+
             if (legSprite != null)
                 DrawSprite(legSprite, playerPosition, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
             if(bodySprite != null)
                 DrawSprite(bodySprite, playerPosition, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
             if(headSprite != null)
                 DrawSprite(headSprite, playerPosition, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
-            if(armSprite != null)
-                DrawSprite(armSprite, playerPosition, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
 
             var name = SteamFriends.GetFriendPersona(player.SteamId);
             var nameSize = GraphicsUtils.Instance.DebugFont.MeasureString(name);
-            var drawX = new Vector2(player.X + headSprite.Texture.Width / 2.0f - nameSize.X / 2.0f,
-                player.Y - 5 - nameSize.Y * 0.5f);
+            var drawPos = new Vector2( player.GetBounds().X + player.GetBounds().Width / 2.0f - nameSize.X / 2.0f / 2.0f, player.GetBounds().Y - 20 - nameSize.Y / 2.0f);
             
-            GraphicsUtils.Instance.DrawFilledRectangle((int) drawX.X - 5, (int) drawX.Y - 5, (int)( nameSize.X * 0.5f) + 10, (int) (nameSize.Y * 0.5f) + 10, Color.Black * 0.5f);
+            GraphicsUtils.Instance.DrawFilledRectangle((int) drawPos.X - 5, (int) drawPos.Y - 5, (int)( nameSize.X * 0.5f) + 10, (int) (nameSize.Y * 0.5f) + 10, Color.Black * 0.5f);
             GraphicsUtils.Instance.SpriteBatch.DrawString(GraphicsUtils.Instance.DebugFont,
-                name, new Vector2(player.X + headSprite.Texture.Width / 2.0f - nameSize.X / 2.0f, player.Y - 5 - nameSize.Y * 0.5f), Color.White, 0, Vector2.Zero, 0.5f, SpriteEffects.None, 0F);
+                name, drawPos, Color.White, 0, Vector2.Zero, 0.5f, SpriteEffects.None, 0F);
         }
 
         private void DrawSprite(ISprite sprite, Vector2 playerPosition, SpriteEffects flip)

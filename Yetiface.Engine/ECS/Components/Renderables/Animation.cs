@@ -7,7 +7,7 @@ namespace Yetiface.Engine.ECS.Components.Renderables
     public class Animation : SpriteRenderComponent, IUpdateable
     {
         public IList<ISprite> Sprites { get; }
-        public float FrameDuration { get; set; } = 0.150f;
+        public float FrameDuration { get; set; } = 0.1f;
         public int FrameCount => Sprites.Count;
 
         public Animation(IList<ISprite> sprites) : base(null)
