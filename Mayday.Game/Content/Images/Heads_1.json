@@ -74,8 +74,7 @@
    { "name": "Walk", "from": 0, "to": 6, "direction": "forward" }
   ],
   "layers": [
-   { "name": "Head", "opacity": 255, "blendMode": "normal" },
-   { "name": "Hair", "opacity": 255, "blendMode": "normal" }
+   { "name": "Head", "opacity": 255, "blendMode": "normal" }
   ],
   "slices": [
   ]

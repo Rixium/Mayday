@@ -155,6 +155,9 @@
     <Content Include="Content\Images\Heads_1.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Images\Heads_2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Images\Legs_1.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

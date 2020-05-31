@@ -67,6 +67,9 @@ namespace Mayday.Game.Screens
                 player.SteamId, player
             }};
             
+            var random = new Random();
+            _myPlayer.HeadId = random.Next(0, ContentChest.Heads.Count) + 1;
+            
             _myPlayer.HeadAnimator = new Animator(ContentChest.Heads[_myPlayer.HeadId].Animations);
             _myPlayer.BodyAnimator = new Animator(ContentChest.Bodies[_myPlayer.BodyId].Animations);
             _myPlayer.LegsAnimator = new Animator(ContentChest.Legs[_myPlayer.LegsId].Animations);
