@@ -63,6 +63,7 @@
     <Compile Include="Graphics\Renderers\WorldRenderer.cs" />
     <Compile Include="Graphics\SpriteSheet.cs" />
     <Compile Include="Networking\Packagers\MaydayMessagePackager.cs" />
+    <Compile Include="Networking\Packets\ChatMessagePacket.cs" />
     <Compile Include="Networking\Packets\JumpPacket.cs" />
     <Compile Include="Networking\Packets\MapRequestPacket.cs" />
     <Compile Include="Networking\Packets\PlayerMovePacket.cs" />

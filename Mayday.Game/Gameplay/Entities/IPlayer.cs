@@ -1,4 +1,6 @@
-﻿using Mayday.Game.Graphics;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Mayday.Game.Graphics;
 using Microsoft.Xna.Framework;
 
 namespace Mayday.Game.Gameplay.Entities
@@ -24,5 +26,7 @@ namespace Mayday.Game.Gameplay.Entities
         void Update();
         void Jump();
         Rectangle GetBounds();
+        void AddChat(string receivedMessage);
+        IList<ChatMessage> GetChat();
     }
 }

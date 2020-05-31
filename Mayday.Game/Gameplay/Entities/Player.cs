@@ -1,15 +1,34 @@
-﻿using Mayday.Game.Gameplay.World;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Mayday.Game.Gameplay.World;
 using Mayday.Game.Graphics;
 using Microsoft.Xna.Framework;
 using Yetiface.Engine.Utils;
 
 namespace Mayday.Game.Gameplay.Entities
 {
+
+    public class ChatMessage
+    {
+
+        public float Y;
+        public float Fade = 1;
+        public string Text;
+        public float X;
+        
+        public void Update()
+        {
+            Fade -= MathHelper.Lerp(0, Fade, Time.DeltaTime);
+            Y -= Time.DeltaTime * 10;
+        }
+        
+    }
     public class Player : IPlayer
     {
         private float _yVelocity;
         private float _xVelocity;
-        
+        private IList<ChatMessage> _chatMessages = new List<ChatMessage>();
+
         public ulong SteamId { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
@@ -75,6 +94,19 @@ namespace Mayday.Game.Gameplay.Entities
                 BodyAnimator?.StopAnimation();
                 LegsAnimator?.StopAnimation();
             }
+
+            var array = _chatMessages.ToArray();
+            
+            foreach (var message in array)
+            {
+                message.Update();
+                
+                if (message.Fade <= 0)
+                {
+                    _chatMessages.Remove(message);
+                }
+            }
+            
         }
 
         public void Jump()
@@ -86,5 +118,20 @@ namespace Mayday.Game.Gameplay.Entities
             new Rectangle(X + 18, Y + 18,
                 LegsAnimator.Current.SourceRectangle.Value.Width - 17 - 18,
                 LegsAnimator.Current.SourceRectangle.Value.Height - 19);
+
+        public void AddChat(string receivedMessage)
+        {
+            _chatMessages.Add(new ChatMessage
+            {
+                Text = receivedMessage,
+                X = GetBounds().X,
+                Y = GetBounds().Top - 10
+            });
+        }
+
+        public IList<ChatMessage> GetChat()
+        {
+            return _chatMessages;
+        }
     }
 }

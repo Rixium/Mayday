@@ -13,6 +13,7 @@ namespace Mayday.Game.Networking.Packagers
             AddDefinition<PlayerMovePacket>();
             AddDefinition<PlayerPositionPacket>();
             AddDefinition<JumpPacket>();
+            AddDefinition<ChatMessagePacket>();
         }
         
     }

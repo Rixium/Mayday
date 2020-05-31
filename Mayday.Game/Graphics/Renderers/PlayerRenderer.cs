@@ -32,13 +32,22 @@ namespace Mayday.Game.Graphics.Renderers
             if(headSprite != null)
                 DrawSprite(headSprite, playerPosition, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
 
-            var name = SteamFriends.GetFriendPersona(player.SteamId);
-            var nameSize = GraphicsUtils.Instance.DebugFont.MeasureString(name);
-            var drawPos = new Vector2( player.GetBounds().X + player.GetBounds().Width / 2.0f - nameSize.X / 2.0f / 2.0f, player.GetBounds().Y - 20 - nameSize.Y / 2.0f);
+
+            foreach (var message in player.GetChat())
+            {
+                ShowMessage(message);
+            }
+        }
+
+        private void ShowMessage(ChatMessage message)
+        {
+            var text = message.Text;
+            var textSize = GraphicsUtils.Instance.DebugFont.MeasureString(text);
+            var drawPos = new Vector2( message.X- (int)(textSize.X * 0.25f / 2), message.Y);
             
-            GraphicsUtils.Instance.DrawFilledRectangle((int) drawPos.X - 5, (int) drawPos.Y - 5, (int)( nameSize.X * 0.5f) + 10, (int) (nameSize.Y * 0.5f) + 10, Color.Black * 0.5f);
+            GraphicsUtils.Instance.DrawFilledRectangle((int) drawPos.X - 5, (int) drawPos.Y - 5, (int)( textSize.X * 0.25f) + 10, (int) (textSize.Y * 0.25f) + 10, Color.Black * 0.5f * message.Fade);
             GraphicsUtils.Instance.SpriteBatch.DrawString(GraphicsUtils.Instance.DebugFont,
-                name, drawPos, Color.White, 0, Vector2.Zero, 0.5f, SpriteEffects.None, 0F);
+                text, drawPos, Color.White * message.Fade, 0, Vector2.Zero, 0.25f, SpriteEffects.None, 0F);
         }
 
         private void DrawSprite(ISprite sprite, Vector2 playerPosition, SpriteEffects flip)

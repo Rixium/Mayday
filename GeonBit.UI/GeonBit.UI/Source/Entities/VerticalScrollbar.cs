@@ -222,5 +222,37 @@ namespace GeonBit.UI.Entities
         {
             Value = _value - MouseInput.MouseWheelChange * GetStepSize();
         }
+
+        /// <summary>
+        /// Scrolls immediately to the end of the scroll bar contents.
+        /// </summary>
+        public void ScrollToEnd()
+        {
+            Value = GetLastChild().GetActualDestRect().Bottom;
+
+        }
+
+        private Entity GetLastChild()
+        {
+            Entity lastChild = null;
+            
+            foreach (var child in Parent._children)
+            {
+                // skip self
+                if (child == this) continue;
+
+                // skip internals
+                if (child._hiddenInternalEntity) continue;
+
+                // get current child bottom
+                int bottom = child.GetActualDestRect().Bottom;
+
+                // calc new max value
+                if (lastChild == null || lastChild.GetActualDestRect().Bottom < bottom)
+                    lastChild = child;
+            }
+
+            return lastChild;
+        }
     }
 }

@@ -74,7 +74,7 @@ namespace Mayday.Game.Screens
 
         public override void Awake()
         {
-            UserInterface = new GameScreenUserInterface();
+            UserInterface = new GameScreenUserInterface(this, _networkManager);
             
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D), () => Move(2), InputEventType.Held);
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.A), () => Move(-2), InputEventType.Held);
@@ -98,6 +98,9 @@ namespace Mayday.Game.Screens
 
         private void Jump()
         {
+            var inter = (GameScreenUserInterface) UserInterface;
+            if (inter.TextInput.IsFocused) return;
+            
             var jumpPacket = new JumpPacket
             {
                 SteamId = _myPlayer.SteamId
@@ -117,6 +120,9 @@ namespace Mayday.Game.Screens
 
         private void Move(int x)
         {
+            var inter = (GameScreenUserInterface) UserInterface;
+            if (inter.TextInput.IsFocused) return;
+
             var player = _players[SteamClient.SteamId];
 
             if (player.XDirection != x)
@@ -163,6 +169,8 @@ namespace Mayday.Game.Screens
         /// </summary>
         public override void Draw()
         {
+            UserInterface?.Draw();
+            
             GraphicsUtils.Instance.SpriteBatch.GraphicsDevice.Clear(BackgroundColor);
 
             GraphicsUtils.Instance.Begin(true, _camera.GetMatrix());
@@ -172,7 +180,7 @@ namespace Mayday.Game.Screens
 
             GraphicsUtils.Instance.End();
             
-            UserInterface?.Draw();
+            UserInterface?.AfterDraw();
         }
 
         public override void Finish()
@@ -181,8 +189,9 @@ namespace Mayday.Game.Screens
 
         public override void Update()
         {
+            base.Update();
+            
             _networkManager?.Update();
-            UserInterface?.Update();
             
             foreach(var player in _players)
                 player.Value.Update();
@@ -300,7 +309,17 @@ namespace Mayday.Game.Screens
             {
                 var jumpPacket = (JumpPacket) received;
                 _players[jumpPacket.SteamId].Jump();
+            } else if (received.GetType() == typeof(ChatMessagePacket))
+            {
+                AddMessageToChat((ChatMessagePacket) received);
             }
+        }
+
+        private void AddMessageToChat(ChatMessagePacket received)
+        {
+            _players.TryGetValue(received.SteamId, out var selectedPlayer);
+            if (selectedPlayer == null) return;
+            selectedPlayer.AddChat(received.Message);
         }
 
         private async void SendMap()
@@ -403,6 +422,9 @@ namespace Mayday.Game.Screens
             {
                 var jumpPacket = (JumpPacket) received;
                 _players[jumpPacket.SteamId].Jump();
+            } else if (received.GetType() == typeof(ChatMessagePacket))
+            {
+                AddMessageToChat((ChatMessagePacket) received);
             }
         }
 
@@ -410,6 +432,8 @@ namespace Mayday.Game.Screens
         {
             
         }
+
+        public void AddChat(ChatMessagePacket chatMessage) => AddMessageToChat(chatMessage);
     }
 
 }
