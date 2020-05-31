@@ -54,7 +54,13 @@ namespace Mayday.Game.Graphics
             NextFrame();
         }
 
-        public void StopAnimation() => Animating = false;
+        public void StopAnimation()
+        {
+            Animating = false;
+            _frameNumber = 0;
+            _currentFrameTime = 0;
+        }
+
         private void NextFrame()
         {
             _frameNumber++;
