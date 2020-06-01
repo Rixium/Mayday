@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Graphics;
@@ -17,10 +18,6 @@ namespace Mayday.Game.Gameplay.Entities
         public int LegsId { get; set; } = 1;
         public int ArmsId { get; set; } = 1;
 
-        public IAnimator HeadAnimator { get; set; }
-        public IAnimator BodyAnimator { get; set; }
-        public IAnimator LegsAnimator { get; set; }
-
         public int XDirection { get; set; }
 
         public int FacingDirection { get; set; } = 1;
@@ -28,35 +25,21 @@ namespace Mayday.Game.Gameplay.Entities
 
         public Vector2 Position => new Vector2(X, Y);
 
-        private IList<IComponent> _components = new List<IComponent>();
+        private readonly IList<IComponent> _components = new List<IComponent>();
 
         public void Update()
         {
-            HeadAnimator?.Update();
-            BodyAnimator?.Update();
-            LegsAnimator?.Update();
-            //
-            // if (oldX != X)
-            // {
-            //     HeadAnimator?.SetAnimation("Walk");
-            //     BodyAnimator?.SetAnimation("Walk");
-            //     LegsAnimator?.SetAnimation("Walk");
-            // }
-            // else
-            // {
-            //     HeadAnimator?.StopAnimation();
-            //     BodyAnimator?.StopAnimation();
-            //     LegsAnimator?.StopAnimation();
-            // }
-
             foreach (var component in _components)
                 component.Update();
         }
 
+        public T GetComponent<T>() where T : IComponent => 
+            (T) _components.FirstOrDefault(component => component.GetType() == typeof(T));
+
         public Rectangle GetBounds() =>
             new Rectangle(X + 18, Y + 18,
-                LegsAnimator.Current.SourceRectangle.Value.Width - 17 - 18,
-                LegsAnimator.Current.SourceRectangle.Value.Height - 19);
+                42 - 17 - 18,
+                33 - 19);
 
         public IComponent AddComponent(IComponent component)
         {

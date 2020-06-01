@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -20,9 +21,12 @@ namespace Mayday.Game.Graphics.Renderers
 
         public void DrawPlayer(IPlayer player)
         {
-            var headSprite = player.HeadAnimator?.Current;
-            var bodySprite = player.BodyAnimator?.Current;
-            var legSprite = player.LegsAnimator?.Current;
+            var playerAnimationComponent = player.GetComponent<PlayerAnimationComponent>();
+            
+            var headSprite = playerAnimationComponent.HeadAnimator?.Current;
+            var bodySprite = playerAnimationComponent.BodyAnimator?.Current;
+            var legSprite = playerAnimationComponent.LegsAnimator?.Current;
+            
             var playerPosition = player.Position;
             var flip = player.FacingDirection < 0;
             

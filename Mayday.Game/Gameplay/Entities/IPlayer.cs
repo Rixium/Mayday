@@ -14,11 +14,6 @@ namespace Mayday.Game.Gameplay.Entities
         int HeadId { get; set; }
         int BodyId { get; set; }
         int LegsId { get; set; }
-        int ArmsId { get; set; }
-
-        IAnimator HeadAnimator { get; set; }
-        IAnimator BodyAnimator { get; set; }
-        IAnimator LegsAnimator { get; set; }
         
         int XDirection { get; set; }
         int FacingDirection { get; set; }
@@ -28,6 +23,7 @@ namespace Mayday.Game.Gameplay.Entities
         void Update();
 
         IComponent AddComponent(IComponent component);
+        T GetComponent<T>() where T : IComponent;
         
         Rectangle GetBounds();
         

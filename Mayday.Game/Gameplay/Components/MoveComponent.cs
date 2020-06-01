@@ -9,42 +9,39 @@ namespace Mayday.Game.Gameplay.Components
     {
         public IPlayer Player { get; set; }
 
-        private float _yVelocity;
-        private float _xVelocity;
+        public float YVelocity { get; private set; }
+        public float XVelocity { get; private set; }
 
         public void Update()
         {
             var gameWorld = Player.GameWorld;
-
-            var oldX = Player.X;
-
-            _yVelocity = MathHelper.Lerp(-11, _yVelocity, 0.99f);
+            
+            YVelocity = MathHelper.Lerp(-11, YVelocity, 0.99f);
 
             var tileBelow = gameWorld.GetTileAt(Player.GetBounds().X / gameWorld.TileSize,
-                (Player.GetBounds().Bottom - (int) _yVelocity) / gameWorld.TileSize);
-            
-            if (tileBelow == null || 
+                (Player.GetBounds().Bottom - (int) YVelocity) / gameWorld.TileSize);
+
+            if (tileBelow == null ||
                 tileBelow.TileType != TileType.NONE)
-                _yVelocity = 0;
+                YVelocity = 0;
 
             tileBelow = gameWorld.GetTileAt(Player.GetBounds().X / gameWorld.TileSize,
                 (Player.GetBounds().Bottom) / gameWorld.TileSize + 1);
 
             if (Player.XDirection != 0 && tileBelow != null && tileBelow.TileType != TileType.NONE)
-                _xVelocity += Player.XDirection * 5 * Time.DeltaTime;
-            else if(tileBelow == null || tileBelow.TileType != TileType.NONE)
-                _xVelocity = MathHelper.Lerp(0, _xVelocity, 0.5f);
+                XVelocity += Player.XDirection * 5 * Time.DeltaTime;
+            else if (tileBelow == null || tileBelow.TileType != TileType.NONE)
+                XVelocity = MathHelper.Lerp(0, XVelocity, 0.5f);
             else
-                _xVelocity = MathHelper.Lerp(0, _xVelocity, 0.99999f);
+                XVelocity = MathHelper.Lerp(0, XVelocity, 0.99999f);
 
-            _xVelocity = MathHelper.Clamp(_xVelocity, -2, 2);
+            XVelocity = MathHelper.Clamp(XVelocity, -2, 2);
 
-            var xMove = (int)_xVelocity;
+            var xMove = (int) XVelocity;
 
-            var yMove = (int)-_yVelocity;
+            var yMove = (int) -YVelocity;
 
             gameWorld.Move(Player, xMove, yMove);
         }
-        
     }
 }
