@@ -16,7 +16,6 @@ namespace Mayday.Game.Gameplay.Entities
         public int HeadId { get; set; } = 1;
         public int BodyId { get; set; } = 1;
         public int LegsId { get; set; } = 1;
-        public int ArmsId { get; set; } = 1;
 
         public int XDirection { get; set; }
 
