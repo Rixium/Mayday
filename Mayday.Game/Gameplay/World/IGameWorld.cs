@@ -10,8 +10,8 @@ namespace Mayday.Game.Gameplay.World
         int Height { get; set; }
 
         void Move(IPlayer player,
-            int xMove,
-            int yMove);
+            float xMove,
+            float yMove);
         Tile GetTileAt(int tileX, int tileY);
     }
 }

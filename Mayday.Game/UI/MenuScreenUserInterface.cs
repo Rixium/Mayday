@@ -402,8 +402,8 @@ namespace Mayday.Game.UI
             {
                 SteamId = SteamClient.SteamId,
                 HeadId = player.HeadId,
-                X = player.X,
-                Y = player.Y
+                X = (int) player.X,
+                Y = (int) player.Y
             };
 
             var package = _packager.Package(newPlayerPacket);

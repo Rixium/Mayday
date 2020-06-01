@@ -41,8 +41,9 @@ namespace Mayday.Game.Graphics.Renderers
 
                     var tileSet = ContentChest.Tiles[(int) tile.TileType];
 
-                    IndexConvert(tileIndex, tileSet.Width / worldTileSize, out var x, out var y);
-                    var rect = new Rectangle(x * worldTileSize, y * worldTileSize, worldTileSize, worldTileSize);
+                    var sheetTileSize = 16;
+                    IndexConvert(tileIndex, tileSet.Width / sheetTileSize, out var x, out var y);
+                    var rect = new Rectangle(x * sheetTileSize, y * sheetTileSize, sheetTileSize, sheetTileSize);
 
                     GraphicsUtils.Instance.SpriteBatch.Draw(tileSet,
                         new Rectangle(tile.RenderX, tile.RenderY, tile.TileSize, tile.TileSize),

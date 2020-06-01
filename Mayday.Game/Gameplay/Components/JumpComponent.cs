@@ -5,7 +5,8 @@ namespace Mayday.Game.Gameplay.Components
     public class JumpComponent : IComponent
     {
         public IPlayer Player { get; set; }
-        private bool _jumping;
+
+        public bool Jumping { get; set; }
         
         public void Update()
         {
@@ -17,16 +18,16 @@ namespace Mayday.Game.Gameplay.Components
             // We need to know when the player hits the floor, so that we can
             // set jumping back to false.
             var gravityComponent = Player.GetComponent<GravityComponent>();
-            gravityComponent.HitFloor += () => _jumping = false;
+            gravityComponent.HitFloor += () => Jumping = false;
         }
 
         public void Jump()
         {
-            if (_jumping) return;
+            if (Jumping) return;
             
             var moveComponent = Player.GetComponent<MoveComponent>();
             
-            _jumping = true;
+            Jumping = true;
             moveComponent.YVelocity = 4;
         }
 

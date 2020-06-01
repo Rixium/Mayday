@@ -17,9 +17,9 @@ namespace Mayday.Game.Gameplay.World
 
         public int Height { get; set; }
 
-        public void Move(IPlayer player, int xMove, int yMove)
+        public void Move(IPlayer player, float xMove, float yMove)
         {
-            player.X += xMove;
+            player.X += (int) xMove;
 
             var bounds = player.GetBounds();
 
@@ -74,7 +74,7 @@ namespace Mayday.Game.Gameplay.World
                 }
             }
 
-            player.Y += yMove;
+            player.Y += (int) yMove;
             bounds = player.GetBounds();
 
             tileStartX = (bounds.Left / TileSize) - 1;

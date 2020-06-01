@@ -15,15 +15,21 @@ namespace Mayday.Game.Gameplay.Components
         public void Update()
         {
             var moveComponent = Player.GetComponent<MoveComponent>();
+            var jumpComponent = Player.GetComponent<JumpComponent>();
 
-            var speed = (float) (1.0 / Math.Pow(5, Math.Abs(moveComponent.XVelocity)));
-            speed = MathHelper.Clamp(speed, 0.05f, 0.2f);
+            var speed = (float) (1.0 / Math.Pow(2, Math.Abs(moveComponent.XVelocity)));
+            speed = MathHelper.Clamp(speed, 0, 0.2f);
             
             HeadAnimator?.Update(speed);
             BodyAnimator?.Update(speed);
             LegsAnimator?.Update(speed);
 
-            if (Math.Abs(moveComponent.XVelocity) > 0.01f)
+            if (jumpComponent.Jumping)
+            {
+                HeadAnimator?.SetAnimation("Jump");
+                BodyAnimator?.SetAnimation("Jump");
+                LegsAnimator?.SetAnimation("Jump");
+            } else if (Math.Abs(moveComponent.XVelocity) > 0.01f)
             {
                 HeadAnimator?.SetAnimation("Walk");
                 BodyAnimator?.SetAnimation("Walk");
@@ -31,9 +37,9 @@ namespace Mayday.Game.Gameplay.Components
             }
             else
             {
-                HeadAnimator?.StopAnimation();
-                BodyAnimator?.StopAnimation();
-                LegsAnimator?.StopAnimation();
+                HeadAnimator?.SetAnimation("Idle");
+                BodyAnimator?.SetAnimation("Idle");
+                LegsAnimator?.SetAnimation("Idle");
             }
         }
 

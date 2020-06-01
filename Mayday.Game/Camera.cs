@@ -41,8 +41,10 @@ namespace Mayday.Game {
             
             var dir = ToGo - Position;
             dir.Normalize();
+            var moveVector = Vector2.Lerp(Position, ToGo,0.1f);
 
-            _position = Vector2.Lerp(Position, ToGo,0.1f);
+            _position.X = (int) moveVector.X;
+            _position.Y = (int) moveVector.Y;
             
             _position.X = MathHelper.Clamp(_position.X, _minX, _maxX);
             _position.Y = MathHelper.Clamp(_position.Y, _minY, _maxY);

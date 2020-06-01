@@ -2,7 +2,6 @@
 using System.Linq;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.World;
-using Mayday.Game.Graphics;
 using Microsoft.Xna.Framework;
 
 namespace Mayday.Game.Gameplay.Entities

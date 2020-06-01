@@ -36,7 +36,7 @@ namespace Mayday.Game.Screens
         private readonly INetworkMessagePackager _messagePackager;
         
         private IGameWorld _gameWorld;
-        private readonly Camera _camera = new Camera();
+        public Camera Camera { get; } = new Camera();
 
         private Dictionary<ulong, IPlayer> _players;
         private IPlayer _myPlayer;
@@ -83,6 +83,7 @@ namespace Mayday.Game.Screens
             player.AddComponent(playerAnimationComponent);
             player.AddComponent(new GravityComponent());
             player.AddComponent(new JumpComponent());
+            player.AddComponent(new BlockBreakerComponent(_gameWorld, Camera, _networkManager));
                 
             _players = new Dictionary<ulong, IPlayer> {
             {
@@ -103,7 +104,7 @@ namespace Mayday.Game.Screens
             YetiGame.InputManager.RegisterInputEvent("MoveRight", () => Move(0), InputEventType.Released);
             YetiGame.InputManager.RegisterInputEvent("MoveLeft", () => Move(0), InputEventType.Released);
 
-            _camera.SetEntity(_myPlayer);
+            Camera.SetEntity(_myPlayer);
         }
 
         private void Jump()
@@ -143,8 +144,8 @@ namespace Mayday.Game.Screens
                 
                 var position = new PlayerPositionPacket
                 {
-                    X = player.X,
-                    Y = player.Y,
+                    X = (int) player.X,
+                    Y = (int) player.Y,
                     SteamId = SteamClient.SteamId
                 };
 
@@ -176,9 +177,9 @@ namespace Mayday.Game.Screens
             
             GraphicsUtils.Instance.SpriteBatch.GraphicsDevice.Clear(BackgroundColor);
 
-            GraphicsUtils.Instance.Begin(true, _camera.GetMatrix());
+            GraphicsUtils.Instance.Begin(true, Camera.GetMatrix());
 
-            _worldRenderer.Draw(_gameWorld, _camera);
+            _worldRenderer.Draw(_gameWorld, Camera);
             _playerRenderer.DrawPlayers(_players);
 
             GraphicsUtils.Instance.End();
@@ -199,56 +200,7 @@ namespace Mayday.Game.Screens
             foreach(var player in _players)
                 player.Value.Update();
             
-            if (MouseState.CurrentState.LeftButton == ButtonState.Pressed)
-            {
-                var mousePosition = MouseState.Bounds(_camera.GetMatrix());
-                var mouseTileX = mousePosition.X / _gameWorld.TileSize;
-                var mouseTileY = mousePosition.Y / _gameWorld.TileSize;
-                if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > _gameWorld.Width - 1 ||
-                    mouseTileY > _gameWorld.Height - 1) return;
-                var tile = _gameWorld.Tiles[mouseTileX, mouseTileY];
-                
-                var oldType = tile.TileType;
-                tile.TileType = TileType.GROUND;
-
-                if (oldType != tile.TileType)
-                {
-                    SendTileChangePacket(tile);
-                }
-                
-            } else if (MouseState.CurrentState.RightButton == ButtonState.Pressed)
-            {
-                var mousePosition = MouseState.Bounds(_camera.GetMatrix());
-                var mouseTileX = mousePosition.X / _gameWorld.TileSize;
-                var mouseTileY = mousePosition.Y / _gameWorld.TileSize;
-                if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > _gameWorld.Width - 1 ||
-                    mouseTileY > _gameWorld.Height - 1) return;
-                var tile = _gameWorld.Tiles[mouseTileX, mouseTileY];
-
-                var oldType = tile.TileType;
-                tile.TileType = TileType.NONE;
-
-                if (oldType != tile.TileType)
-                {
-                    SendTileChangePacket(tile);
-                }
-            }
-            
-            _camera.Update();
-        }
-
-        private void SendTileChangePacket(Tile tile)
-        {
-            var tileChangePacket = new TileTypePacket()
-            {
-                X = tile.X,
-                Y = tile.Y,
-                TileType = tile.TileType
-            };
-
-            var package = _messagePackager.Package(tileChangePacket);
-            
-            _networkManager.SendMessage(package);
+            Camera.Update();
         }
 
         public void OnNewConnection(Connection connection, ConnectionInfo info)

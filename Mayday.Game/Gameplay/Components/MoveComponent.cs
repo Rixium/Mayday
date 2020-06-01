@@ -23,9 +23,12 @@ namespace Mayday.Game.Gameplay.Components
             
             XVelocity = MathHelper.Clamp(XVelocity, -1.5f, 1.5f);
 
-            var xMove = (int) XVelocity;
+            if (Math.Abs(XVelocity) < 0.1f)
+                XVelocity = 0;
 
-            var yMove = (int) -YVelocity;
+            var xMove =  XVelocity;
+
+            var yMove = -YVelocity;
 
             gameWorld.Move(Player, xMove, yMove);
         }

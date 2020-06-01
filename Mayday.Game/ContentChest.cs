@@ -89,7 +89,9 @@ namespace Mayday.Game
                     sprites.Add(sprite);
                 }
                 
-                spriteSheet.Animations.Add(frameTag.Name, new Animation(sprites));
+                spriteSheet.Animations.Add(frameTag.Name, new Animation(new List<ISprite>(sprites)));
+                
+                sprites.Clear();
             }
 
             var properties = typeof(ContentChest).GetProperties();
