@@ -53,12 +53,24 @@ namespace Mayday.Game.Gameplay.WorldMakers
                 }
             }
 
+            var poo = 0;
             for (var i = 0; i < WorldWidth; i++)
             {
+                poo = 0;
                 for (var j = (int)(WorldHeight / 2.0f); j < WorldHeight; j++)
                 {
-                    tiles[i, j].TileType = TileType.GROUND;
-                    bmp.SetPixel(i, j, Color.Brown);
+                    poo++;
+                    if (poo > 3)
+                    {
+                        tiles[i, j].TileType = TileType.STONE;
+                        bmp.SetPixel(i, j, Color.Gray);
+                    }
+                    else
+                    {
+                        tiles[i, j].TileType = TileType.GROUND;
+                        bmp.SetPixel(i, j, Color.Brown);
+                    }
+
                 }
             }
             

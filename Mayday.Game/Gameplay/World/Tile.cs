@@ -6,7 +6,7 @@ namespace Mayday.Game.Gameplay.World
     {
         NONE,
         GROUND,
-        COPPER
+        STONE
     }
     
     public enum WallType
