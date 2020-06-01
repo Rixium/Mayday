@@ -26,6 +26,7 @@ namespace Mayday.Game.Gameplay.World
         public int Y { get; set; }
         public TileType TileType { get; set; }
         public WallType WallType { get; set; }
+        public Vector2 RenderCenter => new Vector2(RenderX + TileSize / 2.0f, RenderY + TileSize / 2.0f);
 
         public Tile(TileType tileType, int x, int y)
         {

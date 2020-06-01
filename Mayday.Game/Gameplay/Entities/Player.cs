@@ -22,6 +22,8 @@ namespace Mayday.Game.Gameplay.Entities
         public IGameWorld GameWorld { get; set; }
 
         public Vector2 Position => new Vector2(X, Y);
+        public Vector2 Center => 
+            new Vector2(GetBounds().X + GetBounds().Width / 2.0f, GetBounds().Y + GetBounds().Height / 2.0f);
 
         private readonly IList<IComponent> _components = new List<IComponent>();
 
