@@ -82,6 +82,7 @@ namespace Mayday.Game.Screens
             player.AddComponent(new MoveComponent());
             player.AddComponent(playerAnimationComponent);
             player.AddComponent(new GravityComponent());
+            player.AddComponent(new JumpComponent());
                 
             _players = new Dictionary<ulong, IPlayer> {
             {
@@ -117,6 +118,9 @@ namespace Mayday.Game.Screens
 
             var package = _messagePackager.Package(jumpPacket);
             _networkManager.SendMessage(package);
+
+            var jumpComponent = _myPlayer.GetComponent<JumpComponent>();
+            jumpComponent.Jump();
         }
 
         private Tile GetSpawnPosition() =>

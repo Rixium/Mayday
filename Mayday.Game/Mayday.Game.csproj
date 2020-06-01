@@ -48,6 +48,7 @@
     <Compile Include="Game1.cs" />
     <Compile Include="Gameplay\Components\GravityComponent.cs" />
     <Compile Include="Gameplay\Components\IComponent.cs" />
+    <Compile Include="Gameplay\Components\JumpComponent.cs" />
     <Compile Include="Gameplay\Components\MoveComponent.cs" />
     <Compile Include="Gameplay\Components\PlayerAnimationComponent.cs" />
     <Compile Include="Gameplay\Entities\IPlayer.cs" />

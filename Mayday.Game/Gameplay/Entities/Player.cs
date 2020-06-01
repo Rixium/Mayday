@@ -44,6 +44,9 @@ namespace Mayday.Game.Gameplay.Entities
         {
             component.Player = this;
             _components.Add(component);
+            
+            component.OnAddedToPlayer();
+            
             return component;
         }
         

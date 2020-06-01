@@ -1,4 +1,6 @@
-﻿using Mayday.Game.Gameplay.Entities;
+﻿using System;
+using Mayday.Game.Gameplay.Components;
+using Mayday.Game.Gameplay.Entities;
 using Yetiface.Engine.Utils;
 
 namespace Mayday.Game.Gameplay.World
@@ -39,8 +41,9 @@ namespace Mayday.Game.Gameplay.World
                     if (!bounds.Intersects(tileBounds)) continue;
 
                     var canMoveUp = true;
-
-                    if (j >= tileEndY - 2)
+                    var moveComponent = player.GetComponent<MoveComponent>();
+                    
+                    if (j >= tileEndY - 2 && Math.Abs(moveComponent.YVelocity) < 0.01f)
                     {
                         for (var k = j - 1; k > j - 4; k--)
                         {

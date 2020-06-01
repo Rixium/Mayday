@@ -7,6 +7,6 @@ namespace Mayday.Game.Gameplay.Components
 
         IPlayer Player { get; set; }
         void Update();
-        
+        void OnAddedToPlayer();
     }
 }

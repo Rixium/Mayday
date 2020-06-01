@@ -33,5 +33,10 @@ namespace Mayday.Game.Gameplay.Components
                 LegsAnimator?.StopAnimation();
             }
         }
+
+        public void OnAddedToPlayer()
+        {
+            
+        }
     }
 }
