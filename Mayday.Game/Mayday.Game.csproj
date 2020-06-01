@@ -46,6 +46,7 @@
     <Compile Include="Camera.cs" />
     <Compile Include="ContentChest.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Gameplay\Components\GravityComponent.cs" />
     <Compile Include="Gameplay\Components\IComponent.cs" />
     <Compile Include="Gameplay\Components\MoveComponent.cs" />
     <Compile Include="Gameplay\Components\PlayerAnimationComponent.cs" />

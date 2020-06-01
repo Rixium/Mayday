@@ -72,7 +72,7 @@ namespace Mayday.Game.Screens
             player.Y = spawnTile.Y * _gameWorld.TileSize - 70;
             player.GameWorld = _gameWorld;
 
-            var playerAnimationComponent = new PlayerAnimationComponent()
+            var playerAnimationComponent = new PlayerAnimationComponent
             {
                 HeadAnimator = new Animator(ContentChest.Heads[player.HeadId].Animations),
                 BodyAnimator = new Animator(ContentChest.Bodies[player.BodyId].Animations),
@@ -81,6 +81,7 @@ namespace Mayday.Game.Screens
             
             player.AddComponent(new MoveComponent());
             player.AddComponent(playerAnimationComponent);
+            player.AddComponent(new GravityComponent());
                 
             _players = new Dictionary<ulong, IPlayer> {
             {
@@ -92,6 +93,7 @@ namespace Mayday.Game.Screens
 
         public override void Awake()
         {
+            BackgroundColor = new Color(47, 39, 54);
             UserInterface = new GameScreenUserInterface(this, _networkManager);
             
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D), () => Move(2), InputEventType.Held);
@@ -100,7 +102,6 @@ namespace Mayday.Game.Screens
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D), () => Move(0), InputEventType.Released);
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.A), () => Move(0), InputEventType.Released);
 
-            BackgroundColor = new Color(47, 39, 54);
             _camera.SetEntity(_myPlayer);
         }
 

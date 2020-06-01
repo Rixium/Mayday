@@ -9,23 +9,14 @@ namespace Mayday.Game.Gameplay.Components
     {
         public IPlayer Player { get; set; }
 
-        public float YVelocity { get; private set; }
+        public float YVelocity { get; set; }
         public float XVelocity { get; private set; }
 
         public void Update()
         {
             var gameWorld = Player.GameWorld;
             
-            YVelocity = MathHelper.Lerp(-11, YVelocity, 0.99f);
-
             var tileBelow = gameWorld.GetTileAt(Player.GetBounds().X / gameWorld.TileSize,
-                (Player.GetBounds().Bottom - (int) YVelocity) / gameWorld.TileSize);
-
-            if (tileBelow == null ||
-                tileBelow.TileType != TileType.NONE)
-                YVelocity = 0;
-
-            tileBelow = gameWorld.GetTileAt(Player.GetBounds().X / gameWorld.TileSize,
                 (Player.GetBounds().Bottom) / gameWorld.TileSize + 1);
 
             if (Player.XDirection != 0 && tileBelow != null && tileBelow.TileType != TileType.NONE)
