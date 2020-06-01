@@ -23,24 +23,24 @@ namespace Mayday.Game.Gameplay.Components
             HeadAnimator?.Update(speed);
             BodyAnimator?.Update(speed);
             LegsAnimator?.Update(speed);
-            //
-            // if (jumpComponent.Jumping)
-            // {
-            //     HeadAnimator?.SetAnimation("Jump");
-            //     BodyAnimator?.SetAnimation("Jump");
-            //     LegsAnimator?.SetAnimation("Jump");
-            // } else if (Math.Abs(moveComponent.XVelocity) > 0.01f)
-            // {
-            //     HeadAnimator?.SetAnimation("Walk");
-            //     BodyAnimator?.SetAnimation("Walk");
-            //     LegsAnimator?.SetAnimation("Walk");
-            // }
-            // else
-            // {
-            //     HeadAnimator?.SetAnimation("Idle");
-            //     BodyAnimator?.SetAnimation("Idle");
-            //     LegsAnimator?.SetAnimation("Idle");
-            // }
+            
+            if (jumpComponent.Jumping)
+            {
+                HeadAnimator?.SetAnimation("Jump");
+                BodyAnimator?.SetAnimation("Jump");
+                LegsAnimator?.SetAnimation("Jump");
+            } else if (Math.Abs(moveComponent.XVelocity) > 0.01f)
+            {
+                HeadAnimator?.SetAnimation("Walk");
+                BodyAnimator?.SetAnimation("Walk");
+                LegsAnimator?.SetAnimation("Walk");
+            }
+            else
+            {
+                HeadAnimator?.SetAnimation("Idle");
+                BodyAnimator?.SetAnimation("Idle");
+                LegsAnimator?.SetAnimation("Idle");
+            }
         }
 
         public void OnAddedToPlayer()
