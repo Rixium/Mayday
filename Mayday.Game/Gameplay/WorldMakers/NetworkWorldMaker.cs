@@ -70,7 +70,7 @@ namespace Mayday.Game.Gameplay.WorldMakers
             {
                 for (var j = 0; j < WorldHeight; j++)
                 {
-                    _tiles[i, j] = new Tile(TileType.NONE, i, j)
+                    _tiles[i, j] = new Tile(0, i, j)
                     {
                         GameWorld = world
                     };
@@ -93,8 +93,8 @@ namespace Mayday.Game.Gameplay.WorldMakers
             
             foreach (var tile in _tiles)
             {
-                Bitmap.SetPixel(tile.X, tile.Y, tile.TileType == TileType.NONE ? Color.Black :
-                    tile.TileType == TileType.GROUND ? Color.White : Color.Orange);
+                Bitmap.SetPixel(tile.X, tile.Y, tile.TileType == 0 ? Color.Black :
+                    tile.TileType == 1 ? Color.White : Color.Orange);
             }
 
             world.Tiles = _tiles;

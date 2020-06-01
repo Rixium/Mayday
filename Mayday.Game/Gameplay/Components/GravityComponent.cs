@@ -53,14 +53,14 @@ namespace Mayday.Game.Gameplay.Components
                 {
                     var tile = Player.GameWorld.GetTileAt(i,
                         (int) ((playerBounds.Top - yVelocity) / player.GameWorld.TileSize));
-                    if (tile == null || tile.TileType != TileType.NONE) return true;
+                    if (tile == null || tile.TileType != 0) return true;
                 }
             else if (yVelocity < 0) // Travelling Downwards
                 for (var i = tileStartX; i <= tileEndX; i++)
                 {
                     var tile = Player.GameWorld.GetTileAt(i,
                         (int) ((playerBounds.Bottom - yVelocity) / player.GameWorld.TileSize));
-                    if (tile != null && tile.TileType == TileType.NONE) continue;
+                    if (tile != null && tile.TileType == 0) continue;
                     HitFloor?.Invoke();
                     return true;
                 }

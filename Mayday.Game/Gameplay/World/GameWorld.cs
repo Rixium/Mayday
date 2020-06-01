@@ -34,7 +34,7 @@ namespace Mayday.Game.Gameplay.World
                 {
                     var tile = GetTileAt(i, j);
                     if (tile == null) continue;
-                    if (tile.TileType == TileType.NONE) continue;
+                    if (tile.TileType == 0) continue;
 
                     var tileBounds = tile.GetBounds();
 
@@ -49,7 +49,7 @@ namespace Mayday.Game.Gameplay.World
                         {
                             var above = GetTileAt(i, k);
 
-                            if (above.TileType == TileType.NONE)
+                            if (above.TileType == 0)
                                 continue;
 
                             canMoveUp = false;
@@ -88,7 +88,7 @@ namespace Mayday.Game.Gameplay.World
                 {
                     var tile = GetTileAt(i, j);
                     if (tile == null) continue;
-                    if (tile.TileType == TileType.NONE) continue;
+                    if (tile.TileType == 0) continue;
 
                     var tileBounds = tile.GetBounds();
 

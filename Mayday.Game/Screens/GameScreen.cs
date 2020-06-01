@@ -10,7 +10,6 @@ using Mayday.Game.Graphics.Renderers;
 using Mayday.Game.Networking.Packagers;
 using Mayday.Game.Networking.Packets;
 using Mayday.Game.UI;
-using Microsoft.Xna.Framework.Input;
 using Steamworks;
 using Steamworks.Data;
 using Yetiface.Engine;
@@ -21,7 +20,6 @@ using Yetiface.Engine.Networking.Packagers;
 using Yetiface.Engine.Screens;
 using Yetiface.Engine.Utils;
 using Color = Microsoft.Xna.Framework.Color;
-using MouseState = Yetiface.Engine.Utils.MouseState;
 
 namespace Mayday.Game.Screens
 {
@@ -123,7 +121,7 @@ namespace Mayday.Game.Screens
 
         private Tile GetSpawnPosition() =>
             (from Tile tile in _gameWorld.Tiles
-                where tile.TileType == TileType.GROUND 
+                where tile.TileType == 1
                 select _gameWorld.Tiles[(int) (_gameWorld.Width / 2.0f), tile.Y])
             .FirstOrDefault();
 

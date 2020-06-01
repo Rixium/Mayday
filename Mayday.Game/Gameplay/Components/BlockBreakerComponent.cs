@@ -47,7 +47,7 @@ namespace Mayday.Game.Gameplay.Components
                 if (DistanceFromBlock(tile) > MaxDistanceToBreak) return;
 
                 var oldType = tile.TileType;
-                tile.TileType = TileType.GROUND;
+                tile.TileType = 1;
 
                 if (oldType != tile.TileType)
                 {
@@ -68,7 +68,7 @@ namespace Mayday.Game.Gameplay.Components
                 if (DistanceFromBlock(tile) > MaxDistanceToBreak) return;
 
                 var oldType = tile.TileType;
-                tile.TileType = TileType.NONE;
+                tile.TileType = 0;
 
                 if (oldType != tile.TileType)
                 {

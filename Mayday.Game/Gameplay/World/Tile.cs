@@ -2,18 +2,6 @@
 
 namespace Mayday.Game.Gameplay.World
 {
-    public enum TileType
-    {
-        NONE,
-        GROUND,
-        STONE
-    }
-    
-    public enum WallType
-    {
-        NONE,
-        GROUND
-    }
 
     public class Tile
     {
@@ -24,11 +12,11 @@ namespace Mayday.Game.Gameplay.World
 
         public int X { get; set; }
         public int Y { get; set; }
-        public TileType TileType { get; set; }
-        public WallType WallType { get; set; }
+        public int TileType { get; set; }
+        public int WallType { get; set; }
         public Vector2 RenderCenter => new Vector2(RenderX + TileSize / 2.0f, RenderY + TileSize / 2.0f);
 
-        public Tile(TileType tileType, int x, int y)
+        public Tile(int tileType, int x, int y)
         {
             TileType = tileType;
             X = x;

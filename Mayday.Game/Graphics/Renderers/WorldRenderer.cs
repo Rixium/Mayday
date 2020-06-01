@@ -35,11 +35,11 @@ namespace Mayday.Game.Graphics.Renderers
                     if (i < 0 || j < 0 || i > gameWorld.Width - 1 || j > gameWorld.Height - 1) continue;
                     var tile = gameWorld.Tiles[i, j];
 
-                    if (tile.TileType == TileType.NONE) continue;
+                    if (tile.TileType == 0) continue;
 
                     var tileIndex = GetTileBlobValue(gameWorld, tile, _tileBlobMap);
 
-                    var tileSet = ContentChest.Tiles[(int) tile.TileType];
+                    var tileSet = ContentChest.Tiles[tile.TileType];
 
                     var sheetTileSize = 16;
                     IndexConvert(tileIndex, tileSet.Width / sheetTileSize, out var x, out var y);
