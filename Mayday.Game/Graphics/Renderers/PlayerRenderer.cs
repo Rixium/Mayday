@@ -10,6 +10,8 @@ namespace Mayday.Game.Graphics.Renderers
     public class PlayerRenderer : IPlayerRenderer
     {
         
+        public Color OutlineColor { get; set;  }= new Color(24, 24, 24);
+        
         public void DrawPlayers(Dictionary<ulong, IPlayer> players)
         {
             foreach(var player in players)
@@ -35,25 +37,9 @@ namespace Mayday.Game.Graphics.Renderers
                 DrawSprite(bodySprite, playerPosition, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
             if(headSprite != null)
                 DrawSprite(headSprite, playerPosition, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
-
-
-            foreach (var message in player.GetChat())
-            {
-                ShowMessage(message);
-            }
-        }
-
-        private void ShowMessage(ChatMessage message)
-        {
-            var text = message.Text;
-            var textSize = GraphicsUtils.Instance.DebugFont.MeasureString(text);
-            var drawPos = new Vector2( message.X- (int)(textSize.X * 0.25f / 2), message.Y);
             
-            GraphicsUtils.Instance.DrawFilledRectangle((int) drawPos.X - 5, (int) drawPos.Y - 5, (int)( textSize.X * 0.25f) + 10, (int) (textSize.Y * 0.25f) + 10, Color.Black * 0.5f * message.Fade);
-            GraphicsUtils.Instance.SpriteBatch.DrawString(GraphicsUtils.Instance.DebugFont,
-                text, drawPos, Color.White * message.Fade, 0, Vector2.Zero, 0.25f, SpriteEffects.None, 0F);
         }
-
+        
         private void DrawSprite(ISprite sprite, Vector2 playerPosition, SpriteEffects flip, bool isBorder = false)
         {
             if (isBorder)
@@ -71,28 +57,28 @@ namespace Mayday.Game.Graphics.Renderers
             GraphicsUtils.Instance.SpriteBatch.Draw(
                 sprite.Texture,
                 current,
-                sprite.SourceRectangle, Color.Black,
+                sprite.SourceRectangle, OutlineColor,
                 0f, Vector2.Zero, 1f, flip, 0F);
             
             current = playerPosition - Vector2.UnitX;
             GraphicsUtils.Instance.SpriteBatch.Draw(
                 sprite.Texture,
                 current,
-                sprite.SourceRectangle, Color.Black,
+                sprite.SourceRectangle, OutlineColor,
                 0f, Vector2.Zero, 1f, flip, 0F);
             
             current = playerPosition + Vector2.UnitY;
             GraphicsUtils.Instance.SpriteBatch.Draw(
                 sprite.Texture,
                 current,
-                sprite.SourceRectangle, Color.Black,
+                sprite.SourceRectangle, OutlineColor,
                 0f, Vector2.Zero, 1f, flip, 0F);
             
             current = playerPosition - Vector2.UnitY;
             GraphicsUtils.Instance.SpriteBatch.Draw(
                 sprite.Texture,
                 current,
-                sprite.SourceRectangle, Color.Black,
+                sprite.SourceRectangle, OutlineColor,
                 0f, Vector2.Zero, 1f, flip, 0F);
         }
     }

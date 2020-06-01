@@ -1,5 +1,4 @@
 ﻿using Mayday.Game.Gameplay.Entities;
-using Microsoft.Xna.Framework;
 
 namespace Mayday.Game.Gameplay.World
 {
@@ -10,7 +9,7 @@ namespace Mayday.Game.Gameplay.World
         int Width { get; set; }
         int Height { get; set; }
 
-        void Move(Player player,
+        void Move(IPlayer player,
             int xMove,
             int yMove);
         Tile GetTileAt(int tileX, int tileY);

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Mayday.Game.Gameplay.Entities;
+using Microsoft.Xna.Framework;
 using Yetiface.Engine.Utils;
 
 namespace Mayday.Game {
@@ -14,6 +15,7 @@ namespace Mayday.Game {
         private readonly int _maxY;
 
         private int _zoom = 3;
+        private IPlayer _following;
 
         public Camera() {
             _position = Vector2.Zero;
@@ -33,6 +35,10 @@ namespace Mayday.Game {
 
         public void Update()
         {
+            if (_following != null)
+                Goto(new Vector2(_following.GetBounds().X + _following.GetBounds().Width / 2.0f,
+                    _following.GetBounds().Y + _following.GetBounds().Height / 2.0f));
+            
             var dir = ToGo - Position;
             dir.Normalize();
 
@@ -57,6 +63,10 @@ namespace Mayday.Game {
             return _transform;
         }
 
+        public void SetEntity(IPlayer myPlayer)
+        {
+            _following = myPlayer;
+        }
     }
 
 }

@@ -10,6 +10,8 @@ using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Gameplay.WorldMakers;
 using Mayday.Game.Gameplay.WorldMakers.Listeners;
+using Mayday.Game.Networking.Packagers;
+using Mayday.Game.Networking.Packets;
 using Mayday.Game.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -51,6 +53,7 @@ namespace Mayday.Game.UI
         
         private readonly SoundEffect _clickSound;
         private readonly SoundEffect _hoverSound;
+        private MaydayMessagePackager _packager;
 
         public MenuScreenUserInterface(INetworkManager networkManager, IScreenManager screenManager)
         {
@@ -133,6 +136,8 @@ namespace Mayday.Game.UI
                 }
                 num++;
             }
+            
+            _packager = new MaydayMessagePackager();
         }
 
         private void ConnectToLobby(string lobbyId)
@@ -257,10 +262,10 @@ namespace Mayday.Game.UI
             var button = _characterCreationPanel.AddChild(new Button("Start"));
             button.OnClick += (e) =>
             {
-                gameScreen.SetPlayer(new Player()
+                gameScreen.AddPlayer(new Player
                 {
                     HeadId = SelectedHair
-                });
+                }, true);
                 
                 _screenManager.AddScreen(gameScreen);
                 _screenManager.ChangeScreen(gameScreen.Name);
@@ -451,10 +456,21 @@ namespace Mayday.Game.UI
             var button = _characterCreationPanel.AddChild(new Button("Start"));
             button.OnClick += (e) =>
             {
-                gameScreen.SetPlayer(new Player()
+                var player = gameScreen.AddPlayer(new Player
                 {
                     HeadId = SelectedHair
-                });
+                }, true);
+
+                var newPlayerPacket = new NewPlayerPacket
+                {
+                    SteamId = SteamClient.SteamId,
+                    HeadId = player.HeadId,
+                    X = player.X,
+                    Y = player.Y
+                };
+
+                var package = _packager.Package(newPlayerPacket);
+                _networkManager.SendMessage(package);
                 
                 _screenManager.AddScreen(gameScreen);
                 _screenManager.ChangeScreen(gameScreen.Name);

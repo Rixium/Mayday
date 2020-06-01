@@ -15,7 +15,7 @@ namespace Mayday.Game.Gameplay.World
 
         public int Height { get; set; }
 
-        public void Move(Player player, int xMove, int yMove)
+        public void Move(IPlayer player, int xMove, int yMove)
         {
             player.X += xMove;
 

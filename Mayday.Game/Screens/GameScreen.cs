@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Graphics;
@@ -9,7 +10,6 @@ using Mayday.Game.Graphics.Renderers;
 using Mayday.Game.Networking.Packagers;
 using Mayday.Game.Networking.Packets;
 using Mayday.Game.UI;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Steamworks;
 using Steamworks.Data;
@@ -58,25 +58,32 @@ namespace Mayday.Game.Screens
             _gameWorld = gameWorld;
         }
         
-        public void SetPlayer(IPlayer player)
+        public IPlayer AddPlayer(IPlayer player, bool isClients = false)
         {
-            _myPlayer = player;
-            
+            if (isClients)
+            {
+                _myPlayer = player;
+                player.SteamId = SteamClient.SteamId;
+            }
+
             var spawnTile = GetSpawnPosition();
             
-            _myPlayer.SteamId = SteamClient.SteamId;
-            _myPlayer.X = spawnTile.X * _gameWorld.TileSize;
-            _myPlayer.Y = spawnTile.Y * _gameWorld.TileSize - 70;
-            _myPlayer.GameWorld = _gameWorld;
+            player.X = spawnTile.X * _gameWorld.TileSize;
+            player.Y = spawnTile.Y * _gameWorld.TileSize - 70;
+            player.GameWorld = _gameWorld;
             
-            _myPlayer.HeadAnimator = new Animator(ContentChest.Heads[_myPlayer.HeadId].Animations);
-            _myPlayer.BodyAnimator = new Animator(ContentChest.Bodies[_myPlayer.BodyId].Animations);
-            _myPlayer.LegsAnimator = new Animator(ContentChest.Legs[_myPlayer.LegsId].Animations);
-            
+            player.HeadAnimator = new Animator(ContentChest.Heads[_myPlayer.HeadId].Animations);
+            player.BodyAnimator = new Animator(ContentChest.Bodies[_myPlayer.BodyId].Animations);
+            player.LegsAnimator = new Animator(ContentChest.Legs[_myPlayer.LegsId].Animations);
+
+            player.AddComponent(new MoveComponent());
+                
             _players = new Dictionary<ulong, IPlayer> {
             {
                 player.SteamId, player
             }};
+
+            return player;
         }
 
         public override void Awake()
@@ -90,7 +97,7 @@ namespace Mayday.Game.Screens
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.A), () => Move(0), InputEventType.Released);
 
             BackgroundColor = new Color(47, 39, 54);
-            _camera.Position = (new Vector2(_myPlayer.X, _myPlayer.Y - 100));
+            _camera.SetEntity(_myPlayer);
         }
 
         private void Jump()
@@ -105,8 +112,6 @@ namespace Mayday.Game.Screens
 
             var package = _messagePackager.Package(jumpPacket);
             _networkManager.SendMessage(package);
-            
-            _myPlayer.Jump();
         }
 
         private Tile GetSpawnPosition() =>
@@ -192,11 +197,6 @@ namespace Mayday.Game.Screens
             
             foreach(var player in _players)
                 player.Value.Update();
-
-            _camera.Goto(
-                new Vector2(
-                    _myPlayer.GetBounds().X + _myPlayer.GetBounds().Width / 2.0f, 
-                    _myPlayer.GetBounds().Y + _myPlayer.GetBounds().Height / 2.0f));
             
             if (MouseState.CurrentState.LeftButton == ButtonState.Pressed)
             {
@@ -304,19 +304,34 @@ namespace Mayday.Game.Screens
                 _gameWorld.Tiles[typePacket.X, typePacket.Y].TileType = typePacket.TileType;
             } else if (received.GetType() == typeof(JumpPacket))
             {
-                var jumpPacket = (JumpPacket) received;
-                _players[jumpPacket.SteamId].Jump();
+                
             } else if (received.GetType() == typeof(ChatMessagePacket))
             {
                 AddMessageToChat((ChatMessagePacket) received);
+            } else if (received.GetType() == typeof(NewPlayerPacket))
+            {
+                var newPlayer = (NewPlayerPacket) received;
+                
+                var player = new Player()
+                {
+                    SteamId = newPlayer.SteamId,
+                    X = newPlayer.X,
+                    Y = newPlayer.Y,
+                    GameWorld = _gameWorld,
+                    HeadId = newPlayer.HeadId
+                };
+
+                player.HeadAnimator = new Animator(ContentChest.Heads[player.HeadId].Animations);
+                player.BodyAnimator = new Animator(ContentChest.Bodies[player.BodyId].Animations);
+                player.LegsAnimator = new Animator(ContentChest.Legs[player.LegsId].Animations);
+                    
+                _players.Add(player.SteamId, player);
             }
         }
 
         private void AddMessageToChat(ChatMessagePacket received)
         {
             _players.TryGetValue(received.SteamId, out var selectedPlayer);
-            if (selectedPlayer == null) return;
-            selectedPlayer.AddChat(received.Message);
         }
 
         private async void SendMap()
@@ -417,11 +432,28 @@ namespace Mayday.Game.Screens
                 _gameWorld.Tiles[typePacket.X, typePacket.Y].TileType = typePacket.TileType;
             } else if (received.GetType() == typeof(JumpPacket))
             {
-                var jumpPacket = (JumpPacket) received;
-                _players[jumpPacket.SteamId].Jump();
+                
             } else if (received.GetType() == typeof(ChatMessagePacket))
             {
                 AddMessageToChat((ChatMessagePacket) received);
+            } else if (received.GetType() == typeof(NewPlayerPacket))
+            {
+                var newPlayer = (NewPlayerPacket) received;
+                
+                var player = new Player()
+                {
+                    SteamId = newPlayer.SteamId,
+                    X = newPlayer.X,
+                    Y = newPlayer.Y,
+                    GameWorld = _gameWorld,
+                    HeadId = newPlayer.HeadId
+                };
+
+                player.HeadAnimator = new Animator(ContentChest.Heads[player.HeadId].Animations);
+                player.BodyAnimator = new Animator(ContentChest.Bodies[player.BodyId].Animations);
+                player.LegsAnimator = new Animator(ContentChest.Legs[player.LegsId].Animations);
+                    
+                _players.Add(player.SteamId, player);
             }
         }
 

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Graphics;
 using Microsoft.Xna.Framework;
@@ -26,9 +25,10 @@ namespace Mayday.Game.Gameplay.Entities
         IGameWorld GameWorld { get; set; }
 
         void Update();
-        void Jump();
+
+        IComponent AddComponent(IComponent component);
+        
         Rectangle GetBounds();
-        void AddChat(string receivedMessage);
-        IList<ChatMessage> GetChat();
+        
     }
 }

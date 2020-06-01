@@ -46,6 +46,8 @@
     <Compile Include="Camera.cs" />
     <Compile Include="ContentChest.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Gameplay\Components\IComponent.cs" />
+    <Compile Include="Gameplay\Components\MoveComponent.cs" />
     <Compile Include="Gameplay\Entities\IPlayer.cs" />
     <Compile Include="Gameplay\Entities\Player.cs" />
     <Compile Include="Gameplay\WorldMakers\IWorldMaker.cs" />
@@ -66,6 +68,7 @@
     <Compile Include="Networking\Packets\ChatMessagePacket.cs" />
     <Compile Include="Networking\Packets\JumpPacket.cs" />
     <Compile Include="Networking\Packets\MapRequestPacket.cs" />
+    <Compile Include="Networking\Packets\NewPlayerPacket.cs" />
     <Compile Include="Networking\Packets\PlayerMovePacket.cs" />
     <Compile Include="Networking\Packets\PlayerPositionPacket.cs" />
     <Compile Include="Networking\Packets\TileTypePacket.cs" />
