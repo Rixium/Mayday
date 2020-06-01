@@ -26,6 +26,8 @@ namespace Mayday.Game.Gameplay.Entities
         public int FacingDirection { get; set; } = 1;
         public IGameWorld GameWorld { get; set; }
 
+        public Vector2 Position => new Vector2(X, Y);
+
         private IList<IComponent> _components = new List<IComponent>();
 
         public void Update()

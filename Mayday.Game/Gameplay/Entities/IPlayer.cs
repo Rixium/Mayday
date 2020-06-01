@@ -23,6 +23,7 @@ namespace Mayday.Game.Gameplay.Entities
         int XDirection { get; set; }
         int FacingDirection { get; set; }
         IGameWorld GameWorld { get; set; }
+        Vector2 Position { get; }
 
         void Update();
 

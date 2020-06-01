@@ -23,7 +23,7 @@ namespace Mayday.Game.Graphics.Renderers
             var headSprite = player.HeadAnimator?.Current;
             var bodySprite = player.BodyAnimator?.Current;
             var legSprite = player.LegsAnimator?.Current;
-            var playerPosition = new Vector2(player.X, player.Y);
+            var playerPosition = player.Position;
             var flip = player.FacingDirection < 0;
             
             if(bodySprite != null)
