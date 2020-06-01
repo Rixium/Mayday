@@ -1,20 +1,20 @@
 ﻿[
   {
-    "bindingName":"interact",
-    "key":32,
-    
+    "bindingName":"MoveLeft",
+    "key":65,
     "gamePadIndex":0,
-    "gamePadButton":4096,
-    
-    "mouseButton": "Left"
+    "gamePadAxis":"-X"
   },
   {
-    "bindingName":"secret",
-    "key":80,
-    
+    "bindingName":"MoveRight",
+    "key":68,
     "gamePadIndex":0,
-    "gamePadButton":8192,
-    
-    "mouseButton": "Right"
+    "gamePadAxis":"+X"
+  },
+  {
+    "bindingName":"Jump",
+    "key":32,
+    "gamePadIndex":0,
+    "gamePadButton":4096
   }
 ]

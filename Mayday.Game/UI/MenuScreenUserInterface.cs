@@ -233,43 +233,13 @@ namespace Mayday.Game.UI
             
             _characterCreationPanel = _rootPanel.AddChild(new Panel(new Vector2(400, 0.5f)));       
             
-            SelectedHair = 1;
-            
-            var selectedHairSprite = ContentChest.Heads[SelectedHair].Animations.FirstOrDefault().Value
-                .Sprites[0];
-
-            var image = _characterCreationPanel.AddChild(new Image(selectedHairSprite.Texture,
-                new Vector2(100, 100), ImageDrawMode.Stretch, Anchor.TopCenter)
+            gameScreen.AddPlayer(new Player
             {
-                SourceRectangle = selectedHairSprite.SourceRectangle
-            });
+                HeadId = 1
+            }, true);
             
-            var buttonHair = _characterCreationPanel.AddChild(new Button("Hair Select"));
-            
-            buttonHair.OnClick += (e) =>
-            {
-                SelectedHair++;
-                if (SelectedHair >= ContentChest.Heads.Count + 1)
-                    SelectedHair = 1;
-
-                selectedHairSprite = ContentChest.Heads[SelectedHair].Animations.FirstOrDefault().Value
-                    .Sprites[0];
-
-                ((Image) image).Texture = selectedHairSprite.Texture;
-                ((Image) image).SourceRectangle = selectedHairSprite.SourceRectangle;
-            };
-                
-            var button = _characterCreationPanel.AddChild(new Button("Start"));
-            button.OnClick += (e) =>
-            {
-                gameScreen.AddPlayer(new Player
-                {
-                    HeadId = SelectedHair
-                }, true);
-                
-                _screenManager.AddScreen(gameScreen);
-                _screenManager.ChangeScreen(gameScreen.Name);
-            };
+            _screenManager.AddScreen(gameScreen);
+            _screenManager.ChangeScreen(gameScreen.Name);
         }
 
         private async Task<IGameWorld> CreateWorld()
@@ -422,63 +392,27 @@ namespace Mayday.Game.UI
             var gameScreen = new GameScreen(_networkManager);
             
             gameScreen.SetWorld(world);
-
-            _rootPanel.RemoveChild(creatingWorldPanel);
             
-            _characterCreationPanel = _rootPanel.AddChild(new Panel(new Vector2(400, 0.5f)));       
-            
-            SelectedHair = 1;
-            
-            var selectedHairSprite = ContentChest.Heads[SelectedHair].Animations.FirstOrDefault().Value
-                .Sprites[0];
-
-            var image = _characterCreationPanel.AddChild(new Image(selectedHairSprite.Texture, 
-                new Vector2(100, 100))
+            var player = gameScreen.AddPlayer(new Player
             {
-                SourceRectangle = selectedHairSprite.SourceRectangle
-            });
-            
-            var buttonHair = _characterCreationPanel.AddChild(new Button("Hair Select"));
-            
-            buttonHair.OnClick += (e) =>
+                HeadId = 1
+            }, true);
+
+            var newPlayerPacket = new NewPlayerPacket
             {
-                SelectedHair++;
-                if (SelectedHair > ContentChest.Heads.Count + 1)
-                    SelectedHair = 1;
-
-                selectedHairSprite = ContentChest.Heads[SelectedHair].Animations.FirstOrDefault().Value
-                    .Sprites[0];
-
-                ((Image) image).Texture = selectedHairSprite.Texture;
-                ((Image) image).SourceRectangle = selectedHairSprite.SourceRectangle;
+                SteamId = SteamClient.SteamId,
+                HeadId = player.HeadId,
+                X = player.X,
+                Y = player.Y
             };
-                
-            var button = _characterCreationPanel.AddChild(new Button("Start"));
-            button.OnClick += (e) =>
-            {
-                var player = gameScreen.AddPlayer(new Player
-                {
-                    HeadId = SelectedHair
-                }, true);
 
-                var newPlayerPacket = new NewPlayerPacket
-                {
-                    SteamId = SteamClient.SteamId,
-                    HeadId = player.HeadId,
-                    X = player.X,
-                    Y = player.Y
-                };
-
-                var package = _packager.Package(newPlayerPacket);
-                _networkManager.SendMessage(package);
+            var package = _packager.Package(newPlayerPacket);
+            _networkManager.SendMessage(package);
                 
-                _screenManager.AddScreen(gameScreen);
-                _screenManager.ChangeScreen(gameScreen.Name);
-            };
+            _screenManager.AddScreen(gameScreen);
+            _screenManager.ChangeScreen(gameScreen.Name);
         }
-
-        public int SelectedHair { get; set; }
-
+        
         private void SetupSettingsPanel()
         {
             _settingsPanel = _rootPanel.AddChild(new Panel(new Vector2(400, -1), PanelSkin.None)

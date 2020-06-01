@@ -14,6 +14,7 @@ namespace Yetiface.Engine.Inputs
         
         public int GamePadIndex { get; set; }
         public Buttons GamePadButton { get; set; }
+        public string GamePadAxis { get; set; }
         
         public MouseButton MouseButton { get; set; } = MouseButton.None;
     }
@@ -49,7 +50,7 @@ namespace Yetiface.Engine.Inputs
                 if (binding.Key != Keys.None) 
                     AddBinding(binding.BindingName, new KeyInputBinding(binding.Key));
                 if (binding.GamePadButton != 0)
-                    AddBinding(binding.BindingName, new GamePadInputBinding(binding.GamePadIndex, binding.GamePadButton));
+                    AddBinding(binding.BindingName, new GamePadInputBinding(binding.GamePadIndex, binding.GamePadButton, binding.GamePadAxis));
                 if(binding.MouseButton != MouseButton.None)
                     AddBinding(binding.BindingName, new MouseButtonBinding(binding.MouseButton));
             }
@@ -69,7 +70,7 @@ namespace Yetiface.Engine.Inputs
 
         public void RegisterInputEvent(string bindingName, Action callback, InputEventType eventType = InputEventType.Pressed)
         {
-            foreach (var binding in InputBindings.Where(binding => binding.Name.Equals(bindingName)))
+            foreach (var binding in InputBindings.Where(binding => binding.Name != null && binding.Name.Equals(bindingName)))
                 RegisterInputEvent(binding, callback, eventType);
         }
 

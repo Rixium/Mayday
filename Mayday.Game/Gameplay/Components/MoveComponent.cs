@@ -21,7 +21,7 @@ namespace Mayday.Game.Gameplay.Components
             else
                 XVelocity += -Math.Sign(XVelocity) * 5 * Time.DeltaTime;
             
-            XVelocity = MathHelper.Clamp(XVelocity, -2, 2);
+            XVelocity = MathHelper.Clamp(XVelocity, -1.5f, 1.5f);
 
             var xMove = (int) XVelocity;
 

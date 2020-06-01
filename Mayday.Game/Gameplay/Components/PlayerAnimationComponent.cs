@@ -1,6 +1,7 @@
 ﻿using System;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace Mayday.Game.Gameplay.Components
 {
@@ -15,10 +16,12 @@ namespace Mayday.Game.Gameplay.Components
         {
             var moveComponent = Player.GetComponent<MoveComponent>();
 
-            HeadAnimator?.Update();
-            BodyAnimator?.Update();
-            LegsAnimator?.Update();
-
+            var speed = (float) (1.0 / Math.Pow(5, Math.Abs(moveComponent.XVelocity)));
+            speed = MathHelper.Clamp(speed, 0.05f, 0.2f);
+            
+            HeadAnimator?.Update(speed);
+            BodyAnimator?.Update(speed);
+            LegsAnimator?.Update(speed);
 
             if (Math.Abs(moveComponent.XVelocity) > 0.01f)
             {

@@ -97,20 +97,17 @@ namespace Mayday.Game.Screens
             BackgroundColor = new Color(47, 39, 54);
             UserInterface = new GameScreenUserInterface(this, _networkManager);
             
-            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D), () => Move(2), InputEventType.Held);
-            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.A), () => Move(-2), InputEventType.Held);
-            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.Space), Jump);
-            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D), () => Move(0), InputEventType.Released);
-            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.A), () => Move(0), InputEventType.Released);
+            YetiGame.InputManager.RegisterInputEvent("MoveRight", () => Move(2), InputEventType.Held);
+            YetiGame.InputManager.RegisterInputEvent("MoveLeft", () => Move(-2), InputEventType.Held);
+            YetiGame.InputManager.RegisterInputEvent("Jump", Jump);
+            YetiGame.InputManager.RegisterInputEvent("MoveRight", () => Move(0), InputEventType.Released);
+            YetiGame.InputManager.RegisterInputEvent("MoveLeft", () => Move(0), InputEventType.Released);
 
             _camera.SetEntity(_myPlayer);
         }
 
         private void Jump()
         {
-            var inter = (GameScreenUserInterface) UserInterface;
-            if (inter.TextInput.IsFocused) return;
-            
             var jumpPacket = new JumpPacket
             {
                 SteamId = _myPlayer.SteamId
@@ -131,9 +128,6 @@ namespace Mayday.Game.Screens
 
         private void Move(int x)
         {
-            var inter = (GameScreenUserInterface) UserInterface;
-            if (inter.TextInput.IsFocused) return;
-
             var player = _players[SteamClient.SteamId];
 
             if (player.XDirection != x)
@@ -147,20 +141,18 @@ namespace Mayday.Game.Screens
                 var movePackage = _messagePackager.Package(data);
                 _networkManager.SendMessage(movePackage);
                 
-                if (x == 0)
+                var position = new PlayerPositionPacket
                 {
-                    var position = new PlayerPositionPacket
-                    {
-                        X = player.X,
-                        Y = player.Y,
-                        SteamId = SteamClient.SteamId
-                    };
+                    X = player.X,
+                    Y = player.Y,
+                    SteamId = SteamClient.SteamId
+                };
 
-                    var package = _messagePackager.Package(position);
+                var package = _messagePackager.Package(position);
                     
-                    _networkManager.SendMessage(package);
-                }
-                else
+                _networkManager.SendMessage(package);
+                
+                if (x != 0)
                 {
                     player.FacingDirection = x;
                 }
@@ -309,7 +301,10 @@ namespace Mayday.Game.Screens
                 _gameWorld.Tiles[typePacket.X, typePacket.Y].TileType = typePacket.TileType;
             } else if (received.GetType() == typeof(JumpPacket))
             {
-                
+                var jump = (JumpPacket) received;
+                var player = _players[jump.SteamId];
+                var jumpComponent = player.GetComponent<JumpComponent>();
+                jumpComponent.Jump();
             } else if (received.GetType() == typeof(ChatMessagePacket))
             {
                 AddMessageToChat((ChatMessagePacket) received);
@@ -425,7 +420,10 @@ namespace Mayday.Game.Screens
                 _gameWorld.Tiles[typePacket.X, typePacket.Y].TileType = typePacket.TileType;
             } else if (received.GetType() == typeof(JumpPacket))
             {
-                
+                var jump = (JumpPacket) received;
+                var player = _players[jump.SteamId];
+                var jumpComponent = player.GetComponent<JumpComponent>();
+                jumpComponent.Jump();
             } else if (received.GetType() == typeof(ChatMessagePacket))
             {
                 AddMessageToChat((ChatMessagePacket) received);

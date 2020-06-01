@@ -11,7 +11,7 @@ namespace Mayday.Game.Gameplay.Components
     {
         public IPlayer Player { get; set; }
 
-        public float Gravity { get; set; } = 3.7f;
+        public float Gravity { get; set; } = 9.8f;
 
         public float Gravity2 => Gravity * 2;
         public Action HitFloor { get; set; }
@@ -45,8 +45,8 @@ namespace Mayday.Game.Gameplay.Components
         {
             var playerBounds = Player.GetBounds();
 
-            var tileStartX = playerBounds.Left / player.GameWorld.TileSize;
-            var tileEndX = playerBounds.Right / player.GameWorld.TileSize;
+            var tileStartX = (playerBounds.Left + 1) / player.GameWorld.TileSize;
+            var tileEndX = (playerBounds.Right - 1) / player.GameWorld.TileSize;
             
             if(yVelocity > 0) // Travelling Upwards
                 for (var i = tileStartX; i <= tileEndX; i++)

@@ -43,13 +43,13 @@ namespace Mayday.Game.Graphics
             _currentFrameTime = 0;
         }
 
-        public void Update()
+        public void Update(float frameSpeed)
         {
             if (!Animating) return;
             
             _currentFrameTime += Time.DeltaTime;
 
-            if (_currentFrameTime < ActiveAnimation.FrameDuration) return;
+            if (_currentFrameTime < frameSpeed) return;
 
             NextFrame();
         }
