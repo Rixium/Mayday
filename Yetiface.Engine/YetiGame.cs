@@ -19,6 +19,7 @@ namespace Yetiface.Engine
         
         public string GameName = "YetiGame";
         public string GameVersion => $"{Major}.{Minor}.{Revision}";
+        public double UpdateTimeAccumulator { get; set; }
 
         protected int Major = 0;
         protected int Minor = 1;
@@ -29,6 +30,7 @@ namespace Yetiface.Engine
         public IScreenManager ScreenManager { get; set; }
 
         private FrameRate _frameRate;
+        private bool _isDrawingOrUpdating;
 
         public YetiGame(string gameName)
         {
@@ -89,6 +91,9 @@ namespace Yetiface.Engine
 
         protected override void Update(GameTime gameTime)
         {
+            if (!ShouldUpdate(ref gameTime))
+                return;
+
             if(ShouldQuit) Exit();
             
             // Update all of our util stuff !DO FIRST ALWAYS
@@ -103,12 +108,28 @@ namespace Yetiface.Engine
             base.Update(gameTime);
         }
 
+        private bool ShouldUpdate(ref GameTime gameTime)
+        {            
+            UpdateTimeAccumulator += gameTime.ElapsedGameTime.TotalSeconds;
+            
+            if (UpdateTimeAccumulator < 1 / 60f)
+            {
+                return false;
+            }
+            gameTime = new GameTime(gameTime.TotalGameTime, new TimeSpan(10000000 / 60));
+            UpdateTimeAccumulator -= 1 / 60f;
+            UpdateTimeAccumulator = Math.Min(UpdateTimeAccumulator, 1 / 60f);
+
+            return true;
+        }
+
         protected override void Draw(GameTime gameTime)
         {
             _frameRate.Update((float) gameTime.ElapsedGameTime.TotalSeconds);
             SetWindowTitle($"{Math.Round(_frameRate.AverageFramesPerSecond)} fps");
             ScreenManager.Draw();
             base.Draw(gameTime);
+            _isDrawingOrUpdating = false;
         }
 
         public static void Quit()

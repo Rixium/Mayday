@@ -28,9 +28,9 @@ namespace Mayday.Game.Gameplay.World
             var tileStartY = (bounds.Top / TileSize) - 1;
             var tileEndY = (bounds.Bottom / TileSize) + 1;
 
-            for (var i = tileStartX; i <= tileEndX; i++)
+            for (var i = (int) tileStartX; i <= tileEndX; i++)
             {
-                for (var j = tileStartY; j <= tileEndY; j++)
+                for (var j = (int) tileStartY; j <= tileEndY; j++)
                 {
                     var tile = TryGetTile(i, j);
                     if (tile == null) continue;
@@ -82,9 +82,9 @@ namespace Mayday.Game.Gameplay.World
             tileStartY = (bounds.Top / TileSize) - 1;
             tileEndY = (bounds.Bottom / TileSize) + 1;
 
-            for (var i = tileStartX; i <= tileEndX; i++)
+            for (var i = (int) tileStartX; i <= tileEndX; i++)
             {
-                for (var j = tileStartY; j <= tileEndY; j++)
+                for (var j = (int) tileStartY; j <= tileEndY; j++)
                 {
                     var tile = TryGetTile(i, j);
                     if (tile == null) continue;

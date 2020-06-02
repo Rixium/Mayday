@@ -3,6 +3,7 @@ using System.Linq;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.World;
 using Microsoft.Xna.Framework;
+using Yetiface.Engine.Utils;
 
 namespace Mayday.Game.Gameplay.Entities
 {
@@ -36,8 +37,8 @@ namespace Mayday.Game.Gameplay.Entities
         public T GetComponent<T>() where T : IComponent => 
             (T) _components.FirstOrDefault(component => component.GetType() == typeof(T));
 
-        public Rectangle GetBounds() =>
-            new Rectangle(X + 18, Y + 18,
+        public RectangleF GetBounds() =>
+            new RectangleF(X + 18, Y + 18,
                 42 - 17 - 18,
                 33 - 19);
 

@@ -5,8 +5,7 @@ namespace Yetiface.Engine.Utils
 {
     public static class RectangleExtensions
     {
-        
-        public static Vector2 GetIntersectionDepth(this Rectangle rectA, Rectangle rectB)
+        public static Vector2 GetIntersectionDepth(this RectangleF rectA, RectangleF rectB)
         {
             // Calculate half sizes.
             float halfWidthA = rectA.Width / 2.0f;

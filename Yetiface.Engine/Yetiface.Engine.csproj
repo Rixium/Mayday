@@ -73,6 +73,7 @@
     <Compile Include="Utils\ArrayUtils.cs" />
     <Compile Include="Utils\FrameRate.cs" />
     <Compile Include="Utils\RectangleExtensions.cs" />
+    <Compile Include="Utils\RectangleF.cs" />
     <Compile Include="YetiGame.cs" />
     <Compile Include="Graphics\ISprite.cs" />
     <Compile Include="Graphics\Sprite.cs" />

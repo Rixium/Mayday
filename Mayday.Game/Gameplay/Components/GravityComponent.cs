@@ -48,14 +48,14 @@ namespace Mayday.Game.Gameplay.Components
             var tileEndX = (playerBounds.Right - 1) / player.GameWorld.TileSize;
             
             if(yVelocity > 0) // Travelling Upwards
-                for (var i = tileStartX; i <= tileEndX; i++)
+                for (var i = (int) tileStartX; i <= tileEndX; i++)
                 {
                     var tile = Player.GameWorld.TryGetTile(i,
                         (int) ((playerBounds.Top - yVelocity) / player.GameWorld.TileSize));
                     if (tile == null || tile.TileType != 0) return true;
                 }
             else if (yVelocity < 0) // Travelling Downwards
-                for (var i = tileStartX; i <= tileEndX; i++)
+                for (var i = (int) tileStartX; i <= tileEndX; i++)
                 {
                     var tile = Player.GameWorld.TryGetTile(i,
                         (int) ((playerBounds.Bottom - yVelocity) / player.GameWorld.TileSize));

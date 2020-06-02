@@ -8,7 +8,7 @@ namespace Yetiface.Engine.Utils
         /// <summary>
         /// Get the time passed since last frame.
         /// </summary>
-        public static float DeltaTime { get; set; }
+        public static float DeltaTime => (float) GameTime.ElapsedGameTime.TotalSeconds;
         
         /// <summary>
         /// The time scale for delta time.
@@ -21,7 +21,6 @@ namespace Yetiface.Engine.Utils
         public static void Update(GameTime gameTime)
         {
             GameTime = gameTime;
-            DeltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds * TimeScale;
         }
         
     }

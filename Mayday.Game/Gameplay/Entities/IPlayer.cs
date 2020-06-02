@@ -1,6 +1,7 @@
 ﻿using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.World;
 using Microsoft.Xna.Framework;
+using Yetiface.Engine.Utils;
 
 namespace Mayday.Game.Gameplay.Entities
 {
@@ -25,7 +26,7 @@ namespace Mayday.Game.Gameplay.Entities
         IComponent AddComponent(IComponent component);
         T GetComponent<T>() where T : IComponent;
         
-        Rectangle GetBounds();
+        RectangleF GetBounds();
         
     }
 }

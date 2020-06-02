@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Yetiface.Engine.Utils;
 
 namespace Mayday.Game.Gameplay.World
 {
@@ -24,7 +25,7 @@ namespace Mayday.Game.Gameplay.World
             Y = y;
         }
         
-        public Rectangle GetBounds() => new Rectangle(RenderX, RenderY, TileSize, TileSize);
+        public RectangleF GetBounds() => new RectangleF(RenderX, RenderY, TileSize, TileSize);
 
     }
 }
