@@ -32,7 +32,7 @@ namespace Mayday.Game.Gameplay.World
             {
                 for (var j = tileStartY; j <= tileEndY; j++)
                 {
-                    var tile = GetTileAt(i, j);
+                    var tile = TryGetTile(i, j);
                     if (tile == null) continue;
                     if (tile.TileType == 0) continue;
 
@@ -47,7 +47,7 @@ namespace Mayday.Game.Gameplay.World
                     {
                         for (var k = j - 1; k > j - 4; k--)
                         {
-                            var above = GetTileAt(i, k);
+                            var above = TryGetTile(i, k);
 
                             if (above.TileType == 0)
                                 continue;
@@ -86,7 +86,7 @@ namespace Mayday.Game.Gameplay.World
             {
                 for (var j = tileStartY; j <= tileEndY; j++)
                 {
-                    var tile = GetTileAt(i, j);
+                    var tile = TryGetTile(i, j);
                     if (tile == null) continue;
                     if (tile.TileType == 0) continue;
 
@@ -101,10 +101,12 @@ namespace Mayday.Game.Gameplay.World
             }
         }
 
-        public Tile GetTileAt(int x, int y)
+        public Tile TryGetTile(int tileX, int tileY)
         {
-            if (x < 0 || y < 0 || x >= Width || y >= Height) return null;
-            return Tiles[x, y];
+            if (tileX < 0 || tileY < 0) return null;
+            if (tileX > Width - 1 || tileY > Height - 1) return null;
+            return Tiles[tileX, tileY];
         }
+        
     }
 }

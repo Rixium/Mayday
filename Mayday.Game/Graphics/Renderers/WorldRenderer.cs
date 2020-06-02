@@ -42,7 +42,9 @@ namespace Mayday.Game.Graphics.Renderers
                     var tileSet = ContentChest.Tiles[tile.TileType];
 
                     var sheetTileSize = 16;
-                    IndexConvert(tileIndex, tileSet.Width / sheetTileSize, out var x, out var y);
+                    
+                    ArrayUtils.IndexConvert(tileIndex, tileSet.Width / sheetTileSize, out var x, out var y);
+                    
                     var rect = new Rectangle(x * sheetTileSize, y * sheetTileSize, sheetTileSize, sheetTileSize);
 
                     GraphicsUtils.Instance.SpriteBatch.Draw(tileSet,
@@ -52,7 +54,6 @@ namespace Mayday.Game.Graphics.Renderers
             }
         }
         
-        
         // Gets the blob value from a given tile blob map for a given tile.
         private static int GetTileBlobValue(IGameWorld gameWorld, Tile tile, Dictionary<int, int> tileBlobMap)
         {
@@ -60,14 +61,14 @@ namespace Mayday.Game.Graphics.Renderers
             var y = tile.Y;
             byte bitSum = 0;
 
-            var n = TryGetTile(gameWorld, x, y - 1);
-            var e = TryGetTile(gameWorld, x + 1, y);
-            var s = TryGetTile(gameWorld, x, y + 1);
-            var w = TryGetTile(gameWorld, x - 1, y);
-            var nw = TryGetTile(gameWorld, x - 1, y - 1);
-            var ne = TryGetTile(gameWorld, x + 1, y - 1);
-            var se = TryGetTile(gameWorld, x + 1, y + 1);
-            var sw = TryGetTile(gameWorld, x - 1, y + 1);
+            var n = gameWorld.TryGetTile(x, y - 1);
+            var e = gameWorld.TryGetTile(x + 1, y);
+            var s =gameWorld.TryGetTile(x, y + 1);
+            var w = gameWorld.TryGetTile( x - 1, y);
+            var nw = gameWorld.TryGetTile( x - 1, y - 1);
+            var ne = gameWorld.TryGetTile( x + 1, y - 1);
+            var se = gameWorld.TryGetTile( x + 1, y + 1);
+            var sw = gameWorld.TryGetTile(x - 1, y + 1);
 
             TileTypeMatch(ref bitSum, tile, n, 1);
             TileTypeMatch(ref bitSum, tile, e, 4);
@@ -81,22 +82,6 @@ namespace Mayday.Game.Graphics.Renderers
             tileBlobMap.TryGetValue(bitSum, out var tileNumber);
             
             return tileNumber;
-        }
-
-        // Attempt to get a given tile index x, y from a given game world.
-        // Returns null if it doesn't exist. (Out of bounds).
-        private static Tile TryGetTile(IGameWorld gameWorld, int tileX, int tileY)
-        {
-            if (tileX < 0 || tileY < 0) return null;
-            if (tileX > gameWorld.Width - 1 || tileY > gameWorld.Height - 1) return null;
-            return gameWorld.Tiles[tileX, tileY];
-        }
-
-        // Convert a 1D array index to a 2D array index.
-        private static void IndexConvert(int index, int arrayWidth, out int x, out int y)
-        {
-            x = index % arrayWidth;
-            y = index / arrayWidth;
         }
 
         // Checks if a tile matches another tile, or any of the assure not tiles passed.

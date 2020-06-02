@@ -12,6 +12,6 @@ namespace Mayday.Game.Gameplay.World
         void Move(IPlayer player,
             float xMove,
             float yMove);
-        Tile GetTileAt(int tileX, int tileY);
+        Tile TryGetTile(int tileX, int tileY);
     }
 }

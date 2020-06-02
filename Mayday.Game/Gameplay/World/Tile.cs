@@ -2,7 +2,6 @@
 
 namespace Mayday.Game.Gameplay.World
 {
-
     public class Tile
     {
         public IGameWorld GameWorld { get; set; }
@@ -13,7 +12,9 @@ namespace Mayday.Game.Gameplay.World
         public int X { get; set; }
         public int Y { get; set; }
         public int TileType { get; set; }
+
         public int WallType { get; set; }
+
         public Vector2 RenderCenter => new Vector2(RenderX + TileSize / 2.0f, RenderY + TileSize / 2.0f);
 
         public Tile(int tileType, int x, int y)
@@ -22,12 +23,8 @@ namespace Mayday.Game.Gameplay.World
             X = x;
             Y = y;
         }
-
-        public bool ContainsX(int boundsX,int width) => RenderX >= boundsX && RenderX + TileSize >= boundsX + width;
-
-        public bool ContainsY(int boundsY, int height) => RenderY >= boundsY && RenderY + TileSize >= boundsY + height;
-
-        public Rectangle GetBounds() => new Rectangle(RenderX, RenderY, TileSize, TileSize);
         
+        public Rectangle GetBounds() => new Rectangle(RenderX, RenderY, TileSize, TileSize);
+
     }
 }
