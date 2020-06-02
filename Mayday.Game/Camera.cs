@@ -22,22 +22,32 @@ namespace Mayday.Game {
             _position = Vector2.Zero;
             _maxX = 2000000;
             _maxY = 1000000;
+            
         }
 
         public void Goto(Vector2 pos)
         {
-            _minX = (int) (Window.Center.X / _zoom);
-            _minY = (int) (Window.Center.Y / _zoom);
-
-            _position = pos;
+            ToGo = pos;
         }
+
+        public Vector2 ToGo { get; set; }
 
         public void Update()
         {
+            _minX = (int) (Window.Center.X / _zoom);
+            _minY = (int) (Window.Center.Y / _zoom);
+            
             if (_following != null)
                 Goto(new Vector2(_following.GetBounds().X + _following.GetBounds().Width / 2.0f,
                     _following.GetBounds().Y + _following.GetBounds().Height / 2.0f));
-
+            
+            var dir = ToGo - Position;
+            dir.Normalize();
+            var moveVector = Vector2.Lerp(Position, ToGo,0.05f);
+            
+            _position.X = moveVector.X;
+            _position.Y = moveVector.Y;
+            
             _position.X = MathHelper.Clamp(_position.X, _minX, _maxX);
             _position.Y = MathHelper.Clamp(_position.Y, _minY, _maxY);
         }
