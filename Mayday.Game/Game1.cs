@@ -40,9 +40,6 @@ namespace Mayday.Game
             MediaPlayer.Play(music);
             MediaPlayer.Volume = 0.1f;
 
-            IsFixedTimeStep = false;
-            Yetiface.Engine.Utils.Window.GraphicsDeviceManager.SynchronizeWithVerticalRetrace = false;
-            
             new ContentChest().Load(ContentManager);
         }
 

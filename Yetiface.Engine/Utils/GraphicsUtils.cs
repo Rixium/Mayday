@@ -39,7 +39,7 @@ namespace Yetiface.Engine.Utils
             if(useViewportMatrix)
                 SpriteBatch.Begin(
                     SpriteSortMode.Deferred, // Only render images when end has been called
-                    null,  // No blending
+                    BlendState.AlphaBlend,  // No blending
                     SamplerState.PointClamp, // Point clamp, so we get sexy pixel perfect resizing
                     null, // We don't care about this. Tbh, I don't even understand it.
                     null, // I don't even know what this it.

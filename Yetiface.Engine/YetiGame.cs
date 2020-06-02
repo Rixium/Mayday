@@ -35,7 +35,7 @@ namespace Yetiface.Engine
         public YetiGame(string gameName)
         {
             GameName = gameName;
-            
+
             Utils.Window.GraphicsDeviceManager = Utils.Window.CreateGraphicsDevice(this);
 
             Content.RootDirectory = "Content";
@@ -50,11 +50,18 @@ namespace Yetiface.Engine
             IsMouseVisible = false;
             
             SetWindowTitle();
+            UnlockFps();
             
             InputManager = new InputManager();
             InputManager.Initialize(File.ReadAllText("Config/inputBindings.json"));
 
             base.Initialize();
+        }
+
+        private void UnlockFps()
+        {
+            IsFixedTimeStep = false;
+            Utils.Window.GraphicsDeviceManager.SynchronizeWithVerticalRetrace = false;
         }
 
         private void SetWindowTitle(params string[] supplementaryText)

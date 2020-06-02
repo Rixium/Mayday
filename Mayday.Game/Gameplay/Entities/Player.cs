@@ -10,8 +10,8 @@ namespace Mayday.Game.Gameplay.Entities
     public class Player : IPlayer
     {
         public ulong SteamId { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
+        public float X { get; set; }
+        public float Y { get; set; }
 
         public int HeadId { get; set; } = 1;
         public int BodyId { get; set; } = 1;

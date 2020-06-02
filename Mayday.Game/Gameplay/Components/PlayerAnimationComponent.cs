@@ -17,8 +17,7 @@ namespace Mayday.Game.Gameplay.Components
             var moveComponent = Player.GetComponent<MoveComponent>();
             var jumpComponent = Player.GetComponent<JumpComponent>();
 
-            var speed = (float) (1.0 / Math.Pow(2, Math.Abs(moveComponent.XVelocity)));
-            speed = MathHelper.Clamp(speed, 0, 0.2f);
+            var speed = 0.1f;
             
             HeadAnimator?.Update(speed);
             BodyAnimator?.Update(speed);

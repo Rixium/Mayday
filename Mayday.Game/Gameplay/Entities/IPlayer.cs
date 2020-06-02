@@ -8,8 +8,8 @@ namespace Mayday.Game.Gameplay.Entities
     public interface IPlayer
     {
         ulong SteamId { get; set; }
-        int X { get; set; }
-        int Y { get; set; }
+        float X { get; set; }
+        float Y { get; set; }
 
         int HeadId { get; set; }
         int BodyId { get; set; }

@@ -19,7 +19,7 @@ namespace Mayday.Game.Gameplay.World
 
         public void Move(IPlayer player, float xMove, float yMove)
         {
-            player.X += (int) xMove;
+            player.X += xMove;
 
             var bounds = player.GetBounds();
 
@@ -68,13 +68,13 @@ namespace Mayday.Game.Gameplay.World
                     else
                     {
                         var depth = bounds.GetIntersectionDepth(tileBounds);
-                        player.X += (int) depth.X;
+                        player.X += depth.X;
                         bounds = player.GetBounds();
                     }
                 }
             }
 
-            player.Y += (int) yMove;
+            player.Y += yMove;
             bounds = player.GetBounds();
 
             tileStartX = (bounds.Left / TileSize) - 1;
@@ -95,7 +95,7 @@ namespace Mayday.Game.Gameplay.World
                     if (!bounds.Intersects(tileBounds)) continue;
 
                     var depth = bounds.GetIntersectionDepth(tileBounds);
-                    player.Y += (int) depth.Y;
+                    player.Y += depth.Y;
                     bounds = player.GetBounds();
                 }
             }

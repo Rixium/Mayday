@@ -17,8 +17,8 @@ namespace Mayday.Game.Gameplay.Components
         {
             // We need to know when the player hits the floor, so that we can
             // set jumping back to false.
-            var gravityComponent = Player.GetComponent<GravityComponent>();
-            gravityComponent.HitFloor += () => Jumping = false;
+            var moveComponent = Player.GetComponent<MoveComponent>();
+            moveComponent.HitFloor += () => Jumping = false;
         }
 
         public void Jump()

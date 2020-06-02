@@ -1,4 +1,5 @@
-﻿using Mayday.Game.Gameplay.Entities;
+﻿using System;
+using Mayday.Game.Gameplay.Entities;
 using Microsoft.Xna.Framework;
 using Yetiface.Engine.Utils;
 
@@ -28,24 +29,15 @@ namespace Mayday.Game {
             _minX = (int) (Window.Center.X / _zoom);
             _minY = (int) (Window.Center.Y / _zoom);
 
-            ToGo = pos;
+            _position = pos;
         }
-
-        public Vector2 ToGo { get; set; }
 
         public void Update()
         {
             if (_following != null)
                 Goto(new Vector2(_following.GetBounds().X + _following.GetBounds().Width / 2.0f,
                     _following.GetBounds().Y + _following.GetBounds().Height / 2.0f));
-            
-            var dir = ToGo - Position;
-            dir.Normalize();
-            var moveVector = Vector2.Lerp(Position, ToGo,0.1f);
 
-            _position.X = (int) moveVector.X;
-            _position.Y = (int) moveVector.Y;
-            
             _position.X = MathHelper.Clamp(_position.X, _minX, _maxX);
             _position.Y = MathHelper.Clamp(_position.Y, _minY, _maxY);
         }
@@ -56,14 +48,10 @@ namespace Mayday.Game {
             set => _position = value;
         }
 
-        public Matrix GetMatrix() {
-            _transform =
-                Matrix.CreateTranslation(new Vector3(-_position.X, -_position.Y, 0)) *
-                Matrix.CreateScale(_zoom, _zoom, 1) *
-                Matrix.CreateTranslation(new Vector3(Window.Center.X, Window.Center.Y, 0));
-
-            return _transform;
-        }
+        public Matrix GetMatrix() =>
+            Matrix.CreateTranslation(new Vector3(-_position.X, -_position.Y, 0)) *
+            Matrix.CreateScale(_zoom, _zoom, 1) *
+            Matrix.CreateTranslation(new Vector3(Window.Center.X, Window.Center.Y, 0));
 
         public void SetEntity(IPlayer myPlayer)
         {
