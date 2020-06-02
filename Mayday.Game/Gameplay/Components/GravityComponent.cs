@@ -1,6 +1,5 @@
 ﻿using System;
 using Mayday.Game.Gameplay.Entities;
-using Mayday.Game.Gameplay.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Yetiface.Engine.Utils;

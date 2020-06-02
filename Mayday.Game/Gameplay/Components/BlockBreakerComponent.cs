@@ -1,5 +1,4 @@
-﻿using System;
-using Mayday.Game.Gameplay.Entities;
+﻿using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Networking.Packagers;
 using Mayday.Game.Networking.Packets;
@@ -20,7 +19,7 @@ namespace Mayday.Game.Gameplay.Components
         public IPlayer Player { get; set; }
         public IGameWorld GameWorld { get; set; }
 
-        public int MaxDistanceToBreak { get; set; } = 30;
+        public int MaxDistanceToBreak { get; set; } = 40;
         
         public BlockBreakerComponent(IGameWorld gameWorld, Camera camera, INetworkManager networkManager)
         {
