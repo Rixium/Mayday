@@ -1,4 +1,5 @@
-﻿using Mayday.Game.Gameplay.Entities;
+﻿using System.Diagnostics;
+using Mayday.Game.Gameplay.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Yetiface.Engine.Utils;
@@ -14,11 +15,12 @@ namespace Mayday.Game.Gameplay.Components
         public void Update()
         {
             var moveComponent = Player.GetComponent<MoveComponent>();
+            var jumpComponent = Player.GetComponent<JumpComponent>();
 
-            var activeGravity = Gravity * 2;
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
-                activeGravity = Gravity;
+            var activeGravity = Gravity;
+            
+            if (!Keyboard.GetState().IsKeyDown(Keys.Space) && jumpComponent.Jumping)
+                 activeGravity = Gravity * 2;
 
             moveComponent.YVelocity -= activeGravity * Time.DeltaTime;
             

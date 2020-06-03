@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Mayday.Game.Gameplay.Data;
+using Microsoft.Xna.Framework;
 using Yetiface.Engine.Utils;
 
 namespace Mayday.Game.Gameplay.World
@@ -9,7 +10,6 @@ namespace Mayday.Game.Gameplay.World
         public int TileSize => GameWorld.TileSize;
         public int RenderX => X * TileSize;
         public int RenderY => Y * TileSize;
-
         public int X { get; set; }
         public int Y { get; set; }
 
@@ -29,6 +29,8 @@ namespace Mayday.Game.Gameplay.World
                 SetNeighboursBlobFlag();
             }
         }
+
+        public TileProperties TileProperties => ContentChest.TileProperties[_tileType];
 
         private void SetNeighboursBlobFlag()
         {
@@ -55,8 +57,7 @@ namespace Mayday.Game.Gameplay.World
             X = x;
             Y = y;
         }
-        
-        public RectangleF GetBounds() => new RectangleF(RenderX, RenderY, TileSize, TileSize);
 
+        public RectangleF GetBounds() => new RectangleF(RenderX, RenderY, TileSize, TileSize);
     }
 }

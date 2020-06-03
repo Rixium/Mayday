@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Mayday.Game.Gameplay.Data;
 using Mayday.Game.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
@@ -17,14 +19,41 @@ namespace Mayday.Game
     public class ContentChest
     {
         
+        public static Dictionary<int, TileProperties> TileProperties { get; set; } = new Dictionary<int, TileProperties>();
         public static Dictionary<int, SpriteSheet> Heads { get; set; } = new Dictionary<int, SpriteSheet>();
         public static Dictionary<int, SpriteSheet> Bodies { get; set; } = new Dictionary<int, SpriteSheet>();
         public static Dictionary<int, SpriteSheet> Legs { get; set; } = new Dictionary<int, SpriteSheet>();
         public static Dictionary<int, Texture2D> Tiles { get; set; } = new Dictionary<int, Texture2D>();
 
+        public static Dictionary<string, SoundEffect> SoundEffects { get; set; } =
+            new Dictionary<string, SoundEffect>();
+
         public void Load(ContentManager contentManager)
         {
             LoadImages(contentManager);
+            LoadTileProperties(contentManager);
+            LoadSoundEffects(contentManager);
+        }
+
+        private void LoadSoundEffects(ContentManager contentManager)
+        {
+            var directory = $"{contentManager.RootDirectory}\\Game\\Sounds";
+            var soundFiles = Directory.GetFiles(directory, "*.xnb", SearchOption.AllDirectories)
+                .Select(Path.GetFileNameWithoutExtension)
+                .Select(Path.GetFileName).ToArray();
+
+            foreach (var file in soundFiles)
+            {
+                SoundEffects.Add(file, contentManager.Load<SoundEffect>("Game\\Sounds\\" + file));
+            }
+        }
+
+        private void LoadTileProperties(ContentManager contentManager)
+        {
+            var tilePropertiesFile = $"{contentManager.RootDirectory}\\Data\\TileProperties.json";
+            var tilePropertiesData = File.ReadAllText(tilePropertiesFile);
+            
+            TileProperties = JsonConvert.DeserializeObject<Dictionary<int, TileProperties>>(tilePropertiesData);
         }
 
         private void LoadImages(ContentManager contentManager)

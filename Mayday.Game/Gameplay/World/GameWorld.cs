@@ -69,7 +69,7 @@ namespace Mayday.Game.Gameplay.World
                     {
                         var depth = bounds.GetIntersectionDepth(tileBounds);
                         player.X += depth.X;
-                        bounds = player.GetBounds();
+                        bounds = player.GetBounds(); 
                     }
                 }
             }

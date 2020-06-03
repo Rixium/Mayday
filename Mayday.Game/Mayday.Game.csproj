@@ -52,6 +52,7 @@
     <Compile Include="Gameplay\Components\JumpComponent.cs" />
     <Compile Include="Gameplay\Components\MoveComponent.cs" />
     <Compile Include="Gameplay\Components\PlayerAnimationComponent.cs" />
+    <Compile Include="Gameplay\Data\TileProperties.cs" />
     <Compile Include="Gameplay\Entities\IPlayer.cs" />
     <Compile Include="Gameplay\Entities\Player.cs" />
     <Compile Include="Gameplay\WorldMakers\IWorldMaker.cs" />
@@ -219,6 +220,9 @@
     </None>
     <None Include="app.manifest" />
     <None Include="packages.config" />
+    <Content Include="Content\Data\TileProperties.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Images\Arms_1.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

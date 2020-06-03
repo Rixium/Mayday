@@ -1,0 +1,12 @@
+﻿{
+  "1" : {
+    "Name": "Dirt",
+    "Mineable": true,
+    "MineSpeedModifier": 1
+  },
+  "2" : {
+    "Name": "Stone",
+    "Mineable": true,
+    "MineSpeedModifier": 2
+  }
+}

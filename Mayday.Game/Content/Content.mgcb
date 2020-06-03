@@ -13,6 +13,18 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Game/Sounds/breakTile.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Game/Sounds/breakTile.wav
+
+#begin Game/Sounds/startDig.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Game/Sounds/startDig.wav
+
 #begin Images/Arms_1.png
 /importer:TextureImporter
 /processor:TextureProcessor
