@@ -29,8 +29,7 @@ namespace Yetiface.Engine
         public static IInputManager InputManager;
         public IScreenManager ScreenManager { get; set; }
 
-        private FrameRate _frameRate;
-        private bool _isDrawingOrUpdating;
+        private readonly FrameRate _frameRate;
 
         public YetiGame(string gameName)
         {
@@ -136,7 +135,6 @@ namespace Yetiface.Engine
             SetWindowTitle($"{Math.Round(_frameRate.AverageFramesPerSecond)} fps");
             ScreenManager.Draw();
             base.Draw(gameTime);
-            _isDrawingOrUpdating = false;
         }
 
         public static void Quit()
