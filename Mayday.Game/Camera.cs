@@ -42,8 +42,10 @@ namespace Mayday.Game {
                     _following.GetBounds().Y + _following.GetBounds().Height / 2.0f));
             
             var dir = ToGo - Position;
+
             dir.Normalize();
-            var moveVector = Vector2.Lerp(Position, ToGo,0.05f);
+            
+            var moveVector = Vector2.Lerp(Position, ToGo, 1f);
             
             _position.X = moveVector.X;
             _position.Y = moveVector.Y;

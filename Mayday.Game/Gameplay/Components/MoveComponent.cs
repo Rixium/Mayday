@@ -27,9 +27,9 @@ namespace Mayday.Game.Gameplay.Components
             }
 
             XVelocity = MathHelper.Clamp(XVelocity, -1f, 1f);
+
+            CheckPlayerHit();
             
-            if (PlayerHit(Player, YVelocity))
-                YVelocity = 0;
             
             var xMove = XVelocity;
             var yMove = -YVelocity;
@@ -38,32 +38,34 @@ namespace Mayday.Game.Gameplay.Components
         }
 
 
-        private bool PlayerHit(IPlayer player, float yVelocity)
+        private void CheckPlayerHit()
         {
             var playerBounds = Player.GetBounds();
 
-            var tileStartX = (playerBounds.Left + 1) / player.GameWorld.TileSize;
-            var tileEndX = (playerBounds.Right - 1) / player.GameWorld.TileSize;
+            var tileStartX = (playerBounds.Left + 1) / Player.GameWorld.TileSize;
+            var tileEndX = (playerBounds.Right - 1) / Player.GameWorld.TileSize;
             
-            if(yVelocity > 0) // Travelling Upwards
+            if(YVelocity > 0) // Travelling Upwards
                 for (var i = (int) tileStartX; i <= tileEndX; i++)
                 {
                     var tile = Player.GameWorld.TryGetTile(i,
-                        (int) ((playerBounds.Top - yVelocity) / player.GameWorld.TileSize));
-                    if (tile == null || tile.TileType != 0) return true;
+                        (int) ((playerBounds.Top - YVelocity) / Player.GameWorld.TileSize));
+                    if (tile != null && tile.TileType == 0) 
+                        continue;
+                    
+                    YVelocity = 0;
+                    return;
                 }
-            else if (yVelocity < 0) // Travelling Downwards
+            else if (YVelocity < 0) // Travelling Downwards
                 for (var i = (int) tileStartX; i <= tileEndX; i++)
                 {
                     var tile = Player.GameWorld.TryGetTile(i,
-                        (int) ((playerBounds.Bottom  + 1) / player.GameWorld.TileSize));
+                        (int) ((playerBounds.Bottom  + 1) / Player.GameWorld.TileSize));
                     if (tile != null && tile.TileType == 0) continue;
+                    
                     HitFloor?.Invoke();
-                    return true;
+                    return;
                 }
-
-            // Didn't hit, so we good!
-            return false;
         }
         
         public void OnAddedToPlayer()
