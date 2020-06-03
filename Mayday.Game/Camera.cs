@@ -50,6 +50,11 @@ namespace Mayday.Game {
             
             _position.X = MathHelper.Clamp(_position.X, _minX, _maxX);
             _position.Y = MathHelper.Clamp(_position.Y, _minY, _maxY);
+
+            if (Math.Abs(_position.X - (int)_position.X + 0.5f) < 0.1f)
+                _position.X += 0.1f;
+            if (Math.Abs(_position.Y - (int)_position.Y + 0.5f) < 0.1f)
+                _position.Y += 0.1f;
         }
         
         public Vector2 Position

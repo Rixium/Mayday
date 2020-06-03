@@ -50,7 +50,7 @@ namespace Yetiface.Engine
             IsMouseVisible = false;
             
             SetWindowTitle();
-            UnlockFps();
+            //UnlockFps();
             
             InputManager = new InputManager();
             InputManager.Initialize(File.ReadAllText("Config/inputBindings.json"));
@@ -60,8 +60,8 @@ namespace Yetiface.Engine
 
         private void UnlockFps()
         {
-            IsFixedTimeStep = false;
             Utils.Window.GraphicsDeviceManager.SynchronizeWithVerticalRetrace = false;
+            IsFixedTimeStep = false;
         }
 
         private void SetWindowTitle(params string[] supplementaryText)
@@ -98,8 +98,8 @@ namespace Yetiface.Engine
 
         protected override void Update(GameTime gameTime)
         {
-            if (!ShouldUpdate(ref gameTime))
-                return;
+            // if (!ShouldUpdate(ref gameTime))
+            //     return;
 
             if(ShouldQuit) Exit();
             

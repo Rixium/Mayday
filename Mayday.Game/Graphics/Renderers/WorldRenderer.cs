@@ -57,6 +57,9 @@ namespace Mayday.Game.Graphics.Renderers
         // Gets the blob value from a given tile blob map for a given tile.
         private static int GetTileBlobValue(IGameWorld gameWorld, Tile tile, Dictionary<int, int> tileBlobMap)
         {
+            if (tile.BlobValue != -1) 
+                return tile.BlobValue;
+            
             var x = tile.X;
             var y = tile.Y;
             byte bitSum = 0;
@@ -80,6 +83,8 @@ namespace Mayday.Game.Graphics.Renderers
             TileTypeMatch(ref bitSum, tile, nw, 128, n, w);
 
             tileBlobMap.TryGetValue(bitSum, out var tileNumber);
+
+            tile.BlobValue = tileNumber;
             
             return tileNumber;
         }
