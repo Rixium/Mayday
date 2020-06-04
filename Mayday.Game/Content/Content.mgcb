@@ -25,16 +25,6 @@
 /processorParam:Quality=Best
 /build:Game/Sounds/startDig.wav
 
-#begin Images/Animations/Arms_1.aseprite
-/importer:
-/processor:
-/build:Images/Animations/Arms_1.aseprite
-
-#begin Images/Animations/Arms_1.json
-/importer:
-/processor:
-/build:Images/Animations/Arms_1.json
-
 #begin Images/Animations/Arms_1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -46,16 +36,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Images/Animations/Arms_1.png
-
-#begin Images/Animations/Bodies_1.aseprite
-/importer:
-/processor:
-/build:Images/Animations/Bodies_1.aseprite
-
-#begin Images/Animations/Bodies_1.json
-/importer:
-/processor:
-/build:Images/Animations/Bodies_1.json
 
 #begin Images/Animations/Bodies_1.png
 /importer:TextureImporter
@@ -69,21 +49,6 @@
 /processorParam:TextureFormat=Color
 /build:Images/Animations/Bodies_1.png
 
-#begin Images/Animations/character.aseprite
-/importer:
-/processor:
-/build:Images/Animations/character.aseprite
-
-#begin Images/Animations/Heads_1.aseprite
-/importer:
-/processor:
-/build:Images/Animations/Heads_1.aseprite
-
-#begin Images/Animations/Heads_1.json
-/importer:
-/processor:
-/build:Images/Animations/Heads_1.json
-
 #begin Images/Animations/Heads_1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -96,16 +61,6 @@
 /processorParam:TextureFormat=Color
 /build:Images/Animations/Heads_1.png
 
-#begin Images/Animations/Heads_2.aseprite
-/importer:
-/processor:
-/build:Images/Animations/Heads_2.aseprite
-
-#begin Images/Animations/Heads_2.json
-/importer:
-/processor:
-/build:Images/Animations/Heads_2.json
-
 #begin Images/Animations/Heads_2.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -117,16 +72,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Images/Animations/Heads_2.png
-
-#begin Images/Animations/Legs_1.aseprite
-/importer:
-/processor:
-/build:Images/Animations/Legs_1.aseprite
-
-#begin Images/Animations/Legs_1.json
-/importer:
-/processor:
-/build:Images/Animations/Legs_1.json
 
 #begin Images/Animations/Legs_1.png
 /importer:TextureImporter

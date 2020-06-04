@@ -25,8 +25,6 @@ namespace Mayday.Game
         public static Dictionary<int, SpriteSheet> Legs { get; set; } = new Dictionary<int, SpriteSheet>();
         public static Dictionary<int, Texture2D> Tiles { get; set; } = new Dictionary<int, Texture2D>();
         
-        public static Dictionary<string, Texture2D> TileToTiles { get; set; } = new Dictionary<string, Texture2D>();
-
         public static Dictionary<string, SoundEffect> SoundEffects { get; set; } =
             new Dictionary<string, SoundEffect>();
 
@@ -40,7 +38,7 @@ namespace Mayday.Game
 
         private void LoadTiles(ContentManager contentManager)
         {
-            var directory = $"{contentManager.RootDirectory}\\Images";
+            var directory = $"{contentManager.RootDirectory}\\Images\\Tiles";
 
             var imageFiles = Directory.GetFiles(directory, "Tiles*.xnb", SearchOption.AllDirectories)
                 .Select(Path.GetFileNameWithoutExtension)
@@ -49,7 +47,7 @@ namespace Mayday.Game
             foreach (var file in imageFiles)
             {
                 var nameOf = file.Split('_');
-                Tiles.Add(int.Parse(nameOf[1]), contentManager.Load<Texture2D>($"Images\\{file}"));
+                Tiles.Add(int.Parse(nameOf[1]), contentManager.Load<Texture2D>($"Images\\Tiles\\{file}"));
             }
         }
         
@@ -76,7 +74,7 @@ namespace Mayday.Game
 
         private void LoadJsonImages(ContentManager contentManager)
         {
-            var directory = $"{contentManager.RootDirectory}\\Images";
+            var directory = $"{contentManager.RootDirectory}\\Images\\Animations";
 
             var imageFiles = Directory.GetFiles(directory, "*.xnb", SearchOption.AllDirectories)
                 .Select(Path.GetFileNameWithoutExtension)
@@ -88,12 +86,12 @@ namespace Mayday.Game
 
             foreach (var file in imageFiles.Where(fileName => jsonFiles.Contains(fileName)))
             {
-                var texture = contentManager.Load<Texture2D>($"Images\\{file}");
-                LoadAnimation(contentManager, directory, file, texture);
+                var texture = contentManager.Load<Texture2D>($"Images\\Animations\\{file}");
+                LoadAnimation(directory, file, texture);
             }
         }
 
-        private void LoadAnimation(ContentManager contentManager, string folder, string fileName, Texture2D texture)
+        private void LoadAnimation(string folder, string fileName, Texture2D texture)
         {
             var sheetText = File.ReadAllText($"{folder}\\{fileName}.json");
             var sheetData = JsonConvert.DeserializeObject<AsepriteSheet>(sheetText);
