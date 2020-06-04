@@ -12,6 +12,8 @@ namespace Mayday.Game
     public class Game1 : YetiGame
     {
 
+        public static uint AppId { get; } = 1323490;
+        
         public Game1() : base("Mayday")
         {
             try 
@@ -24,11 +26,6 @@ namespace Mayday.Game
             }
         }
         
-        public static uint AppId { get; set; } = 1323490;
-
-        public static int FriendCount { get; set; }
-
-        public static string Name { get; set; }
 
         protected override void Initialize()
         {
