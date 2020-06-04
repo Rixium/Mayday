@@ -264,10 +264,6 @@
       <Project>{4ebc6789-9069-427c-94cb-ebaf1095aaab}</Project>
       <Name>Facepunch.Steamworks.Win64</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GeonBit.UI\GeonBit.UI\GeonBit.UI.csproj">
-      <Project>{dd284f36-fcd5-4265-ae4c-28b9a38b9def}</Project>
-      <Name>GeonBit.UI</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Yetiface.Engine\Yetiface.Engine.csproj">
       <Project>{6b7d6ee3-17d6-4e6b-ac60-d3bd2027c1cc}</Project>
       <Name>Yetiface.Engine</Name>
