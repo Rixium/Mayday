@@ -50,9 +50,10 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="MainMenuUserInterface.cs" />
-        <Compile Include="MainMenuUserInterface.Generated.cs" />
+        <Compile Include="Controllers\MainMenuUserInterfaceController.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="Views\MainMenuUserInterface.cs" />
+        <Compile Include="Views\MainMenuUserInterface.Generated.cs" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

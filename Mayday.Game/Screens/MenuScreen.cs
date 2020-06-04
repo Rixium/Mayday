@@ -1,6 +1,5 @@
 ﻿using Mayday.Game.Networking.SteamNetworking;
-using Mayday.Game.UI;
-using Mayday.UI;
+using Mayday.UI.Views;
 using Microsoft.Xna.Framework;
 using Myra.Graphics2D.UI;
 using Yetiface.Engine.Screens;

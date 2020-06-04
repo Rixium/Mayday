@@ -1,3 +1,6 @@
+using System;
+using System.Linq;
+using System.Reflection;
 using Myra.Graphics2D.UI;
 
 namespace Yetiface.Engine.UI
@@ -9,8 +12,18 @@ namespace Yetiface.Engine.UI
         public MyraUserInterface(Panel panel)
         {
             _panel = panel;
+            InitializeController(panel);
         }
-        
+
+        private static void InitializeController(Panel panel)
+        {
+            var assemblyTypes = panel.GetType().Assembly.GetTypes();
+            var controller =
+                assemblyTypes.FirstOrDefault(m => m.IsClass && m.Name.Equals(panel.GetType().Name + "Controller"));
+            if (controller == null) return;
+            Activator.CreateInstance(controller, panel);
+        }
+
         public void SetActive() => Desktop.Root = _panel;
 
         public void Draw()
