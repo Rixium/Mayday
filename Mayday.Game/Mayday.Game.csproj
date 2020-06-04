@@ -49,12 +49,17 @@
     <Compile Include="Gameplay\Components\BlockBreakerComponent.cs" />
     <Compile Include="Gameplay\Components\GravityComponent.cs" />
     <Compile Include="Gameplay\Components\IComponent.cs" />
+    <Compile Include="Gameplay\Components\InventoryComponent.cs" />
     <Compile Include="Gameplay\Components\JumpComponent.cs" />
     <Compile Include="Gameplay\Components\MoveComponent.cs" />
     <Compile Include="Gameplay\Components\PlayerAnimationComponent.cs" />
     <Compile Include="Gameplay\Data\TileProperties.cs" />
     <Compile Include="Gameplay\Entities\IPlayer.cs" />
     <Compile Include="Gameplay\Entities\Player.cs" />
+    <Compile Include="Gameplay\Items\IItem.cs" />
+    <Compile Include="Gameplay\Items\IItemStack.cs" />
+    <Compile Include="Gameplay\Items\Item.cs" />
+    <Compile Include="Gameplay\Items\ItemStack.cs" />
     <Compile Include="Gameplay\WorldMakers\IWorldMaker.cs" />
     <Compile Include="Gameplay\WorldMakers\Listeners\IWorldMakerListener.cs" />
     <Compile Include="Gameplay\WorldMakers\NetworkWorldMaker.cs" />
