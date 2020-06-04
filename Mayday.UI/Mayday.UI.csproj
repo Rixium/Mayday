@@ -32,11 +32,8 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="info.lundin.math, Version=1.2.6.0, Culture=neutral, PublicKeyToken=2f7fe9ec5efab85f">
-          <HintPath>..\..\Myra\src\Myra\bin\MonoGame\Debug\net45\info.lundin.math.dll</HintPath>
-        </Reference>
-        <Reference Include="MonoGame.Framework, Version=3.6.0.1625, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\Myra\src\Myra\bin\MonoGame\Debug\net45\MonoGame.Framework.dll</HintPath>
+        <Reference Include="MonoGame.Framework, Version=3.7.1.189, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\MonoGame.Framework.DesktopGL.3.7.1.189\lib\net45\MonoGame.Framework.dll</HintPath>
         </Reference>
         <Reference Include="Myra, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\Myra\src\Myra\bin\MonoGame\Debug\net45\Myra.dll</HintPath>
