@@ -90,8 +90,6 @@
     <Compile Include="Screens\GameScreen.cs" />
     <Compile Include="Screens\MenuScreen.cs" />
     <Compile Include="TerrainPresets.cs" />
-    <Compile Include="UI\GameScreenUserInterface.cs" />
-    <Compile Include="UI\MenuScreenUserInterface.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -231,24 +229,21 @@
     <Content Include="Content\Data\TileProperties.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Images\Arms_1.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Content Include="Content\Images\Animations\Arms_1.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Images\Bodies_1.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Content Include="Content\Images\Animations\Bodies_1.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Images\Bodies_1.png" />
-    <Content Include="Content\Images\Heads_1.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Content Include="Content\Images\Animations\Heads_1.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Images\Heads_2.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Content Include="Content\Images\Animations\Heads_2.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Images\Legs_1.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Content Include="Content\Images\Animations\Legs_1.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Images\Tiles_1.png" />
-    <Content Include="Content\Images\Tiles_2.png" />
     <Content Include="steam_appid.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -275,6 +270,9 @@
       <Project>{6b7d6ee3-17d6-4e6b-ac60-d3bd2027c1cc}</Project>
       <Name>Yetiface.Engine</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\Images\Tiles" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

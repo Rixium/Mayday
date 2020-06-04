@@ -2,6 +2,7 @@
 using System.Linq;
 using Mayday.Game.Gameplay.World;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Yetiface.Engine.Utils;
 
 namespace Mayday.Game.Graphics.Renderers
@@ -41,7 +42,7 @@ namespace Mayday.Game.Graphics.Renderers
 
                     var tileSet = ContentChest.Tiles[tile.TileType];
 
-                    var sheetTileSize = 16;
+                    var sheetTileSize = 8;
                     
                     ArrayUtils.IndexConvert(tileIndex, tileSet.Width / sheetTileSize, out var x, out var y);
                     

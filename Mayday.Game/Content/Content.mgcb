@@ -25,31 +25,17 @@
 /processorParam:Quality=Best
 /build:Game/Sounds/startDig.wav
 
-#begin Images/Arms_1.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Images/Arms_1.png
+#begin Images/Animations/Arms_1.aseprite
+/importer:
+/processor:
+/build:Images/Animations/Arms_1.aseprite
 
-#begin Images/Bodies_1.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Images/Bodies_1.png
+#begin Images/Animations/Arms_1.json
+/importer:
+/processor:
+/build:Images/Animations/Arms_1.json
 
-#begin Images/Heads_1.png
+#begin Images/Animations/Arms_1.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -59,33 +45,19 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Images/Heads_1.png
+/build:Images/Animations/Arms_1.png
 
-#begin Images/Heads_2.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Images/Heads_2.png
+#begin Images/Animations/Bodies_1.aseprite
+/importer:
+/processor:
+/build:Images/Animations/Bodies_1.aseprite
 
-#begin Images/Legs_1.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Images/Legs_1.png
+#begin Images/Animations/Bodies_1.json
+/importer:
+/processor:
+/build:Images/Animations/Bodies_1.json
 
-#begin Images/Tiles_1.png
+#begin Images/Animations/Bodies_1.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -95,9 +67,24 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Images/Tiles_1.png
+/build:Images/Animations/Bodies_1.png
 
-#begin Images/Tiles_2.png
+#begin Images/Animations/character.aseprite
+/importer:
+/processor:
+/build:Images/Animations/character.aseprite
+
+#begin Images/Animations/Heads_1.aseprite
+/importer:
+/processor:
+/build:Images/Animations/Heads_1.aseprite
+
+#begin Images/Animations/Heads_1.json
+/importer:
+/processor:
+/build:Images/Animations/Heads_1.json
+
+#begin Images/Animations/Heads_1.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -107,7 +94,75 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Images/Tiles_2.png
+/build:Images/Animations/Heads_1.png
+
+#begin Images/Animations/Heads_2.aseprite
+/importer:
+/processor:
+/build:Images/Animations/Heads_2.aseprite
+
+#begin Images/Animations/Heads_2.json
+/importer:
+/processor:
+/build:Images/Animations/Heads_2.json
+
+#begin Images/Animations/Heads_2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/Animations/Heads_2.png
+
+#begin Images/Animations/Legs_1.aseprite
+/importer:
+/processor:
+/build:Images/Animations/Legs_1.aseprite
+
+#begin Images/Animations/Legs_1.json
+/importer:
+/processor:
+/build:Images/Animations/Legs_1.json
+
+#begin Images/Animations/Legs_1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/Animations/Legs_1.png
+
+#begin Images/Tiles/Tiles_1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/Tiles/Tiles_1.png
+
+#begin Images/Tiles/Tiles_2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/Tiles/Tiles_2.png
 
 #begin MainMenu/click.wav
 /importer:WavImporter

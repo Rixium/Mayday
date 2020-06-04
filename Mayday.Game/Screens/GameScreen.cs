@@ -9,7 +9,6 @@ using Mayday.Game.Graphics;
 using Mayday.Game.Graphics.Renderers;
 using Mayday.Game.Networking.Packagers;
 using Mayday.Game.Networking.Packets;
-using Mayday.Game.UI;
 using Steamworks;
 using Steamworks.Data;
 using Yetiface.Engine;
@@ -18,7 +17,6 @@ using Yetiface.Engine.Networking;
 using Yetiface.Engine.Networking.Listeners;
 using Yetiface.Engine.Networking.Packagers;
 using Yetiface.Engine.Screens;
-using Yetiface.Engine.UI;
 using Yetiface.Engine.Utils;
 using Color = Microsoft.Xna.Framework.Color;
 

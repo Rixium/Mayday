@@ -46,9 +46,10 @@ namespace Mayday.Game
         {
             base.LoadContent();
 
-            var music  = ContentManager.Load<Song>("MainMenu/menuMusic");
-            MediaPlayer.Play(music);
-            MediaPlayer.Volume = 0.1f;
+            // TODO MUSIC
+            // var music  = ContentManager.Load<Song>("MainMenu/menuMusic");
+            // MediaPlayer.Play(music);
+            // MediaPlayer.Volume = 0.1f;
 
             new ContentChest().Load(ContentManager);
             

@@ -16,6 +16,7 @@
     </VerticalStackPanel>
     <VerticalStackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="200" Padding="10" Visible="False" Background="#3D3D3D23" Border="#E0DEFFFF" Id="MultiPlayerPanel">
       <Label Text="Multiplayer" Margin="0, 0, 0, 10" HorizontalAlignment="Center" />
+      <ImageTextButton Text="Create Game" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Id="MultiPlayerCreateGame" />
       <ImageTextButton Text="Join by IP" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Id="MultiPlayerJoinByIp" />
       <ImageTextButton Text="Join by Steam" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Id="MultiPlayerJoinBySteam" />
       <ImageTextButton Text="Back" ContentHorizontalAlignment="Center" Padding="10" HorizontalAlignment="Stretch" Id="MultiPlayerBack" />
