@@ -50,14 +50,12 @@ namespace Yetiface.Engine.Screens
 
         public virtual void Draw()
         {
-            UserInterface?.Draw();
-            
             GraphicsUtils.Instance.SpriteBatch.GraphicsDevice.Clear(BackgroundColor);
             GraphicsUtils.Instance.Begin();
             Renderer?.Draw();
             GraphicsUtils.Instance.End();
 
-            UserInterface?.AfterDraw();
+            UserInterface?.Draw();
         }
 
         public abstract void Finish();

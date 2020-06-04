@@ -94,6 +94,9 @@
     <Compile Include="UI\MenuScreenUserInterface.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="info.lundin.math, Version=1.2.6.0, Culture=neutral, PublicKeyToken=2f7fe9ec5efab85f">
+      <HintPath>..\..\Myra\src\Myra\bin\MonoGame\Debug\net45\info.lundin.math.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
       <Private>True</Private>
@@ -103,6 +106,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
+    <Reference Include="Myra, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\Myra\src\Myra\bin\MonoGame\Debug\net45\Myra.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -171,6 +177,9 @@
     <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <HintPath>..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="XNAssets, Version=0.5.0.6, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\Myra\src\Myra\bin\MonoGame\Debug\net45\XNAssets.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -264,9 +273,9 @@
       <Project>{4ebc6789-9069-427c-94cb-ebaf1095aaab}</Project>
       <Name>Facepunch.Steamworks.Win64</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GeonBit.UI\GeonBit.UI\GeonBit.UI.csproj">
-      <Project>{dd284f36-fcd5-4265-ae4c-28b9a38b9def}</Project>
-      <Name>GeonBit.UI</Name>
+    <ProjectReference Include="..\Mayday.UI\Mayday.UI.csproj">
+      <Project>{bd290914-b822-4b7f-86aa-41abec56accd}</Project>
+      <Name>Mayday.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\Yetiface.Engine\Yetiface.Engine.csproj">
       <Project>{6b7d6ee3-17d6-4e6b-ac60-d3bd2027c1cc}</Project>

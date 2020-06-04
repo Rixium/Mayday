@@ -18,6 +18,7 @@ using Yetiface.Engine.Networking;
 using Yetiface.Engine.Networking.Listeners;
 using Yetiface.Engine.Networking.Packagers;
 using Yetiface.Engine.Screens;
+using Yetiface.Engine.UI;
 using Yetiface.Engine.Utils;
 using Color = Microsoft.Xna.Framework.Color;
 
@@ -94,7 +95,6 @@ namespace Mayday.Game.Screens
         public override void Awake()
         {
             BackgroundColor = new Color(47, 39, 54);
-            UserInterface = new GameScreenUserInterface(this, _networkManager);
             
             YetiGame.InputManager.RegisterInputEvent("MoveRight", () => Move(2), InputEventType.Held);
             YetiGame.InputManager.RegisterInputEvent("MoveLeft", () => Move(-2), InputEventType.Held);

@@ -25,7 +25,7 @@ namespace Yetiface.Engine.Screens
         /// Add a screen to the screen manager to track.
         /// </summary>
         /// <param name="screen">The screen to add.</param>
-        void AddScreen(IScreen screen);
+        T AddScreen<T>(T screen) where T : IScreen;
         
         /// <summary>
         /// Removes a given screen from the screen manager if it exists.

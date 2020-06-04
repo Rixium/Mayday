@@ -9,15 +9,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yetiface.Engine.Tests", "Ye
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yetiface.Engine", "Yetiface.Engine\Yetiface.Engine.csproj", "{6B7D6EE3-17D6-4E6B-AC60-D3BD2027C1CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeonBit.UI", "GeonBit.UI\GeonBit.UI\GeonBit.UI.csproj", "{DD284F36-FCD5-4265-AE4C-28B9A38B9DEF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTypes", "GeonBit.UI\GeonBit.UI\Libs\DataTypes\DataTypes.csproj", "{2C87417A-07A7-440A-AFDA-D624CE4ACE05}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Facepunch.Steamworks.Win64", "Facepunch.Steamworks\Facepunch.Steamworks\Facepunch.Steamworks.Win64.csproj", "{4EBC6789-9069-427C-94CB-EBAF1095AAAB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccidentalNoise", "AccidentalNoise\AccidentalNoise.csproj", "{548C482E-7AD8-4DD7-B32A-F09340C7A04E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mayday.Game.Tests", "Mayday.Game.Tests\Mayday.Game.Tests.csproj", "{7CD75A68-7FEF-430F-8BD3-BEEB9C407FA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mayday.UI", "Mayday.UI\Mayday.UI.csproj", "{BD290914-B822-4B7F-86AA-41ABEC56ACCD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,14 +35,6 @@ Global
 		{6B7D6EE3-17D6-4E6B-AC60-D3BD2027C1CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B7D6EE3-17D6-4E6B-AC60-D3BD2027C1CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B7D6EE3-17D6-4E6B-AC60-D3BD2027C1CC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DD284F36-FCD5-4265-AE4C-28B9A38B9DEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DD284F36-FCD5-4265-AE4C-28B9A38B9DEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DD284F36-FCD5-4265-AE4C-28B9A38B9DEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DD284F36-FCD5-4265-AE4C-28B9A38B9DEF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2C87417A-07A7-440A-AFDA-D624CE4ACE05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2C87417A-07A7-440A-AFDA-D624CE4ACE05}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2C87417A-07A7-440A-AFDA-D624CE4ACE05}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2C87417A-07A7-440A-AFDA-D624CE4ACE05}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4EBC6789-9069-427C-94CB-EBAF1095AAAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4EBC6789-9069-427C-94CB-EBAF1095AAAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EBC6789-9069-427C-94CB-EBAF1095AAAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -57,6 +47,10 @@ Global
 		{7CD75A68-7FEF-430F-8BD3-BEEB9C407FA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CD75A68-7FEF-430F-8BD3-BEEB9C407FA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7CD75A68-7FEF-430F-8BD3-BEEB9C407FA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD290914-B822-4B7F-86AA-41ABEC56ACCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD290914-B822-4B7F-86AA-41ABEC56ACCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD290914-B822-4B7F-86AA-41ABEC56ACCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD290914-B822-4B7F-86AA-41ABEC56ACCD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

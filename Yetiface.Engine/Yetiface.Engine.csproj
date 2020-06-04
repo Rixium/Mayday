@@ -70,6 +70,7 @@
     <Compile Include="Networking\Packets\IPacketDefinition.cs" />
     <Compile Include="Networking\Packets\PacketDefinition.cs" />
     <Compile Include="UI\IUserInterface.cs" />
+    <Compile Include="UI\MyraUserInterface.cs" />
     <Compile Include="Utils\ArrayUtils.cs" />
     <Compile Include="Utils\FrameRate.cs" />
     <Compile Include="Utils\RectangleExtensions.cs" />
@@ -101,6 +102,9 @@
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Myra, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\Myra\src\Myra\bin\MonoGame\Debug\net45\Myra.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>

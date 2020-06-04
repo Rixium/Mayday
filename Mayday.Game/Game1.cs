@@ -3,7 +3,9 @@ using Mayday.Game.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Myra.Graphics2D.UI.Styles;
 using Steamworks;
+using XNAssets;
 using Yetiface.Engine;
 using Yetiface.Engine.Inputs;
 
@@ -33,14 +35,10 @@ namespace Mayday.Game
         protected override void Initialize()
         {
             base.Initialize();
+
+            IsMouseVisible = true;
             
             InputManager.RegisterInputEvent(new KeyInputBinding(Keys.F1), NextResize);
-
-            var music  = ContentManager.Load<Song>("MainMenu/menuMusic");
-            MediaPlayer.Play(music);
-            MediaPlayer.Volume = 0.1f;
-
-            new ContentChest().Load(ContentManager);
         }
 
         protected override void Update(GameTime gameTime)
@@ -52,6 +50,14 @@ namespace Mayday.Game
         protected override void LoadContent()
         {
             base.LoadContent();
+
+            var music  = ContentManager.Load<Song>("MainMenu/menuMusic");
+            MediaPlayer.Play(music);
+            MediaPlayer.Volume = 0.1f;
+
+            new ContentChest().Load(ContentManager);
+            
+            Myra.MyraEnvironment.Game = this;
             
             ScreenManager.AddScreen(new MenuScreen());
         }
