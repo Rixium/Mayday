@@ -273,6 +273,10 @@
       <Project>{4ebc6789-9069-427c-94cb-ebaf1095aaab}</Project>
       <Name>Facepunch.Steamworks.Win64</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mayday.UI\Mayday.UI.csproj">
+      <Project>{bd290914-b822-4b7f-86aa-41abec56accd}</Project>
+      <Name>Mayday.UI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Yetiface.Engine\Yetiface.Engine.csproj">
       <Project>{6b7d6ee3-17d6-4e6b-ac60-d3bd2027c1cc}</Project>
       <Name>Yetiface.Engine</Name>

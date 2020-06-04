@@ -27,7 +27,7 @@ using Window = Yetiface.Engine.Utils.Window;
 
 namespace Mayday.Game.UI
 {
-    public class MenuScreenUserInterface : IUserInterface, INetworkServerListener, INetworkClientListener, IWorldMakerListener
+    public class MenuScreenUserInterface : INetworkServerListener, INetworkClientListener, IWorldMakerListener
     {
         
         private readonly IScreenManager _screenManager;
@@ -50,7 +50,7 @@ namespace Mayday.Game.UI
 
             var panel = new Panel();
 
-            panel.Widgets.Add(new Image
+            var image = panel.AddChild(new Image
             {
                 ResizeMode = ImageResizeMode.KeepAspectRatio,
                 Renderable = new TextureRegion(YetiGame.ContentManager.Load<Texture2D>("MainMenu\\planet")),
@@ -60,7 +60,7 @@ namespace Mayday.Game.UI
                 Height = 300
             });
 
-            var buttonPanel = new VerticalStackPanel()
+            var buttonPanel = new VerticalStackPanel
             {
                 Background = new SolidBrush(Color.White * 0.5f),
                 Padding = new Thickness(10),
@@ -68,16 +68,16 @@ namespace Mayday.Game.UI
                 HorizontalAlignment = HorizontalAlignment.Center
             };
             
-            buttonPanel.Widgets.Add(new TextButton
+            var button = buttonPanel.AddChild(new TextButton
             {
                 Text = "Single Player",
-                StyleName = "commodore-64",
                 Padding = new Thickness(10),
                 Margin = new Thickness(0, 0, 0, 10),
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Center
             });
-            
+
+            button.Click += (w, a) => StartNewGame();
             
             buttonPanel.Widgets.Add(new TextButton
             {

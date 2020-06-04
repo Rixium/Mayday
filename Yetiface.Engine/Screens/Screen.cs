@@ -50,7 +50,6 @@ namespace Yetiface.Engine.Screens
 
         public virtual void Draw()
         {
-            
             GraphicsUtils.Instance.SpriteBatch.GraphicsDevice.Clear(BackgroundColor);
             GraphicsUtils.Instance.Begin();
             Renderer?.Draw();

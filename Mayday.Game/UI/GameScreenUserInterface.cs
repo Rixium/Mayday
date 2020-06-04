@@ -6,7 +6,7 @@ using Yetiface.Engine.Utils;
 
 namespace Mayday.Game.UI
 {
-    public class GameScreenUserInterface : IUserInterface
+    public class GameScreenUserInterface
     {
         private readonly GameScreen _gameScreen;
         private readonly INetworkManager _netManager;
@@ -20,19 +20,5 @@ namespace Mayday.Game.UI
             _packager = new MaydayMessagePackager();
         }
 
-        public void Draw()
-        {
-            
-        }
-
-        public void Update()
-        {
-            
-        }
-
-        public void AfterDraw()
-        {
-            
-        }
     }
 }

@@ -3,7 +3,9 @@ using Mayday.Game.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Myra.Graphics2D.UI.Styles;
 using Steamworks;
+using XNAssets;
 using Yetiface.Engine;
 using Yetiface.Engine.Inputs;
 

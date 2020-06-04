@@ -2,6 +2,7 @@
 {
     public interface IUserInterface
     {
+        void SetActive();
 
         void Draw();
 
