@@ -101,9 +101,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
-    <Reference Include="Myra, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Mayday.UI\Myra.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -254,6 +251,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Myra\src\Myra\Myra.MonoGame.csproj">
+      <Project>{4f8b1fe8-e098-4a1e-b5ad-29e64049880e}</Project>
+      <Name>Myra.MonoGame</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AccidentalNoise\AccidentalNoise.csproj">
       <Project>{548c482e-7ad8-4dd7-b32a-f09340c7a04e}</Project>
       <Name>AccidentalNoise</Name>

@@ -35,9 +35,6 @@
         <Reference Include="MonoGame.Framework, Version=3.7.1.189, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\packages\MonoGame.Framework.DesktopGL.3.7.1.189\lib\net45\MonoGame.Framework.dll</HintPath>
         </Reference>
-        <Reference Include="Myra, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\Myra\src\Myra\bin\MonoGame\Debug\net45\Myra.dll</HintPath>
-        </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
@@ -55,6 +52,12 @@
     <ItemGroup>
       <Content Include="Myra.dll" />
       <Content Include="XNAssets.dll" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\Myra\src\Myra\Myra.MonoGame.csproj">
+        <Project>{4f8b1fe8-e098-4a1e-b5ad-29e64049880e}</Project>
+        <Name>Myra.MonoGame</Name>
+      </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

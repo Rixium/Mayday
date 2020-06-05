@@ -26,11 +26,8 @@
           <ImageTextButton Text="Back" ContentHorizontalAlignment="Center" Padding="10" HorizontalAlignment="Stretch" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="SettingsBack" />
         </VerticalStackPanel>
         <VerticalStackPanel HorizontalAlignment="Center" Width="200" Padding="10" Visible="False" Id="JoinByIpPanel">
-          <Label Text="Join by IP" Margin="0, 0, 0, 10" HorizontalAlignment="Center" />
-          <Label Text="IP Address:" Margin="0, 0, 0, 10" />
-          <TextBox Margin="0, 0, 0, 10" Padding="10" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="IpAddressTextBox" />
-          <Label Text="Port:" Margin="0, 0, 0, 10" />
-          <TextBox Text="25565" Margin="0, 0, 0, 10" Padding="10" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="PortTextBox" />
+          <TextBox HintText="IP Address" Margin="0, 0, 0, 10" Padding="10" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="IpAddressTextBox" />
+          <TextBox HintText="Port" Text="25565" Margin="0, 0, 0, 10" Padding="10" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="PortTextBox" />
           <ImageTextButton Text="Join" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="JoinByIpJoin" />
           <ImageTextButton Text="Back" ContentHorizontalAlignment="Center" Padding="10" HorizontalAlignment="Stretch" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="JoinByIpBack" />
         </VerticalStackPanel>
