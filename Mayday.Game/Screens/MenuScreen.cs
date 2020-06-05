@@ -11,7 +11,6 @@ using Mayday.UI.Controllers;
 using Mayday.UI.Views;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.TextureAtlases;
-using Myra.Graphics2D.UI;
 using Steamworks;
 using Steamworks.Data;
 using Yetiface.Engine;
@@ -59,6 +58,8 @@ namespace Mayday.Game.Screens
             
             panel.GameLogo.Renderable = new TextureRegion(YetiGame.ContentManager.Load<Texture2D>("MainMenu/logo"));
             
+            panel.GameLogo.Renderable = new TextureRegion(YetiGame.ContentManager.Load<Texture2D>("MainMenu/logo"));
+
             UserInterface.SetActive();
         }
 

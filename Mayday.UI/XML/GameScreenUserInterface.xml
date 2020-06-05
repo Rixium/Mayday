@@ -1,6 +1,18 @@
 <Project>
   <Project.ExportOptions Namespace="Mayday.UI.Views" Class="GameScreenUserInterface" OutputPath="C:\dev\Mayday\Mayday.UI\Views" />
   <Panel Padding="10">
-    <ListBox Id="ItemListBox"/>
+    <ListBox Id="ItemListBox" />
+    <HorizontalStackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
+      <Panel Width="64" Height="64">
+        <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Id="InventorySlot1Background" />
+        <Image Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" Id="InventorySlot1Image" />
+        <Label HorizontalAlignment="Right" VerticalAlignment="Bottom" Id="InventorySlot1Count" />
+      </Panel>
+      <Panel Width="64" Height="64">
+        <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Id="InventorySlot2Background" />
+        <Image Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" Id="InventorySlot2Image" />
+        <Label HorizontalAlignment="Right" VerticalAlignment="Bottom" Id="InventorySlot2Count" />
+      </Panel>
+    </HorizontalStackPanel>
   </Panel>
 </Project>

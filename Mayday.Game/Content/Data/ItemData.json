@@ -1,6 +1,12 @@
 ﻿{
   "0": {
+    "Id": 0,
     "Name": "Dirt",
+    "MaxStackSize": 30
+  },
+  "1": {
+    "Id": 1,
+    "Name": "Stone",
     "MaxStackSize": 30
   }
 }

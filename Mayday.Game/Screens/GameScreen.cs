@@ -11,6 +11,8 @@ using Mayday.Game.Networking.Packagers;
 using Mayday.Game.Networking.Packets;
 using Mayday.UI.Controllers;
 using Mayday.UI.Views;
+using Microsoft.Xna.Framework.Graphics;
+using Myra.Graphics2D.TextureAtlases;
 using Steamworks;
 using Steamworks.Data;
 using Yetiface.Engine;
@@ -57,6 +59,12 @@ namespace Mayday.Game.Screens
             var gameScreenUserInterface = new GameScreenUserInterface();
             _interfaceController = new GameScreenUserInterfaceController(gameScreenUserInterface);
             UserInterface = new MyraUserInterface(gameScreenUserInterface);
+
+            var renderable = new TextureRegion(YetiGame.ContentManager.Load<Texture2D>("UI/bar_inventory_item"));
+            foreach (var background in _interfaceController.UserInterface.InventorySlotBackgrounds)
+            {
+                background.Renderable = renderable;
+            }
         }
         
         public void SetWorld(IGameWorld gameWorld)
@@ -90,7 +98,7 @@ namespace Mayday.Game.Screens
             player.AddComponent(new GravityComponent());
             player.AddComponent(new JumpComponent());
             player.AddComponent(new BlockBreakerComponent(_gameWorld, Camera, _networkManager));
-            var inventory = player.AddComponent(new InventoryComponent(10));
+            var inventory = player.AddComponent(new InventoryComponent(8));
                 
             if (isClients) inventory.InventoryChanged += () => OnInventoryChanged(inventory);
 
@@ -102,16 +110,21 @@ namespace Mayday.Game.Screens
         private void OnInventoryChanged(InventoryComponent inventory)
         {
             _interfaceController.ClearItems();
+
+            var stackIndex = inventory.Slots - 1;
+            
             foreach (var stack in inventory.ItemStacks)
             {
+                stackIndex--;
+                
                 if (stack.IsEmpty())
                 {
                     _interfaceController.AddItem("Nothing");
                     continue;
                 }
                 
-                var stackString = $"{stack.Item.Name} : {stack.Count}";
-                _interfaceController.AddItem(stackString);
+                _interfaceController.SetSlotData(ContentChest.Items[stack.Item.Id], stack.Count, stackIndex + 1);
+                
             }
         }
         

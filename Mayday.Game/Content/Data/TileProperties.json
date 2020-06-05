@@ -8,6 +8,7 @@
   "2" : {
     "Name": "Stone",
     "Mineable": true,
-    "MineSpeedModifier": 2
+    "MineSpeedModifier": 2,
+    "ItemDropId": 1
   }
 }
