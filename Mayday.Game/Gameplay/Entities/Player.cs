@@ -42,7 +42,7 @@ namespace Mayday.Game.Gameplay.Entities
                 42 * Game1.GlobalGameScale - 17 * Game1.GlobalGameScale - 18 * Game1.GlobalGameScale,
                 33 * Game1.GlobalGameScale - 19 * Game1.GlobalGameScale);
 
-        public IComponent AddComponent(IComponent component)
+        public T AddComponent<T>(T component) where T : IComponent
         {
             component.Player = this;
             _components.Add(component);

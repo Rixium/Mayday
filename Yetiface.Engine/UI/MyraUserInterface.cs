@@ -12,7 +12,7 @@ namespace Yetiface.Engine.UI
         public MyraUserInterface(Panel panel)
         {
             _panel = panel;
-            InitializeController(panel);
+            // InitializeController(panel);
         }
 
         private static void InitializeController(Panel panel)

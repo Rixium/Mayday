@@ -6,48 +6,48 @@ namespace Mayday.UI.Controllers
 {
     public class MainMenuUserInterfaceController
     {
-        private readonly MainMenuUserInterface _userInterface;
+        private MainMenuUserInterface UserInterface { get; set; }
 
         private Stack<Widget> _backStack = new Stack<Widget>();
         private Widget _currentActive;
         
         public MainMenuUserInterfaceController(MainMenuUserInterface userInterface)
         {
-            _userInterface = userInterface;
+            UserInterface = userInterface;
             
-            Show(_userInterface.MainPanel);
+            Show(UserInterface.MainPanel);
             
-            _userInterface.MenuSinglePlayer.Click += (sender, args) =>
-                Show(_userInterface.StartGamePanel);
+            UserInterface.MenuSinglePlayer.Click += (sender, args) =>
+                Show(UserInterface.StartGamePanel);
 
-            _userInterface.MenuMultiPlayer.Click += (sender, args) => 
-                Show(_userInterface.MultiPlayerPanel);
+            UserInterface.MenuMultiPlayer.Click += (sender, args) => 
+                Show(UserInterface.MultiPlayerPanel);
 
-            _userInterface.MenuSettings.Click += (sender, args) => 
-                Show(_userInterface.SettingsPanel);
+            UserInterface.MenuSettings.Click += (sender, args) => 
+                Show(UserInterface.SettingsPanel);
             
-            _userInterface.MenuQuit.Click += (sender, args) =>
+            UserInterface.MenuQuit.Click += (sender, args) =>
             {
 
             };
             
-            _userInterface.StartGameBack.Click += (sender, args) => 
+            UserInterface.StartGameBack.Click += (sender, args) => 
                 ShowLast();
             
-            _userInterface.MultiPlayerBack.Click += (sender, args) => 
+            UserInterface.MultiPlayerBack.Click += (sender, args) => 
                 ShowLast();
             
-            _userInterface.SettingsBack.Click += (sender, args) => 
+            UserInterface.SettingsBack.Click += (sender, args) => 
                 ShowLast();
 
-            _userInterface.JoinByIpBack.Click += (sender, args) =>
+            UserInterface.JoinByIpBack.Click += (sender, args) =>
                 ShowLast();
             
-            _userInterface.MultiPlayerJoinByIp.Click += (sender, args) => 
-                Show(_userInterface.JoinByIpPanel);
+            UserInterface.MultiPlayerJoinByIp.Click += (sender, args) => 
+                Show(UserInterface.JoinByIpPanel);
 
-            _userInterface.StartGameNewGame.Click += (sender, args) =>
-                _userInterface.StartGamePanel.Enabled = false;
+            UserInterface.StartGameNewGame.Click += (sender, args) =>
+                UserInterface.StartGamePanel.Enabled = false;
         }
 
         private void Show(Widget toShow)

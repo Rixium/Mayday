@@ -1,0 +1,6 @@
+<Project>
+  <Project.ExportOptions Namespace="Mayday.UI.Views" Class="GameScreenUserInterface" OutputPath="C:\dev\Mayday\Mayday.UI\Views" />
+  <Panel Padding="10">
+    <ListBox Id="ItemListBox"/>
+  </Panel>
+</Project>

@@ -27,10 +27,8 @@ namespace Yetiface.Engine.Screens
         {
         }
 
-        public override void Draw()
+        public override void RenderScreen()
         {
-            base.Draw();
-
             GraphicsUtils.Instance.Begin(false);
             GraphicsUtils.Instance.Draw(_sprite, new Vector2(Window.WindowWidth / 2.0f, Window.WindowHeight / 2.0f), Color.White);
             GraphicsUtils.Instance.End();

@@ -13,10 +13,7 @@ namespace Mayday.Game.Tests.Gameplay.Components
         [Test]
         public void CreateNewStackWhenNoneAvailable()
         {
-            var inventoryComponent = new InventoryComponent
-            {
-                Slots = 1
-            };
+            var inventoryComponent = new InventoryComponent(1);
             
             inventoryComponent.AddItemToInventory(Substitute.For<IItem>());
             
@@ -27,11 +24,8 @@ namespace Mayday.Game.Tests.Gameplay.Components
         [Test]
         public void NotCreateNewStackWhenSlotCountReached()
         {
-            var inventoryComponent = new InventoryComponent
-            {
-                Slots = 1
-            };
-            
+            var inventoryComponent = new InventoryComponent(1);
+
             inventoryComponent.AddItemToInventory(Substitute.For<IItem>());
             inventoryComponent.AddItemToInventory(Substitute.For<IItem>());
             
@@ -41,10 +35,7 @@ namespace Mayday.Game.Tests.Gameplay.Components
         [Test]
         public void CreateNewStackForSameItemIfOtherStackMaxCapacity()
         {
-            var inventoryComponent = new InventoryComponent
-            {
-                Slots = 2
-            };
+            var inventoryComponent = new InventoryComponent(2);
             
             const string itemName = "TestItem";
             var itemOne = Substitute.For<IItem>();
@@ -66,14 +57,10 @@ namespace Mayday.Game.Tests.Gameplay.Components
             inventoryComponent.ItemStacks[1].Item.Name.ShouldBe(itemName);
         }
         
-        
         [Test]
         public void FailToCreateNewStackForSameItemIfMaxSlots()
         {
-            var inventoryComponent = new InventoryComponent
-            {
-                Slots = 1
-            };
+            var inventoryComponent = new InventoryComponent(1);
             
             const string itemName = "TestItem";
             var itemOne = Substitute.For<IItem>();

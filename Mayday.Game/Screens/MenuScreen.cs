@@ -7,6 +7,7 @@ using Mayday.Game.Gameplay.WorldMakers.Listeners;
 using Mayday.Game.Networking.Packagers;
 using Mayday.Game.Networking.Packets;
 using Mayday.Game.Networking.SteamNetworking;
+using Mayday.UI.Controllers;
 using Mayday.UI.Views;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.TextureAtlases;
@@ -41,6 +42,7 @@ namespace Mayday.Game.Screens
             _packager = new MaydayMessagePackager();
             
             var panel = new MainMenuUserInterface();
+            new MainMenuUserInterfaceController(panel);
             UserInterface = new MyraUserInterface(panel);
             
             _networkManager.SetServerNetworkListener(this);
@@ -76,11 +78,9 @@ namespace Mayday.Game.Screens
             _networkManager.Update();
         }
 
-        public override void Draw()
+        public override void RenderScreen()
         {
-            base.Draw();
             
-            Desktop.Render();
         }
         
         private async void StartNewGame()

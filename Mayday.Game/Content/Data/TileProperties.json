@@ -2,7 +2,8 @@
   "1" : {
     "Name": "Dirt",
     "Mineable": true,
-    "MineSpeedModifier": 1
+    "MineSpeedModifier": 1,
+    "ItemDropId": 0
   },
   "2" : {
     "Name": "Stone",

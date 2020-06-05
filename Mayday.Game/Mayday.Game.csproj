@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="Camera.cs" />
     <Compile Include="ContentChest.cs" />
+    <Compile Include="Enums\ItemType.cs" />
+    <Compile Include="Enums\TileType.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Gameplay\Components\BlockBreakerComponent.cs" />
     <Compile Include="Gameplay\Components\GravityComponent.cs" />
@@ -223,6 +225,9 @@
     </None>
     <None Include="app.manifest" />
     <None Include="packages.config" />
+    <Content Include="Content\Data\ItemData.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Data\TileProperties.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

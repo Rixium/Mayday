@@ -66,6 +66,12 @@ namespace Mayday.Game.Gameplay.Components
 
                 if (!CloseEnoughToTile(tile)) return;
                 
+                if (tile.TileProperties?.ItemDropId != null)
+                {
+                    var playerInventory = Player.GetComponent<InventoryComponent>();
+                    AddItemToInventory(playerInventory, tile.TileProperties.ItemDropId);
+                }
+                
                 var oldType = tile.TileType;
                 tile.TileType = 0;
 
@@ -75,6 +81,16 @@ namespace Mayday.Game.Gameplay.Components
                 }
             }
 
+        }
+
+        private static void AddItemToInventory(InventoryComponent inventory, int itemId)
+        {
+            if (!ContentChest.ItemData.ContainsKey(itemId))
+            {
+                return;
+            }
+            
+            inventory.AddItemToInventory(ContentChest.ItemData[itemId]);
         }
 
         private bool CloseEnoughToTile(Tile tile)

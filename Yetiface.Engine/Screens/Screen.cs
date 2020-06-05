@@ -48,13 +48,28 @@ namespace Yetiface.Engine.Screens
                 updateable.Update();
         }
 
-        public virtual void Draw()
+        public void BeforeDraw()
         {
             GraphicsUtils.Instance.SpriteBatch.GraphicsDevice.Clear(BackgroundColor);
+        }
+
+        public void Draw()
+        {
+            BeforeDraw();
+
             GraphicsUtils.Instance.Begin();
             Renderer?.Draw();
             GraphicsUtils.Instance.End();
+            
+            RenderScreen();
+            
+            AfterDraw();
+        }
 
+        public abstract void RenderScreen();
+
+        public void AfterDraw()
+        {
             UserInterface?.Draw();
         }
 

@@ -23,7 +23,7 @@ namespace Mayday.Game.Gameplay.Entities
 
         void Update();
 
-        IComponent AddComponent(IComponent component);
+        T AddComponent<T>(T component) where T : IComponent;
         T GetComponent<T>() where T : IComponent;
         
         RectangleF GetBounds();

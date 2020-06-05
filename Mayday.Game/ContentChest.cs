@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Mayday.Game.Gameplay.Data;
+using Mayday.Game.Gameplay.Items;
 using Mayday.Game.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -18,40 +19,43 @@ namespace Mayday.Game
     
     public class ContentChest
     {
-        
+        public static Dictionary<int, Item> ItemData;
         public static Dictionary<int, TileProperties> TileProperties { get; set; } = new Dictionary<int, TileProperties>();
         public static Dictionary<int, SpriteSheet> Heads { get; set; } = new Dictionary<int, SpriteSheet>();
         public static Dictionary<int, SpriteSheet> Bodies { get; set; } = new Dictionary<int, SpriteSheet>();
         public static Dictionary<int, SpriteSheet> Legs { get; set; } = new Dictionary<int, SpriteSheet>();
         public static Dictionary<int, Texture2D> Tiles { get; set; } = new Dictionary<int, Texture2D>();
-        
+        public static Dictionary<int, Texture2D> Items { get; set; } = new Dictionary<int, Texture2D>();
         public static Dictionary<string, SoundEffect> SoundEffects { get; set; } =
             new Dictionary<string, SoundEffect>();
 
         public void Load(ContentManager contentManager)
         {
-            LoadTiles(contentManager);
+            LoadDictionary(contentManager, "Images\\Tiles", Tiles);
+            LoadDictionary(contentManager, "Images\\Items", Items);
+            
             LoadJsonImages(contentManager);
             LoadSoundEffects(contentManager);
             LoadTileProperties(contentManager);
+            LoadItemData(contentManager);
         }
-
-        private void LoadTiles(ContentManager contentManager)
+        
+        private static void LoadDictionary(ContentManager contentManager, string pathRelativeToContent, Dictionary<int, Texture2D> dictionary)
         {
-            var directory = $"{contentManager.RootDirectory}\\Images\\Tiles";
+            var directory = $"{contentManager.RootDirectory}\\{pathRelativeToContent}";
 
-            var imageFiles = Directory.GetFiles(directory, "Tiles*.xnb", SearchOption.AllDirectories)
+            var imageFiles = Directory.GetFiles(directory, "*.xnb", SearchOption.AllDirectories)
                 .Select(Path.GetFileNameWithoutExtension)
                 .Select(Path.GetFileName).ToArray();
 
             foreach (var file in imageFiles)
             {
                 var nameOf = file.Split('_');
-                Tiles.Add(int.Parse(nameOf[1]), contentManager.Load<Texture2D>($"Images\\Tiles\\{file}"));
+                dictionary.Add(int.Parse(nameOf[1]), contentManager.Load<Texture2D>($"{pathRelativeToContent}\\{file}"));
             }
         }
         
-        private void LoadSoundEffects(ContentManager contentManager)
+        private static void LoadSoundEffects(ContentManager contentManager)
         {
             var directory = $"{contentManager.RootDirectory}\\Game\\Sounds";
             var soundFiles = Directory.GetFiles(directory, "*.xnb", SearchOption.AllDirectories)
@@ -64,12 +68,20 @@ namespace Mayday.Game
             }
         }
 
-        private void LoadTileProperties(ContentManager contentManager)
+        private static void LoadTileProperties(ContentManager contentManager)
         {
             var tilePropertiesFile = $"{contentManager.RootDirectory}\\Data\\TileProperties.json";
             var tilePropertiesData = File.ReadAllText(tilePropertiesFile);
             
             TileProperties = JsonConvert.DeserializeObject<Dictionary<int, TileProperties>>(tilePropertiesData);
+        } 
+        
+        private static void LoadItemData(ContentManager contentManager)
+        {
+            var itemDataFile = $"{contentManager.RootDirectory}\\Data\\ItemData.json";
+            var itemDataFileText = File.ReadAllText(itemDataFile);
+            
+            ItemData = JsonConvert.DeserializeObject<Dictionary<int, Item>>(itemDataFileText);
         }
 
         private void LoadJsonImages(ContentManager contentManager)
@@ -89,7 +101,8 @@ namespace Mayday.Game
                 var texture = contentManager.Load<Texture2D>($"Images\\Animations\\{file}");
                 LoadAnimation(directory, file, texture);
             }
-        }
+        }        
+       
 
         private void LoadAnimation(string folder, string fileName, Texture2D texture)
         {

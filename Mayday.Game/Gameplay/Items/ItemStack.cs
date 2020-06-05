@@ -17,14 +17,16 @@ namespace Mayday.Game.Gameplay.Items
             return ContainsItemOfType(item) || IsEmpty();
         }
 
-        public void AddItem(IItem item)
+        public bool AddItem(IItem item)
         {
-            if (Count >= MaxStackSize) return;
-            if (Item != null && !ContainsItemOfType(item)) return;
+            if (Count >= MaxStackSize) return false;
+            if (Item != null && !ContainsItemOfType(item)) return false;
 
             Item = item;
             Count++;
             MaxStackSize = item.MaxStackSize;
+            
+            return true;
         }
     }
 }

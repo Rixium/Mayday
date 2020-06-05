@@ -59,7 +59,10 @@ namespace Yetiface.Engine.Screens
 
         void Update();
 
+        void BeforeDraw();
         void Draw();
+        void RenderScreen();
+        void AfterDraw();
 
         /// <summary>
         /// Called as soon as the screen has finished transitioning out, use for cleanup.

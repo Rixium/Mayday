@@ -8,6 +8,6 @@ namespace Mayday.Game.Gameplay.Items
         bool IsEmpty();
         bool ContainsItemOfType(IItem item);
         bool HasSpaceFor(IItem item);
-        void AddItem(IItem item);
+        bool AddItem(IItem item);
     }
 }

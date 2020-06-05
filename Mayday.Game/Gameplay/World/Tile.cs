@@ -30,7 +30,9 @@ namespace Mayday.Game.Gameplay.World
             }
         }
 
-        public TileProperties TileProperties => ContentChest.TileProperties[_tileType];
+        public TileProperties TileProperties => ContentChest.TileProperties.ContainsKey(_tileType)
+            ? ContentChest.TileProperties[_tileType]
+            : null;
 
         private void SetNeighboursBlobFlag()
         {

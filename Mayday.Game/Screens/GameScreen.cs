@@ -9,6 +9,8 @@ using Mayday.Game.Graphics;
 using Mayday.Game.Graphics.Renderers;
 using Mayday.Game.Networking.Packagers;
 using Mayday.Game.Networking.Packets;
+using Mayday.UI.Controllers;
+using Mayday.UI.Views;
 using Steamworks;
 using Steamworks.Data;
 using Yetiface.Engine;
@@ -17,6 +19,7 @@ using Yetiface.Engine.Networking;
 using Yetiface.Engine.Networking.Listeners;
 using Yetiface.Engine.Networking.Packagers;
 using Yetiface.Engine.Screens;
+using Yetiface.Engine.UI;
 using Yetiface.Engine.Utils;
 using Color = Microsoft.Xna.Framework.Color;
 
@@ -37,6 +40,8 @@ namespace Mayday.Game.Screens
 
         private readonly Dictionary<ulong, IPlayer> _players = new Dictionary<ulong, IPlayer>();
         private IPlayer _myPlayer;
+        
+        private GameScreenUserInterfaceController _interfaceController;
 
         public GameScreen(INetworkManager networkManager) : base("GameScreen")
         {
@@ -48,8 +53,12 @@ namespace Mayday.Game.Screens
             
             _worldRenderer = new WorldRenderer();
             _playerRenderer = new PlayerRenderer();
-        }
 
+            var gameScreenUserInterface = new GameScreenUserInterface();
+            _interfaceController = new GameScreenUserInterfaceController(gameScreenUserInterface);
+            UserInterface = new MyraUserInterface(gameScreenUserInterface);
+        }
+        
         public void SetWorld(IGameWorld gameWorld)
         {
             _gameWorld = gameWorld;
@@ -81,12 +90,31 @@ namespace Mayday.Game.Screens
             player.AddComponent(new GravityComponent());
             player.AddComponent(new JumpComponent());
             player.AddComponent(new BlockBreakerComponent(_gameWorld, Camera, _networkManager));
+            var inventory = player.AddComponent(new InventoryComponent(10));
                 
+            if (isClients) inventory.InventoryChanged += () => OnInventoryChanged(inventory);
+
             _players.Add(player.SteamId, player);
 
             return player;
         }
 
+        private void OnInventoryChanged(InventoryComponent inventory)
+        {
+            _interfaceController.ClearItems();
+            foreach (var stack in inventory.ItemStacks)
+            {
+                if (stack.IsEmpty())
+                {
+                    _interfaceController.AddItem("Nothing");
+                    continue;
+                }
+                
+                var stackString = $"{stack.Item.Name} : {stack.Count}";
+                _interfaceController.AddItem(stackString);
+            }
+        }
+        
         public override void Awake()
         {
             BackgroundColor = new Color(47, 39, 54);
@@ -98,6 +126,7 @@ namespace Mayday.Game.Screens
             YetiGame.InputManager.RegisterInputEvent("MoveLeft", () => Move(0), InputEventType.Released);
 
             Camera.SetEntity(_myPlayer);
+            UserInterface.SetActive();
         }
 
         private void Jump()
@@ -158,26 +187,15 @@ namespace Mayday.Game.Screens
         public override void Begin()
         {
         }
-
-        /// <summary>
-        /// Obviously a test implementation at the moment, so we can see
-        /// the world rendering. Tbh ignore everything in this class, as it has just
-        /// become a testing ground atm.
-        /// </summary>
-        public override void Draw()
+        
+        public override void RenderScreen()
         {
-            UserInterface?.Draw();
-            
-            GraphicsUtils.Instance.SpriteBatch.GraphicsDevice.Clear(BackgroundColor);
-
             GraphicsUtils.Instance.Begin(true, Camera.GetMatrix());
 
             _worldRenderer.Draw(_gameWorld, Camera);
             _playerRenderer.DrawPlayers(_players);
 
             GraphicsUtils.Instance.End();
-            
-            UserInterface?.AfterDraw();
         }
 
         public override void Finish()
