@@ -1,8 +1,8 @@
-﻿using Mayday.Game.Gameplay.Entities;
+﻿using System;
+using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Networking.Packagers;
 using Mayday.Game.Networking.Packets;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Yetiface.Engine.Networking;
 using MouseState = Yetiface.Engine.Utils.MouseState;
@@ -19,7 +19,7 @@ namespace Mayday.Game.Gameplay.Components
         public IPlayer Player { get; set; }
         public IGameWorld GameWorld { get; set; }
 
-        public int MaxDistanceToBreak { get; set; } = 40 * Game1.GlobalGameScale;
+        public int MaxDistanceToBreak => 7 * GameWorld.TileSize;
         
         public BlockBreakerComponent(IGameWorld gameWorld, Camera camera, INetworkManager networkManager)
         {
@@ -42,9 +42,9 @@ namespace Mayday.Game.Gameplay.Components
                 if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > GameWorld.Width - 1 ||
                     mouseTileY > GameWorld.Height - 1) return;
                 var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
-                
-                if (DistanceFromBlock(tile) > MaxDistanceToBreak) return;
 
+                if (!CloseEnoughToTile(tile)) return;
+                
                 var oldType = tile.TileType;
                 tile.TileType = 1;
 
@@ -64,8 +64,8 @@ namespace Mayday.Game.Gameplay.Components
                 
                 var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
 
-                if (DistanceFromBlock(tile) > MaxDistanceToBreak) return;
-
+                if (!CloseEnoughToTile(tile)) return;
+                
                 var oldType = tile.TileType;
                 tile.TileType = 0;
 
@@ -77,11 +77,20 @@ namespace Mayday.Game.Gameplay.Components
 
         }
 
-        private float DistanceFromBlock(Tile tile)
+        private bool CloseEnoughToTile(Tile tile)
         {
-            return Vector2.Distance(tile.RenderCenter, Player.Center);
+            var playerBounds = Player.GetBounds();
+            var playerLeft = playerBounds.Left;
+            var playerRight = playerBounds.Right;
+            var playerTop = playerBounds.Top;
+            var playerBottom = playerBounds.Bottom;
+            
+            if (Math.Abs(tile.RenderCenter.X - playerLeft) > MaxDistanceToBreak) return false;
+            if (Math.Abs(tile.RenderCenter.X - playerRight) > MaxDistanceToBreak) return false;
+            if (Math.Abs(tile.RenderCenter.Y - playerTop) > MaxDistanceToBreak) return false;
+            return (Math.Abs(tile.RenderCenter.Y - playerBottom) <= MaxDistanceToBreak);
         }
-
+        
         private void SendTileChangePacket(Tile tile)
         {
             var tileChangePacket = new TileTypePacket()

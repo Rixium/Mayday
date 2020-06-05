@@ -35,7 +35,7 @@ namespace Mayday.Game.Screens
         private IGameWorld _gameWorld;
         public Camera Camera { get; } = new Camera();
 
-        private Dictionary<ulong, IPlayer> _players;
+        private readonly Dictionary<ulong, IPlayer> _players = new Dictionary<ulong, IPlayer>();
         private IPlayer _myPlayer;
 
         public GameScreen(INetworkManager networkManager) : base("GameScreen")
@@ -82,10 +82,7 @@ namespace Mayday.Game.Screens
             player.AddComponent(new JumpComponent());
             player.AddComponent(new BlockBreakerComponent(_gameWorld, Camera, _networkManager));
                 
-            _players = new Dictionary<ulong, IPlayer> {
-            {
-                player.SteamId, player
-            }};
+            _players.Add(player.SteamId, player);
 
             return player;
         }
@@ -201,17 +198,7 @@ namespace Mayday.Game.Screens
 
         public void OnNewConnection(Connection connection, ConnectionInfo info)
         {
-            var spawnTile = GetSpawnPosition();
-
-            var newPlayer = new Player
-            {
-                SteamId = info.Identity.SteamId,
-                X = spawnTile.X * 16,
-                Y = spawnTile.Y * 16- (int)(62 / 2f),
-                GameWorld = _gameWorld
-            };
             
-            AddPlayer(newPlayer);
         }
 
 
@@ -260,7 +247,7 @@ namespace Mayday.Game.Screens
             {
                 var newPlayer = (NewPlayerPacket) received;
                 
-                var player = new Player()
+                var player = new Player
                 {
                     SteamId = newPlayer.SteamId,
                     X = newPlayer.X,
