@@ -38,9 +38,9 @@ namespace Mayday.Game.Gameplay.Entities
             (T) _components.FirstOrDefault(component => component.GetType() == typeof(T));
 
         public RectangleF GetBounds() =>
-            new RectangleF(X + 18, Y + 18,
-                42 - 17 - 18,
-                33 - 19);
+            new RectangleF(X + 18 * Game1.GlobalGameScale, Y + 18 * Game1.GlobalGameScale,
+                42 * Game1.GlobalGameScale - 17 * Game1.GlobalGameScale - 18 * Game1.GlobalGameScale,
+                33 * Game1.GlobalGameScale - 19 * Game1.GlobalGameScale);
 
         public IComponent AddComponent(IComponent component)
         {

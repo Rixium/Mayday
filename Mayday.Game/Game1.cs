@@ -2,7 +2,6 @@
 using Mayday.Game.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 using Steamworks;
 using Yetiface.Engine;
 using Yetiface.Engine.Inputs;
@@ -11,7 +10,9 @@ namespace Mayday.Game
 {
     public class Game1 : YetiGame
     {
-
+        // Alters everything from the tile size, to speeds EVERYTHING.
+        public static int GlobalGameScale { get; set; } = 3;
+        
         public static uint AppId { get; } = 1323490;
         
         public Game1() : base("Mayday")

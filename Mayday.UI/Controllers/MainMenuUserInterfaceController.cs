@@ -46,6 +46,8 @@ namespace Mayday.UI.Controllers
             _userInterface.MultiPlayerJoinByIp.Click += (sender, args) => 
                 Show(_userInterface.JoinByIpPanel);
 
+            _userInterface.StartGameNewGame.Click += (sender, args) =>
+                _userInterface.StartGamePanel.Enabled = false;
         }
 
         private void Show(Widget toShow)

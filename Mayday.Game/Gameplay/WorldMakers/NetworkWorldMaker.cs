@@ -100,7 +100,7 @@ namespace Mayday.Game.Gameplay.WorldMakers
             world.Tiles = _tiles;
             world.Width = WorldWidth;
             world.Height = WorldHeight;
-            world.TileSize = 8;
+            world.TileSize = 8 * Game1.GlobalGameScale;
             
             return world;
         }

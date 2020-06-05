@@ -1,39 +1,40 @@
 <Project>
   <Project.ExportOptions Namespace="Mayday.UI.Views" Class="MainMenuUserInterface" OutputPath="C:\dev\Mayday\Mayday.UI\Views" />
   <Panel Padding="10">
-    <VerticalStackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="200" Padding="10" Visible="False" Background="#3D3D3D23" Border="#E0DEFFFF" Id="MainPanel">
-      <Label Text="Mayday" Margin="0, 0, 0, 10" HorizontalAlignment="Center" />
-      <ImageTextButton Text="Single Player" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Id="MenuSinglePlayer" />
-      <ImageTextButton Text="Multiplayer" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Id="MenuMultiPlayer" />
-      <ImageTextButton Text="Settings" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Id="MenuSettings" />
-      <ImageTextButton Text="Quit" ContentHorizontalAlignment="Center" Padding="10" HorizontalAlignment="Stretch" Id="MenuQuit" />
-    </VerticalStackPanel>
-    <VerticalStackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="200" Padding="10" Visible="False" Background="#3D3D3D23" Border="#E0DEFFFF" Id="StartGamePanel">
-      <Label Text="Single Player" Margin="0, 0, 0, 10" HorizontalAlignment="Center" />
-      <ImageTextButton Text="New Game" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Id="StartGameNewGame" />
-      <ImageTextButton Text="Load Game" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Id="StartGameLoadGame" />
-      <ImageTextButton Text="Back" ContentHorizontalAlignment="Center" Padding="10" HorizontalAlignment="Stretch" Id="StartGameBack" />
-    </VerticalStackPanel>
-    <VerticalStackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="200" Padding="10" Visible="False" Background="#3D3D3D23" Border="#E0DEFFFF" Id="MultiPlayerPanel">
-      <Label Text="Multiplayer" Margin="0, 0, 0, 10" HorizontalAlignment="Center" />
-      <ImageTextButton Text="Create Game" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Id="MultiPlayerCreateGame" />
-      <ImageTextButton Text="Join by IP" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Id="MultiPlayerJoinByIp" />
-      <ImageTextButton Text="Join by Steam" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Id="MultiPlayerJoinBySteam" />
-      <ImageTextButton Text="Back" ContentHorizontalAlignment="Center" Padding="10" HorizontalAlignment="Stretch" Id="MultiPlayerBack" />
-    </VerticalStackPanel>
-    <VerticalStackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="200" Padding="10" Visible="False" Background="#3D3D3D23" Border="#E0DEFFFF" Id="SettingsPanel">
-      <Label Text="Settings" Margin="0, 0, 0, 10" HorizontalAlignment="Center" />
-      <ImageTextButton Text="Back" ContentHorizontalAlignment="Center" Padding="10" HorizontalAlignment="Stretch" Id="SettingsBack" />
-    </VerticalStackPanel>
-    <VerticalStackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="200" Padding="10" Visible="False" Background="#3D3D3D23" Border="#E0DEFFFF" Id="JoinByIpPanel">
-      <Label Text="Join by IP" Margin="0, 0, 0, 10" HorizontalAlignment="Center" />
-      <Label Text="IP Address:" Margin="0, 0, 0, 10" />
-      <TextBox Margin="0, 0, 0, 10" Padding="10" Id="IpAddressTextBox" />
-      <Label Text="Port:" Margin="0, 0, 0, 10" />
-      <TextBox Text="25565" Margin="0, 0, 0, 10" Padding="10" Id="PortTextBox" />
-      <ImageTextButton Text="Join" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Id="JoinByIpJoin" />
-      <ImageTextButton Text="Back" ContentHorizontalAlignment="Center" Padding="10" HorizontalAlignment="Stretch" Id="JoinByIpBack" />
-    </VerticalStackPanel>
-    <Label Text="Yetiface" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
+    <Label Text="Yetiface" Margin="0, 10" HorizontalAlignment="Center" VerticalAlignment="Bottom" GridRow="1" />
+    <Grid HorizontalAlignment="Center">
+      <Image Width="284" Height="64" Margin="0, 0, 0, 50" HorizontalAlignment="Center" VerticalAlignment="Bottom" Id="GameLogo" />
+      <VerticalStackPanel GridRow="1">
+        <VerticalStackPanel HorizontalAlignment="Center" Width="200" Padding="10" Id="MainPanel">
+          <ImageTextButton Text="Single Player" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="MenuSinglePlayer" />
+          <ImageTextButton Text="Multiplayer" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="MenuMultiPlayer" />
+          <ImageTextButton Text="Settings" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="MenuSettings" />
+          <ImageTextButton Text="Quit" ContentHorizontalAlignment="Center" Padding="10" HorizontalAlignment="Stretch" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="MenuQuit" />
+        </VerticalStackPanel>
+        <VerticalStackPanel HorizontalAlignment="Center" Width="200" Padding="10" Visible="False" Id="StartGamePanel">
+          <ImageTextButton Text="New Game" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="StartGameNewGame" />
+          <ImageTextButton Text="Load Game" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="StartGameLoadGame" />
+          <ImageTextButton Text="Back" ContentHorizontalAlignment="Center" Padding="10" HorizontalAlignment="Stretch" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="StartGameBack" />
+        </VerticalStackPanel>
+        <VerticalStackPanel HorizontalAlignment="Center" Width="200" Padding="10" Visible="False" Id="MultiPlayerPanel">
+          <ImageTextButton Text="Create Game" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="MultiPlayerCreateGame" />
+          <ImageTextButton Text="Join by IP" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="MultiPlayerJoinByIp" />
+          <ImageTextButton Text="Join by Steam" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="MultiPlayerJoinBySteam" />
+          <ImageTextButton Text="Back" ContentHorizontalAlignment="Center" Padding="10" HorizontalAlignment="Stretch" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="MultiPlayerBack" />
+        </VerticalStackPanel>
+        <VerticalStackPanel HorizontalAlignment="Center" Width="200" Padding="10" Visible="False" Id="SettingsPanel">
+          <ImageTextButton Text="Back" ContentHorizontalAlignment="Center" Padding="10" HorizontalAlignment="Stretch" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="SettingsBack" />
+        </VerticalStackPanel>
+        <VerticalStackPanel HorizontalAlignment="Center" Width="200" Padding="10" Visible="False" Id="JoinByIpPanel">
+          <Label Text="Join by IP" Margin="0, 0, 0, 10" HorizontalAlignment="Center" />
+          <Label Text="IP Address:" Margin="0, 0, 0, 10" />
+          <TextBox Margin="0, 0, 0, 10" Padding="10" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="IpAddressTextBox" />
+          <Label Text="Port:" Margin="0, 0, 0, 10" />
+          <TextBox Text="25565" Margin="0, 0, 0, 10" Padding="10" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="PortTextBox" />
+          <ImageTextButton Text="Join" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="JoinByIpJoin" />
+          <ImageTextButton Text="Back" ContentHorizontalAlignment="Center" Padding="10" HorizontalAlignment="Stretch" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="JoinByIpBack" />
+        </VerticalStackPanel>
+      </VerticalStackPanel>
+    </Grid>
   </Panel>
 </Project>

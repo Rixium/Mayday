@@ -66,7 +66,7 @@ namespace Mayday.Game.Screens
             var spawnTile = GetSpawnPosition();
             
             player.X = spawnTile.X * _gameWorld.TileSize;
-            player.Y = spawnTile.Y * _gameWorld.TileSize - 70;
+            player.Y = spawnTile.Y * _gameWorld.TileSize - 70 * Game1.GlobalGameScale;
             player.GameWorld = _gameWorld;
 
             var playerAnimationComponent = new PlayerAnimationComponent

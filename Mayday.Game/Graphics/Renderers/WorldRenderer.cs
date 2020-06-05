@@ -26,8 +26,8 @@ namespace Mayday.Game.Graphics.Renderers
 
             var startTileX = (int) (camera.Position.X - Window.ViewportWidth / 2.0f) / worldTileSize - 1;
             var startTileY = (int) (camera.Position.Y - Window.ViewportHeight / 2.0f) / worldTileSize - 1;
-            var endTileX = (int) (camera.Position.X + Window.ViewportWidth / 2.0f) / worldTileSize - 1;
-            var endTileY = (int) (camera.Position.Y + Window.ViewportHeight / 2.0f) / worldTileSize - 1;
+            var endTileX = (int) (camera.Position.X + Window.ViewportWidth / 2.0f) / worldTileSize + 1;
+            var endTileY = (int) (camera.Position.Y + Window.ViewportHeight / 2.0f) / worldTileSize + 1;
 
             for (var i = startTileX; i < endTileX; i++)
             {

@@ -28,7 +28,7 @@ namespace Mayday.Game.Gameplay.Components
             var moveComponent = Player.GetComponent<MoveComponent>();
             
             Jumping = true;
-            moveComponent.YVelocity = 2;
+            moveComponent.YVelocity = 2 * Game1.GlobalGameScale;;
         }
 
     }

@@ -17,7 +17,7 @@ namespace Mayday.Game.Gameplay.Components
             var gameWorld = Player.GameWorld;
 
             if (Player.XDirection != 0)
-                XVelocity += 0.1f * Player.XDirection;
+                XVelocity += 0.1f * Player.XDirection * Game1.GlobalGameScale;
             else
             {
                 XVelocity *= 0.9f;
@@ -26,7 +26,7 @@ namespace Mayday.Game.Gameplay.Components
                     XVelocity = 0;
             }
 
-            XVelocity = MathHelper.Clamp(XVelocity, -1f, 1f);
+            XVelocity = MathHelper.Clamp(XVelocity, -1f * Game1.GlobalGameScale, 1f * Game1.GlobalGameScale);
 
             CheckPlayerHit();
             

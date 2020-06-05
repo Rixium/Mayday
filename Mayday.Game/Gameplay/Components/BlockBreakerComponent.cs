@@ -19,7 +19,7 @@ namespace Mayday.Game.Gameplay.Components
         public IPlayer Player { get; set; }
         public IGameWorld GameWorld { get; set; }
 
-        public int MaxDistanceToBreak { get; set; } = 40;
+        public int MaxDistanceToBreak { get; set; } = 40 * Game1.GlobalGameScale;
         
         public BlockBreakerComponent(IGameWorld gameWorld, Camera camera, INetworkManager networkManager)
         {

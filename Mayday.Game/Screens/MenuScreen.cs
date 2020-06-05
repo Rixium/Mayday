@@ -8,9 +8,12 @@ using Mayday.Game.Networking.Packagers;
 using Mayday.Game.Networking.Packets;
 using Mayday.Game.Networking.SteamNetworking;
 using Mayday.UI.Views;
+using Microsoft.Xna.Framework.Graphics;
+using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Steamworks;
 using Steamworks.Data;
+using Yetiface.Engine;
 using Yetiface.Engine.Networking;
 using Yetiface.Engine.Networking.Listeners;
 using Yetiface.Engine.Screens;
@@ -29,8 +32,7 @@ namespace Mayday.Game.Screens
         
         public MenuScreen() : base("MenuScreen")
         {
-            BackgroundColor = Color.Black;
-            
+            BackgroundColor = new Color(4,13,21);
         }
 
         public override void Awake()
@@ -52,6 +54,8 @@ namespace Mayday.Game.Screens
             
             panel.JoinByIpJoin.Click += (o, e) => 
                 JoinServer(panel.IpAddressTextBox.Text);
+            
+            panel.GameLogo.Renderable = new TextureRegion(YetiGame.ContentManager.Load<Texture2D>("MainMenu/logo"));
             
             UserInterface.SetActive();
         }
