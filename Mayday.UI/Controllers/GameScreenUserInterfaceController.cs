@@ -21,18 +21,6 @@ namespace Mayday.UI.Controllers
             UserInterface.InventorySlotItemImages[index].Renderable = new TextureRegion(itemImage);
             UserInterface.InventorySlotItemCounts[index].Text = $"{count}";
         }
-        
-        public void AddItem(string item)
-        {
-            UserInterface.ItemListBox.Items.Insert(0, new ListItem(item, Color.White));
-            UserInterface.ItemListBox.InvalidateMeasure();
-        }
-
-        public void ClearItems()
-        {
-            UserInterface.ItemListBox.Items.Clear();
-            UserInterface.ItemListBox.InvalidateMeasure();
-        }
 
     }
 }

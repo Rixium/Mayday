@@ -112,9 +112,6 @@ namespace Mayday.Game.Screens
 
         private void OnInventoryChanged(IInventory inventory)
         {
-            
-            _interfaceController.ClearItems();
-
             var stackIndex = inventory.Slots - 1;
             
             foreach (var stack in inventory.ItemStacks)
@@ -123,7 +120,6 @@ namespace Mayday.Game.Screens
                 
                 if (stack.IsEmpty())
                 {
-                    _interfaceController.AddItem("Nothing");
                     continue;
                 }
                 
