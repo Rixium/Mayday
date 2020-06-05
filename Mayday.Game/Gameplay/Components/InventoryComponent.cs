@@ -9,71 +9,18 @@ namespace Mayday.Game.Gameplay.Components
     {
         public IPlayer Player { get; set; }
         
-        public Action<IItem> ItemPickup { get; set; }
-        public Action InventoryChanged { get; set; }
-        public IList<IItemStack> ItemStacks { get; set; }
-        public int Slots { get; set; }
-
-        public InventoryComponent(int slots)
-        {
-            Slots = slots;
-            InitializeSlots();
-            
-            ItemPickup += (item) => InventoryChanged?.Invoke();
-        }
-
-        private void InitializeSlots()
-        {
-            ItemStacks = new List<IItemStack>();
-            
-            for(var i = 0; i < Slots; i++)
-                ItemStacks.Add(new ItemStack());
-        }
+        private IList<IInventory> Inventories { get; set; }
 
         public void AddItemToInventory(IItem item)
         {
-            var selectedStack = GetStackForItem(item);
-            var successful = selectedStack?.AddItem(item);
-
-            if (successful.HasValue && successful.Value)
+            foreach (var inventory in Inventories)
             {
-                ItemPickup?.Invoke(item);
+                var result = inventory.AddItemToInventory(item);
+                if (result)
+                {
+                    break;
+                }
             }
-        }
-
-        private IItemStack GetStackForItem(IItem item)
-        {
-            IItemStack selectedStack = null;
-
-            if (ItemStacks == null)
-                ItemStacks = new List<IItemStack>();
-
-            foreach (var stack in ItemStacks)
-            {
-                if (stack.IsEmpty())
-                    selectedStack = stack;
-                if (!stack.ContainsItemOfType(item))
-                    continue;
-                if (!stack.HasSpaceFor(item))
-                    continue;
-                selectedStack = stack;
-                break;
-            }
-
-            return selectedStack ?? CreateNewStackIfPossible();
-        }
-
-        private IItemStack CreateNewStackIfPossible()
-        {
-            if (ItemStacks == null)
-                ItemStacks = new List<IItemStack>();
-
-            if (ItemStacks.Count >= Slots)
-                return null;
-
-            var newStack = new ItemStack();
-            ItemStacks.Add(newStack);
-            return newStack;
         }
 
         public void Update()
@@ -82,6 +29,15 @@ namespace Mayday.Game.Gameplay.Components
 
         public void OnAddedToPlayer()
         {
+        }
+
+        public IInventory AddInventory(Inventory inventory)
+        {
+            if(Inventories == null)
+                Inventories = new List<IInventory>();
+            
+            Inventories.Add(inventory);
+            return inventory;
         }
     }
 }

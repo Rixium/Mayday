@@ -58,8 +58,10 @@
     <Compile Include="Gameplay\Data\TileProperties.cs" />
     <Compile Include="Gameplay\Entities\IPlayer.cs" />
     <Compile Include="Gameplay\Entities\Player.cs" />
+    <Compile Include="Gameplay\Items\IInventory.cs" />
     <Compile Include="Gameplay\Items\IItem.cs" />
     <Compile Include="Gameplay\Items\IItemStack.cs" />
+    <Compile Include="Gameplay\Items\Inventory.cs" />
     <Compile Include="Gameplay\Items\Item.cs" />
     <Compile Include="Gameplay\Items\ItemStack.cs" />
     <Compile Include="Gameplay\WorldMakers\IWorldMaker.cs" />

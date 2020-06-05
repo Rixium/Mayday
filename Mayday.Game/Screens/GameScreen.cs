@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Entities;
+using Mayday.Game.Gameplay.Items;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Graphics;
 using Mayday.Game.Graphics.Renderers;
@@ -98,17 +99,20 @@ namespace Mayday.Game.Screens
             player.AddComponent(new GravityComponent());
             player.AddComponent(new JumpComponent());
             player.AddComponent(new BlockBreakerComponent(_gameWorld, Camera, _networkManager));
-            var inventory = player.AddComponent(new InventoryComponent(8));
-                
-            if (isClients) inventory.InventoryChanged += () => OnInventoryChanged(inventory);
+            var inventoryComponent = player.AddComponent(new InventoryComponent());
+            var inventoryBar = inventoryComponent.AddInventory(new Inventory(8));
+            var mainInventory = inventoryComponent.AddInventory(new Inventory(24));    
+            
+            if (isClients) inventoryBar.InventoryChanged += () => OnInventoryChanged(inventoryBar);
 
             _players.Add(player.SteamId, player);
 
             return player;
         }
 
-        private void OnInventoryChanged(InventoryComponent inventory)
+        private void OnInventoryChanged(IInventory inventory)
         {
+            
             _interfaceController.ClearItems();
 
             var stackIndex = inventory.Slots - 1;

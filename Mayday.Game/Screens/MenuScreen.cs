@@ -41,7 +41,7 @@ namespace Mayday.Game.Screens
             _packager = new MaydayMessagePackager();
             
             var panel = new MainMenuUserInterface();
-            new MainMenuUserInterfaceController(panel);
+            var mainMenuUserInterfaceController = new MainMenuUserInterfaceController(panel);
             UserInterface = new MyraUserInterface(panel);
             
             _networkManager.SetServerNetworkListener(this);

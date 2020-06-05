@@ -60,7 +60,7 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Gameplay\Components\InventoryComponentShould.cs" />
+        <Compile Include="Gameplay\Items\InventoryShould.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
