@@ -19,13 +19,16 @@ namespace Mayday.UI.Views
 	{
 		private void BuildUI()
 		{
+			Left = 0;
+			Top = 0;
+			
 			ItemListBox = new ListBox();
 			ItemListBox.Id = "ItemListBox";
 
 			var horizontalStackPanel1 = new HorizontalStackPanel();
 			horizontalStackPanel1.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
 			horizontalStackPanel1.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Top;
-
+			horizontalStackPanel1.IsDraggable = true;
 			for (var i = 0; i < 8; i++)
 			{
 				var panel = new Panel();
@@ -56,10 +59,91 @@ namespace Mayday.UI.Views
 				
 				horizontalStackPanel1.Widgets.Add(panel);
 			}
+			
+			var topPanel = new Panel()
+			{
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				VerticalAlignment = VerticalAlignment.Top,
+				Background = null,
+				Padding = new Thickness(5)
+			};
 
-			Padding = new Thickness(10);
+			InventoryPanel = new VerticalStackPanel()
+			{
+				VerticalAlignment = VerticalAlignment.Center,
+				HorizontalAlignment = HorizontalAlignment.Center,
+				Background = new SolidBrush(Color.Black * 0.5f),
+				IsDraggable = true,
+				DragHandle = topPanel
+			};
+
+			InventoryPanel.AddChild(topPanel);
+
+			topPanel.AddChild(new Label()
+			{
+				Text = "Inventory",
+				TextColor = Color.White,
+				HorizontalAlignment = HorizontalAlignment.Center,
+				VerticalAlignment = VerticalAlignment.Center
+			});
+
+			var closeInventoryButton = topPanel.AddChild(new TextButton()
+			{
+				Text = "x",
+				Background = null,
+				FocusedBackground = null,
+				OverBackground = null,
+				PressedBackground = null,
+				DisabledBackground = null,
+				HorizontalAlignment = HorizontalAlignment.Right,
+				VerticalAlignment = VerticalAlignment.Center
+			});
+
+			closeInventoryButton.Click += (sender, args) => InventoryPanel.Visible = false;
+
+			for (var i = 0; i < 4; i++)
+			{
+				var horizontalRow = new HorizontalStackPanel();
+				
+				for (var j = 0; j < 6; j++)
+				{
+					var panel = new Panel();
+					panel.Width = 64;
+					panel.Height = 64;
+				
+					var inventorySlotBackground = new Image();
+					inventorySlotBackground.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
+					inventorySlotBackground.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;
+
+					var inventorySlotItemImage = new Image();
+					inventorySlotItemImage.Width = 40;
+					inventorySlotItemImage.Height = 40;
+					inventorySlotItemImage.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
+					inventorySlotItemImage.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
+
+					var inventorySlotCount = new Label();
+					inventorySlotCount.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Right;
+					inventorySlotCount.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Bottom;
+
+					MainInventorySlotBackgrounds.Add(inventorySlotBackground);
+					MainInventorySlotItemImages.Add(inventorySlotItemImage);
+					MainInventorySlotItemCounts.Add(inventorySlotCount);
+				
+					panel.Widgets.Add(inventorySlotBackground);
+					panel.Widgets.Add(inventorySlotItemImage);
+					panel.Widgets.Add(inventorySlotCount);
+					
+					horizontalRow.AddChild(panel);
+				}
+
+				InventoryPanel.AddChild(horizontalRow);
+			}
+;
 			Widgets.Add(ItemListBox);
 			Widgets.Add(horizontalStackPanel1);
+			Widgets.Add(InventoryPanel);
+			
+			Widgets.Add(new DebugOptionsWindow());
 		}
 		
 		public ListBox ItemListBox;
@@ -67,6 +151,12 @@ namespace Mayday.UI.Views
 		public IList<Image> InventorySlotItemImages = new List<Image>();
 		public IList<Label> InventorySlotItemCounts = new List<Label>();
 		public IList<Image> InventorySlotBackgrounds = new List<Image>();
+		
+		public IList<Image> MainInventorySlotItemImages = new List<Image>();
+		public IList<Label> MainInventorySlotItemCounts = new List<Label>();
+		public IList<Image> MainInventorySlotBackgrounds = new List<Image>();
+		
+		public VerticalStackPanel InventoryPanel { get; set; }
 		
 	}
 }

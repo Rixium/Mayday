@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Mayday.UI.Views;
 using Myra.Graphics2D.UI;
 
-namespace Mayday.UI.Controllers
+namespace Mayday.Game.UI.Controllers
 {
     public class MainMenuUserInterfaceController
     {

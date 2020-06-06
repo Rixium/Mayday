@@ -7,7 +7,7 @@ using Mayday.Game.Gameplay.WorldMakers.Listeners;
 using Mayday.Game.Networking.Packagers;
 using Mayday.Game.Networking.Packets;
 using Mayday.Game.Networking.SteamNetworking;
-using Mayday.UI.Controllers;
+using Mayday.Game.UI.Controllers;
 using Mayday.UI.Views;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.TextureAtlases;

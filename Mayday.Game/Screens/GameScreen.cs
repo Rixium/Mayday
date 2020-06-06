@@ -10,9 +10,10 @@ using Mayday.Game.Graphics;
 using Mayday.Game.Graphics.Renderers;
 using Mayday.Game.Networking.Packagers;
 using Mayday.Game.Networking.Packets;
-using Mayday.UI.Controllers;
+using Mayday.Game.UI.Controllers;
 using Mayday.UI.Views;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Myra.Graphics2D.TextureAtlases;
 using Steamworks;
 using Steamworks.Data;
@@ -60,12 +61,6 @@ namespace Mayday.Game.Screens
             var gameScreenUserInterface = new GameScreenUserInterface();
             _interfaceController = new GameScreenUserInterfaceController(gameScreenUserInterface);
             UserInterface = new MyraUserInterface(gameScreenUserInterface);
-
-            var renderable = new TextureRegion(YetiGame.ContentManager.Load<Texture2D>("UI/bar_inventory_item"));
-            foreach (var background in _interfaceController.UserInterface.InventorySlotBackgrounds)
-            {
-                background.Renderable = renderable;
-            }
         }
         
         public void SetWorld(IGameWorld gameWorld)
@@ -101,33 +96,19 @@ namespace Mayday.Game.Screens
             player.AddComponent(new BlockBreakerComponent(_gameWorld, Camera, _networkManager));
             var inventoryComponent = player.AddComponent(new InventoryComponent());
             var inventoryBar = inventoryComponent.AddInventory(new Inventory(8));
-            var mainInventory = inventoryComponent.AddInventory(new Inventory(24));    
-            
-            if (isClients) inventoryBar.InventoryChanged += () => OnInventoryChanged(inventoryBar);
+            var mainInventory = inventoryComponent.AddInventory(new Inventory(24));
+
+            if (isClients)
+            {
+                inventoryBar.InventoryChanged += () => _interfaceController.InventoryBarChanged(inventoryBar);
+                mainInventory.InventoryChanged += () => _interfaceController.MainInventoryChanged(mainInventory);
+            }
 
             _players.Add(player.SteamId, player);
 
             return player;
         }
 
-        private void OnInventoryChanged(IInventory inventory)
-        {
-            var stackIndex = inventory.Slots - 1;
-            
-            foreach (var stack in inventory.ItemStacks)
-            {
-                stackIndex--;
-                
-                if (stack.IsEmpty())
-                {
-                    continue;
-                }
-                
-                _interfaceController.SetSlotData(ContentChest.Items[stack.Item.Id], stack.Count, stackIndex + 1);
-                
-            }
-        }
-        
         public override void Awake()
         {
             BackgroundColor = new Color(47, 39, 54);
@@ -138,6 +119,8 @@ namespace Mayday.Game.Screens
             YetiGame.InputManager.RegisterInputEvent("MoveRight", () => Move(0), InputEventType.Released);
             YetiGame.InputManager.RegisterInputEvent("MoveLeft", () => Move(0), InputEventType.Released);
 
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.I), _interfaceController.ToggleMainInventory);
+            
             Camera.SetEntity(_myPlayer);
             UserInterface.SetActive();
         }
@@ -204,10 +187,10 @@ namespace Mayday.Game.Screens
         public override void RenderScreen()
         {
             GraphicsUtils.Instance.Begin(true, Camera.GetMatrix());
-
+            
             _worldRenderer.Draw(_gameWorld, Camera);
             _playerRenderer.DrawPlayers(_players);
-
+            
             GraphicsUtils.Instance.End();
         }
 
