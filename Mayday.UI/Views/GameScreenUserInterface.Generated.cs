@@ -5,7 +5,7 @@ using Myra.Graphics2D;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.Brushes;
-
+using Myra.Graphics2D.UI.ColorPicker;
 #if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -25,15 +25,26 @@ namespace Mayday.UI.Views
 			ItemListBox = new ListBox();
 			ItemListBox.Id = "ItemListBox";
 
-			var horizontalStackPanel1 = new HorizontalStackPanel();
-			horizontalStackPanel1.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
-			horizontalStackPanel1.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Top;
-			horizontalStackPanel1.IsDraggable = true;
+			TopPanel = new HorizontalStackPanel()
+			{
+				Background = new SolidBrush(Color.White),
+				Padding = new Thickness(10),
+				Margin = new Thickness(0, 10, 0, 0),
+				Width = 582,
+				Height = 64
+			};
+
+			TopPanel.Spacing = 10;
+
+			TopPanel.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
+			TopPanel.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Top;
+			
 			for (var i = 0; i < 8; i++)
 			{
 				var panel = new Panel();
 				panel.Width = 64;
 				panel.Height = 64;
+				panel.VerticalAlignment = VerticalAlignment.Center;
 				
 				var inventorySlotBackground = new Image();
 				inventorySlotBackground.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
@@ -57,9 +68,9 @@ namespace Mayday.UI.Views
 				panel.Widgets.Add(inventorySlotItemImage);
 				panel.Widgets.Add(inventorySlotCount);
 				
-				horizontalStackPanel1.Widgets.Add(panel);
+				TopPanel.Widgets.Add(panel);
 			}
-			
+				
 			var topPanel = new Panel()
 			{
 				HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -140,10 +151,8 @@ namespace Mayday.UI.Views
 			}
 ;
 			Widgets.Add(ItemListBox);
-			Widgets.Add(horizontalStackPanel1);
+			Widgets.Add(TopPanel);
 			Widgets.Add(InventoryPanel);
-			
-			Widgets.Add(new DebugOptionsWindow());
 		}
 		
 		public ListBox ItemListBox;
@@ -155,7 +164,8 @@ namespace Mayday.UI.Views
 		public IList<Image> MainInventorySlotItemImages = new List<Image>();
 		public IList<Label> MainInventorySlotItemCounts = new List<Label>();
 		public IList<Image> MainInventorySlotBackgrounds = new List<Image>();
-		
+		public HorizontalStackPanel TopPanel;
+
 		public VerticalStackPanel InventoryPanel { get; set; }
 		
 	}
