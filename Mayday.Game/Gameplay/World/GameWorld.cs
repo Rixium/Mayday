@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Entities;
 using Yetiface.Engine.Utils;
@@ -16,8 +17,9 @@ namespace Mayday.Game.Gameplay.World
         public int Width { get; set; }
 
         public int Height { get; set; }
+        public IList<IEntity> WorldItems { get; set; } = new List<IEntity>();
 
-        public void Move(IPlayer player, float xMove, float yMove)
+        public void Move(IEntity player, float xMove, float yMove)
         {
             player.X += xMove;
 

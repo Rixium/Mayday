@@ -6,18 +6,18 @@ namespace Mayday.Game.Gameplay.Components
 {
     public class MoveComponent : IComponent
     {
-        public IPlayer Player { get; set; }
-
+        
+        public IEntity Entity { get; set; }
         public float YVelocity { get; set; }
-        public float XVelocity { get; private set; }
+        public float XVelocity { get; set; }
         public Action HitFloor { get; set; }
 
         public void Update()
         {
-            var gameWorld = Player.GameWorld;
+            var gameWorld = Entity.GameWorld;
 
-            if (Player.XDirection != 0)
-                XVelocity += 0.1f * Player.XDirection * Game1.GlobalGameScale;
+            if (Entity.XDirection != 0)
+                XVelocity += 0.1f * Entity.XDirection * Game1.GlobalGameScale;
             else
             {
                 XVelocity *= 0.9f;
@@ -34,22 +34,22 @@ namespace Mayday.Game.Gameplay.Components
             var xMove = XVelocity;
             var yMove = -YVelocity;
 
-            gameWorld.Move(Player, xMove, yMove);
+            gameWorld.Move(Entity, xMove, yMove);
         }
 
 
         private void CheckPlayerHit()
         {
-            var playerBounds = Player.GetBounds();
+            var playerBounds = Entity.GetBounds();
 
-            var tileStartX = (playerBounds.Left + 1) / Player.GameWorld.TileSize;
-            var tileEndX = (playerBounds.Right - 1) / Player.GameWorld.TileSize;
+            var tileStartX = (playerBounds.Left + 1) / Entity.GameWorld.TileSize;
+            var tileEndX = (playerBounds.Right - 1) / Entity.GameWorld.TileSize;
             
             if(YVelocity > 0) // Travelling Upwards
                 for (var i = (int) tileStartX; i <= tileEndX; i++)
                 {
-                    var tile = Player.GameWorld.TryGetTile(i,
-                        (int) ((playerBounds.Top - YVelocity) / Player.GameWorld.TileSize));
+                    var tile = Entity.GameWorld.TryGetTile(i,
+                        (int) ((playerBounds.Top - YVelocity) / Entity.GameWorld.TileSize));
                     if (tile != null && tile.TileType == 0) 
                         continue;
                     
@@ -59,8 +59,8 @@ namespace Mayday.Game.Gameplay.Components
             else if (YVelocity < 0) // Travelling Downwards
                 for (var i = (int) tileStartX; i <= tileEndX; i++)
                 {
-                    var tile = Player.GameWorld.TryGetTile(i,
-                        (int) ((playerBounds.Bottom  + 1) / Player.GameWorld.TileSize));
+                    var tile = Entity.GameWorld.TryGetTile(i,
+                        (int) ((playerBounds.Bottom  + 1) / Entity.GameWorld.TileSize));
                     if (tile != null && tile.TileType == 0) continue;
                     
                     HitFloor?.Invoke();

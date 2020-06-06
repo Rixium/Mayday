@@ -1,4 +1,7 @@
-﻿using Mayday.Game.Gameplay.Data;
+﻿using System;
+using System.Collections.Generic;
+using Mayday.Game.Gameplay.Components;
+using Mayday.Game.Gameplay.Data;
 using Microsoft.Xna.Framework;
 using Yetiface.Engine.Utils;
 
@@ -14,6 +17,8 @@ namespace Mayday.Game.Gameplay.World
         public int Y { get; set; }
 
         private int _tileType;
+
+        public Action<Tile> TileDestroyed { get; set; }
 
         public int TileType
         {
@@ -48,6 +53,8 @@ namespace Mayday.Game.Gameplay.World
             }
         }
 
+        private IList<IComponent> Components { get; set; } = new List<IComponent>();
+
         public int WallType { get; set; }
 
         public Vector2 RenderCenter => new Vector2(RenderX + TileSize / 2.0f, RenderY + TileSize / 2.0f);
@@ -61,5 +68,30 @@ namespace Mayday.Game.Gameplay.World
         }
 
         public RectangleF GetBounds() => new RectangleF(RenderX, RenderY, TileSize, TileSize);
+
+        public void Destroy()
+        {
+            if (TileType == 0) return;
+            TileDestroyed?.Invoke(this);
+            TileType = 0;
+        }
+
+        public T AddComponent<T>(T component) where T : IComponent
+        {
+            Components.Add(component);
+            return component;
+        }
+
+        public T GetComponent<T>()
+        {
+            foreach (var component in Components)
+            {
+                if (component.GetType() == typeof(T))
+                    return (T) component;
+            }
+
+            return default;
+        }
+        
     }
 }

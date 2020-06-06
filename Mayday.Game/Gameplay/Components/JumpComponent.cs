@@ -4,10 +4,10 @@ namespace Mayday.Game.Gameplay.Components
 {
     public class JumpComponent : IComponent
     {
-        public IPlayer Player { get; set; }
 
+        public IEntity Entity { get; set; }
         public bool Jumping { get; set; }
-        
+
         public void Update()
         {
             
@@ -17,7 +17,7 @@ namespace Mayday.Game.Gameplay.Components
         {
             // We need to know when the player hits the floor, so that we can
             // set jumping back to false.
-            var moveComponent = Player.GetComponent<MoveComponent>();
+            var moveComponent = Entity.GetComponent<MoveComponent>();
             moveComponent.HitFloor += () => Jumping = false;
         }
 
@@ -25,7 +25,7 @@ namespace Mayday.Game.Gameplay.Components
         {
             if (Jumping) return;
             
-            var moveComponent = Player.GetComponent<MoveComponent>();
+            var moveComponent = Entity.GetComponent<MoveComponent>();
             
             Jumping = true;
             moveComponent.YVelocity = 2 * Game1.GlobalGameScale;;

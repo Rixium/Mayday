@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Mayday.Game.Gameplay.Components;
@@ -12,9 +13,8 @@ using Mayday.Game.Networking.Packagers;
 using Mayday.Game.Networking.Packets;
 using Mayday.Game.UI.Controllers;
 using Mayday.UI.Views;
-using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using Myra.Graphics2D.TextureAtlases;
 using Steamworks;
 using Steamworks.Data;
 using Yetiface.Engine;
@@ -38,12 +38,13 @@ namespace Mayday.Game.Screens
         
         private readonly INetworkManager _networkManager;
         private readonly INetworkMessagePackager _messagePackager;
+        private Random _random = new Random();
         
         private IGameWorld _gameWorld;
         public Camera Camera { get; } = new Camera();
 
-        private readonly Dictionary<ulong, IPlayer> _players = new Dictionary<ulong, IPlayer>();
-        private IPlayer _myPlayer;
+        private readonly Dictionary<ulong, Player> _players = new Dictionary<ulong, Player>();
+        private Player _myPlayer;
         
         private GameScreenUserInterfaceController _interfaceController;
 
@@ -66,14 +67,76 @@ namespace Mayday.Game.Screens
         public void SetWorld(IGameWorld gameWorld)
         {
             _gameWorld = gameWorld;
+
+            RegisterTileCallbacks();
+        }
+
+        private void RegisterTileCallbacks()
+        {
+            if (_gameWorld == null) return;
+            foreach (var tile in _gameWorld.Tiles)
+            {
+                tile.TileDestroyed += OnTileDestroyed;
+            }
+        }
+
+        private void OnTileDestroyed(Tile tile)
+        {
+            var itemDrop = new ItemDrop
+            {
+                Item = ContentChest.ItemData[tile.TileProperties.ItemDropId],
+                X = tile.RenderX,
+                Y = tile.RenderY,
+                GameWorld = _gameWorld
+            };
+
+            var moveComponent = itemDrop.AddComponent(new MoveComponent());
+            itemDrop.AddComponent(new GravityComponent());
+            moveComponent.XVelocity = _random.Next(-10, 10);
+            moveComponent.YVelocity = _random.Next(0, 5);
+            
+            _gameWorld.WorldItems.Add(itemDrop);
+            
+            var tempTile = new Tile(0, tile.X, tile.Y);
+            SendTileChangePacket(tempTile);
+            
+            SendItemDropPacket(itemDrop);
+        }
+
+        private void SendItemDropPacket(ItemDrop itemDrop)
+        {
+            var itemDropPacket = new ItemDropPacket()
+            {
+                X = itemDrop.X,
+                Y = itemDrop.Y,
+                ItemId = itemDrop.Item.Id
+            };
+
+            var package = _messagePackager.Package(itemDropPacket);
+            
+            _networkManager.SendMessage(package);
+        }
+
+        private void SendTileChangePacket(Tile tile)
+        {
+            var tileChangePacket = new TileTypePacket()
+            {
+                X = tile.X,
+                Y = tile.Y,
+                TileType = tile.TileType
+            };
+
+            var package = _messagePackager.Package(tileChangePacket);
+            
+            _networkManager.SendMessage(package);
         }
         
-        public IPlayer AddPlayer(IPlayer player, bool isClients = false)
+        public Player AddPlayer(Player player, bool isClients = false)
         {
             if (isClients)
             {
                 _myPlayer = player;
-                player.SteamId = SteamClient.SteamId;
+                player.SteamId = GetId();
             }
 
             var spawnTile = GetSpawnPosition();
@@ -93,7 +156,9 @@ namespace Mayday.Game.Screens
             player.AddComponent(playerAnimationComponent);
             player.AddComponent(new GravityComponent());
             player.AddComponent(new JumpComponent());
-            player.AddComponent(new BlockBreakerComponent(_gameWorld, Camera, _networkManager));
+            player.AddComponent(new BlockBreakerComponent(_gameWorld, Camera));
+            player.AddComponent(new ItemPickerComponent());
+            
             var inventoryComponent = player.AddComponent(new InventoryComponent());
             var inventoryBar = inventoryComponent.AddInventory(new Inventory(8));
             var mainInventory = inventoryComponent.AddInventory(new Inventory(24));
@@ -109,6 +174,18 @@ namespace Mayday.Game.Screens
             return player;
         }
 
+        private ulong GetId()
+        {
+            try
+            {
+                return SteamClient.SteamId;
+            }
+            catch (Exception _)
+            {
+                return 0;
+            }
+        }
+
         public override void Awake()
         {
             BackgroundColor = new Color(47, 39, 54);
@@ -122,7 +199,6 @@ namespace Mayday.Game.Screens
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.I), _interfaceController.ToggleMainInventory);
             
             Camera.SetEntity(_myPlayer);
-            UserInterface.SetActive();
         }
 
         private void Jump()
@@ -147,14 +223,14 @@ namespace Mayday.Game.Screens
 
         private void Move(int x)
         {
-            var player = _players[SteamClient.SteamId];
+            var player = _players[_myPlayer.SteamId];
 
             if (player.XDirection != x)
             {
                 var data = new PlayerMovePacket()
                 {
                     XDirection = x,
-                    SteamId = SteamClient.SteamId
+                    SteamId = player.SteamId
                 };
 
                 var movePackage = _messagePackager.Package(data);
@@ -164,7 +240,7 @@ namespace Mayday.Game.Screens
                 {
                     X = (int) player.X,
                     Y = (int) player.Y,
-                    SteamId = SteamClient.SteamId
+                    SteamId = player.SteamId
                 };
 
                 var package = _messagePackager.Package(position);
@@ -190,6 +266,14 @@ namespace Mayday.Game.Screens
             
             _worldRenderer.Draw(_gameWorld, Camera);
             _playerRenderer.DrawPlayers(_players);
+
+            foreach (var entity in _gameWorld.WorldItems)
+            {
+                if (!Camera.Intersects(entity.GetBounds())) continue;
+                if (entity.GetType() != typeof(ItemDrop)) continue;
+                var item = (ItemDrop) entity;
+                GraphicsUtils.Instance.SpriteBatch.Draw(ContentChest.Items[item.Item.Id], new Vector2(item.X, item.Y), Color.White);
+            }
             
             GraphicsUtils.Instance.End();
         }
@@ -206,6 +290,9 @@ namespace Mayday.Game.Screens
             
             foreach(var player in _players)
                 player.Value.Update();
+            
+            foreach(var entity in _gameWorld.WorldItems)
+                entity.Update();
             
             Camera.Update();
         }
@@ -271,6 +358,25 @@ namespace Mayday.Game.Screens
                 };
 
                 AddPlayer(player);
+            } else if (received.GetType() == typeof(ItemDropPacket))
+            {
+                var itemDropPacket = (ItemDropPacket) received;
+
+                var itemDrop = new ItemDrop
+                {
+                    Item = ContentChest.ItemData[itemDropPacket.ItemId],
+                    X = itemDropPacket.X,
+                    Y = itemDropPacket.Y,
+                    GameWorld = _gameWorld
+                };
+
+                var moveComponent = itemDrop.AddComponent(new MoveComponent());
+                itemDrop.AddComponent(new GravityComponent());
+                moveComponent.XVelocity = _random.Next(-10, 10);
+                moveComponent.YVelocity = _random.Next(0, 5);
+            
+                
+                _gameWorld.WorldItems.Add(itemDrop);
             }
         }
 
@@ -329,7 +435,7 @@ namespace Mayday.Game.Screens
                 else
                 {
                     var spawnTile = GetSpawnPosition();
-                    var player = new Player()
+                    var player = new Player
                     {
                         SteamId = movePacket.SteamId,
                         X = spawnTile.X * 16,
@@ -352,7 +458,7 @@ namespace Mayday.Game.Screens
                 }
                 else
                 {
-                    var player = new Player()
+                    var player = new Player
                     {
                         SteamId = positionPacket.SteamId,
                         X = positionPacket.X,
@@ -390,6 +496,24 @@ namespace Mayday.Game.Screens
                 };
 
                 AddPlayer(player);
+            } else if (received.GetType() == typeof(ItemDropPacket))
+            {
+                var itemDropPacket = (ItemDropPacket) received;
+
+                var itemDrop = new ItemDrop
+                {
+                    Item = ContentChest.ItemData[itemDropPacket.ItemId],
+                    X = itemDropPacket.X,
+                    Y = itemDropPacket.Y,
+                    GameWorld = _gameWorld
+                };
+
+                var moveComponent = itemDrop.AddComponent(new MoveComponent());
+                itemDrop.AddComponent(new GravityComponent());
+                moveComponent.XVelocity = _random.Next(-10, 10);
+                moveComponent.YVelocity = _random.Next(0, 5);
+            
+                _gameWorld.WorldItems.Add(itemDrop);
             }
         }
 

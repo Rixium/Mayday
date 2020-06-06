@@ -15,6 +15,7 @@ namespace Mayday.Game.Networking.Packagers
             AddDefinition<JumpPacket>();
             AddDefinition<ChatMessagePacket>();
             AddDefinition<NewPlayerPacket>();
+            AddDefinition<ItemDropPacket>();
         }
         
     }

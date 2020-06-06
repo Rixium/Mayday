@@ -59,8 +59,6 @@ namespace Mayday.Game.Screens
             panel.GameLogo.Renderable = new TextureRegion(YetiGame.ContentManager.Load<Texture2D>("MainMenu/logo"));
             
             panel.GameLogo.Renderable = new TextureRegion(YetiGame.ContentManager.Load<Texture2D>("MainMenu/logo"));
-
-            UserInterface.SetActive();
         }
 
         public override void Begin()

@@ -1,10 +1,7 @@
 ﻿using System;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.World;
-using Mayday.Game.Networking.Packagers;
-using Mayday.Game.Networking.Packets;
 using Microsoft.Xna.Framework.Input;
-using Yetiface.Engine.Networking;
 using MouseState = Yetiface.Engine.Utils.MouseState;
 
 namespace Mayday.Game.Gameplay.Components
@@ -13,21 +10,15 @@ namespace Mayday.Game.Gameplay.Components
     {
         private readonly Camera _camera;
 
-        private readonly INetworkManager _networkManager;
-        private readonly MaydayMessagePackager _messagePackager;
-        
-        public IPlayer Player { get; set; }
+        public IEntity Entity { get; set; }
         public IGameWorld GameWorld { get; set; }
 
         public int MaxDistanceToBreak => 7 * GameWorld.TileSize;
         
-        public BlockBreakerComponent(IGameWorld gameWorld, Camera camera, INetworkManager networkManager)
+        public BlockBreakerComponent(IGameWorld gameWorld, Camera camera)
         {
             GameWorld = gameWorld;
             _camera = camera;
-            
-            _networkManager = networkManager;
-            _messagePackager = new MaydayMessagePackager();
         }
         
         public void Update()
@@ -48,11 +39,6 @@ namespace Mayday.Game.Gameplay.Components
                 var oldType = tile.TileType;
                 tile.TileType = 1;
 
-                if (oldType != tile.TileType)
-                {
-                    SendTileChangePacket(tile);
-                }
-                
             } else if (MouseState.CurrentState.RightButton == ButtonState.Pressed)
             {
                 var mousePosition = MouseState.Bounds(_camera.GetMatrix());
@@ -66,19 +52,13 @@ namespace Mayday.Game.Gameplay.Components
 
                 if (!CloseEnoughToTile(tile)) return;
                 
-                if (tile.TileProperties?.ItemDropId != null)
-                {
-                    var playerInventory = Player.GetComponent<InventoryComponent>();
-                    AddItemToInventory(playerInventory, tile.TileProperties.ItemDropId);
-                }
-                
-                var oldType = tile.TileType;
-                tile.TileType = 0;
-
-                if (oldType != tile.TileType)
-                {
-                    SendTileChangePacket(tile);
-                }
+                // if (tile.TileProperties?.ItemDropId != null)
+                // {
+                //     var playerInventory = Player.GetComponent<InventoryComponent>();
+                //     AddItemToInventory(playerInventory, tile.TileProperties.ItemDropId);
+                // }
+                //
+                tile.Destroy();
             }
 
         }
@@ -95,7 +75,7 @@ namespace Mayday.Game.Gameplay.Components
 
         private bool CloseEnoughToTile(Tile tile)
         {
-            var playerBounds = Player.GetBounds();
+            var playerBounds = Entity.GetBounds();
             var playerLeft = playerBounds.Left;
             var playerRight = playerBounds.Right;
             var playerTop = playerBounds.Top;
@@ -106,21 +86,7 @@ namespace Mayday.Game.Gameplay.Components
             if (Math.Abs(tile.RenderCenter.Y - playerTop) > MaxDistanceToBreak) return false;
             return (Math.Abs(tile.RenderCenter.Y - playerBottom) <= MaxDistanceToBreak);
         }
-        
-        private void SendTileChangePacket(Tile tile)
-        {
-            var tileChangePacket = new TileTypePacket()
-            {
-                X = tile.X,
-                Y = tile.Y,
-                TileType = tile.TileType
-            };
 
-            var package = _messagePackager.Package(tileChangePacket);
-            
-            _networkManager.SendMessage(package);
-        }
-        
         public void OnAddedToPlayer()
         {
             

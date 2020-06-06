@@ -7,15 +7,15 @@ namespace Mayday.Game.Gameplay.Components
 {
     public class PlayerAnimationComponent : IComponent
     {
-        public IPlayer Player { get; set; }
         public IAnimator HeadAnimator { get; set; }
         public IAnimator BodyAnimator { get; set; }
         public IAnimator LegsAnimator { get; set; }
+        public IEntity Entity { get; set; }
 
         public void Update()
         {
-            var moveComponent = Player.GetComponent<MoveComponent>();
-            var jumpComponent = Player.GetComponent<JumpComponent>();
+            var moveComponent = Entity.GetComponent<MoveComponent>();
+            var jumpComponent = Entity.GetComponent<JumpComponent>();
 
             var speed = 0.1f;
             

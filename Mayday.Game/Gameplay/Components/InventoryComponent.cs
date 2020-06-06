@@ -7,8 +7,7 @@ namespace Mayday.Game.Gameplay.Components
 {
     public class InventoryComponent : IComponent
     {
-        public IPlayer Player { get; set; }
-        
+        public IEntity Entity { get; set; }
         private IList<IInventory> Inventories { get; set; }
 
         public void AddItemToInventory(IItem item)
@@ -22,6 +21,7 @@ namespace Mayday.Game.Gameplay.Components
                 }
             }
         }
+
 
         public void Update()
         {

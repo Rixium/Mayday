@@ -5,7 +5,7 @@ namespace Mayday.Game.Gameplay.Components
     public interface IComponent
     {
 
-        IPlayer Player { get; set; }
+        IEntity Entity { get; set; }
         void Update();
         void OnAddedToPlayer();
     }

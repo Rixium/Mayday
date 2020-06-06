@@ -27,14 +27,10 @@ namespace Mayday.UI.Views
 
 			TopPanel = new HorizontalStackPanel()
 			{
-				Background = new SolidBrush(Color.White),
 				Padding = new Thickness(10),
 				Margin = new Thickness(0, 10, 0, 0),
-				Width = 582,
-				Height = 64
 			};
 
-			TopPanel.Spacing = 10;
 
 			TopPanel.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
 			TopPanel.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Top;
@@ -51,8 +47,8 @@ namespace Mayday.UI.Views
 				inventorySlotBackground.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;
 
 				var inventorySlotItemImage = new Image();
-				inventorySlotItemImage.Width = 40;
-				inventorySlotItemImage.Height = 40;
+				inventorySlotItemImage.Width = 32;
+				inventorySlotItemImage.Height = 32;
 				inventorySlotItemImage.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
 				inventorySlotItemImage.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
 
@@ -127,8 +123,8 @@ namespace Mayday.UI.Views
 					inventorySlotBackground.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;
 
 					var inventorySlotItemImage = new Image();
-					inventorySlotItemImage.Width = 40;
-					inventorySlotItemImage.Height = 40;
+					inventorySlotItemImage.Width = 32;
+					inventorySlotItemImage.Height = 32;
 					inventorySlotItemImage.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
 					inventorySlotItemImage.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
 

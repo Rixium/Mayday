@@ -14,7 +14,7 @@ namespace Mayday.Game
         private readonly int _maxY;
 
         private int _zoom = 1;
-        private IPlayer _following;
+        private IEntity _following;
 
         public Camera()
         {
@@ -59,9 +59,15 @@ namespace Mayday.Game
             Matrix.CreateScale(_zoom, _zoom, 1) *
             Matrix.CreateTranslation(new Vector3(Window.Center.X, Window.Center.Y, 0));
 
-        public void SetEntity(IPlayer myPlayer)
+        public void SetEntity(IEntity entity)
         {
-            _following = myPlayer;
+            _following = entity;
+        }
+
+        public bool Intersects(RectangleF bounds)
+        {
+            var rect = new RectangleF(_position.X - Window.Center.X, _position.Y - Window.Center.Y, Window.ViewportWidth, Window.ViewportHeight);
+            return rect.Intersects(bounds);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Mayday.Game.Gameplay.Entities;
+﻿using System.Collections.Generic;
+using Mayday.Game.Gameplay.Entities;
 
 namespace Mayday.Game.Gameplay.World
 {
@@ -8,8 +9,8 @@ namespace Mayday.Game.Gameplay.World
         Tile[,] Tiles { get; set; }
         int Width { get; set; }
         int Height { get; set; }
-
-        void Move(IPlayer player,
+        IList<IEntity> WorldItems { get; set; }
+        void Move(IEntity player,
             float xMove,
             float yMove);
         Tile TryGetTile(int tileX, int tileY);

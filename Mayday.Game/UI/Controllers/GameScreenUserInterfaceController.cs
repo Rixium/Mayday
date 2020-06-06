@@ -26,7 +26,6 @@ namespace Mayday.Game.UI.Controllers
                 background.Renderable = renderable;
             }
             
-            userInterface.TopPanel.Background = new TextureRegion(YetiGame.ContentManager.Load<Texture2D>("UI/top_bar_background"));
         }
 
         public void SetBarSlotData(Texture2D itemImage, int count, int index)

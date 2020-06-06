@@ -13,13 +13,13 @@ namespace Mayday.Game.Graphics.Renderers
         
         public Color OutlineColor { get; set;  }= new Color(24, 24, 24);
         
-        public void DrawPlayers(Dictionary<ulong, IPlayer> players)
+        public void DrawPlayers(Dictionary<ulong, Player> players)
         {
             foreach(var player in players)
                 DrawPlayer(player.Value);
         }
 
-        public void DrawPlayer(IPlayer player)
+        public void DrawPlayer(Player player)
         {
             var playerAnimationComponent = player.GetComponent<PlayerAnimationComponent>();
             

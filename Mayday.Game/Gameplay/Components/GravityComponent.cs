@@ -6,13 +6,13 @@ namespace Mayday.Game.Gameplay.Components
 {
     public class GravityComponent : IComponent
     {
-        public IPlayer Player { get; set; }
-
         public float Gravity { get; set; } = 3.72f * Game1.GlobalGameScale;
+
+        public IEntity Entity { get; set; }
 
         public void Update()
         {
-            var moveComponent = Player.GetComponent<MoveComponent>();
+            var moveComponent = Entity.GetComponent<MoveComponent>();
 
             var activeGravity = Gravity;
             
