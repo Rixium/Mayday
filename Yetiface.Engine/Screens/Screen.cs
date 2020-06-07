@@ -89,8 +89,7 @@ namespace Yetiface.Engine.Screens
 
         private void HandleKeyboard(KeyboardState keyboardState)
         {
-            foreach (var key in keyboardState.GetPressedKeys()
-                .Where(k => !LastKeyboardState.GetPressedKeys().Contains(k)))
+            foreach (var key in keyboardState.GetPressedKeys())
             {
                 OnKeyDown?.Invoke(key);
             }
