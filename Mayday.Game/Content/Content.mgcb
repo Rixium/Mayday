@@ -19,6 +19,24 @@
 /processorParam:Quality=Best
 /build:Game/Sounds/breakTile.wav
 
+#begin Game/Sounds/breakTile.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Game/Sounds/breakTile.wav
+
+#begin Game/Sounds/pop.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Game/Sounds/pop.wav
+
+#begin Game/Sounds/startDig.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Game/Sounds/startDig.wav
+
 #begin Game/Sounds/startDig.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
