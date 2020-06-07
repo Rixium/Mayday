@@ -153,7 +153,7 @@ namespace Mayday.Game.Screens
             player.AddComponent(new MoveComponent());
             player.AddComponent(playerAnimationComponent);
             player.AddComponent(new GravityComponent());
-            player.AddComponent(new JumpComponent());
+            player.AddComponent(new JumpComponent(this));
             var blockBreakerComponent = player.AddComponent(new BlockBreakerComponent(GameWorld, Camera));
             player.AddComponent(new ItemPickerComponent());
 
@@ -321,6 +321,12 @@ namespace Mayday.Game.Screens
         {
             itemDrop.GameWorld = GameWorld;
             GameWorld.WorldItems.Add(itemDrop);
+        }
+
+        public void SendPacket(JumpPacket jumpPacket)
+        {
+            var package = MessagePackager.Package(jumpPacket);
+            NetworkManager.SendMessage(package);
         }
         
     }

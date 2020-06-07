@@ -21,8 +21,17 @@ namespace Mayday.Game.Networking.Consumers
         protected override void ConsumePacket(Connection connection, JumpPacket packet)
         {
             var player = _gameScreen.Players[packet.SteamId];
+            
             var jumpComponent = player.GetComponent<JumpComponent>();
-            jumpComponent.Jump();
+            
+            if (packet.IsStopping)
+            {
+                jumpComponent.EndJump();
+            }
+            else
+            {
+                jumpComponent.Jump();
+            }
         }
         
     }
