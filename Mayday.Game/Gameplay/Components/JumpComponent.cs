@@ -21,7 +21,7 @@ namespace Mayday.Game.Gameplay.Components
         
         public void Update()
         {
-            if (Entity == _gameScreen.MyPlayer) return;
+            if (Entity != _gameScreen.MyPlayer) return;
             
             if (Jumping)
             {
