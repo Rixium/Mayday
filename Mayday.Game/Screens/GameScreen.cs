@@ -8,6 +8,8 @@ using Mayday.Game.Gameplay.Items;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Graphics;
 using Mayday.Game.Graphics.Renderers;
+using Mayday.Game.Networking.Consumers;
+using Mayday.Game.Networking.Listeners;
 using Mayday.Game.Networking.Packagers;
 using Mayday.Game.Networking.Packets;
 using Mayday.Game.UI.Controllers;
@@ -19,7 +21,6 @@ using Steamworks.Data;
 using Yetiface.Engine;
 using Yetiface.Engine.Inputs;
 using Yetiface.Engine.Networking;
-using Yetiface.Engine.Networking.Listeners;
 using Yetiface.Engine.Networking.Packagers;
 using Yetiface.Engine.Screens;
 using Yetiface.Engine.UI;
@@ -29,35 +30,33 @@ using Color = Microsoft.Xna.Framework.Color;
 namespace Mayday.Game.Screens
 {
 
-    public class GameScreen : Screen, INetworkServerListener, INetworkClientListener
+    public class GameScreen : Screen
     {
 
+        public INetworkManager NetworkManager { get; set; }
+        public INetworkMessagePackager MessagePackager { get; set; }
+        public IGameWorld GameWorld { get; set; }
+        public Dictionary<ulong, Player> Players { get; set; } 
+            = new Dictionary<ulong, Player>();
+        
         private readonly IWorldRenderer _worldRenderer;
         private readonly IPlayerRenderer _playerRenderer;
-        
-        private readonly INetworkManager _networkManager;
-        private readonly INetworkMessagePackager _messagePackager;
         private Random _random = new Random();
         
-        private IGameWorld _gameWorld;
         public Camera Camera { get; } = new Camera();
-
-        private readonly Dictionary<ulong, Player> _players = new Dictionary<ulong, Player>();
+        
         private Player _myPlayer;
         
         private GameScreenUserInterfaceController _interfaceController;
 
         public GameScreen(INetworkManager networkManager) : base("GameScreen")
         {
-            _networkManager = networkManager;
-            _networkManager.SetServerNetworkListener(this);
-            _networkManager.SetClientNetworkListener(this);
-            
-            _messagePackager = new MaydayMessagePackager();
+            NetworkManager = networkManager;
+            MessagePackager = new MaydayMessagePackager();
             
             _worldRenderer = new WorldRenderer();
             _playerRenderer = new PlayerRenderer();
-
+            
             var gameScreenUserInterface = new GameScreenUserInterface();
             _interfaceController = new GameScreenUserInterfaceController(gameScreenUserInterface);
             UserInterface = new MyraUserInterface(gameScreenUserInterface);
@@ -65,15 +64,15 @@ namespace Mayday.Game.Screens
         
         public void SetWorld(IGameWorld gameWorld)
         {
-            _gameWorld = gameWorld;
+            GameWorld = gameWorld;
 
             RegisterTileCallbacks();
         }
 
         private void RegisterTileCallbacks()
         {
-            if (_gameWorld == null) return;
-            foreach (var tile in _gameWorld.Tiles)
+            if (GameWorld == null) return;
+            foreach (var tile in GameWorld.Tiles)
             {
                 tile.TileDestroyed += OnTileDestroyed;
             }
@@ -86,7 +85,7 @@ namespace Mayday.Game.Screens
                 Item = ContentChest.ItemData[tile.TileProperties.ItemDropId],
                 X = tile.RenderX,
                 Y = tile.RenderY,
-                GameWorld = _gameWorld
+                GameWorld = GameWorld
             };
 
             var moveComponent = itemDrop.AddComponent(new MoveComponent());
@@ -94,11 +93,10 @@ namespace Mayday.Game.Screens
             moveComponent.XVelocity = _random.Next(-10, 10);
             moveComponent.YVelocity = _random.Next(0, 5);
             
-            _gameWorld.WorldItems.Add(itemDrop);
+            GameWorld.WorldItems.Add(itemDrop);
             
             var tempTile = new Tile(0, tile.X, tile.Y);
             SendTileChangePacket(tempTile);
-            
             SendItemDropPacket(itemDrop);
         }
 
@@ -111,9 +109,9 @@ namespace Mayday.Game.Screens
                 ItemId = itemDrop.Item.Id
             };
 
-            var package = _messagePackager.Package(itemDropPacket);
+            var package = MessagePackager.Package(itemDropPacket);
             
-            _networkManager.SendMessage(package);
+            NetworkManager.SendMessage(package);
         }
 
         private void SendTileChangePacket(Tile tile)
@@ -125,24 +123,23 @@ namespace Mayday.Game.Screens
                 TileType = tile.TileType
             };
 
-            var package = _messagePackager.Package(tileChangePacket);
+            var package = MessagePackager.Package(tileChangePacket);
             
-            _networkManager.SendMessage(package);
+            NetworkManager.SendMessage(package);
         }
         
         public Player AddPlayer(Player player, bool isClients = false)
         {
             if (isClients)
             {
-                _myPlayer = player;
+                var spawnTile = GetSpawnPosition();
+                player.X = spawnTile.X * GameWorld.TileSize;
+                player.Y = spawnTile.Y * GameWorld.TileSize - 70 * Game1.GlobalGameScale;
                 player.SteamId = GetId();
+                _myPlayer = player;
             }
 
-            var spawnTile = GetSpawnPosition();
-            
-            player.X = spawnTile.X * _gameWorld.TileSize;
-            player.Y = spawnTile.Y * _gameWorld.TileSize - 70 * Game1.GlobalGameScale;
-            player.GameWorld = _gameWorld;
+            player.GameWorld = GameWorld;
 
             var playerAnimationComponent = new PlayerAnimationComponent
             {
@@ -155,7 +152,7 @@ namespace Mayday.Game.Screens
             player.AddComponent(playerAnimationComponent);
             player.AddComponent(new GravityComponent());
             player.AddComponent(new JumpComponent());
-            player.AddComponent(new BlockBreakerComponent(_gameWorld, Camera));
+            player.AddComponent(new BlockBreakerComponent(GameWorld, Camera));
             player.AddComponent(new ItemPickerComponent());
             
             var inventoryComponent = player.AddComponent(new InventoryComponent());
@@ -168,7 +165,7 @@ namespace Mayday.Game.Screens
                 mainInventory.InventoryChanged += () => _interfaceController.MainInventoryChanged(mainInventory);
             }
 
-            _players.Add(player.SteamId, player);
+            Players.Add(player.SteamId, player);
 
             return player;
         }
@@ -188,6 +185,8 @@ namespace Mayday.Game.Screens
         public override void Awake()
         {
             BackgroundColor = new Color(47, 39, 54);
+
+            SetupNetworking();
             
             YetiGame.InputManager.RegisterInputEvent("MoveRight", () => Move(2), InputEventType.Held);
             YetiGame.InputManager.RegisterInputEvent("MoveLeft", () => Move(-2), InputEventType.Held);
@@ -200,6 +199,18 @@ namespace Mayday.Game.Screens
             Camera.SetEntity(_myPlayer);
         }
 
+        private void SetupNetworking()
+        {            
+            var gameServerListener = new MaydayServerNetworkListener(MessagePackager);
+            var gameClientListener = new MaydayClientNetworkListener(MessagePackager);
+            
+            NetworkManager.SetServerNetworkListener(gameServerListener);
+            NetworkManager.SetClientNetworkListener(gameClientListener);
+            
+            var consumers = new GamePacketConsumerManager(this);
+            consumers.InjectInto(gameClientListener, gameServerListener);
+        }
+
         private void Jump()
         {
             var jumpPacket = new JumpPacket
@@ -207,22 +218,22 @@ namespace Mayday.Game.Screens
                 SteamId = _myPlayer.SteamId
             };
 
-            var package = _messagePackager.Package(jumpPacket);
-            _networkManager.SendMessage(package);
+            var package = MessagePackager.Package(jumpPacket);
+            NetworkManager.SendMessage(package);
 
             var jumpComponent = _myPlayer.GetComponent<JumpComponent>();
             jumpComponent.Jump();
         }
 
         private Tile GetSpawnPosition() =>
-            (from Tile tile in _gameWorld.Tiles
+            (from Tile tile in GameWorld.Tiles
                 where tile.TileType == 1
-                select _gameWorld.Tiles[(int) (_gameWorld.Width / 2.0f), tile.Y])
+                select GameWorld.Tiles[(int) (GameWorld.Width / 2.0f), tile.Y])
             .FirstOrDefault();
 
         private void Move(int x)
         {
-            var player = _players[_myPlayer.SteamId];
+            var player = Players[_myPlayer.SteamId];
 
             if (player.XDirection != x)
             {
@@ -232,8 +243,8 @@ namespace Mayday.Game.Screens
                     SteamId = player.SteamId
                 };
 
-                var movePackage = _messagePackager.Package(data);
-                _networkManager.SendMessage(movePackage);
+                var movePackage = MessagePackager.Package(data);
+                NetworkManager.SendMessage(movePackage);
                 
                 var position = new PlayerPositionPacket
                 {
@@ -242,9 +253,9 @@ namespace Mayday.Game.Screens
                     SteamId = player.SteamId
                 };
 
-                var package = _messagePackager.Package(position);
+                var package = MessagePackager.Package(position);
                     
-                _networkManager.SendMessage(package);
+                NetworkManager.SendMessage(package);
                 
                 if (x != 0)
                 {
@@ -263,10 +274,10 @@ namespace Mayday.Game.Screens
         {
             GraphicsUtils.Instance.Begin(true, Camera.GetMatrix());
             
-            _worldRenderer.Draw(_gameWorld, Camera);
-            _playerRenderer.DrawPlayers(_players);
+            _worldRenderer.Draw(GameWorld, Camera);
+            _playerRenderer.DrawPlayers(Players);
 
-            foreach (var entity in _gameWorld.WorldItems)
+            foreach (var entity in GameWorld.WorldItems)
             {
                 if (!Camera.Intersects(entity.GetBounds())) continue;
                 if (entity.GetType() != typeof(ItemDrop)) continue;
@@ -285,243 +296,23 @@ namespace Mayday.Game.Screens
         {
             base.Update();
             
-            _networkManager?.Update();
+            NetworkManager?.Update();
             
-            foreach(var player in _players)
+            foreach(var player in Players)
                 player.Value.Update();
             
-            foreach(var entity in _gameWorld.WorldItems)
+            foreach(var entity in GameWorld.WorldItems)
                 entity.Update();
             
             Camera.Update();
         }
-
-        public void OnNewConnection(Connection connection, ConnectionInfo info)
+        
+        public void DropItem(ItemDrop itemDrop)
         {
-            
+            itemDrop.GameWorld = GameWorld;
+            GameWorld.WorldItems.Add(itemDrop);
         }
-
-
-        public void OnConnectionLeft(Connection connection, ConnectionInfo info)
-        {
-            
-        }
-
-        public void OnMessageReceived(Connection connection, NetIdentity identity, IntPtr data, int size, long messageNum,
-            long recvTime, int channel)
-        {
-            var received = _messagePackager.Unpack(data, size);
-
-            if (received.GetType() == typeof(MapRequestPacket))
-            {
-                SendMap();
-            } else if (received.GetType() == typeof(PlayerMovePacket))
-            {
-                var movePacket = (PlayerMovePacket) received;
-                var player = _players[movePacket.SteamId];
-                var xDir = movePacket.XDirection;
-                player.XDirection = xDir;
-                player.FacingDirection = movePacket.XDirection != 0 ? movePacket.XDirection :
-                    player.FacingDirection;
-            } else if (received.GetType() == typeof(PlayerPositionPacket))
-            {
-                var positionPacket = (PlayerPositionPacket) received;
-                var player = _players[positionPacket.SteamId];
-                player.X = positionPacket.X;
-                player.Y = positionPacket.Y;
-            } 
-            else if (received.GetType() == typeof(TileTypePacket))
-            {
-                var typePacket = (TileTypePacket) received;
-                _gameWorld.Tiles[typePacket.X, typePacket.Y].TileType = typePacket.TileType;
-            } else if (received.GetType() == typeof(JumpPacket))
-            {
-                var jump = (JumpPacket) received;
-                var player = _players[jump.SteamId];
-                var jumpComponent = player.GetComponent<JumpComponent>();
-                jumpComponent.Jump();
-            } else if (received.GetType() == typeof(ChatMessagePacket))
-            {
-                AddMessageToChat((ChatMessagePacket) received);
-            } else if (received.GetType() == typeof(NewPlayerPacket))
-            {
-                var newPlayer = (NewPlayerPacket) received;
-                
-                var player = new Player
-                {
-                    SteamId = newPlayer.SteamId,
-                    X = newPlayer.X,
-                    Y = newPlayer.Y,
-                    GameWorld = _gameWorld,
-                    HeadId = newPlayer.HeadId
-                };
-
-                AddPlayer(player);
-            } else if (received.GetType() == typeof(ItemDropPacket))
-            {
-                var itemDropPacket = (ItemDropPacket) received;
-
-                var itemDrop = new ItemDrop
-                {
-                    Item = ContentChest.ItemData[itemDropPacket.ItemId],
-                    X = itemDropPacket.X,
-                    Y = itemDropPacket.Y,
-                    GameWorld = _gameWorld
-                };
-
-                var moveComponent = itemDrop.AddComponent(new MoveComponent());
-                itemDrop.AddComponent(new GravityComponent());
-                moveComponent.XVelocity = _random.Next(-10, 10);
-                moveComponent.YVelocity = _random.Next(0, 5);
-            
-                
-                _gameWorld.WorldItems.Add(itemDrop);
-            }
-        }
-
-        private void AddMessageToChat(ChatMessagePacket received)
-        {
-            _players.TryGetValue(received.SteamId, out var selectedPlayer);
-        }
-
-        private async void SendMap()
-        {
-            for (var i = 0; i < _gameWorld.Width; i++)
-            {
-                for (var j = 0; j < _gameWorld.Height; j++)
-                {
-                    var tileToSend = _gameWorld.Tiles[i, j];
-                    var tileTypePacket = new TileTypePacket()
-                    {
-                        X = tileToSend.X,
-                        Y = tileToSend.Y,
-                        TileType = tileToSend.TileType
-                    };
-                    var packet = _messagePackager.Package(tileTypePacket);
-                    _networkManager.SendMessage(packet);
-                }
-
-                await Task.Delay(1);
-            }
-            
-        }
-
-        public void OnConnectionChanged(Connection connection, ConnectionInfo info)
-        {
-            
-        }
-
-
-        public void OnDisconnectedFromServer(ConnectionInfo info)
-        {
-            
-        }
-
-        public void OnMessageReceived(IntPtr data, int size, long messageNum, long recvTime, int channel)
-        {
-            var received = _messagePackager.Unpack(data, size);
-
-            if (received.GetType() == typeof(PlayerMovePacket))
-            {
-                var movePacket = (PlayerMovePacket) received;
-                if (_players.ContainsKey(movePacket.SteamId))
-                {
-                    var player = _players[movePacket.SteamId];
-                    player.XDirection = movePacket.XDirection;
-                    player.FacingDirection = movePacket.XDirection != 0 ? movePacket.XDirection :
-                    player.FacingDirection;
-                }
-                else
-                {
-                    var spawnTile = GetSpawnPosition();
-                    var player = new Player
-                    {
-                        SteamId = movePacket.SteamId,
-                        X = spawnTile.X * 16,
-                        Y = spawnTile.Y * 16 - (int)(62 / 2f),
-                        GameWorld = _gameWorld
-                    };
-
-                    AddPlayer(player);
-                }
-            } 
-            else if (received.GetType() == typeof(PlayerPositionPacket))
-            {
-                var positionPacket = (PlayerPositionPacket) received;
-                
-                if (_players.ContainsKey(positionPacket.SteamId))
-                {
-                    var player = _players[positionPacket.SteamId];
-                    player.X = positionPacket.X;
-                    player.Y = positionPacket.Y;
-                }
-                else
-                {
-                    var player = new Player
-                    {
-                        SteamId = positionPacket.SteamId,
-                        X = positionPacket.X,
-                        Y = positionPacket.Y,
-                        GameWorld = _gameWorld
-                    };
-
-                    AddPlayer(player);
-                }
-            }
-            else if (received.GetType() == typeof(TileTypePacket))
-            {
-                var typePacket = (TileTypePacket) received;
-                _gameWorld.Tiles[typePacket.X, typePacket.Y].TileType = typePacket.TileType;
-            } else if (received.GetType() == typeof(JumpPacket))
-            {
-                var jump = (JumpPacket) received;
-                var player = _players[jump.SteamId];
-                var jumpComponent = player.GetComponent<JumpComponent>();
-                jumpComponent.Jump();
-            } else if (received.GetType() == typeof(ChatMessagePacket))
-            {
-                AddMessageToChat((ChatMessagePacket) received);
-            } else if (received.GetType() == typeof(NewPlayerPacket))
-            {
-                var newPlayer = (NewPlayerPacket) received;
-                
-                var player = new Player()
-                {
-                    SteamId = newPlayer.SteamId,
-                    X = newPlayer.X,
-                    Y = newPlayer.Y,
-                    GameWorld = _gameWorld,
-                    HeadId = newPlayer.HeadId
-                };
-
-                AddPlayer(player);
-            } else if (received.GetType() == typeof(ItemDropPacket))
-            {
-                var itemDropPacket = (ItemDropPacket) received;
-
-                var itemDrop = new ItemDrop
-                {
-                    Item = ContentChest.ItemData[itemDropPacket.ItemId],
-                    X = itemDropPacket.X,
-                    Y = itemDropPacket.Y,
-                    GameWorld = _gameWorld
-                };
-
-                var moveComponent = itemDrop.AddComponent(new MoveComponent());
-                itemDrop.AddComponent(new GravityComponent());
-                moveComponent.XVelocity = _random.Next(-10, 10);
-                moveComponent.YVelocity = _random.Next(0, 5);
-            
-                _gameWorld.WorldItems.Add(itemDrop);
-            }
-        }
-
-        public void OnConnectedToServer(ConnectionInfo info)
-        {
-            
-        }
-
-        public void AddChat(ChatMessagePacket chatMessage) => AddMessageToChat(chatMessage);
+        
     }
 
 }

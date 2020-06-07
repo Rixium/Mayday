@@ -15,6 +15,7 @@ using Steamworks;
 using Steamworks.Data;
 using Yetiface.Engine;
 using Yetiface.Engine.Networking;
+using Yetiface.Engine.Networking.Consumers;
 using Yetiface.Engine.Networking.Listeners;
 using Yetiface.Engine.Screens;
 using Yetiface.Engine.UI;
@@ -165,7 +166,18 @@ namespace Mayday.Game.Screens
 
             var package = _packager.Package(newPlayerPacket);
             _networkManager.SendMessage(package);
-                
+
+            foreach (var netPlayer in ((NetworkWorldMaker) _worldMaker).PlayersToAdd)
+            {
+                gameScreen.AddPlayer(new Player
+                {
+                    X = netPlayer.X,
+                    Y = netPlayer.Y,
+                    SteamId = netPlayer.SteamId,
+                    HeadId = netPlayer.HeadId
+                });
+            }
+            
             ScreenManager.AddScreen(gameScreen);
             ScreenManager.ChangeScreen(gameScreen.Name);
         }
@@ -216,6 +228,11 @@ namespace Mayday.Game.Screens
             
         }
 
+        void INetworkServerListener.AddConsumer(IPacketConsumer packetConsumer)
+        {
+            
+        }
+
         public void OnDisconnectedFromServer(ConnectionInfo info)
         {
             
@@ -228,6 +245,11 @@ namespace Mayday.Game.Screens
 
         public void OnConnectedToServer(ConnectionInfo info) => 
             CreateNetworkWorld();
+
+        void INetworkClientListener.AddConsumer(IPacketConsumer packetConsumer)
+        {
+            
+        }
 
         public void OnWorldGenerationUpdate(string message)
         {

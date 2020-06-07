@@ -1,5 +1,6 @@
 using System;
 using Steamworks.Data;
+using Yetiface.Engine.Networking.Consumers;
 
 namespace Yetiface.Engine.Networking.Listeners
 {
@@ -9,6 +10,7 @@ namespace Yetiface.Engine.Networking.Listeners
         void OnDisconnectedFromServer(ConnectionInfo info);
         void OnMessageReceived(IntPtr data, int size, long messageNum, long recvTime, int channel);
         void OnConnectedToServer(ConnectionInfo info);
-        
+        void AddConsumer(IPacketConsumer packetConsumer);
+
     }
 }
