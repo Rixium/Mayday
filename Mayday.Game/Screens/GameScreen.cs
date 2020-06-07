@@ -325,6 +325,7 @@ namespace Mayday.Game.Screens
 
         public void SendPacket(JumpPacket jumpPacket)
         {
+            jumpPacket.SteamId = SteamClient.SteamId;
             var package = MessagePackager.Package(jumpPacket);
             NetworkManager.SendMessage(package);
         }
