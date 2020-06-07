@@ -6,7 +6,7 @@ using Yetiface.Engine;
 
 namespace Mayday.Game.Gameplay.Components
 {
-    public class ItemPickerComponent : IComponent
+    public class ItemPickerComponent : IUpdateable
     {
         public IEntity Entity { get; set; }
 

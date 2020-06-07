@@ -54,6 +54,7 @@
     <Compile Include="Gameplay\Components\IComponent.cs" />
     <Compile Include="Gameplay\Components\InventoryComponent.cs" />
     <Compile Include="Gameplay\Components\ItemPickerComponent.cs" />
+    <Compile Include="Gameplay\Components\IUpdateable.cs" />
     <Compile Include="Gameplay\Components\JumpComponent.cs" />
     <Compile Include="Gameplay\Components\MoveComponent.cs" />
     <Compile Include="Gameplay\Components\PlayerAnimationComponent.cs" />

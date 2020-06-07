@@ -1,7 +1,6 @@
 ﻿using System;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.World;
-using Microsoft.Xna.Framework.Input;
 using Yetiface.Engine.Inputs;
 using MouseState = Yetiface.Engine.Utils.MouseState;
 
@@ -22,10 +21,6 @@ namespace Mayday.Game.Gameplay.Components
             _camera = camera;
         }
         
-        public void Update()
-        {
-        }
-
         private bool CloseEnoughToTile(Tile tile)
         {
             var playerBounds = Entity.GetBounds();

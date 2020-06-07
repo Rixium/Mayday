@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Mayday.Game.Gameplay.Components
 {
-    public class JumpComponent : IComponent
+    public class JumpComponent : IUpdateable
     {
         private MoveComponent _moveComponent;
         private KeyboardState _lastKeyboardState;
@@ -38,6 +38,8 @@ namespace Mayday.Game.Gameplay.Components
             if (Jumping) return;
             
             var moveComponent = Entity.GetComponent<MoveComponent>();
+
+            if (!moveComponent.Grounded) return;
             
             Jumping = true;
             moveComponent.YVelocity = 2 * Game1.GlobalGameScale;

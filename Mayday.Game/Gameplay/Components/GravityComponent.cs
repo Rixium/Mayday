@@ -4,7 +4,7 @@ using Yetiface.Engine.Utils;
 
 namespace Mayday.Game.Gameplay.Components
 {
-    public class GravityComponent : IComponent
+    public class GravityComponent : IUpdateable
     {
         public float Gravity { get; set; } = 3.72f * Game1.GlobalGameScale;
 

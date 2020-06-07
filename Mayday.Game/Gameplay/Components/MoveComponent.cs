@@ -4,13 +4,14 @@ using Microsoft.Xna.Framework;
 
 namespace Mayday.Game.Gameplay.Components
 {
-    public class MoveComponent : IComponent
+    public class MoveComponent : IUpdateable
     {
         
         public IEntity Entity { get; set; }
         public float YVelocity { get; set; }
         public float XVelocity { get; set; }
         public Action HitFloor { get; set; }
+        public bool Grounded { get; set; }
 
         public void Update()
         {
@@ -29,12 +30,15 @@ namespace Mayday.Game.Gameplay.Components
             XVelocity = MathHelper.Clamp(XVelocity, -1f * Game1.GlobalGameScale, 1f * Game1.GlobalGameScale);
 
             CheckPlayerHit();
-            
+
+            var currentY = Entity.Y;
             
             var xMove = XVelocity;
             var yMove = -YVelocity;
 
             gameWorld.Move(Entity, xMove, yMove);
+
+            Grounded = Math.Abs(currentY - Entity.Y) < 0.01f;
         }
 
 
