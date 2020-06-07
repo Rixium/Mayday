@@ -41,8 +41,8 @@ namespace Mayday.Game.Screens
         private Random _random = new Random();
         
         public Camera Camera { get; } = new Camera();
-        
-        private Player _myPlayer;
+
+        public Player MyPlayer { get; set; }
         
         private GameScreenUserInterfaceController _interfaceController;
 
@@ -138,7 +138,7 @@ namespace Mayday.Game.Screens
                 player.X = spawnTile.X * GameWorld.TileSize;
                 player.Y = spawnTile.Y * GameWorld.TileSize - 70 * Game1.GlobalGameScale;
                 player.SteamId = GetId();
-                _myPlayer = player;
+                MyPlayer = player;
             }
 
             player.GameWorld = GameWorld;
@@ -201,7 +201,7 @@ namespace Mayday.Game.Screens
 
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.I), _interfaceController.ToggleMainInventory);
             
-            Camera.SetEntity(_myPlayer);
+            Camera.SetEntity(MyPlayer);
         }
 
         private void SetupWorldCallbacks()
@@ -225,13 +225,13 @@ namespace Mayday.Game.Screens
         {
             var jumpPacket = new JumpPacket
             {
-                SteamId = _myPlayer.SteamId
+                SteamId = MyPlayer.SteamId
             };
 
             var package = MessagePackager.Package(jumpPacket);
             NetworkManager.SendMessage(package);
 
-            var jumpComponent = _myPlayer.GetComponent<JumpComponent>();
+            var jumpComponent = MyPlayer.GetComponent<JumpComponent>();
             jumpComponent.Jump();
         }
 
@@ -243,7 +243,7 @@ namespace Mayday.Game.Screens
 
         private void Move(int x)
         {
-            var player = Players[_myPlayer.SteamId];
+            var player = Players[MyPlayer.SteamId];
 
             if (player.XDirection != x)
             {

@@ -21,6 +21,8 @@ namespace Mayday.Game.Gameplay.Components
         
         public void Update()
         {
+            if (Entity == _gameScreen.MyPlayer) return;
+            
             if (Jumping)
             {
                 if (_lastKeyboardState.IsKeyDown(Keys.Space) && Keyboard.GetState().IsKeyUp(Keys.Space))
