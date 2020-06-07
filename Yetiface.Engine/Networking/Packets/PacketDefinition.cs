@@ -59,7 +59,7 @@ namespace Yetiface.Engine.Networking.Packets
             }
 
             if (property.PropertyType == typeof(bool))
-                return value == "1" || value == "true" || value == "on" || value == "checked";
+                return value == "1" || value == "true" || value == "on" || value == "checked" || value == "True";
 
             return property.PropertyType == typeof(Uri)
                 ? new Uri(Convert.ToString(value))
