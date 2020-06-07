@@ -51,11 +51,11 @@ namespace Mayday.Game.Screens
             panel.StartGameNewGame.Click += (o, e) => 
                 StartNewGame();
             
-            panel.MultiPlayerCreateGame.Click += (o, e) => 
-                CreateMultiplayerGame();
+            panel.CreateMultiplayerGameCreateGame.Click += (o, e) => 
+                CreateMultiplayerGame(panel.CreateMultiplayerGamePortTextBox.Text);
             
             panel.JoinByIpJoin.Click += (o, e) => 
-                JoinServer(panel.IpAddressTextBox.Text);
+                JoinServer(panel.IpAddressTextBox.Text, panel.PortTextBox.Text);
             
             panel.GameLogo.Renderable = new TextureRegion(YetiGame.ContentManager.Load<Texture2D>("MainMenu/logo"));
             
@@ -111,11 +111,11 @@ namespace Mayday.Game.Screens
             return await _worldMaker.Create(this);
         }
         
-        private void JoinServer(string ipAddress)
+        private void JoinServer(string ipAddress, string port)
         {
             try
             {
-                _networkManager.JoinSession(ipAddress);
+                _networkManager.JoinSession(ipAddress, port);
             }
             catch (Exception)
             {
@@ -131,12 +131,13 @@ namespace Mayday.Game.Screens
         private void OnConnectedToLobby(Lobby obj)
         {
             var ip = obj.GetData("ip");
-            JoinServer(ip.Trim());
+            var port = obj.GetData("port");
+            JoinServer(ip.Trim(), port);
         }
         
-        private void CreateMultiplayerGame()
+        private void CreateMultiplayerGame(string port)
         {
-            _networkManager.CreateSession();
+            _networkManager.CreateSession(port);
             StartNewGame();
         }
         

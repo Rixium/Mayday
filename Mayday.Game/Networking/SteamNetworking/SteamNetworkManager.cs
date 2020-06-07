@@ -24,28 +24,29 @@ namespace Mayday.Game.Networking.SteamNetworking
         public ConnectionManager Client { get; set; }
         public SocketManager Server { get; set; }
 
-        public SocketManager CreateSession()
+        public SocketManager CreateSession(string port)
         {
-            var netAddress = NetAddress.AnyIp(25565);
+            var netAddress = NetAddress.AnyIp(ushort.Parse(port));
             Server = SteamNetworkingSockets.CreateNormalSocket<MaydayServer>(netAddress);
 
             ((MaydayServer) Server).NetworkManager = this;
 
-            SteamMatchmaking.OnLobbyCreated += OnLobbyCreated;
+            SteamMatchmaking.OnLobbyCreated += (result, lobby) => OnLobbyCreated(result, lobby, port);
             SteamMatchmaking.CreateLobbyAsync();
 
             return Server;
         }
 
-        private void OnLobbyCreated(Result _, Lobby lobby)
+        private void OnLobbyCreated(Result _, Lobby lobby, string port)
         {
             lobby.SetPublic();
             lobby.SetData("ip", new WebClient().DownloadString("http://ipv4.icanhazip.com/"));
+            lobby.SetData("port", port);
         }
 
-        public ConnectionManager JoinSession(string ip)
+        public ConnectionManager JoinSession(string ip, string port)
         {
-            Client = SteamNetworkingSockets.ConnectNormal<MaydayClient>(NetAddress.From(ip, 25565));
+            Client = SteamNetworkingSockets.ConnectNormal<MaydayClient>(NetAddress.From(ip, ushort.Parse(port)));
             ((MaydayClient) Client).NetworkManager = this;
 
             return Client;

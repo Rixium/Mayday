@@ -16,6 +16,10 @@
           <ImageTextButton Text="Load Game" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="StartGameLoadGame" />
           <ImageTextButton Text="Back" ContentHorizontalAlignment="Center" Padding="10" HorizontalAlignment="Stretch" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="StartGameBack" />
         </VerticalStackPanel>
+        <VerticalStackPanel HorizontalAlignment="Center" Widget="200" Padding="10" Visible="False" Id="CreateMultiplayerGamePanel">
+          <TextBox HintText="Port" Text="25565" Margin="0, 0, 0, 10" Padding="10" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="CreateMultiplayerGamePortTextBox" />
+           <ImageTextButton Text="Create Game" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="CreateMultiplayerGameCreateGame" />
+        </VerticalStackPanel>
         <VerticalStackPanel HorizontalAlignment="Center" Width="200" Padding="10" Visible="False" Id="MultiPlayerPanel">
           <ImageTextButton Text="Create Game" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="MultiPlayerCreateGame" />
           <ImageTextButton Text="Join by IP" ContentHorizontalAlignment="Center" Margin="0, 0, 0, 10" Padding="10" HorizontalAlignment="Stretch" Background="#8d697a" OverBackground="#544e68" FocusedBackground="#203c56" Id="MultiPlayerJoinByIp" />

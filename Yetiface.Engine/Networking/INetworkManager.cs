@@ -11,8 +11,8 @@ namespace Yetiface.Engine.Networking
     {
         ConnectionManager Client { get; set; }
         SocketManager Server { get; set; }
-        SocketManager CreateSession();
-        ConnectionManager JoinSession(string ip);
+        SocketManager CreateSession(string port);
+        ConnectionManager JoinSession(string ip, string port);
 
         void Update();
 

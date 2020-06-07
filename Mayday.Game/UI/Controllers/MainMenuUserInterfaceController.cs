@@ -23,6 +23,9 @@ namespace Mayday.Game.UI.Controllers
             UserInterface.MenuMultiPlayer.Click += (sender, args) => 
                 Show(UserInterface.MultiPlayerPanel);
 
+            UserInterface.MultiPlayerCreateGame.Click += (sender, args) =>
+                Show(UserInterface.CreateMultiplayerGamePanel);
+
             UserInterface.MenuSettings.Click += (sender, args) => 
                 Show(UserInterface.SettingsPanel);
             
