@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using Mayday.Game.Gameplay.Entities;
-using Mayday.Game.Gameplay.World;
 using Mayday.Game.Networking.Listeners;
 using Mayday.Game.Screens;
 using Yetiface.Engine.Networking.Consumers;
@@ -13,15 +11,15 @@ namespace Mayday.Game.Networking.Consumers
         
         private readonly IList<IPacketConsumer> _packetConsumers = new List<IPacketConsumer>();
 
-        public GamePacketConsumerManager(GameScreen gameScreen,
-            Dictionary<ulong, Player> players, IGameWorld gameWorld)
+        public GamePacketConsumerManager(GameScreen gameScreen)
         {
             _packetConsumers.Add(new ItemDropPacketConsumer(gameScreen));
-            _packetConsumers.Add(new JumpPacketConsumer(players));
-            _packetConsumers.Add(new MovePacketConsumer(players));
+            _packetConsumers.Add(new JumpPacketConsumer(gameScreen));
+            _packetConsumers.Add(new MovePacketConsumer(gameScreen));
             _packetConsumers.Add(new NewPlayerPacketConsumer(gameScreen));
-            _packetConsumers.Add(new PlayerPositionPacketConsumer(players));
-            _packetConsumers.Add(new TileTypePacketConsumer(gameWorld));
+            _packetConsumers.Add(new PlayerPositionPacketConsumer(gameScreen));
+            _packetConsumers.Add(new TileTypePacketConsumer(gameScreen));
+            _packetConsumers.Add(new MapRequestPacketConsumer(gameScreen));
         }
 
         public void InjectInto(MaydayClientNetworkListener gameClientListener = null, INetworkServerListener serverListener = null)

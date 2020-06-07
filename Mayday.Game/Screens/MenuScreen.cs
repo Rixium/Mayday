@@ -166,7 +166,18 @@ namespace Mayday.Game.Screens
 
             var package = _packager.Package(newPlayerPacket);
             _networkManager.SendMessage(package);
-                
+
+            foreach (var netPlayer in ((NetworkWorldMaker) _worldMaker).PlayersToAdd)
+            {
+                gameScreen.AddPlayer(new Player
+                {
+                    X = netPlayer.X,
+                    Y = netPlayer.Y,
+                    SteamId = netPlayer.SteamId,
+                    HeadId = netPlayer.HeadId
+                });
+            }
+            
             ScreenManager.AddScreen(gameScreen);
             ScreenManager.ChangeScreen(gameScreen.Name);
         }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Networking.Packets;
+using Mayday.Game.Screens;
 using Steamworks.Data;
 using Yetiface.Engine.Networking.Consumers;
 
@@ -8,18 +9,18 @@ namespace Mayday.Game.Networking.Consumers
 {
     public class PlayerPositionPacketConsumer : PacketConsumer<PlayerPositionPacket>
     {
-        private readonly Dictionary<ulong, Player> _players;
+        private readonly GameScreen _gameScreen;
 
-        public PlayerPositionPacketConsumer(Dictionary<ulong, Player> players)
+        public PlayerPositionPacketConsumer(GameScreen gameScreen)
         {
-            _players = players;
+            _gameScreen = gameScreen;
         }
 
         protected override void ConsumePacket(Connection connection, PlayerPositionPacket packet)
         {
-            if (!_players.ContainsKey(packet.SteamId)) return;
+            if (!_gameScreen.Players.ContainsKey(packet.SteamId)) return;
 
-            var player = _players[packet.SteamId];
+            var player = _gameScreen.Players[packet.SteamId];
             player.X = packet.X;
             player.Y = packet.Y;
         }

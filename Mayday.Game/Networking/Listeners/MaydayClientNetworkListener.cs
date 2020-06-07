@@ -11,39 +11,35 @@ namespace Mayday.Game.Networking.Listeners
     {
         private readonly INetworkMessagePackager _messagePackager;
 
-        private readonly Dictionary<Type, IPacketConsumer> _packetConsumers = 
+        private readonly Dictionary<Type, IPacketConsumer> _packetConsumers =
             new Dictionary<Type, IPacketConsumer>();
 
         public MaydayClientNetworkListener(INetworkMessagePackager messagePackager)
         {
             _messagePackager = messagePackager;
         }
-        
+
         public void OnDisconnectedFromServer(ConnectionInfo info)
         {
-            
         }
 
         public void OnMessageReceived(IntPtr data, int size, long messageNum, long recvTime, int channel)
         {
             var received = _messagePackager.Unpack(data, size);
             var receivedType = received.GetType();
-            
-            if (!_packetConsumers.ContainsKey(receivedType)) 
+
+            if (!_packetConsumers.ContainsKey(receivedType))
                 return;
-            
+
             var consumer = _packetConsumers[receivedType];
             consumer.Consume(received);
         }
 
         public void OnConnectedToServer(ConnectionInfo info)
         {
-            
         }
 
-        public void AddConsumer(IPacketConsumer packetConsumer) => 
-            _packetConsumers.Add(packetConsumer.GetType(), packetConsumer);
-        
+        public void AddConsumer(IPacketConsumer packetConsumer) =>
+            _packetConsumers.Add(packetConsumer.PacketType, packetConsumer);
     }
-    
 }

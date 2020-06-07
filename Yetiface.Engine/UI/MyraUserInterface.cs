@@ -23,7 +23,7 @@ namespace Yetiface.Engine.UI
 
         public void Update()
         {
-            Desktop.Update();
+            //Desktop.Update();
         }
 
         public void AfterDraw()

@@ -97,6 +97,7 @@
     <Compile Include="Networking\Packets\ItemDropPacket.cs" />
     <Compile Include="Networking\Packets\JumpPacket.cs" />
     <Compile Include="Networking\Packets\MapRequestPacket.cs" />
+    <Compile Include="Networking\Packets\MapSendCompletePacket.cs" />
     <Compile Include="Networking\Packets\NewPlayerPacket.cs" />
     <Compile Include="Networking\Packets\PlayerMovePacket.cs" />
     <Compile Include="Networking\Packets\PlayerPositionPacket.cs" />

@@ -48,7 +48,7 @@ namespace Mayday.Game.Networking.Listeners
         }
         
         public void AddConsumer(IPacketConsumer packetConsumer) => 
-            _packetConsumers.Add(packetConsumer.GetType(), packetConsumer);
+            _packetConsumers.Add(packetConsumer.PacketType, packetConsumer);
         
     }
 }

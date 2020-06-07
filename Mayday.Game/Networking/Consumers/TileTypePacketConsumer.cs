@@ -1,5 +1,5 @@
-using Mayday.Game.Gameplay.World;
 using Mayday.Game.Networking.Packets;
+using Mayday.Game.Screens;
 using Steamworks.Data;
 using Yetiface.Engine.Networking.Consumers;
 
@@ -7,16 +7,15 @@ namespace Mayday.Game.Networking.Consumers
 {
     public class TileTypePacketConsumer : PacketConsumer<TileTypePacket>
     {
-        private readonly IGameWorld _gameWorld;
+        private readonly GameScreen _gameScreen;
 
-        public TileTypePacketConsumer(IGameWorld gameWorld)
+        public TileTypePacketConsumer(GameScreen gameScreen)
         {
-            _gameWorld = gameWorld;
+            _gameScreen = gameScreen;
         }
 
-        protected override void ConsumePacket(Connection connection, TileTypePacket packet)
-        {
-            _gameWorld.Tiles[packet.X, packet.Y].TileType = packet.TileType;
-        }
+        protected override void ConsumePacket(Connection connection, TileTypePacket packet) => 
+            _gameScreen.GameWorld.Tiles[packet.X, packet.Y].TileType = packet.TileType;
+        
     }
 }

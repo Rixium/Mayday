@@ -33,37 +33,30 @@ namespace Mayday.Game.Screens
     public class GameScreen : Screen
     {
 
+        public INetworkManager NetworkManager { get; set; }
+        public INetworkMessagePackager MessagePackager { get; set; }
+        public IGameWorld GameWorld { get; set; }
+        public Dictionary<ulong, Player> Players { get; set; } 
+            = new Dictionary<ulong, Player>();
+        
         private readonly IWorldRenderer _worldRenderer;
         private readonly IPlayerRenderer _playerRenderer;
-        
-        private readonly INetworkManager _networkManager;
-        private readonly INetworkMessagePackager _messagePackager;
         private Random _random = new Random();
         
-        private IGameWorld _gameWorld;
         public Camera Camera { get; } = new Camera();
-
-        private readonly Dictionary<ulong, Player> _players = new Dictionary<ulong, Player>();
+        
         private Player _myPlayer;
         
         private GameScreenUserInterfaceController _interfaceController;
 
         public GameScreen(INetworkManager networkManager) : base("GameScreen")
         {
-            _networkManager = networkManager;
-            _messagePackager = new MaydayMessagePackager();
-            
-            var gameServerListener = new MaydayServerNetworkListener(_messagePackager);
-            var gameClientListener = new MaydayClientNetworkListener(_messagePackager);
-            var consumers = new GamePacketConsumerManager(this, _players, _gameWorld);
-            consumers.InjectInto(gameClientListener, gameServerListener);
-
-            _networkManager.SetServerNetworkListener(gameServerListener);
-            _networkManager.SetClientNetworkListener(gameClientListener);
+            NetworkManager = networkManager;
+            MessagePackager = new MaydayMessagePackager();
             
             _worldRenderer = new WorldRenderer();
             _playerRenderer = new PlayerRenderer();
-
+            
             var gameScreenUserInterface = new GameScreenUserInterface();
             _interfaceController = new GameScreenUserInterfaceController(gameScreenUserInterface);
             UserInterface = new MyraUserInterface(gameScreenUserInterface);
@@ -71,15 +64,15 @@ namespace Mayday.Game.Screens
         
         public void SetWorld(IGameWorld gameWorld)
         {
-            _gameWorld = gameWorld;
+            GameWorld = gameWorld;
 
             RegisterTileCallbacks();
         }
 
         private void RegisterTileCallbacks()
         {
-            if (_gameWorld == null) return;
-            foreach (var tile in _gameWorld.Tiles)
+            if (GameWorld == null) return;
+            foreach (var tile in GameWorld.Tiles)
             {
                 tile.TileDestroyed += OnTileDestroyed;
             }
@@ -92,7 +85,7 @@ namespace Mayday.Game.Screens
                 Item = ContentChest.ItemData[tile.TileProperties.ItemDropId],
                 X = tile.RenderX,
                 Y = tile.RenderY,
-                GameWorld = _gameWorld
+                GameWorld = GameWorld
             };
 
             var moveComponent = itemDrop.AddComponent(new MoveComponent());
@@ -100,7 +93,7 @@ namespace Mayday.Game.Screens
             moveComponent.XVelocity = _random.Next(-10, 10);
             moveComponent.YVelocity = _random.Next(0, 5);
             
-            _gameWorld.WorldItems.Add(itemDrop);
+            GameWorld.WorldItems.Add(itemDrop);
             
             var tempTile = new Tile(0, tile.X, tile.Y);
             SendTileChangePacket(tempTile);
@@ -116,9 +109,9 @@ namespace Mayday.Game.Screens
                 ItemId = itemDrop.Item.Id
             };
 
-            var package = _messagePackager.Package(itemDropPacket);
+            var package = MessagePackager.Package(itemDropPacket);
             
-            _networkManager.SendMessage(package);
+            NetworkManager.SendMessage(package);
         }
 
         private void SendTileChangePacket(Tile tile)
@@ -130,24 +123,23 @@ namespace Mayday.Game.Screens
                 TileType = tile.TileType
             };
 
-            var package = _messagePackager.Package(tileChangePacket);
+            var package = MessagePackager.Package(tileChangePacket);
             
-            _networkManager.SendMessage(package);
+            NetworkManager.SendMessage(package);
         }
         
         public Player AddPlayer(Player player, bool isClients = false)
         {
             if (isClients)
             {
-                _myPlayer = player;
+                var spawnTile = GetSpawnPosition();
+                player.X = spawnTile.X * GameWorld.TileSize;
+                player.Y = spawnTile.Y * GameWorld.TileSize - 70 * Game1.GlobalGameScale;
                 player.SteamId = GetId();
+                _myPlayer = player;
             }
 
-            var spawnTile = GetSpawnPosition();
-            
-            player.X = spawnTile.X * _gameWorld.TileSize;
-            player.Y = spawnTile.Y * _gameWorld.TileSize - 70 * Game1.GlobalGameScale;
-            player.GameWorld = _gameWorld;
+            player.GameWorld = GameWorld;
 
             var playerAnimationComponent = new PlayerAnimationComponent
             {
@@ -160,7 +152,7 @@ namespace Mayday.Game.Screens
             player.AddComponent(playerAnimationComponent);
             player.AddComponent(new GravityComponent());
             player.AddComponent(new JumpComponent());
-            player.AddComponent(new BlockBreakerComponent(_gameWorld, Camera));
+            player.AddComponent(new BlockBreakerComponent(GameWorld, Camera));
             player.AddComponent(new ItemPickerComponent());
             
             var inventoryComponent = player.AddComponent(new InventoryComponent());
@@ -173,7 +165,7 @@ namespace Mayday.Game.Screens
                 mainInventory.InventoryChanged += () => _interfaceController.MainInventoryChanged(mainInventory);
             }
 
-            _players.Add(player.SteamId, player);
+            Players.Add(player.SteamId, player);
 
             return player;
         }
@@ -193,6 +185,8 @@ namespace Mayday.Game.Screens
         public override void Awake()
         {
             BackgroundColor = new Color(47, 39, 54);
+
+            SetupNetworking();
             
             YetiGame.InputManager.RegisterInputEvent("MoveRight", () => Move(2), InputEventType.Held);
             YetiGame.InputManager.RegisterInputEvent("MoveLeft", () => Move(-2), InputEventType.Held);
@@ -205,6 +199,18 @@ namespace Mayday.Game.Screens
             Camera.SetEntity(_myPlayer);
         }
 
+        private void SetupNetworking()
+        {            
+            var gameServerListener = new MaydayServerNetworkListener(MessagePackager);
+            var gameClientListener = new MaydayClientNetworkListener(MessagePackager);
+            
+            NetworkManager.SetServerNetworkListener(gameServerListener);
+            NetworkManager.SetClientNetworkListener(gameClientListener);
+            
+            var consumers = new GamePacketConsumerManager(this);
+            consumers.InjectInto(gameClientListener, gameServerListener);
+        }
+
         private void Jump()
         {
             var jumpPacket = new JumpPacket
@@ -212,22 +218,22 @@ namespace Mayday.Game.Screens
                 SteamId = _myPlayer.SteamId
             };
 
-            var package = _messagePackager.Package(jumpPacket);
-            _networkManager.SendMessage(package);
+            var package = MessagePackager.Package(jumpPacket);
+            NetworkManager.SendMessage(package);
 
             var jumpComponent = _myPlayer.GetComponent<JumpComponent>();
             jumpComponent.Jump();
         }
 
         private Tile GetSpawnPosition() =>
-            (from Tile tile in _gameWorld.Tiles
+            (from Tile tile in GameWorld.Tiles
                 where tile.TileType == 1
-                select _gameWorld.Tiles[(int) (_gameWorld.Width / 2.0f), tile.Y])
+                select GameWorld.Tiles[(int) (GameWorld.Width / 2.0f), tile.Y])
             .FirstOrDefault();
 
         private void Move(int x)
         {
-            var player = _players[_myPlayer.SteamId];
+            var player = Players[_myPlayer.SteamId];
 
             if (player.XDirection != x)
             {
@@ -237,8 +243,8 @@ namespace Mayday.Game.Screens
                     SteamId = player.SteamId
                 };
 
-                var movePackage = _messagePackager.Package(data);
-                _networkManager.SendMessage(movePackage);
+                var movePackage = MessagePackager.Package(data);
+                NetworkManager.SendMessage(movePackage);
                 
                 var position = new PlayerPositionPacket
                 {
@@ -247,9 +253,9 @@ namespace Mayday.Game.Screens
                     SteamId = player.SteamId
                 };
 
-                var package = _messagePackager.Package(position);
+                var package = MessagePackager.Package(position);
                     
-                _networkManager.SendMessage(package);
+                NetworkManager.SendMessage(package);
                 
                 if (x != 0)
                 {
@@ -268,10 +274,10 @@ namespace Mayday.Game.Screens
         {
             GraphicsUtils.Instance.Begin(true, Camera.GetMatrix());
             
-            _worldRenderer.Draw(_gameWorld, Camera);
-            _playerRenderer.DrawPlayers(_players);
+            _worldRenderer.Draw(GameWorld, Camera);
+            _playerRenderer.DrawPlayers(Players);
 
-            foreach (var entity in _gameWorld.WorldItems)
+            foreach (var entity in GameWorld.WorldItems)
             {
                 if (!Camera.Intersects(entity.GetBounds())) continue;
                 if (entity.GetType() != typeof(ItemDrop)) continue;
@@ -290,12 +296,12 @@ namespace Mayday.Game.Screens
         {
             base.Update();
             
-            _networkManager?.Update();
+            NetworkManager?.Update();
             
-            foreach(var player in _players)
+            foreach(var player in Players)
                 player.Value.Update();
             
-            foreach(var entity in _gameWorld.WorldItems)
+            foreach(var entity in GameWorld.WorldItems)
                 entity.Update();
             
             Camera.Update();
@@ -303,8 +309,8 @@ namespace Mayday.Game.Screens
         
         public void DropItem(ItemDrop itemDrop)
         {
-            itemDrop.GameWorld = _gameWorld;
-            _gameWorld.WorldItems.Add(itemDrop);
+            itemDrop.GameWorld = GameWorld;
+            GameWorld.WorldItems.Add(itemDrop);
         }
         
     }

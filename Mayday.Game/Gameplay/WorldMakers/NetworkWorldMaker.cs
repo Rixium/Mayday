@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
+using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Gameplay.WorldMakers.Listeners;
 using Mayday.Game.Networking.Packagers;
@@ -31,6 +33,7 @@ namespace Mayday.Game.Gameplay.WorldMakers
         public int WorldHeight { get; set; }
 
         private Tile[,] _tiles;
+        public IList<NewPlayerPacket> PlayersToAdd = new List<NewPlayerPacket>();
 
         private int WorldSize { get; set; }
         private Bitmap Bitmap { get; set; }
@@ -92,6 +95,11 @@ namespace Mayday.Game.Gameplay.WorldMakers
             
             worldGeneratorListener.OnWorldGenerationUpdate("Got tiles...");
             
+            while (!ReceivedMap)
+            {
+                worldGeneratorListener.OnWorldGenerationUpdate("Waiting for players...");
+            }
+            
             foreach (var tile in _tiles)
             {
                 Bitmap.SetPixel(tile.X, tile.Y, tile.TileType == 0 ? Color.Black :
@@ -123,10 +131,19 @@ namespace Mayday.Game.Gameplay.WorldMakers
                 var tileType = tileTypePacket.TileType;
                 
                 _tiles[x, y].TileType = tileType;
+            } else if (packet.GetType() == typeof(NewPlayerPacket))
+            {
+                var newPlayerPacket = (NewPlayerPacket) packet;
+                PlayersToAdd.Add(newPlayerPacket);
+            } else if (packet.GetType() == typeof(MapSendCompletePacket))
+            {
+                ReceivedMap = true;
             }
             
             _tilesReceived++;
         }
+
+        public bool ReceivedMap { get; set; }
 
         public void OnConnectedToServer(ConnectionInfo info)
         {
