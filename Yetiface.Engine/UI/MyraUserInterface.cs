@@ -5,12 +5,12 @@ namespace Yetiface.Engine.UI
     public class MyraUserInterface : IUserInterface
     {
         private readonly Panel _panel;
-        private Desktop _desktop;
+        public Desktop Desktop { get; set; }
 
         public MyraUserInterface(Panel panel)
         {
             _panel = panel;
-            _desktop = new Desktop()
+            Desktop = new Desktop()
             {
                 Root = panel
             };
@@ -18,12 +18,12 @@ namespace Yetiface.Engine.UI
 
         public void Draw()
         {
-            _desktop.Render();
+            Desktop.Render();
         }
 
         public void Update()
         {
-            
+            Desktop.Update();
         }
 
         public void AfterDraw()
