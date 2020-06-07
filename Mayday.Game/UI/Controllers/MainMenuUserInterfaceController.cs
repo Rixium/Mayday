@@ -67,7 +67,7 @@ namespace Mayday.Game.UI.Controllers
 
         private void ShowLast()
         {
-            if (_backStack.Peek() == null) return;
+            if (_backStack.Count == 0) return;
             
             if (_currentActive != null)
                 _currentActive.Visible = false;
