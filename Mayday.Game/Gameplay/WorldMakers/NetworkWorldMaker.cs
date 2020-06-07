@@ -7,6 +7,7 @@ using Mayday.Game.Networking.Packagers;
 using Mayday.Game.Networking.Packets;
 using Steamworks.Data;
 using Yetiface.Engine.Networking;
+using Yetiface.Engine.Networking.Consumers;
 using Yetiface.Engine.Networking.Listeners;
 using Yetiface.Engine.Networking.Packagers;
 using Color = System.Drawing.Color;
@@ -131,6 +132,10 @@ namespace Mayday.Game.Gameplay.WorldMakers
         {
             
         }
-        
+
+        public void AddConsumer(IPacketConsumer packetConsumer)
+        {
+            
+        }
     }
 }

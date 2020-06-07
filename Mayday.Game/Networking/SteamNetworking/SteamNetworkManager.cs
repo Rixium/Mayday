@@ -73,5 +73,9 @@ namespace Mayday.Game.Networking.SteamNetworking
 
             Client?.Connection.SendMessage(data);
         }
+        
+        public void SendMessage(byte[] data, Connection to) => 
+            to.SendMessage(data);
+        
     }
 }

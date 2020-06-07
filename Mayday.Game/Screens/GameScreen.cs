@@ -8,6 +8,8 @@ using Mayday.Game.Gameplay.Items;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Graphics;
 using Mayday.Game.Graphics.Renderers;
+using Mayday.Game.Networking.Consumers;
+using Mayday.Game.Networking.Listeners;
 using Mayday.Game.Networking.Packagers;
 using Mayday.Game.Networking.Packets;
 using Mayday.Game.UI.Controllers;
@@ -19,7 +21,6 @@ using Steamworks.Data;
 using Yetiface.Engine;
 using Yetiface.Engine.Inputs;
 using Yetiface.Engine.Networking;
-using Yetiface.Engine.Networking.Listeners;
 using Yetiface.Engine.Networking.Packagers;
 using Yetiface.Engine.Screens;
 using Yetiface.Engine.UI;
@@ -29,7 +30,7 @@ using Color = Microsoft.Xna.Framework.Color;
 namespace Mayday.Game.Screens
 {
 
-    public class GameScreen : Screen, INetworkServerListener, INetworkClientListener
+    public class GameScreen : Screen
     {
 
         private readonly IWorldRenderer _worldRenderer;
@@ -50,10 +51,15 @@ namespace Mayday.Game.Screens
         public GameScreen(INetworkManager networkManager) : base("GameScreen")
         {
             _networkManager = networkManager;
-            _networkManager.SetServerNetworkListener(this);
-            _networkManager.SetClientNetworkListener(this);
-            
             _messagePackager = new MaydayMessagePackager();
+            
+            var gameServerListener = new MaydayServerNetworkListener(_messagePackager);
+            var gameClientListener = new MaydayClientNetworkListener(_messagePackager);
+            var consumers = new GamePacketConsumerManager(this, _players, _gameWorld);
+            consumers.InjectInto(gameClientListener, gameServerListener);
+
+            _networkManager.SetServerNetworkListener(gameServerListener);
+            _networkManager.SetClientNetworkListener(gameClientListener);
             
             _worldRenderer = new WorldRenderer();
             _playerRenderer = new PlayerRenderer();
@@ -98,7 +104,6 @@ namespace Mayday.Game.Screens
             
             var tempTile = new Tile(0, tile.X, tile.Y);
             SendTileChangePacket(tempTile);
-            
             SendItemDropPacket(itemDrop);
         }
 
@@ -295,233 +300,13 @@ namespace Mayday.Game.Screens
             
             Camera.Update();
         }
-
-        public void OnNewConnection(Connection connection, ConnectionInfo info)
+        
+        public void DropItem(ItemDrop itemDrop)
         {
-            
+            itemDrop.GameWorld = _gameWorld;
+            _gameWorld.WorldItems.Add(itemDrop);
         }
-
-
-        public void OnConnectionLeft(Connection connection, ConnectionInfo info)
-        {
-            
-        }
-
-        public void OnMessageReceived(Connection connection, NetIdentity identity, IntPtr data, int size, long messageNum,
-            long recvTime, int channel)
-        {
-            var received = _messagePackager.Unpack(data, size);
-
-            if (received.GetType() == typeof(MapRequestPacket))
-            {
-                SendMap();
-            } else if (received.GetType() == typeof(PlayerMovePacket))
-            {
-                var movePacket = (PlayerMovePacket) received;
-                var player = _players[movePacket.SteamId];
-                var xDir = movePacket.XDirection;
-                player.XDirection = xDir;
-                player.FacingDirection = movePacket.XDirection != 0 ? movePacket.XDirection :
-                    player.FacingDirection;
-            } else if (received.GetType() == typeof(PlayerPositionPacket))
-            {
-                var positionPacket = (PlayerPositionPacket) received;
-                var player = _players[positionPacket.SteamId];
-                player.X = positionPacket.X;
-                player.Y = positionPacket.Y;
-            } 
-            else if (received.GetType() == typeof(TileTypePacket))
-            {
-                var typePacket = (TileTypePacket) received;
-                _gameWorld.Tiles[typePacket.X, typePacket.Y].TileType = typePacket.TileType;
-            } else if (received.GetType() == typeof(JumpPacket))
-            {
-                var jump = (JumpPacket) received;
-                var player = _players[jump.SteamId];
-                var jumpComponent = player.GetComponent<JumpComponent>();
-                jumpComponent.Jump();
-            } else if (received.GetType() == typeof(ChatMessagePacket))
-            {
-                AddMessageToChat((ChatMessagePacket) received);
-            } else if (received.GetType() == typeof(NewPlayerPacket))
-            {
-                var newPlayer = (NewPlayerPacket) received;
-                
-                var player = new Player
-                {
-                    SteamId = newPlayer.SteamId,
-                    X = newPlayer.X,
-                    Y = newPlayer.Y,
-                    GameWorld = _gameWorld,
-                    HeadId = newPlayer.HeadId
-                };
-
-                AddPlayer(player);
-            } else if (received.GetType() == typeof(ItemDropPacket))
-            {
-                var itemDropPacket = (ItemDropPacket) received;
-
-                var itemDrop = new ItemDrop
-                {
-                    Item = ContentChest.ItemData[itemDropPacket.ItemId],
-                    X = itemDropPacket.X,
-                    Y = itemDropPacket.Y,
-                    GameWorld = _gameWorld
-                };
-
-                var moveComponent = itemDrop.AddComponent(new MoveComponent());
-                itemDrop.AddComponent(new GravityComponent());
-                moveComponent.XVelocity = _random.Next(-10, 10);
-                moveComponent.YVelocity = _random.Next(0, 5);
-            
-                
-                _gameWorld.WorldItems.Add(itemDrop);
-            }
-        }
-
-        private void AddMessageToChat(ChatMessagePacket received)
-        {
-            _players.TryGetValue(received.SteamId, out var selectedPlayer);
-        }
-
-        private async void SendMap()
-        {
-            for (var i = 0; i < _gameWorld.Width; i++)
-            {
-                for (var j = 0; j < _gameWorld.Height; j++)
-                {
-                    var tileToSend = _gameWorld.Tiles[i, j];
-                    var tileTypePacket = new TileTypePacket()
-                    {
-                        X = tileToSend.X,
-                        Y = tileToSend.Y,
-                        TileType = tileToSend.TileType
-                    };
-                    var packet = _messagePackager.Package(tileTypePacket);
-                    _networkManager.SendMessage(packet);
-                }
-
-                await Task.Delay(1);
-            }
-            
-        }
-
-        public void OnConnectionChanged(Connection connection, ConnectionInfo info)
-        {
-            
-        }
-
-
-        public void OnDisconnectedFromServer(ConnectionInfo info)
-        {
-            
-        }
-
-        public void OnMessageReceived(IntPtr data, int size, long messageNum, long recvTime, int channel)
-        {
-            var received = _messagePackager.Unpack(data, size);
-
-            if (received.GetType() == typeof(PlayerMovePacket))
-            {
-                var movePacket = (PlayerMovePacket) received;
-                if (_players.ContainsKey(movePacket.SteamId))
-                {
-                    var player = _players[movePacket.SteamId];
-                    player.XDirection = movePacket.XDirection;
-                    player.FacingDirection = movePacket.XDirection != 0 ? movePacket.XDirection :
-                    player.FacingDirection;
-                }
-                else
-                {
-                    var spawnTile = GetSpawnPosition();
-                    var player = new Player
-                    {
-                        SteamId = movePacket.SteamId,
-                        X = spawnTile.X * 16,
-                        Y = spawnTile.Y * 16 - (int)(62 / 2f),
-                        GameWorld = _gameWorld
-                    };
-
-                    AddPlayer(player);
-                }
-            } 
-            else if (received.GetType() == typeof(PlayerPositionPacket))
-            {
-                var positionPacket = (PlayerPositionPacket) received;
-                
-                if (_players.ContainsKey(positionPacket.SteamId))
-                {
-                    var player = _players[positionPacket.SteamId];
-                    player.X = positionPacket.X;
-                    player.Y = positionPacket.Y;
-                }
-                else
-                {
-                    var player = new Player
-                    {
-                        SteamId = positionPacket.SteamId,
-                        X = positionPacket.X,
-                        Y = positionPacket.Y,
-                        GameWorld = _gameWorld
-                    };
-
-                    AddPlayer(player);
-                }
-            }
-            else if (received.GetType() == typeof(TileTypePacket))
-            {
-                var typePacket = (TileTypePacket) received;
-                _gameWorld.Tiles[typePacket.X, typePacket.Y].TileType = typePacket.TileType;
-            } else if (received.GetType() == typeof(JumpPacket))
-            {
-                var jump = (JumpPacket) received;
-                var player = _players[jump.SteamId];
-                var jumpComponent = player.GetComponent<JumpComponent>();
-                jumpComponent.Jump();
-            } else if (received.GetType() == typeof(ChatMessagePacket))
-            {
-                AddMessageToChat((ChatMessagePacket) received);
-            } else if (received.GetType() == typeof(NewPlayerPacket))
-            {
-                var newPlayer = (NewPlayerPacket) received;
-                
-                var player = new Player()
-                {
-                    SteamId = newPlayer.SteamId,
-                    X = newPlayer.X,
-                    Y = newPlayer.Y,
-                    GameWorld = _gameWorld,
-                    HeadId = newPlayer.HeadId
-                };
-
-                AddPlayer(player);
-            } else if (received.GetType() == typeof(ItemDropPacket))
-            {
-                var itemDropPacket = (ItemDropPacket) received;
-
-                var itemDrop = new ItemDrop
-                {
-                    Item = ContentChest.ItemData[itemDropPacket.ItemId],
-                    X = itemDropPacket.X,
-                    Y = itemDropPacket.Y,
-                    GameWorld = _gameWorld
-                };
-
-                var moveComponent = itemDrop.AddComponent(new MoveComponent());
-                itemDrop.AddComponent(new GravityComponent());
-                moveComponent.XVelocity = _random.Next(-10, 10);
-                moveComponent.YVelocity = _random.Next(0, 5);
-            
-                _gameWorld.WorldItems.Add(itemDrop);
-            }
-        }
-
-        public void OnConnectedToServer(ConnectionInfo info)
-        {
-            
-        }
-
-        public void AddChat(ChatMessagePacket chatMessage) => AddMessageToChat(chatMessage);
+        
     }
 
 }

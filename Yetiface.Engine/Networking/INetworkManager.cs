@@ -1,4 +1,5 @@
 ﻿using Steamworks;
+using Steamworks.Data;
 using Yetiface.Engine.Networking.Listeners;
 
 namespace Yetiface.Engine.Networking
@@ -19,5 +20,6 @@ namespace Yetiface.Engine.Networking
         void SetServerNetworkListener(INetworkServerListener networkServerListener);
         void SetClientNetworkListener(INetworkClientListener clientNetworkListener);
         void SendMessage(byte[] data);
+        void SendMessage(byte[] data, Connection to);
     }
 }
