@@ -18,6 +18,7 @@ namespace Mayday.Game.Gameplay.World
 
         public int Height { get; set; }
         public IList<IEntity> WorldItems { get; set; } = new List<IEntity>();
+        public Action<Tile> TilePlaced { get; set; }
 
         public void Move(IEntity player, float xMove, float yMove)
         {
@@ -110,5 +111,12 @@ namespace Mayday.Game.Gameplay.World
             return Tiles[tileX, tileY];
         }
         
+        public void PlaceTile(Tile tile, int tileType)
+        {
+            if (tile.TileType == tileType) return;
+            tile.TileType = tileType;
+            TilePlaced?.Invoke(tile);
+        }
+
     }
 }

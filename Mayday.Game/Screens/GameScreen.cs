@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.Items;
@@ -99,6 +98,11 @@ namespace Mayday.Game.Screens
             SendTileChangePacket(tempTile);
             SendItemDropPacket(itemDrop);
         }
+        
+        private void OnTilePlaced(Tile tile)
+        {
+            SendTileChangePacket(tile);
+        }
 
         private void SendItemDropPacket(ItemDrop itemDrop)
         {
@@ -187,6 +191,7 @@ namespace Mayday.Game.Screens
             BackgroundColor = new Color(47, 39, 54);
 
             SetupNetworking();
+            SetupWorldCallbacks();
             
             YetiGame.InputManager.RegisterInputEvent("MoveRight", () => Move(2), InputEventType.Held);
             YetiGame.InputManager.RegisterInputEvent("MoveLeft", () => Move(-2), InputEventType.Held);
@@ -197,6 +202,11 @@ namespace Mayday.Game.Screens
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.I), _interfaceController.ToggleMainInventory);
             
             Camera.SetEntity(_myPlayer);
+        }
+
+        private void SetupWorldCallbacks()
+        {
+            GameWorld.TilePlaced += OnTilePlaced;
         }
 
         private void SetupNetworking()
