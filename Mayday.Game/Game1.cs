@@ -2,6 +2,7 @@
 using Mayday.Game.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using Steamworks;
 using Yetiface.Engine;
 using Yetiface.Engine.Inputs;
@@ -47,16 +48,27 @@ namespace Mayday.Game
         {
             base.LoadContent();
 
-            // TODO MUSIC
-            // var music  = ContentManager.Load<Song>("MainMenu/menuMusic");
-            // MediaPlayer.Play(music);
-            // MediaPlayer.Volume = 0.1f;
+            var music  = ContentManager.Load<Song>("MainMenu/menuMusic");
+            MediaPlayer.Play(music);
+            MediaPlayer.Volume = 0.1f;
 
             new ContentChest().Load(ContentManager);
             
             Myra.MyraEnvironment.Game = this;
             
             ScreenManager.AddScreen(new MenuScreen());
+            
+            InputManager.RegisterInputEvent(new KeyInputBinding(Keys.OemTilde), MediaPlayer.Stop);
+            SkipSplashKeybinding = new KeyInputBinding(Keys.Space);
+            InputManager.RegisterInputEvent(SkipSplashKeybinding, SkipSplash);
+        }
+
+        public KeyInputBinding SkipSplashKeybinding { get; set; }
+
+        private void SkipSplash()
+        {
+            ScreenManager.NextScreen();
+            InputManager.DeRegisterInputEvent(SkipSplashKeybinding, SkipSplash);
         }
 
         public static void NextResize()

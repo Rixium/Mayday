@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using Steamworks;
 using Steamworks.Data;
@@ -75,8 +77,14 @@ namespace Mayday.Game.Networking.SteamNetworking
             Client?.Connection.SendMessage(data);
         }
         
-        public void SendMessage(byte[] data, Connection to) => 
-            to.SendMessage(data);
-        
+        public void SendMessage(byte[] data, Connection to) => to.SendMessage(data);
+
+        public void RelayMessage(IntPtr data, int size, Connection ignore)
+        {
+            if (Server?.Connected == null) return;
+            
+            foreach (var connection in Server.Connected.Where(connection => connection != ignore))
+                connection.SendMessage(data, size);
+        }
     }
 }

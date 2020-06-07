@@ -114,17 +114,24 @@ namespace Yetiface.Engine.Inputs
             switch (eventType)
             {
                 case InputEventType.Pressed:
-                    binding.OnPressed.Remove(callback);
+                    binding.OnPressed = RemoveCallback(binding.OnPressed, callback);
                     break;
                 case InputEventType.Released:
-                    binding.OnReleased.Remove(callback);
+                    binding.OnReleased = RemoveCallback(binding.OnReleased, callback);
                     break;
                 case InputEventType.Held:
-                    binding.OnHeld.Remove(callback);
+                    binding.OnHeld = RemoveCallback(binding.OnHeld, callback);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(eventType), eventType, null);
             }
+        }
+
+        private static IList<Action> RemoveCallback(IEnumerable<Action> binding, Action callback)
+        {
+            IList<Action> copy = new List<Action>(binding);
+            copy.Remove(callback);
+            return copy;
         }
     }
 }

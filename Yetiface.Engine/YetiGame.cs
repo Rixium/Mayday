@@ -49,8 +49,7 @@ namespace Yetiface.Engine
             IsMouseVisible = false;
             
             SetWindowTitle();
-            //UnlockFps();
-            
+
             InputManager = new InputManager();
             InputManager.Initialize(File.ReadAllText("Config/inputBindings.json"));
 
@@ -79,13 +78,13 @@ namespace Yetiface.Engine
                     Speed = 3f
                 }
             );
-            //
-            // ScreenManager.AddScreen(
-            //     new SplashScreen
-            //     {
-            //         BackgroundColor = Color.White
-            //     }
-            //  );
+            
+            ScreenManager.AddScreen(
+                new SplashScreen
+                {
+                    BackgroundColor = Color.White
+                }
+             );
 
             InputManager.RegisterInputEvent(new KeyInputBinding(Keys.F1),
                 callback: () =>

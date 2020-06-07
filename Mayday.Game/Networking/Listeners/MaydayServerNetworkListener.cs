@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Mayday.Game.Networking.SteamNetworking;
 using Steamworks.Data;
+using Yetiface.Engine.Networking;
 using Yetiface.Engine.Networking.Consumers;
 using Yetiface.Engine.Networking.Listeners;
 using Yetiface.Engine.Networking.Packagers;
@@ -9,13 +11,15 @@ namespace Mayday.Game.Networking.Listeners
 {
     public class MaydayServerNetworkListener : INetworkServerListener
     {
+        private readonly INetworkManager _networkManager;
         private readonly INetworkMessagePackager _messagePackager;
 
         private readonly Dictionary<Type, IPacketConsumer> _packetConsumers 
             = new Dictionary<Type, IPacketConsumer>();
 
-        public MaydayServerNetworkListener(INetworkMessagePackager messagePackager)
+        public MaydayServerNetworkListener(INetworkManager networkManager, INetworkMessagePackager messagePackager)
         {
+            _networkManager = networkManager;
             _messagePackager = messagePackager;
         }
         
@@ -40,6 +44,8 @@ namespace Mayday.Game.Networking.Listeners
             
             var consumer = _packetConsumers[receivedType];
             consumer.Consume(connection, received);
+            
+            _networkManager.RelayMessage(data, size, connection);
         }
 
         public void OnConnectionChanged(Connection connection, ConnectionInfo info)
