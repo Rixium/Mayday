@@ -154,8 +154,10 @@ namespace Mayday.Game.Screens
             player.AddComponent(playerAnimationComponent);
             player.AddComponent(new GravityComponent());
             player.AddComponent(new JumpComponent());
-            player.AddComponent(new BlockBreakerComponent(GameWorld, Camera));
+            var blockBreakerComponent = player.AddComponent(new BlockBreakerComponent(GameWorld, Camera));
             player.AddComponent(new ItemPickerComponent());
+
+            OnMouseDown += blockBreakerComponent.MouseDown;
             
             var inventoryComponent = player.AddComponent(new InventoryComponent());
             var inventoryBar = inventoryComponent.AddInventory(new Inventory(8));

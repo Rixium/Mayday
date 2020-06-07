@@ -24,11 +24,15 @@ namespace Yetiface.Engine.UI
         public void Update()
         {
             //Desktop.Update();
+            MouseOver = Desktop.IsMouseOverGUI;
         }
 
         public void AfterDraw()
         {
             
         }
+
+        public bool MouseOver { get; set; }
+        
     }
 }

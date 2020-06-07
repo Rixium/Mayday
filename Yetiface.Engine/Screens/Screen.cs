@@ -1,12 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Yetiface.Engine.ECS;
 using Yetiface.Engine.ECS.Components;
 using Yetiface.Engine.ECS.Components.Renderables;
 using Yetiface.Engine.Graphics.Renderers;
+using Yetiface.Engine.Inputs;
 using Yetiface.Engine.Utils;
 using IUpdateable = Yetiface.Engine.ECS.Components.Updateables.IUpdateable;
 using IUserInterface = Yetiface.Engine.UI.IUserInterface;
+using MouseState = Yetiface.Engine.Utils.MouseState;
 
 namespace Yetiface.Engine.Screens
 {
@@ -25,6 +30,14 @@ namespace Yetiface.Engine.Screens
         public IUserInterface UserInterface { get; set; }
         public Color BackgroundColor { get; set; }
 
+
+        public KeyboardState LastKeyboardState;
+        public Action<Keys> OnKeyDown;
+        public Action<Keys> OnKeyUp;
+        public Action<MouseButton> OnMouseDown;
+        public Action<MouseButton> OnMouseUp;
+        public Action<MouseButton> OnMouseHeld;
+
         public string Name { get; set; }
 
         public bool IsForced { get; protected set; }
@@ -41,11 +54,46 @@ namespace Yetiface.Engine.Screens
 
         public virtual void Update()
         {
+            var keyboardState = Keyboard.GetState();
+
+            HandleKeyboard(keyboardState);
+            HandleMouse();
+            
             UserInterface?.Update();
 
             if (Updateables == null) return;
             foreach (var updateable in Updateables) 
                 updateable.Update();
+
+            LastKeyboardState = keyboardState;
+        }
+
+        private void HandleMouse()
+        {
+            if (UserInterface != null && UserInterface.MouseOver) return;
+            
+            if (MouseState.CurrentState.LeftButton == ButtonState.Pressed) 
+                OnMouseDown?.Invoke(MouseButton.Left);
+
+            if (MouseState.CurrentState.LeftButton == ButtonState.Pressed &&
+                MouseState.LastState.LeftButton == ButtonState.Pressed) 
+                OnMouseHeld?.Invoke(MouseButton.Left);
+
+            if (MouseState.CurrentState.RightButton == ButtonState.Pressed) 
+                OnMouseDown?.Invoke(MouseButton.Right);
+
+            if (MouseState.CurrentState.RightButton == ButtonState.Pressed &&
+                MouseState.LastState.RightButton == ButtonState.Pressed) 
+                OnMouseHeld?.Invoke(MouseButton.Right);
+        }
+
+        private void HandleKeyboard(KeyboardState keyboardState)
+        {
+            foreach (var key in keyboardState.GetPressedKeys()
+                .Where(k => !LastKeyboardState.GetPressedKeys().Contains(k)))
+            {
+                OnKeyDown?.Invoke(key);
+            }
         }
 
         public void BeforeDraw()

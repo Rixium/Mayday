@@ -8,5 +8,6 @@
         void Update();
 
         void AfterDraw();
+        bool MouseOver { get; set; }
     }
 }

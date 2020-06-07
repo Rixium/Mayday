@@ -2,6 +2,7 @@
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.World;
 using Microsoft.Xna.Framework.Input;
+using Yetiface.Engine.Inputs;
 using MouseState = Yetiface.Engine.Utils.MouseState;
 
 namespace Mayday.Game.Gameplay.Components
@@ -23,35 +24,6 @@ namespace Mayday.Game.Gameplay.Components
         
         public void Update()
         {
-            if (MouseState.CurrentState.LeftButton == ButtonState.Pressed)
-            {
-                var mousePosition = MouseState.Bounds(_camera.GetMatrix());
-
-                var mouseTileX = mousePosition.X / GameWorld.TileSize;
-                var mouseTileY = mousePosition.Y / GameWorld.TileSize;
-                
-                if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > GameWorld.Width - 1 ||
-                    mouseTileY > GameWorld.Height - 1) return;
-                var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
-
-                if (!CloseEnoughToTile(tile)) return;
-                GameWorld.PlaceTile(tile, 1);
-                
-            } else if (MouseState.CurrentState.RightButton == ButtonState.Pressed)
-            {
-                var mousePosition = MouseState.Bounds(_camera.GetMatrix());
-
-                var mouseTileX = mousePosition.X / GameWorld.TileSize;
-                var mouseTileY = mousePosition.Y / GameWorld.TileSize;
-                if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > GameWorld.Width - 1 ||
-                    mouseTileY > GameWorld.Height - 1) return;
-                
-                var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
-
-                if (!CloseEnoughToTile(tile)) return;
-                tile.Destroy();
-            }
-
         }
 
         private bool CloseEnoughToTile(Tile tile)
@@ -71,6 +43,38 @@ namespace Mayday.Game.Gameplay.Components
         public void OnAddedToPlayer()
         {
             
+        }
+
+        public void MouseDown(MouseButton button)
+        {
+            if (button == MouseButton.Left)
+            {
+                var mousePosition = MouseState.Bounds(_camera.GetMatrix());
+
+                var mouseTileX = mousePosition.X / GameWorld.TileSize;
+                var mouseTileY = mousePosition.Y / GameWorld.TileSize;
+                
+                if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > GameWorld.Width - 1 ||
+                    mouseTileY > GameWorld.Height - 1) return;
+                var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
+
+                if (!CloseEnoughToTile(tile)) return;
+                GameWorld.PlaceTile(tile, 1);
+                
+            } else if (button == MouseButton.Right)
+            {
+                var mousePosition = MouseState.Bounds(_camera.GetMatrix());
+
+                var mouseTileX = mousePosition.X / GameWorld.TileSize;
+                var mouseTileY = mousePosition.Y / GameWorld.TileSize;
+                if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > GameWorld.Width - 1 ||
+                    mouseTileY > GameWorld.Height - 1) return;
+                
+                var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
+
+                if (!CloseEnoughToTile(tile)) return;
+                tile.Destroy();
+            }
         }
     }
 }
