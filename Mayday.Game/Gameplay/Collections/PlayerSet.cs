@@ -5,7 +5,7 @@ namespace Mayday.Game.Gameplay.Collections
 {
     public class PlayerSet : IPlayerSet
     {
-        public Dictionary<ulong, Player> Players { get; set; }
+        private Dictionary<ulong, Player> Players { get; set; }
             = new Dictionary<ulong, Player>();
 
         public Player Add(Player player)
