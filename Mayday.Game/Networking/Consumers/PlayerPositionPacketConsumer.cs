@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Networking.Packets;
 using Mayday.Game.Screens;
 using Steamworks.Data;
@@ -18,9 +16,10 @@ namespace Mayday.Game.Networking.Consumers
 
         protected override void ConsumePacket(Connection connection, PlayerPositionPacket packet)
         {
-            if (!_gameScreen.Players.ContainsKey(packet.SteamId)) return;
+            var player = _gameScreen.Players.Get(packet.SteamId);
 
-            var player = _gameScreen.Players[packet.SteamId];
+            if (player == null) return;
+
             player.X = packet.X;
             player.Y = packet.Y;
         }

@@ -13,16 +13,15 @@ namespace Mayday.Game.Networking.Consumers
         {
             _gameScreen = gameScreen;
         }
-        
+
         protected override void ConsumePacket(Connection connection, PlayerMovePacket packet)
         {
-            if (!_gameScreen.Players.ContainsKey(packet.SteamId)) 
-                return;
-            
-            var player = _gameScreen.Players[packet.SteamId];
+            var player = _gameScreen.Players.Get(packet.SteamId);
+
+            if (player == null) return;
+
             player.XDirection = packet.XDirection;
             player.FacingDirection = packet.XDirection != 0 ? packet.XDirection : player.FacingDirection;
         }
-        
     }
 }

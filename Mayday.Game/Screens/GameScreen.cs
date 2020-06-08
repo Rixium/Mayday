@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mayday.Game.Gameplay.Collections;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.Items;
@@ -9,7 +10,6 @@ using Mayday.Game.Graphics;
 using Mayday.Game.Graphics.Renderers;
 using Mayday.Game.Networking.Consumers;
 using Mayday.Game.Networking.Listeners;
-using Mayday.Game.Networking.Packagers;
 using Mayday.Game.Networking.Packets;
 using Mayday.Game.UI.Controllers;
 using Mayday.UI.Views;
@@ -19,7 +19,6 @@ using Steamworks;
 using Yetiface.Engine;
 using Yetiface.Engine.Inputs;
 using Yetiface.Engine.Networking;
-using Yetiface.Engine.Networking.Packagers;
 using Yetiface.Engine.Screens;
 using Yetiface.Engine.UI;
 using Yetiface.Engine.Utils;
@@ -29,20 +28,16 @@ namespace Mayday.Game.Screens
 
     public class GameScreen : Screen
     {
-
         public INetworkManager NetworkManager { get; set; }
         public IGameWorld GameWorld { get; set; }
-        public Dictionary<ulong, Player> Players { get; set; } 
-            = new Dictionary<ulong, Player>();
-        
+
+        public IPlayerSet Players = new PlayerSet();
+
         private readonly IWorldRenderer _worldRenderer;
         private readonly IPlayerRenderer _playerRenderer;
         private Random _random = new Random();
-        
         public Camera Camera { get; } = new Camera();
-
         public Player MyPlayer { get; set; }
-        
         private GameScreenUserInterfaceController _interfaceController;
 
         public GameScreen(INetworkManager networkManager) : base("GameScreen")
@@ -60,7 +55,6 @@ namespace Mayday.Game.Screens
         public void SetWorld(IGameWorld gameWorld)
         {
             GameWorld = gameWorld;
-
             RegisterTileCallbacks();
         }
 
@@ -167,7 +161,7 @@ namespace Mayday.Game.Screens
                 mainInventory.InventoryChanged += () => _interfaceController.MainInventoryChanged(mainInventory);
             }
 
-            Players.Add(player.SteamId, player);
+            Players.Add(player);
 
             return player;
         }
@@ -241,7 +235,7 @@ namespace Mayday.Game.Screens
 
         private void Move(int x)
         {
-            var player = Players[MyPlayer.SteamId];
+            var player = Players.Get(MyPlayer.SteamId);
 
             if (player.XDirection != x)
             {
@@ -283,7 +277,7 @@ namespace Mayday.Game.Screens
             GraphicsUtils.Instance.Begin(true, Camera.GetMatrix());
             
             _worldRenderer.Draw(GameWorld, Camera);
-            _playerRenderer.DrawPlayers(Players);
+            _playerRenderer.DrawPlayers(Players.GetAll());
 
             foreach (var entity in GameWorld.WorldItems)
             {
@@ -306,8 +300,8 @@ namespace Mayday.Game.Screens
             
             NetworkManager?.Update();
             
-            foreach(var player in Players)
-                player.Value.Update();
+            foreach(var player in Players.GetAll())
+                player.Update();
             
             foreach(var entity in GameWorld.WorldItems)
                 entity.Update();

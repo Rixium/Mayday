@@ -13,10 +13,10 @@ namespace Mayday.Game.Graphics.Renderers
         
         public Color OutlineColor { get; set;  }= new Color(24, 24, 24);
         
-        public void DrawPlayers(Dictionary<ulong, Player> players)
+        public void DrawPlayers(IEnumerable<Player> players)
         {
             foreach(var player in players)
-                DrawPlayer(player.Value);
+                DrawPlayer(player);
         }
 
         public void DrawPlayer(Player player)

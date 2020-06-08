@@ -6,7 +6,7 @@ namespace Mayday.Game.Graphics.Renderers
     public interface IPlayerRenderer
     {
 
-        void DrawPlayers(Dictionary<ulong, Player> players);
+        void DrawPlayers(IEnumerable<Player> players);
         void DrawPlayer(Player player);
         
     }

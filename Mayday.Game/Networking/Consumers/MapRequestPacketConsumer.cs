@@ -17,7 +17,6 @@ namespace Mayday.Game.Networking.Consumers
         private INetworkManager NetworkManager => _gameScreen.NetworkManager;
         private INetworkMessagePackager MessagePackager => NetworkManager.MessagePackager;
         private IGameWorld GameWorld => _gameScreen.GameWorld;
-        private IDictionary<ulong, Player> Players => _gameScreen.Players;
 
         public MapRequestPacketConsumer(GameScreen gameScreen)
         {
@@ -51,14 +50,14 @@ namespace Mayday.Game.Networking.Consumers
                 await Task.Delay(1);
             }
 
-            foreach (var player in Players)
+            foreach (var player in _gameScreen.Players.GetAll())
             {
                 var playerPacket = new NewPlayerPacket()
                 {
-                    SteamId = player.Value.SteamId,
-                    X = (int) player.Value.X,
-                    Y = (int) player.Value.Y,
-                    HeadId = player.Value.HeadId
+                    SteamId = player.SteamId,
+                    X = (int) player.X,
+                    Y = (int) player.Y,
+                    HeadId = player.HeadId
                 };
 
                 var package = MessagePackager.Package(playerPacket);
