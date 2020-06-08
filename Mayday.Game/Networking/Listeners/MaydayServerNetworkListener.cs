@@ -17,10 +17,10 @@ namespace Mayday.Game.Networking.Listeners
         private readonly Dictionary<Type, IPacketConsumer> _packetConsumers 
             = new Dictionary<Type, IPacketConsumer>();
 
-        public MaydayServerNetworkListener(INetworkManager networkManager, INetworkMessagePackager messagePackager)
+        public MaydayServerNetworkListener(INetworkManager networkManager)
         {
             _networkManager = networkManager;
-            _messagePackager = messagePackager;
+            _messagePackager = networkManager.MessagePackager;
         }
         
         public void OnNewConnection(Connection connection, ConnectionInfo info)

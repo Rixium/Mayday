@@ -2,6 +2,7 @@
 using Steamworks;
 using Steamworks.Data;
 using Yetiface.Engine.Networking.Listeners;
+using Yetiface.Engine.Networking.Packagers;
 
 namespace Yetiface.Engine.Networking
 {
@@ -10,6 +11,7 @@ namespace Yetiface.Engine.Networking
     /// </summary>
     public interface INetworkManager
     {
+        INetworkMessagePackager MessagePackager { get; set; }
         ConnectionManager Client { get; set; }
         SocketManager Server { get; set; }
         SocketManager CreateSession(string port);

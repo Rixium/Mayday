@@ -15,7 +15,7 @@ namespace Mayday.Game.Networking.Consumers
     {
         private readonly GameScreen _gameScreen;
         private INetworkManager NetworkManager => _gameScreen.NetworkManager;
-        private INetworkMessagePackager MessagePackager => _gameScreen.MessagePackager;
+        private INetworkMessagePackager MessagePackager => NetworkManager.MessagePackager;
         private IGameWorld GameWorld => _gameScreen.GameWorld;
         private IDictionary<ulong, Player> Players => _gameScreen.Players;
 

@@ -31,7 +31,6 @@ namespace Mayday.Game.Screens
     {
 
         public INetworkManager NetworkManager { get; set; }
-        public INetworkMessagePackager MessagePackager { get; set; }
         public IGameWorld GameWorld { get; set; }
         public Dictionary<ulong, Player> Players { get; set; } 
             = new Dictionary<ulong, Player>();
@@ -49,7 +48,6 @@ namespace Mayday.Game.Screens
         public GameScreen(INetworkManager networkManager) : base("GameScreen")
         {
             NetworkManager = networkManager;
-            MessagePackager = new MaydayMessagePackager();
             
             _worldRenderer = new WorldRenderer();
             _playerRenderer = new PlayerRenderer();
@@ -111,7 +109,7 @@ namespace Mayday.Game.Screens
                 ItemId = itemDrop.Item.Id
             };
 
-            var package = MessagePackager.Package(itemDropPacket);
+            var package = NetworkManager.MessagePackager.Package(itemDropPacket);
             
             NetworkManager.SendMessage(package);
         }
@@ -125,7 +123,7 @@ namespace Mayday.Game.Screens
                 TileType = tile.TileType
             };
 
-            var package = MessagePackager.Package(tileChangePacket);
+            var package = NetworkManager.MessagePackager.Package(tileChangePacket);
             
             NetworkManager.SendMessage(package);
         }
@@ -211,8 +209,8 @@ namespace Mayday.Game.Screens
 
         private void SetupNetworking()
         {            
-            var gameServerListener = new MaydayServerNetworkListener(NetworkManager, MessagePackager);
-            var gameClientListener = new MaydayClientNetworkListener(MessagePackager);
+            var gameServerListener = new MaydayServerNetworkListener(NetworkManager);
+            var gameClientListener = new MaydayClientNetworkListener(NetworkManager);
             
             NetworkManager.SetServerNetworkListener(gameServerListener);
             NetworkManager.SetClientNetworkListener(gameClientListener);
@@ -228,7 +226,7 @@ namespace Mayday.Game.Screens
                 SteamId = MyPlayer.SteamId
             };
 
-            var package = MessagePackager.Package(jumpPacket);
+            var package = NetworkManager.MessagePackager.Package(jumpPacket);
             NetworkManager.SendMessage(package);
 
             var jumpComponent = MyPlayer.GetComponent<JumpComponent>();
@@ -253,7 +251,7 @@ namespace Mayday.Game.Screens
                     SteamId = player.SteamId
                 };
 
-                var movePackage = MessagePackager.Package(data);
+                var movePackage = NetworkManager.MessagePackager.Package(data);
                 NetworkManager.SendMessage(movePackage);
                 
                 var position = new PlayerPositionPacket
@@ -263,7 +261,7 @@ namespace Mayday.Game.Screens
                     SteamId = player.SteamId
                 };
 
-                var package = MessagePackager.Package(position);
+                var package = NetworkManager.MessagePackager.Package(position);
                     
                 NetworkManager.SendMessage(package);
                 
@@ -326,7 +324,7 @@ namespace Mayday.Game.Screens
         public void SendPacket(JumpPacket jumpPacket)
         {
             jumpPacket.SteamId = SteamClient.SteamId;
-            var package = MessagePackager.Package(jumpPacket);
+            var package = NetworkManager.MessagePackager.Package(jumpPacket);
             NetworkManager.SendMessage(package);
         }
         

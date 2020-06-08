@@ -6,6 +6,7 @@ using Steamworks;
 using Steamworks.Data;
 using Yetiface.Engine.Networking;
 using Yetiface.Engine.Networking.Listeners;
+using Yetiface.Engine.Networking.Packagers;
 
 namespace Mayday.Game.Networking.SteamNetworking
 {
@@ -13,14 +14,16 @@ namespace Mayday.Game.Networking.SteamNetworking
     {
         private readonly uint _appId;
 
-        public INetworkServerListener NetworkServerListener;
-        public INetworkClientListener NetworkClientListener;
+        public INetworkServerListener NetworkServerListener { get; set; }
+        public INetworkClientListener NetworkClientListener { get; set; }
+        public INetworkMessagePackager MessagePackager { get; set; }
 
         private List<Connection> Connections { get; set; } = new List<Connection>();
 
-        public SteamNetworkManager(uint appId)
+        public SteamNetworkManager(uint appId, INetworkMessagePackager messagePackager)
         {
             _appId = appId;
+            MessagePackager = messagePackager;
         }
 
         public ConnectionManager Client { get; set; }

@@ -38,8 +38,7 @@ namespace Mayday.Game.Screens
 
         public override void Awake()
         {
-            _networkManager = new SteamNetworkManager(Game1.AppId);        
-            _packager = new MaydayMessagePackager();
+            _networkManager = new SteamNetworkManager(Game1.AppId, new MaydayMessagePackager());
             
             var panel = new MainMenuUserInterface();
             var mainMenuUserInterfaceController = new MainMenuUserInterfaceController(panel);

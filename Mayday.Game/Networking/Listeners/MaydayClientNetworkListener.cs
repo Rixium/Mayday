@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Steamworks.Data;
+using Yetiface.Engine.Networking;
 using Yetiface.Engine.Networking.Consumers;
 using Yetiface.Engine.Networking.Listeners;
 using Yetiface.Engine.Networking.Packagers;
@@ -14,9 +15,9 @@ namespace Mayday.Game.Networking.Listeners
         private readonly Dictionary<Type, IPacketConsumer> _packetConsumers =
             new Dictionary<Type, IPacketConsumer>();
 
-        public MaydayClientNetworkListener(INetworkMessagePackager messagePackager)
+        public MaydayClientNetworkListener(INetworkManager networkManager)
         {
-            _messagePackager = messagePackager;
+            _messagePackager = networkManager.MessagePackager;
         }
 
         public void OnDisconnectedFromServer(ConnectionInfo info)
