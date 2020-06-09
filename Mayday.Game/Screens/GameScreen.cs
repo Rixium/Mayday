@@ -27,16 +27,17 @@ namespace Mayday.Game.Screens
 
     public class GameScreen : Screen
     {
-        public INetworkManager NetworkManager { get; set; }
-        public IGameWorld GameWorld { get; set; }
+        public INetworkManager NetworkManager { get; }
+        public IGameWorld GameWorld { get; private set; }
 
-        public IPlayerSet Players = new PlayerSet();
+        public readonly IPlayerSet Players = new PlayerSet();
+        public Player MyPlayer { get; private set; }
 
         private readonly IWorldRenderer _worldRenderer;
         private readonly IPlayerRenderer _playerRenderer;
-        public Camera Camera { get; } = new Camera();
-        public Player MyPlayer { get; set; }
-        private GameScreenUserInterfaceController _interfaceController;
+        private readonly GameScreenUserInterfaceController _interfaceController;
+
+        private Camera Camera { get; } = new Camera();
 
         public GameScreen(INetworkManager networkManager) : base("GameScreen")
         {
@@ -53,40 +54,20 @@ namespace Mayday.Game.Screens
         public void SetWorld(IGameWorld gameWorld)
         {
             GameWorld = gameWorld;
-            RegisterTileCallbacks();
-        }
 
-        private void RegisterTileCallbacks()
-        {
-            if (GameWorld == null) return;
-            foreach (var tile in GameWorld.Tiles)
+            foreach (var tile in gameWorld.Tiles)
             {
-                tile.TileDestroyed += OnTileDestroyed;
+                var itemDropId = tile.TileProperties?.ItemDropId;
+
+                if (itemDropId == null || itemDropId.Value == -1) continue;
+                
+                var itemDropperComponent = tile.AddComponent(
+                    new ItemDropperComponent(itemDropId.Value));
+
+                itemDropperComponent.ItemDrop += DropItem;
             }
         }
 
-        private void OnTileDestroyed(Tile tile)
-        {
-            var itemDrop = new ItemDrop
-            {
-                Item = ContentChest.ItemData[tile.TileProperties.ItemDropId],
-                X = tile.RenderX,
-                Y = tile.RenderY,
-                GameWorld = GameWorld
-            };
-
-            var moveComponent = itemDrop.AddComponent(new MoveComponent());
-            itemDrop.AddComponent(new GravityComponent());
-            moveComponent.XVelocity = Randomizer.Next(-10, 10);
-            moveComponent.YVelocity = Randomizer.Next(0, 5);
-            
-            GameWorld.WorldItems.Add(itemDrop);
-            
-            var tempTile = new Tile(0, tile.X, tile.Y);
-            SendTileChangePacket(tempTile);
-            SendItemDropPacket(itemDrop);
-        }
-        
         private void OnTilePlaced(Tile tile)
         {
             SendTileChangePacket(tile);
@@ -110,8 +91,8 @@ namespace Mayday.Game.Screens
         {
             var tileChangePacket = new TileTypePacket()
             {
-                X = tile.X,
-                Y = tile.Y,
+                X = tile.TileX,
+                Y = tile.TileY,
                 TileType = tile.TileType
             };
 
@@ -125,8 +106,8 @@ namespace Mayday.Game.Screens
             if (isClients)
             {
                 var spawnTile = GetSpawnPosition();
-                player.X = spawnTile.X * GameWorld.TileSize;
-                player.Y = spawnTile.Y * GameWorld.TileSize - 70 * Game1.GlobalGameScale;
+                player.X = spawnTile.TileX * GameWorld.TileSize;
+                player.Y = spawnTile.TileY * GameWorld.TileSize - 70 * Game1.GlobalGameScale;
                 player.SteamId = GetId();
                 MyPlayer = player;
             }
@@ -170,7 +151,7 @@ namespace Mayday.Game.Screens
             {
                 return SteamClient.SteamId;
             }
-            catch (Exception _)
+            catch (Exception)
             {
                 return 0;
             }
@@ -228,7 +209,7 @@ namespace Mayday.Game.Screens
         private Tile GetSpawnPosition() =>
             (from Tile tile in GameWorld.Tiles
                 where tile.TileType == 1
-                select GameWorld.Tiles[(int) (GameWorld.Width / 2.0f), tile.Y])
+                select GameWorld.Tiles[(int) (GameWorld.Width / 2.0f), tile.TileY])
             .FirstOrDefault();
 
         private void Move(int x)
@@ -311,6 +292,7 @@ namespace Mayday.Game.Screens
         {
             itemDrop.GameWorld = GameWorld;
             GameWorld.WorldItems.Add(itemDrop);
+            SendItemDropPacket(itemDrop);
         }
 
         public void SendPacket(JumpPacket jumpPacket)

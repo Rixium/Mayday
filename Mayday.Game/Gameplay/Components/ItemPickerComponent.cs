@@ -33,7 +33,7 @@ namespace Mayday.Game.Gameplay.Components
 
         private bool CloseEnoughToGet(IEntity item) => item.GetBounds().Intersects(Entity.GetBounds());
 
-        public void OnAddedToPlayer()
+        public void OnAddedToEntity()
         {
             
         }

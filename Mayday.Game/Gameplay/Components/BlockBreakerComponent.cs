@@ -35,7 +35,7 @@ namespace Mayday.Game.Gameplay.Components
             return (Math.Abs(tile.RenderCenter.Y - playerBottom) <= MaxDistanceToBreak);
         }
 
-        public void OnAddedToPlayer()
+        public void OnAddedToEntity()
         {
             
         }
@@ -68,7 +68,7 @@ namespace Mayday.Game.Gameplay.Components
                 var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
 
                 if (!CloseEnoughToTile(tile)) return;
-                tile.Destroy();
+                tile.Break();
             }
         }
     }

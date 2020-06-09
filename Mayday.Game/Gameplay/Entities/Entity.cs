@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mayday.Game.Gameplay.Components;
@@ -11,10 +12,11 @@ namespace Mayday.Game.Gameplay.Entities
 {
     public abstract class Entity : IEntity
     {
+        public Action<IEntity> Destroy { get; set; }
         public IGameWorld GameWorld { get; set; }
         public int XDirection { get; set; }
-        public float X { get; set; }
-        public float Y { get; set; }
+        public virtual float X { get; set; }
+        public virtual float Y { get; set; }
         public Vector2 Position => new Vector2(X, Y);
         
         public Vector2 Center => 
@@ -44,7 +46,7 @@ namespace Mayday.Game.Gameplay.Entities
                 _components.Add(component);
             }
 
-            component.OnAddedToPlayer();
+            component.OnAddedToEntity();
             
             return component;
         }

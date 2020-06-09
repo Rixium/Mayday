@@ -102,7 +102,7 @@ namespace Mayday.Game.Gameplay.WorldMakers
             
             foreach (var tile in _tiles)
             {
-                Bitmap.SetPixel(tile.X, tile.Y, tile.TileType == 0 ? Color.Black :
+                Bitmap.SetPixel(tile.TileX, tile.TileY, tile.TileType == 0 ? Color.Black :
                     tile.TileType == 1 ? Color.White : Color.Orange);
             }
 

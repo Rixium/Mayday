@@ -1,4 +1,5 @@
 ﻿
+using System;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.World;
 using Microsoft.Xna.Framework;
@@ -8,6 +9,7 @@ namespace Mayday.Game.Gameplay.Entities
 {
     public interface IEntity
     {
+        Action<IEntity> Destroy { get; set; }
         IGameWorld GameWorld { get; set; }
         int XDirection { get; set; }
         float X { get; set; }

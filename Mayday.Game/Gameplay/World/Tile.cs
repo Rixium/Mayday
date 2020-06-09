@@ -1,25 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Data;
+using Mayday.Game.Gameplay.Entities;
 using Microsoft.Xna.Framework;
 using Yetiface.Engine.Utils;
 
 namespace Mayday.Game.Gameplay.World
 {
-    public class Tile
+    public class Tile : Entity
     {
-        public IGameWorld GameWorld { get; set; }
+
         public int TileSize => GameWorld.TileSize;
-        public int RenderX => X * TileSize;
-        public int RenderY => Y * TileSize;
-        public int X { get; set; }
-        public int Y { get; set; }
+
+        private float _x;
+        public override float X
+        {
+            get => TileX * TileSize;
+            set => _x = value;
+        }
+
+        private float _y;
+        public override float Y
+        {
+            get => TileY * TileSize;
+            set => _y = value;
+        }
+
+        public int TileX { get; set; }
+        public int TileY { get; set; }
 
         private int _tileType;
-
-        public Action<Tile> TileDestroyed { get; set; }
-
+        
         public int TileType
         {
             get => _tileType;
@@ -41,11 +52,11 @@ namespace Mayday.Game.Gameplay.World
 
         private void SetNeighboursBlobFlag()
         {
-            for (var i = X - 1; i <= X + 1; i++)
+            for (var i = TileX - 1; i <= TileX + 1; i++)
             {
-                for (var j = Y - 1; j <= Y + 1; j++)
+                for (var j = TileY - 1; j <= TileY + 1; j++)
                 {
-                    if (i == X && j == Y) continue;
+                    if (i == TileX && j == TileY) continue;
                     var tile = GameWorld.TryGetTile(i, j);
                     if (tile == null) continue;
                     tile.BlobValue = -1;
@@ -57,41 +68,24 @@ namespace Mayday.Game.Gameplay.World
 
         public int WallType { get; set; }
 
-        public Vector2 RenderCenter => new Vector2(RenderX + TileSize / 2.0f, RenderY + TileSize / 2.0f);
+        public Vector2 RenderCenter => new Vector2(X + TileSize / 2.0f, Y + TileSize / 2.0f);
         public int BlobValue { get; set; } = -1;
 
-        public Tile(int tileType, int x, int y)
+        public Tile(int tileType, int tileX, int tileY)
         {
             TileType = tileType;
-            X = x;
-            Y = y;
+            TileX = tileX;
+            TileY = tileY;
         }
 
-        public RectangleF GetBounds() => new RectangleF(RenderX, RenderY, TileSize, TileSize);
+        public override RectangleF GetBounds() => new RectangleF(X, Y, TileSize, TileSize);
 
-        public void Destroy()
+        public void Break()
         {
             if (TileType == 0) return;
-            TileDestroyed?.Invoke(this);
+            Destroy?.Invoke(this);
             TileType = 0;
         }
 
-        public T AddComponent<T>(T component) where T : IComponent
-        {
-            Components.Add(component);
-            return component;
-        }
-
-        public T GetComponent<T>()
-        {
-            foreach (var component in Components)
-            {
-                if (component.GetType() == typeof(T))
-                    return (T) component;
-            }
-
-            return default;
-        }
-        
     }
 }

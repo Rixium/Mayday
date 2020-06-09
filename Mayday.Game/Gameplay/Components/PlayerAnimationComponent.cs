@@ -42,7 +42,7 @@ namespace Mayday.Game.Gameplay.Components
             }
         }
 
-        public void OnAddedToPlayer()
+        public void OnAddedToEntity()
         {
         }
     }

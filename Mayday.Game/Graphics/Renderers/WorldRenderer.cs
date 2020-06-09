@@ -49,7 +49,7 @@ namespace Mayday.Game.Graphics.Renderers
                     var rect = new Rectangle(x * sheetTileSize, y * sheetTileSize, sheetTileSize, sheetTileSize);
 
                     GraphicsUtils.Instance.SpriteBatch.Draw(tileSet,
-                        new Rectangle(tile.RenderX, tile.RenderY, tile.TileSize, tile.TileSize),
+                        new Rectangle((int) tile.X, (int) tile.Y, tile.TileSize, tile.TileSize),
                         rect, Color.White);
                 }
             }
@@ -61,8 +61,8 @@ namespace Mayday.Game.Graphics.Renderers
             if (tile.BlobValue != -1) 
                 return tile.BlobValue;
             
-            var x = tile.X;
-            var y = tile.Y;
+            var x = tile.TileX;
+            var y = tile.TileY;
             byte bitSum = 0;
 
             var n = gameWorld.TryGetTile(x, y - 1);

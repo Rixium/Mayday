@@ -44,7 +44,7 @@ namespace Mayday.Game.Gameplay.Components
             _lastKeyboardState = Keyboard.GetState();
         }
 
-        public void OnAddedToPlayer()
+        public void OnAddedToEntity()
         {
             // We need to know when the player hits the floor, so that we can
             // set jumping back to false.

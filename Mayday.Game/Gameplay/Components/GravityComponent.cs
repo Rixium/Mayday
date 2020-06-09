@@ -21,7 +21,7 @@ namespace Mayday.Game.Gameplay.Components
             moveComponent.YVelocity = MathHelper.Clamp(moveComponent.YVelocity, -activeGravity, moveComponent.YVelocity);
         }
 
-        public void OnAddedToPlayer()
+        public void OnAddedToEntity()
         {
             
         }

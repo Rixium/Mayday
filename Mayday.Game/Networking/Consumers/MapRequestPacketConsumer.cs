@@ -39,8 +39,8 @@ namespace Mayday.Game.Networking.Consumers
                     var tileToSend = GameWorld.Tiles[i, j];
                     var tileTypePacket = new TileTypePacket()
                     {
-                        X = tileToSend.X,
-                        Y = tileToSend.Y,
+                        X = tileToSend.TileX,
+                        Y = tileToSend.TileY,
                         TileType = tileToSend.TileType
                     };
                     var packet = MessagePackager.Package(tileTypePacket);
