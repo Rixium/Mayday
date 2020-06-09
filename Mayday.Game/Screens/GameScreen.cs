@@ -34,7 +34,6 @@ namespace Mayday.Game.Screens
 
         private readonly IWorldRenderer _worldRenderer;
         private readonly IPlayerRenderer _playerRenderer;
-        private Random _random = new Random();
         public Camera Camera { get; } = new Camera();
         public Player MyPlayer { get; set; }
         private GameScreenUserInterfaceController _interfaceController;
@@ -78,8 +77,8 @@ namespace Mayday.Game.Screens
 
             var moveComponent = itemDrop.AddComponent(new MoveComponent());
             itemDrop.AddComponent(new GravityComponent());
-            moveComponent.XVelocity = _random.Next(-10, 10);
-            moveComponent.YVelocity = _random.Next(0, 5);
+            moveComponent.XVelocity = Randomizer.Next(-10, 10);
+            moveComponent.YVelocity = Randomizer.Next(0, 5);
             
             GameWorld.WorldItems.Add(itemDrop);
             

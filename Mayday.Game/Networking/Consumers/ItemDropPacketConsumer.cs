@@ -1,17 +1,16 @@
-using System;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Items;
 using Mayday.Game.Networking.Packets;
 using Mayday.Game.Screens;
 using Steamworks.Data;
 using Yetiface.Engine.Networking.Consumers;
+using Yetiface.Engine.Utils;
 
 namespace Mayday.Game.Networking.Consumers
 {
     public class ItemDropPacketConsumer : PacketConsumer<ItemDropPacket>
     {
         private readonly GameScreen _gameScreen;
-        private Random _random = new Random();
 
         public ItemDropPacketConsumer(GameScreen gameScreen)
         {
@@ -29,8 +28,8 @@ namespace Mayday.Game.Networking.Consumers
 
             var moveComponent = itemDrop.AddComponent(new MoveComponent());
             itemDrop.AddComponent(new GravityComponent());
-            moveComponent.XVelocity = _random.Next(-10, 10);
-            moveComponent.YVelocity = _random.Next(0, 5);
+            moveComponent.XVelocity = Randomizer.Next(-10, 10);
+            moveComponent.YVelocity = Randomizer.Next(0, 5);
 
             _gameScreen.DropItem(itemDrop);
         }

@@ -75,6 +75,7 @@
     <Compile Include="UI\MyraUserInterface.cs" />
     <Compile Include="Utils\ArrayUtils.cs" />
     <Compile Include="Utils\FrameRate.cs" />
+    <Compile Include="Utils\Randomizer.cs" />
     <Compile Include="Utils\RectangleExtensions.cs" />
     <Compile Include="Utils\RectangleF.cs" />
     <Compile Include="YetiGame.cs" />
