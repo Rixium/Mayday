@@ -1,4 +1,5 @@
-﻿using Yetiface.Engine.Utils;
+﻿using Steamworks;
+using Yetiface.Engine.Utils;
 
 namespace Mayday.Game.Gameplay.Entities
 {
@@ -14,6 +15,10 @@ namespace Mayday.Game.Gameplay.Entities
             new RectangleF(X + 18 * Game1.GlobalGameScale, Y + 18 * Game1.GlobalGameScale,
                 42 * Game1.GlobalGameScale - 17 * Game1.GlobalGameScale - 18 * Game1.GlobalGameScale,
                 33 * Game1.GlobalGameScale - 19 * Game1.GlobalGameScale);
-        
+
+        public void SetClientId()
+        {
+            SteamId = SteamClient.SteamId;
+        }
     }
 }

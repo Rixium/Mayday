@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Mayday.Game.Gameplay.Collections;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Entities;
@@ -108,7 +107,7 @@ namespace Mayday.Game.Screens
                 var spawnTile = GetSpawnPosition();
                 player.X = spawnTile.TileX * GameWorld.TileSize;
                 player.Y = spawnTile.TileY * GameWorld.TileSize - 70 * Game1.GlobalGameScale;
-                player.SteamId = GetId();
+                player.SetClientId();
                 MyPlayer = player;
             }
 
@@ -144,19 +143,7 @@ namespace Mayday.Game.Screens
 
             return player;
         }
-
-        private ulong GetId()
-        {
-            try
-            {
-                return SteamClient.SteamId;
-            }
-            catch (Exception)
-            {
-                return 0;
-            }
-        }
-
+        
         public override void Awake()
         {
             BackgroundColor = new Color(47, 39, 54);
