@@ -33,7 +33,7 @@ namespace Mayday.Game.Screens
         private readonly IPlayerRenderer _playerRenderer;
         private readonly GameScreenUserInterfaceController _interfaceController;
 
-        private Camera Camera { get; } = new Camera();
+        public Camera Camera { get; } = new Camera();
 
         public GameScreen(INetworkManager networkManager) : base("GameScreen")
         {
@@ -121,19 +121,18 @@ namespace Mayday.Game.Screens
             };
             
             var moveComponent = player.AddComponent(new MoveComponent());
-            playerAnimationComponent = player.AddComponent(playerAnimationComponent);
             var gravityComponent = player.AddComponent(new GravityComponent());
             var jumpComponent = player.AddComponent(new JumpComponent(this));
+            var inventoryComponent = player.AddComponent(new InventoryComponent());
+            var inventoryBar = inventoryComponent.AddInventory(new Inventory(8));
+            var mainInventory = inventoryComponent.AddInventory(new Inventory(24));
             var blockBreakerComponent = player.AddComponent(new BlockBreakerComponent(GameWorld, Camera));
-            var itemPickerComponent = player.AddComponent(new ItemPickerComponent());
+            var itemPickerComponent = player.AddComponent(new ItemPickerComponent(this));
+            playerAnimationComponent = player.AddComponent(playerAnimationComponent);
 
             OnMouseDown += blockBreakerComponent.MouseDown;
             moveComponent.PositionChanged += SendPositionPacket;
             moveComponent.MoveDirectionChanged += SendMoveDirectionPacket;
-            
-            var inventoryComponent = player.AddComponent(new InventoryComponent());
-            var inventoryBar = inventoryComponent.AddInventory(new Inventory(8));
-            var mainInventory = inventoryComponent.AddInventory(new Inventory(24));
 
             if (isClients)
             {

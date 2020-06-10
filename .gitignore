@@ -165,3 +165,8 @@ fabric.properties
 /Mayday.Game/.idea/.idea.Mayday.Game.dir/.idea/vcs.xml
 /Mayday.Game/.idea/.idea.Mayday.Game.dir/.idea/workspace.xml
 /.idea/.idea.Mayday/.idea/.idea.Mayday.iml
+/.vs/Mayday/DesignTimeBuild/.dtbcache
+/.vs/Mayday/v15/Server/sqlite3/db.lock
+/.vs/Mayday/v15/Server/sqlite3/storage.ide
+/.vs/Mayday/v15/Server/sqlite3/storage.ide-shm
+/.vs/Mayday/v15/Server/sqlite3/storage.ide-wal

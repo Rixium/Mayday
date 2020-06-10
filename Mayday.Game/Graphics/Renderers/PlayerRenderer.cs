@@ -12,6 +12,8 @@ namespace Mayday.Game.Graphics.Renderers
     {
         
         public Color OutlineColor { get; set;  }= new Color(24, 24, 24);
+        private IDictionary<ulong, PlayerAnimationComponent> _playerAnimationComponents = 
+            new Dictionary<ulong, PlayerAnimationComponent>();
         
         public void DrawPlayers(IEnumerable<Player> players)
         {
@@ -21,7 +23,7 @@ namespace Mayday.Game.Graphics.Renderers
 
         public void DrawPlayer(Player player)
         {
-            var playerAnimationComponent = player.GetComponent<PlayerAnimationComponent>();
+            var playerAnimationComponent = GetPlayerAnimationComponent(player);
             
             var headSprite = playerAnimationComponent.HeadAnimator?.Current;
             var bodySprite = playerAnimationComponent.BodyAnimator?.Current;
@@ -38,7 +40,18 @@ namespace Mayday.Game.Graphics.Renderers
                 DrawSprite(headSprite, playerPosition, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
             
         }
-        
+
+        private PlayerAnimationComponent GetPlayerAnimationComponent(Player player)
+        {
+            _playerAnimationComponents.TryGetValue(player.SteamId, out var component);
+
+            if (component != null) return component;
+
+            component = player.GetComponent<PlayerAnimationComponent>();
+            _playerAnimationComponents.Add(player.SteamId, component);
+            return component;
+        }
+
         private static void DrawSprite(ISprite sprite, Vector2 playerPosition, SpriteEffects flip)
         {
             GraphicsUtils.Instance.SpriteBatch.Draw(
