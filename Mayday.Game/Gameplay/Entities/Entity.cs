@@ -38,7 +38,7 @@ namespace Mayday.Game.Gameplay.Entities
         public T AddComponent<T>(T component) where T : IComponent
         {
             component.Entity = this;
-
+            
             if (typeof(IUpdateable).IsAssignableFrom(typeof(T)))
             {
                 _updateableComponents.Add(component as IUpdateable);

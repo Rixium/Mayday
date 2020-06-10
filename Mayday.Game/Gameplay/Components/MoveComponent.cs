@@ -39,7 +39,7 @@ namespace Mayday.Game.Gameplay.Components
             var xMove = XVelocity;
             var yMove = -YVelocity;
             
-            gameWorld.Move(Entity, xMove, yMove);
+            gameWorld.Move(Entity, xMove, yMove, YVelocity);
 
             Grounded = Math.Abs(currentY - Entity.Y) < 0.01f;
 

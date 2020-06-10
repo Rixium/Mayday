@@ -83,8 +83,8 @@ namespace Mayday.Game.Gameplay.World
         public void Break()
         {
             if (TileType == 0) return;
-            Destroy?.Invoke(this);
             TileType = 0;
+            Destroy?.Invoke(this);
         }
 
     }

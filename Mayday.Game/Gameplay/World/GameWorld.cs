@@ -20,7 +20,7 @@ namespace Mayday.Game.Gameplay.World
         public IList<IEntity> WorldItems { get; set; } = new List<IEntity>();
         public Action<Tile> TilePlaced { get; set; }
 
-        public void Move(IEntity player, float xMove, float yMove)
+        public void Move(IEntity player, float xMove, float yMove, float yVelocity)
         {
             player.X += xMove;
 
@@ -44,9 +44,7 @@ namespace Mayday.Game.Gameplay.World
                     if (!bounds.Intersects(tileBounds)) continue;
 
                     var canMoveUp = true;
-                    var moveComponent = player.GetComponent<MoveComponent>();
-                    
-                    if (j >= tileEndY - 2 && Math.Abs(moveComponent.YVelocity) < 0.01f)
+                    if (j >= tileEndY - 2 && Math.Abs(yVelocity) < 0.01f)
                     {
                         for (var k = j - 1; k > j - 4; k--)
                         {

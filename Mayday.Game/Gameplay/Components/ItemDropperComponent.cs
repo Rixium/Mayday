@@ -9,12 +9,11 @@ namespace Mayday.Game.Gameplay.Components
     {
         public IEntity Entity { get; set; }
         public Action<ItemDrop> ItemDrop { get; set; }
+        public int ItemDropId { get; set; }
         
-        private readonly int _itemDropId;
-
         public ItemDropperComponent(int itemDropId)
         {
-            _itemDropId = itemDropId;
+            ItemDropId = itemDropId;
         }
         
         public void OnAddedToEntity()
@@ -24,7 +23,7 @@ namespace Mayday.Game.Gameplay.Components
 
         private void Drop()
         {
-            var itemData = GetItemData(_itemDropId);
+            var itemData = GetItemData(ItemDropId);
 
             if (itemData == null) return;
             

@@ -14,7 +14,8 @@ namespace Mayday.Game.Gameplay.World
         IList<IEntity> WorldItems { get; set; }
         void Move(IEntity player,
             float xMove,
-            float yMove);
+            float yMove,
+            float yVelocity);
         Tile TryGetTile(int tileX, int tileY);
         void PlaceTile(Tile tile, int tileType);
     }
