@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace Yetiface.Engine.Utils
@@ -8,9 +7,6 @@ namespace Yetiface.Engine.Utils
     {
 
         private static Vector2 _mousePosition;
-        private static float _lastMouseX;
-        private static float _lastMouseY;
-
         private static Rectangle _bounds = new Rectangle(0, 0, 1, 1);
         
         /// <summary>
@@ -43,8 +39,6 @@ namespace Yetiface.Engine.Utils
             }
         }
         
-        private static bool _isDirty;
-
         public static Microsoft.Xna.Framework.Input.MouseState LastState { get; private set; }
         public static Microsoft.Xna.Framework.Input.MouseState CurrentState { get; private set; }
         
@@ -53,12 +47,6 @@ namespace Yetiface.Engine.Utils
             CurrentState = Mouse.GetState();
             
             _mousePosition = Mouse.GetState().Position.ToVector2();
-
-            if (Math.Abs(_mousePosition.X - _lastMouseX) > 0.01f || Math.Abs(_mousePosition.Y - _lastMouseY) > 0.01f) 
-                _isDirty = true;
-
-            _lastMouseX = _mousePosition.X;
-            _lastMouseY = _mousePosition.Y;
         }
 
         public static void AfterUpdate()

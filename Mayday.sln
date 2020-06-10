@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mayday.Game", "Mayday.Game\Mayday.Game.csproj", "{F7229255-F207-4491-9B88-8B5D8091CDBC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mayday.Game", "src\Mayday.Game\Mayday.Game.csproj", "{F7229255-F207-4491-9B88-8B5D8091CDBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yetiface.Engine.Tests", "Yetiface.Engine.Tests\Yetiface.Engine.Tests.csproj", "{35749C93-9F5B-4852-9457-23C9109E4A9D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yetiface.Engine.Tests", "src\Yetiface.Engine.Tests\Yetiface.Engine.Tests.csproj", "{35749C93-9F5B-4852-9457-23C9109E4A9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yetiface.Engine", "Yetiface.Engine\Yetiface.Engine.csproj", "{6B7D6EE3-17D6-4E6B-AC60-D3BD2027C1CC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yetiface.Engine", "src\Yetiface.Engine\Yetiface.Engine.csproj", "{6B7D6EE3-17D6-4E6B-AC60-D3BD2027C1CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Facepunch.Steamworks.Win64", "Facepunch.Steamworks\Facepunch.Steamworks\Facepunch.Steamworks.Win64.csproj", "{4EBC6789-9069-427C-94CB-EBAF1095AAAB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Facepunch.Steamworks.Win64", "lib\Facepunch.Steamworks\Facepunch.Steamworks\Facepunch.Steamworks.Win64.csproj", "{4EBC6789-9069-427C-94CB-EBAF1095AAAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccidentalNoise", "AccidentalNoise\AccidentalNoise.csproj", "{548C482E-7AD8-4DD7-B32A-F09340C7A04E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccidentalNoise", "lib\AccidentalNoise\AccidentalNoise.csproj", "{548C482E-7AD8-4DD7-B32A-F09340C7A04E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mayday.Game.Tests", "Mayday.Game.Tests\Mayday.Game.Tests.csproj", "{7CD75A68-7FEF-430F-8BD3-BEEB9C407FA2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mayday.Game.Tests", "src\Mayday.Game.Tests\Mayday.Game.Tests.csproj", "{7CD75A68-7FEF-430F-8BD3-BEEB9C407FA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mayday.UI", "Mayday.UI\Mayday.UI.csproj", "{BD290914-B822-4B7F-86AA-41ABEC56ACCD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mayday.UI", "src\Mayday.UI\Mayday.UI.csproj", "{BD290914-B822-4B7F-86AA-41ABEC56ACCD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.MonoGame", "..\Myra\src\Myra\Myra.MonoGame.csproj", "{4F8B1FE8-E098-4A1E-B5AD-29E64049880E}"
 EndProject

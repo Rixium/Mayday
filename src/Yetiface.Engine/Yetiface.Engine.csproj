@@ -112,9 +112,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
-    <Reference Include="Yetiface.Engine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Yetiface.Engine.Tests\bin\Debug\Yetiface.Engine.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico" />
@@ -181,11 +178,11 @@
     <Content Include="Content\Utils\pixel.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Myra\src\Myra\Myra.MonoGame.csproj">
+    <ProjectReference Include="..\..\..\Myra\src\Myra\Myra.MonoGame.csproj">
       <Project>{4f8b1fe8-e098-4a1e-b5ad-29e64049880e}</Project>
       <Name>Myra.MonoGame</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Facepunch.Steamworks\Facepunch.Steamworks\Facepunch.Steamworks.Win64.csproj">
+    <ProjectReference Include="..\..\lib\Facepunch.Steamworks\Facepunch.Steamworks\Facepunch.Steamworks.Win64.csproj">
       <Project>{4ebc6789-9069-427c-94cb-ebaf1095aaab}</Project>
       <Name>Facepunch.Steamworks.Win64</Name>
     </ProjectReference>

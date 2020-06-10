@@ -14,8 +14,6 @@ namespace Mayday.Game
 		{
 			Gradient ground_gradient = new Gradient(0, 0, 0, 1);
 
-			ModuleBase active = null;
-			
 			// lowlands
 			Fractal lowland_shape_fractal =
 				new Fractal(FractalType.BILLOW, BasisTypes.GRADIENT, InterpTypes.QUINTIC, 2, 0.3, seed);

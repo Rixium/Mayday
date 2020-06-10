@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using Mayday.Game.Gameplay.Components;
-using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Networking.Packets;
 using Mayday.Game.Screens;
 using Steamworks.Data;
@@ -11,7 +9,6 @@ namespace Mayday.Game.Networking.Consumers
     public class JumpPacketConsumer : PacketConsumer<JumpPacket>
     {
         private readonly GameScreen _gameScreen;
-        private readonly Dictionary<ulong, Player> _players;
 
         public JumpPacketConsumer(GameScreen gameScreen)
         {

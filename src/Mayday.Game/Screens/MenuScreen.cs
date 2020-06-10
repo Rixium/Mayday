@@ -23,13 +23,10 @@ using Color = Microsoft.Xna.Framework.Color;
 
 namespace Mayday.Game.Screens
 {
-    public class MenuScreen : Screen,  INetworkServerListener, INetworkClientListener, IWorldMakerListener
+    public class MenuScreen : Screen, IWorldMakerListener, INetworkClientListener
     {
         private INetworkManager _networkManager;
         private IWorldMaker _worldMaker;
-        
-        private INetworkMessageParser _messageParser;
-        private MaydayMessagePackager _packager;
         
         public MenuScreen() : base("MenuScreen")
         {
@@ -41,10 +38,9 @@ namespace Mayday.Game.Screens
             _networkManager = new SteamNetworkManager(Game1.AppId, new MaydayMessagePackager());
             
             var panel = new MainMenuUserInterface();
-            var mainMenuUserInterfaceController = new MainMenuUserInterfaceController(panel);
+            var controller = new MainMenuUserInterfaceController(panel);
             UserInterface = new MyraUserInterface(panel);
             
-            _networkManager.SetServerNetworkListener(this);
             _networkManager.SetClientNetworkListener(this);
             
             panel.StartGameNewGame.Click += (o, e) => 
@@ -126,14 +122,7 @@ namespace Mayday.Game.Screens
 
             WaitToConnect();
         }
-        
-        private void OnConnectedToLobby(Lobby obj)
-        {
-            var ip = obj.GetData("ip");
-            var port = obj.GetData("port");
-            JoinServer(ip.Trim(), port);
-        }
-        
+
         private void CreateMultiplayerGame(string port)
         {
             _networkManager.CreateSession(port);
@@ -164,7 +153,7 @@ namespace Mayday.Game.Screens
                 Y = (int) player.Y
             };
 
-            var package = _packager.Package(newPlayerPacket);
+            var package = _networkManager.MessagePackager.Package(newPlayerPacket);
             _networkManager.SendMessage(package);
 
             foreach (var netPlayer in ((NetworkWorldMaker) _worldMaker).PlayersToAdd)
@@ -182,11 +171,19 @@ namespace Mayday.Game.Screens
             ScreenManager.ChangeScreen(gameScreen.Name);
         }
         
-        private void ConnectToLobby(string lobbyId)
-        {
-            SteamMatchmaking.OnLobbyEntered += OnConnectedToLobby;
-            SteamMatchmaking.JoinLobbyAsync(ulong.Parse(lobbyId));
-        }
+        // private void ConnectToLobby(string lobbyId)
+        // {
+        //     SteamMatchmaking.OnLobbyEntered += OnConnectedToLobby;
+        //     SteamMatchmaking.JoinLobbyAsync(ulong.Parse(lobbyId));
+        // }
+        
+        //         
+        // private void OnConnectedToLobby(Lobby obj)
+        // {
+        //     var ip = obj.GetData("ip");
+        //     var port = obj.GetData("port");
+        //     JoinServer(ip.Trim(), port);
+        // }
         
         private async void WaitToConnect()
         {
@@ -220,15 +217,9 @@ namespace Mayday.Game.Screens
         public void OnMessageReceived(Connection connection, NetIdentity identity, IntPtr data, int size, long messageNum,
             long recvTime, int channel)
         {
-            var result = _messageParser.Parse(data, size);
         }
 
         public void OnConnectionChanged(Connection connection, ConnectionInfo info)
-        {
-            
-        }
-
-        void INetworkServerListener.AddConsumer(IPacketConsumer packetConsumer)
         {
             
         }
@@ -246,7 +237,7 @@ namespace Mayday.Game.Screens
         public void OnConnectedToServer(ConnectionInfo info) => 
             CreateNetworkWorld();
 
-        void INetworkClientListener.AddConsumer(IPacketConsumer packetConsumer)
+        public void AddConsumer(IPacketConsumer packetConsumer)
         {
             
         }

@@ -4,11 +4,12 @@
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{BD290914-B822-4B7F-86AA-41ABEC56ACCD}</ProjectGuid>
+        <ProjectGuid>{35749C93-9F5B-4852-9457-23C9109E4A9D}</ProjectGuid>
+        <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
         <OutputType>Library</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>Mayday.UI</RootNamespace>
-        <AssemblyName>Mayday.UI</AssemblyName>
+        <RootNamespace>Yetiface.Engine.Tests</RootNamespace>
+        <AssemblyName>Yetiface.Engine.Tests</AssemblyName>
         <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
     </PropertyGroup>
@@ -32,32 +33,48 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="MonoGame.Framework, Version=3.7.1.189, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\packages\MonoGame.Framework.DesktopGL.3.7.1.189\lib\net45\MonoGame.Framework.dll</HintPath>
+        <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc">
+          <HintPath>..\..\packages\Castle.Core.4.4.0\lib\net45\Castle.Core.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="Microsoft.CSharp" />
+        <Reference Include="NSubstitute, Version=4.2.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca">
+          <HintPath>..\..\packages\NSubstitute.4.2.1\lib\net45\NSubstitute.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="Shouldly, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6042cbcb05cbc941">
+          <HintPath>..\..\packages\Shouldly.4.0.0-beta0002\lib\net451\Shouldly.dll</HintPath>
+          <Private>True</Private>
         </Reference>
         <Reference Include="System" />
+        <Reference Include="System.Configuration" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
+        <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+          <HintPath>..\..\packages\System.Threading.Tasks.Extensions.4.3.0\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="System.Xml" />
-        <Reference Include="XNAssets, Version=0.5.0.6, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\Myra\src\Myra\bin\MonoGame\Debug\net45\XNAssets.dll</HintPath>
+        <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb">
+            <HintPath>..\..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Networking\NetworkMessagePackagerShould.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="Views\GameScreenUserInterface.cs" />
-        <Compile Include="Views\GameScreenUserInterface.Generated.cs" />
-        <Compile Include="Views\MainMenuUserInterface.cs" />
-        <Compile Include="Views\MainMenuUserInterface.Generated.cs" />
+        <Compile Include="Screens\ScreenManagerShould.cs" />
     </ItemGroup>
     <ItemGroup>
-      <Content Include="Myra.dll" />
-      <Content Include="XNAssets.dll" />
+      <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\..\Myra\src\Myra\Myra.MonoGame.csproj">
-        <Project>{4f8b1fe8-e098-4a1e-b5ad-29e64049880e}</Project>
-        <Name>Myra.MonoGame</Name>
+      <ProjectReference Include="..\Mayday.Game\Mayday.Game.csproj">
+        <Project>{f7229255-f207-4491-9b88-8b5d8091cdbc}</Project>
+        <Name>Mayday.Game</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\Yetiface.Engine\Yetiface.Engine.csproj">
+        <Project>{6b7d6ee3-17d6-4e6b-ac60-d3bd2027c1cc}</Project>
+        <Name>Yetiface.Engine</Name>
       </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -9,7 +9,6 @@ namespace Mayday.Game.Gameplay.Components
     {
         private MoveComponent _moveComponent;
         private JumpComponent _jumpComponent;
-        private KeyboardState _lastState;
         public IEntity Entity { get; set; }
         public void OnAddedToEntity()
         {

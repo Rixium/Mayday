@@ -7,8 +7,6 @@ namespace Yetiface.Engine.Screens.Transitions
 
     public class FadeTransition : Transition
     {
-
-        private bool complete;
         private Texture2D _pixel;
         private float _fade = 1.0f;
 

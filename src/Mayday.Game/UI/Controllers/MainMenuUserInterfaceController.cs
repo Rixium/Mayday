@@ -81,5 +81,6 @@ namespace Mayday.Game.UI.Controllers
             _currentActive = _backStack.Pop();
             _currentActive.Visible = true;
         }
+
     }
 }
