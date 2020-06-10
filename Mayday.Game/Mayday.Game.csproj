@@ -52,6 +52,7 @@
     <Compile Include="Gameplay\Collections\IPlayerSet.cs" />
     <Compile Include="Gameplay\Collections\PlayerSet.cs" />
     <Compile Include="Gameplay\Components\BlockBreakerComponent.cs" />
+    <Compile Include="Gameplay\Components\CharacterControllerComponent.cs" />
     <Compile Include="Gameplay\Components\GravityComponent.cs" />
     <Compile Include="Gameplay\Components\IComponent.cs" />
     <Compile Include="Gameplay\Components\InventoryComponent.cs" />

@@ -11,6 +11,8 @@ namespace Mayday.Game.Gameplay.Components
         public float YVelocity { get; set; }
         public float XVelocity { get; set; }
         public Action HitFloor { get; set; }
+        public Action<MoveComponent> MoveDirectionChanged { get; set; }
+        public Action<MoveComponent> PositionChanged { get; set; }
         public bool Grounded { get; set; }
 
         public void Update()
@@ -32,13 +34,19 @@ namespace Mayday.Game.Gameplay.Components
             CheckPlayerHit();
 
             var currentY = Entity.Y;
+            var currentX = Entity.X;
             
             var xMove = XVelocity;
             var yMove = -YVelocity;
-
+            
             gameWorld.Move(Entity, xMove, yMove);
 
             Grounded = Math.Abs(currentY - Entity.Y) < 0.01f;
+
+            if (Math.Abs(currentX - Entity.X) > 0.01f || Math.Abs(currentY - Entity.Y) > 0.01f)
+            {
+                PositionChanged?.Invoke(this);
+            }
         }
 
 
@@ -75,6 +83,18 @@ namespace Mayday.Game.Gameplay.Components
         public void OnAddedToEntity()
         {
             
+        }
+
+        public void SetMoveDirection(int x, int y)
+        {
+            if (x != 0)
+            {
+                Entity.FacingDirection = x;
+            }
+            
+            if (Entity.XDirection == x) return;
+            Entity.XDirection = x;
+            MoveDirectionChanged?.Invoke(this);
         }
     }
 }

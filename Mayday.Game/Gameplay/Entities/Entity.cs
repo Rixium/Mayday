@@ -22,6 +22,8 @@ namespace Mayday.Game.Gameplay.Entities
         public Vector2 Center => 
             new Vector2(GetBounds().X + GetBounds().Width / 2.0f, GetBounds().Y + GetBounds().Height / 2.0f);
 
+        public int FacingDirection { get; set; }
+
         private readonly IList<IComponent> _components = new List<IComponent>();
         private readonly IList<IUpdateable> _updateableComponents = new List<IUpdateable>();
         

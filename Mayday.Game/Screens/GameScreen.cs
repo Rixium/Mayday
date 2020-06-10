@@ -12,10 +12,7 @@ using Mayday.Game.Networking.Packets;
 using Mayday.Game.UI.Controllers;
 using Mayday.UI.Views;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Steamworks;
-using Yetiface.Engine;
-using Yetiface.Engine.Inputs;
 using Yetiface.Engine.Networking;
 using Yetiface.Engine.Screens;
 using Yetiface.Engine.UI;
@@ -53,8 +50,11 @@ namespace Mayday.Game.Screens
         public void SetWorld(IGameWorld gameWorld)
         {
             GameWorld = gameWorld;
+        }
 
-            foreach (var tile in gameWorld.Tiles)
+        private void SetupTiles()
+        {
+            foreach (var tile in GameWorld.Tiles)
             {
                 var itemDropId = tile.TileProperties?.ItemDropId;
 
@@ -120,14 +120,16 @@ namespace Mayday.Game.Screens
                 LegsAnimator = new Animator(ContentChest.Legs[player.LegsId].Animations)
             };
             
-            player.AddComponent(new MoveComponent());
-            player.AddComponent(playerAnimationComponent);
-            player.AddComponent(new GravityComponent());
-            player.AddComponent(new JumpComponent(this));
+            var moveComponent = player.AddComponent(new MoveComponent());
+            playerAnimationComponent = player.AddComponent(playerAnimationComponent);
+            var gravityComponent = player.AddComponent(new GravityComponent());
+            var jumpComponent = player.AddComponent(new JumpComponent(this));
             var blockBreakerComponent = player.AddComponent(new BlockBreakerComponent(GameWorld, Camera));
-            player.AddComponent(new ItemPickerComponent());
+            var itemPickerComponent = player.AddComponent(new ItemPickerComponent());
 
             OnMouseDown += blockBreakerComponent.MouseDown;
+            moveComponent.PositionChanged += SendPositionPacket;
+            moveComponent.MoveDirectionChanged += SendMoveDirectionPacket;
             
             var inventoryComponent = player.AddComponent(new InventoryComponent());
             var inventoryBar = inventoryComponent.AddInventory(new Inventory(8));
@@ -135,30 +137,35 @@ namespace Mayday.Game.Screens
 
             if (isClients)
             {
+                player.AddComponent(new CharacterControllerComponent());
                 inventoryBar.InventoryChanged += () => _interfaceController.InventoryBarChanged(inventoryBar);
                 mainInventory.InventoryChanged += () => _interfaceController.MainInventoryChanged(mainInventory);
+                jumpComponent.Jump += SendJumpPacket;
             }
 
             Players.Add(player);
 
             return player;
         }
-        
+
+        private void SendJumpPacket(JumpComponent jumpComponent)
+        {
+            var jumpPacket = new JumpPacket
+            {
+                SteamId = MyPlayer.SteamId
+            };
+
+            var package = NetworkManager.MessagePackager.Package(jumpPacket);
+            NetworkManager.SendMessage(package);
+        }
+
         public override void Awake()
         {
             BackgroundColor = new Color(47, 39, 54);
 
             SetupNetworking();
             SetupWorldCallbacks();
-            
-            YetiGame.InputManager.RegisterInputEvent("MoveRight", () => Move(2), InputEventType.Held);
-            YetiGame.InputManager.RegisterInputEvent("MoveLeft", () => Move(-2), InputEventType.Held);
-            YetiGame.InputManager.RegisterInputEvent("Jump", Jump);
-            YetiGame.InputManager.RegisterInputEvent("MoveRight", () => Move(0), InputEventType.Released);
-            YetiGame.InputManager.RegisterInputEvent("MoveLeft", () => Move(0), InputEventType.Released);
-
-            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.I), _interfaceController.ToggleMainInventory);
-            
+            SetupTiles();
             Camera.SetEntity(MyPlayer);
         }
 
@@ -178,60 +185,41 @@ namespace Mayday.Game.Screens
             var consumers = new GamePacketConsumerManager(this);
             consumers.InjectInto(gameClientListener, gameServerListener);
         }
-
-        private void Jump()
-        {
-            var jumpPacket = new JumpPacket
-            {
-                SteamId = MyPlayer.SteamId
-            };
-
-            var package = NetworkManager.MessagePackager.Package(jumpPacket);
-            NetworkManager.SendMessage(package);
-
-            var jumpComponent = MyPlayer.GetComponent<JumpComponent>();
-            jumpComponent.Jump();
-        }
-
+        
         private Tile GetSpawnPosition() =>
             (from Tile tile in GameWorld.Tiles
                 where tile.TileType == 1
                 select GameWorld.Tiles[(int) (GameWorld.Width / 2.0f), tile.TileY])
             .FirstOrDefault();
 
-        private void Move(int x)
+        private void SendPositionPacket(IComponent moveComponent)
         {
-            var player = Players.Get(MyPlayer.SteamId);
-
-            if (player.XDirection != x)
-            {
-                var data = new PlayerMovePacket()
-                {
-                    XDirection = x,
-                    SteamId = player.SteamId
-                };
-
-                var movePackage = NetworkManager.MessagePackager.Package(data);
-                NetworkManager.SendMessage(movePackage);
-                
-                var position = new PlayerPositionPacket
-                {
-                    X = (int) player.X,
-                    Y = (int) player.Y,
-                    SteamId = player.SteamId
-                };
-
-                var package = NetworkManager.MessagePackager.Package(position);
-                    
-                NetworkManager.SendMessage(package);
-                
-                if (x != 0)
-                {
-                    player.FacingDirection = x;
-                }
-            }
+            var entity = moveComponent.Entity;
             
-            player.XDirection = x;
+            var position = new PlayerPositionPacket
+            {
+                X = (int) entity.X,
+                Y = (int) entity.Y,
+                SteamId = MyPlayer.SteamId
+            };
+
+            var package = NetworkManager.MessagePackager.Package(position);
+                
+            NetworkManager.SendMessage(package);
+        }
+
+        private void SendMoveDirectionPacket(IComponent moveComponent)
+        {
+            var entity = moveComponent.Entity;
+            
+            var data = new PlayerMovePacket()
+            {
+                XDirection = entity.XDirection,
+                SteamId = MyPlayer.SteamId
+            };
+            
+            var movePackage = NetworkManager.MessagePackager.Package(data);
+            NetworkManager.SendMessage(movePackage);
         }
 
         public override void Begin()

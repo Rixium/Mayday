@@ -1,4 +1,5 @@
-﻿using Mayday.Game.Gameplay.Entities;
+﻿using System;
+using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Networking.Packets;
 using Mayday.Game.Screens;
 using Microsoft.Xna.Framework.Input;
@@ -10,6 +11,8 @@ namespace Mayday.Game.Gameplay.Components
         private readonly GameScreen _gameScreen;
         private MoveComponent _moveComponent;
         private KeyboardState _lastKeyboardState;
+
+        public Action<JumpComponent> Jump;
 
         public IEntity Entity { get; set; }
         public bool Jumping { get; set; }
@@ -52,7 +55,7 @@ namespace Mayday.Game.Gameplay.Components
             _moveComponent.HitFloor += () => Jumping = false;
         }
 
-        public void Jump()
+        public void BeginJump()
         {
             if (Jumping) return;
             
@@ -62,6 +65,8 @@ namespace Mayday.Game.Gameplay.Components
             
             Jumping = true;
             moveComponent.YVelocity = 2 * Game1.GlobalGameScale;
+            
+            Jump?.Invoke(this);
         }
 
         public void EndJump()

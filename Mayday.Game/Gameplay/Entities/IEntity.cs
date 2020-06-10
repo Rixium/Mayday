@@ -16,6 +16,7 @@ namespace Mayday.Game.Gameplay.Entities
         float Y { get; set; }
         Vector2 Position { get; }
         Vector2 Center { get; }
+        int FacingDirection { get; set; }
         RectangleF GetBounds();
         void Update();
         T AddComponent<T>(T component) where T : IComponent;

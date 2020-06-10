@@ -32,7 +32,7 @@ namespace Mayday.Game.Networking.Consumers
             }
             else
             {
-                jumpComponent.Jump();
+                jumpComponent.BeginJump();
             }
         }
         
