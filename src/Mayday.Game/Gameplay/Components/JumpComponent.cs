@@ -39,7 +39,7 @@ namespace Mayday.Game.Gameplay.Components
                             IsStopping = true
                         };
 
-                        _gameScreen.SendPacket(jumpPacket);
+                        _gameScreen.JumpStateChange(jumpPacket);
                     }
                 }
             }
