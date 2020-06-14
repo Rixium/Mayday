@@ -1,11 +1,13 @@
+using Mayday.Game.Enums;
+
 namespace Mayday.Game.Gameplay.Items
 {
     public interface IItem
     {
-        int Id { get; set; }
+        ItemType Id { get; set; }
         string Name { get; set; }
         int MaxStackSize { get; set; }
-        int TileId { get; set; }
+        TileType TileType { get; set; }
         bool IsTheSameAs(IItem item);
     }
 }

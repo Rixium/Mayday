@@ -1,4 +1,5 @@
 using System;
+using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Screens;
@@ -31,7 +32,7 @@ namespace Mayday.Game.Gameplay.Components
             {
                 var selectedItem = _gameScreen.SelectedItem;
                 if (selectedItem == null) return;
-                if (selectedItem.TileId == -1) return;
+                if (selectedItem.TileType == TileType.None) return;
                 var mousePosition = MouseState.Bounds(_camera.GetMatrix());
 
                 var mouseTileX = mousePosition.X / GameWorld.TileSize;
@@ -43,13 +44,13 @@ namespace Mayday.Game.Gameplay.Components
                 var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
 
                 if (!CloseEnoughToTile(tile)) return;
-                GameWorld.PlaceTile(tile, selectedItem.TileId);
+                GameWorld.PlaceTile(tile, selectedItem.TileType);
             }
         }
 
         private bool CanPlaceAt(int tileX, int tileY)
         {
-            return GameWorld.Tiles[tileX, tileY].TileType == 0;
+            return GameWorld.Tiles[tileX, tileY].TileType == TileType.None;
         }
 
         private bool CloseEnoughToTile(Tile tile)

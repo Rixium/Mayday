@@ -1,11 +1,11 @@
 ﻿{
-  "1" : {
+  "0" : {
     "Name": "Dirt",
     "Mineable": true,
     "MineSpeedModifier": 1,
-    "ItemDropId": 0
+    "ItemDropName": 0
   },
-  "2" : {
+  "1" : {
     "Name": "Stone",
     "Mineable": true,
     "MineSpeedModifier": 2,

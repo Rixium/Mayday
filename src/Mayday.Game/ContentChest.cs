@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Data;
 using Mayday.Game.Gameplay.Items;
 using Mayday.Game.Graphics;
@@ -20,15 +21,15 @@ namespace Mayday.Game
     public class ContentChest
     {
         public static Dictionary<int, Item> ItemData;
-        public static Dictionary<int, TileProperties> TileProperties { get; set; } = new Dictionary<int, TileProperties>();
+        public static Dictionary<TileType, TileProperties> TileProperties { get; set; } = new Dictionary<TileType, TileProperties>();
         // ReSharper disable once CollectionNeverUpdated.Global
-        public static Dictionary<int, SpriteSheet> HeadSpriteSheets { get; set; } = new Dictionary<int, SpriteSheet>();
+        public static Dictionary<int, SpriteSheet> Heads { get; set; } = new Dictionary<int, SpriteSheet>();
         // ReSharper disable once CollectionNeverUpdated.Global
-        public static Dictionary<int, SpriteSheet> BodySpriteSheets { get; set; } = new Dictionary<int, SpriteSheet>();
+        public static Dictionary<int, SpriteSheet> Bodies { get; set; } = new Dictionary<int, SpriteSheet>();
         // ReSharper disable once CollectionNeverUpdated.Global
-        public static Dictionary<int, SpriteSheet> LegSpriteSheets { get; set; } = new Dictionary<int, SpriteSheet>();
-        public static Dictionary<int, Texture2D> TileTextures { get; set; } = new Dictionary<int, Texture2D>();
-        public static Dictionary<int, Texture2D> ItemTextures { get; set; } = new Dictionary<int, Texture2D>();
+        public static Dictionary<int, SpriteSheet> Legs { get; set; } = new Dictionary<int, SpriteSheet>();
+        public static Dictionary<TileType, Texture2D> TileTextures { get; set; } = new Dictionary<TileType, Texture2D>();
+        public static Dictionary<ItemType, Texture2D> ItemTextures { get; set; } = new Dictionary<ItemType, Texture2D>();
         // ReSharper disable once CollectionNeverQueried.Global
         public static Dictionary<string, SoundEffect> SoundEffects { get; set; } =
             new Dictionary<string, SoundEffect>();
@@ -44,7 +45,7 @@ namespace Mayday.Game
             LoadItemData(contentManager);
         }
         
-        private static void LoadDictionary(ContentManager contentManager, string pathRelativeToContent, Dictionary<int, Texture2D> dictionary)
+        private static void LoadDictionary<T>(ContentManager contentManager, string pathRelativeToContent, Dictionary<T, Texture2D> dictionary)
         {
             var directory = $"{contentManager.RootDirectory}\\{pathRelativeToContent}";
 
@@ -55,7 +56,7 @@ namespace Mayday.Game
             foreach (var file in imageFiles)
             {
                 var nameOf = file.Split('_');
-                dictionary.Add(int.Parse(nameOf[1]), contentManager.Load<Texture2D>($"{pathRelativeToContent}\\{file}"));
+                dictionary.Add((T) Enum.Parse(typeof(T), nameOf[1]), contentManager.Load<Texture2D>($"{pathRelativeToContent}\\{file}"));
             }
         }
         
@@ -77,7 +78,7 @@ namespace Mayday.Game
             var tilePropertiesFile = $"{contentManager.RootDirectory}\\Data\\TileProperties.json";
             var tilePropertiesData = File.ReadAllText(tilePropertiesFile);
             
-            TileProperties = JsonConvert.DeserializeObject<Dictionary<int, TileProperties>>(tilePropertiesData);
+            TileProperties = JsonConvert.DeserializeObject<Dictionary<TileType, TileProperties>>(tilePropertiesData);
         } 
         
         private static void LoadItemData(ContentManager contentManager)

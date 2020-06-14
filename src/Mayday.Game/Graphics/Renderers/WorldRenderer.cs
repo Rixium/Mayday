@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -36,12 +38,16 @@ namespace Mayday.Game.Graphics.Renderers
                     if (i < 0 || j < 0 || i > gameWorld.Width - 1 || j > gameWorld.Height - 1) continue;
                     var tile = gameWorld.Tiles[i, j];
 
-                    if (tile.TileType == 0) continue;
+                    if (tile.TileType == TileType.None) continue;
 
                     var tileIndex = GetTileBlobValue(gameWorld, tile, _tileBlobMap);
 
                     var tileSet = ContentChest.TileTextures[tile.TileType];
 
+                    if (tile.TileType == TileType.Stone)
+                    {
+                        Debug.WriteLine("CUNT");
+                    }
                     var sheetTileSize = 8;
                     
                     ArrayUtils.IndexConvert(tileIndex, tileSet.Width / sheetTileSize, out var x, out var y);

@@ -1,4 +1,5 @@
 ﻿using System;
+using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Entities;
 using Microsoft.Xna.Framework;
 
@@ -62,7 +63,7 @@ namespace Mayday.Game.Gameplay.Components
                 {
                     var tile = Entity.GameWorld.TryGetTile(i,
                         (int) ((playerBounds.Top - YVelocity) / Entity.GameWorld.TileSize));
-                    if (tile != null && tile.TileType == 0) 
+                    if (tile != null && tile.TileType == TileType.None) 
                         continue;
                     
                     YVelocity = 0;
@@ -73,7 +74,7 @@ namespace Mayday.Game.Gameplay.Components
                 {
                     var tile = Entity.GameWorld.TryGetTile(i,
                         (int) ((playerBounds.Bottom  + 1) / Entity.GameWorld.TileSize));
-                    if (tile != null && tile.TileType == 0) continue;
+                    if (tile != null && tile.TileType == TileType.None) continue;
                     
                     HitFloor?.Invoke();
                     return;

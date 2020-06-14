@@ -1,3 +1,4 @@
+using Mayday.Game.Enums;
 using Mayday.Game.Networking.Packets;
 using Mayday.Game.Screens;
 using Steamworks.Data;
@@ -15,7 +16,7 @@ namespace Mayday.Game.Networking.Consumers
         }
 
         protected override void ConsumePacket(Connection connection, TileTypePacket packet) => 
-            _gameScreen.GameWorld.Tiles[packet.X, packet.Y].TileType = packet.TileType;
+            _gameScreen.GameWorld.Tiles[packet.X, packet.Y].TileType = (TileType) packet.TileType;
         
     }
 }

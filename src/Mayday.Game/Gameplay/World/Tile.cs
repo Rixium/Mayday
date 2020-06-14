@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Data;
 using Mayday.Game.Gameplay.Entities;
@@ -29,9 +30,9 @@ namespace Mayday.Game.Gameplay.World
         public int TileX { get; set; }
         public int TileY { get; set; }
 
-        private int _tileType;
+        private TileType _tileType = TileType.None;
         
-        public int TileType
+        public TileType TileType
         {
             get => _tileType;
             set
@@ -46,8 +47,8 @@ namespace Mayday.Game.Gameplay.World
             }
         }
 
-        public TileProperties TileProperties => ContentChest.TileProperties.ContainsKey(_tileType)
-            ? ContentChest.TileProperties[_tileType]
+        public TileProperties TileProperties => ContentChest.TileProperties.ContainsKey(TileType)
+            ? ContentChest.TileProperties[TileType]
             : null;
 
         private void SetNeighboursBlobFlag()
@@ -71,7 +72,7 @@ namespace Mayday.Game.Gameplay.World
         public Vector2 RenderCenter => new Vector2(X + TileSize / 2.0f, Y + TileSize / 2.0f);
         public int BlobValue { get; set; } = -1;
 
-        public Tile(int tileType, int tileX, int tileY)
+        public Tile(TileType tileType, int tileX, int tileY)
         {
             TileType = tileType;
             TileX = tileX;
@@ -82,8 +83,8 @@ namespace Mayday.Game.Gameplay.World
 
         public void Break()
         {
-            if (TileType == 0) return;
-            TileType = 0;
+            if (TileType == TileType.None) return;
+            TileType = TileType.None;
             Destroy?.Invoke(this);
         }
 

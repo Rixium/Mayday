@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Entities;
 
 namespace Mayday.Game.Gameplay.World
@@ -17,6 +18,6 @@ namespace Mayday.Game.Gameplay.World
             float yMove,
             float yVelocity);
         Tile TryGetTile(int tileX, int tileY);
-        void PlaceTile(Tile tile, int tileType);
+        void PlaceTile(Tile tile, TileType tileType);
     }
 }

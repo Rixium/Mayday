@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Entities;
 using Yetiface.Engine.Utils;
@@ -37,7 +38,7 @@ namespace Mayday.Game.Gameplay.World
                 {
                     var tile = TryGetTile(i, j);
                     if (tile == null) continue;
-                    if (tile.TileType == 0) continue;
+                    if (tile.TileType == TileType.None) continue;
 
                     var tileBounds = tile.GetBounds();
 
@@ -50,7 +51,7 @@ namespace Mayday.Game.Gameplay.World
                         {
                             var above = TryGetTile(i, k);
 
-                            if (above.TileType == 0)
+                            if (above.TileType == TileType.None)
                                 continue;
 
                             canMoveUp = false;
@@ -89,7 +90,7 @@ namespace Mayday.Game.Gameplay.World
                 {
                     var tile = TryGetTile(i, j);
                     if (tile == null) continue;
-                    if (tile.TileType == 0) continue;
+                    if (tile.TileType == TileType.None) continue;
 
                     var tileBounds = tile.GetBounds();
 
@@ -109,7 +110,7 @@ namespace Mayday.Game.Gameplay.World
             return Tiles[tileX, tileY];
         }
         
-        public void PlaceTile(Tile tile, int tileType)
+        public void PlaceTile(Tile tile, TileType tileType)
         {
             if (tile.TileType == tileType) return;
             tile.TileType = tileType;

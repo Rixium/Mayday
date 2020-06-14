@@ -48,6 +48,7 @@
     <Compile Include="ContentChest.cs" />
     <Compile Include="Enums\ItemType.cs" />
     <Compile Include="Enums\TileType.cs" />
+    <Compile Include="Enums\WorldObjectType.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Gameplay\Collections\IPlayerSet.cs" />
     <Compile Include="Gameplay\Collections\PlayerSet.cs" />
@@ -257,6 +258,7 @@
     <Content Include="Content\Data\TileProperties.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Data\WorldObjectData.json" />
     <Content Include="Content\Images\Animations\Arms_1.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

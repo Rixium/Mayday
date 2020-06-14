@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Collections;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Entities;
@@ -93,7 +94,7 @@ namespace Mayday.Game.Screens
             {
                 X = itemDrop.X,
                 Y = itemDrop.Y,
-                ItemId = itemDrop.Item.Id
+                ItemId = (int) itemDrop.Item.Id
             };
 
             var package = NetworkManager.MessagePackager.Package(itemDropPacket);
@@ -107,7 +108,7 @@ namespace Mayday.Game.Screens
             {
                 X = tile.TileX,
                 Y = tile.TileY,
-                TileType = tile.TileType
+                TileType = (int) tile.TileType
             };
 
             var package = NetworkManager.MessagePackager.Package(tileChangePacket);
@@ -130,9 +131,9 @@ namespace Mayday.Game.Screens
 
             var playerAnimationComponent = new PlayerAnimationComponent
             {
-                HeadAnimator = new Animator(ContentChest.HeadSpriteSheets[player.HeadId].Animations),
-                BodyAnimator = new Animator(ContentChest.BodySpriteSheets[player.BodyId].Animations),
-                LegsAnimator = new Animator(ContentChest.LegSpriteSheets[player.LegsId].Animations)
+                HeadAnimator = new Animator(ContentChest.Heads[player.HeadId].Animations),
+                BodyAnimator = new Animator(ContentChest.Bodies[player.BodyId].Animations),
+                LegsAnimator = new Animator(ContentChest.Legs[player.LegsId].Animations)
             };
             
             var moveComponent = player.AddComponent(new MoveComponent());
@@ -220,7 +221,7 @@ namespace Mayday.Game.Screens
         
         private Tile GetSpawnPosition() =>
             (from Tile tile in GameWorld.Tiles
-                where tile.TileType == 1
+                where tile.TileType == TileType.Dirt
                 select GameWorld.Tiles[(int) (GameWorld.Width / 2.0f), tile.TileY])
             .FirstOrDefault();
 

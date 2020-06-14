@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Threading.Tasks;
 using AccidentalNoise;
+using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Gameplay.WorldMakers.Listeners;
 
@@ -46,7 +47,7 @@ namespace Mayday.Game.Gameplay.WorldMakers
             {
                 for (var j = 0; j < WorldHeight; j++)
                 {
-                    tiles[i, j] = new Tile(0, i, j)
+                    tiles[i, j] = new Tile(TileType.None, i, j)
                     {
                         GameWorld = world
                     };
@@ -62,12 +63,12 @@ namespace Mayday.Game.Gameplay.WorldMakers
                     poo++;
                     if (poo > 3)
                     {
-                        tiles[i, j].TileType = 2;
+                        tiles[i, j].TileType = TileType.Stone;
                         bmp.SetPixel(i, j, Color.Gray);
                     }
                     else
                     {
-                        tiles[i, j].TileType = 1;
+                        tiles[i, j].TileType = TileType.Dirt;
                         bmp.SetPixel(i, j, Color.Brown);
                     }
 

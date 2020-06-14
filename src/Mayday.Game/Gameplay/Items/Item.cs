@@ -1,11 +1,13 @@
+using Mayday.Game.Enums;
+
 namespace Mayday.Game.Gameplay.Items
 {
     public class Item : IItem
     {
-        public int Id { get; set; }
+        public ItemType Id { get; set; }
         public string Name { get; set; }
         public int MaxStackSize { get; set; }
-        public int TileId { get; set; } = -1;
+        public TileType TileType { get; set; } = TileType.None;
 
         public bool IsTheSameAs(IItem item)
             => item.Id == Id;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
+using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Gameplay.WorldMakers.Listeners;
@@ -74,7 +75,7 @@ namespace Mayday.Game.Gameplay.WorldMakers
             {
                 for (var j = 0; j < WorldHeight; j++)
                 {
-                    _tiles[i, j] = new Tile(0, i, j)
+                    _tiles[i, j] = new Tile(TileType.None, i, j)
                     {
                         GameWorld = world
                     };
@@ -102,8 +103,8 @@ namespace Mayday.Game.Gameplay.WorldMakers
             
             foreach (var tile in _tiles)
             {
-                Bitmap.SetPixel(tile.TileX, tile.TileY, tile.TileType == 0 ? Color.Black :
-                    tile.TileType == 1 ? Color.White : Color.Orange);
+                Bitmap.SetPixel(tile.TileX, tile.TileY, tile.TileType == TileType.None ? Color.Black :
+                    tile.TileType == TileType.Dirt ? Color.White : Color.Orange);
             }
 
             world.Tiles = _tiles;
@@ -130,7 +131,7 @@ namespace Mayday.Game.Gameplay.WorldMakers
                 var y = tileTypePacket.Y;
                 var tileType = tileTypePacket.TileType;
                 
-                _tiles[x, y].TileType = tileType;
+                _tiles[x, y].TileType = (TileType) tileType;
             } else if (packet.GetType() == typeof(NewPlayerPacket))
             {
                 var newPlayerPacket = (NewPlayerPacket) packet;
