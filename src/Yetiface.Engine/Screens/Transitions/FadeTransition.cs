@@ -20,7 +20,7 @@ namespace Yetiface.Engine.Screens.Transitions
         /// </summary>
         protected override void TransitionIn()
         {
-            _fade = MathHelper.Clamp(_fade - Time.DeltaTime / Speed, 0, 1);
+            _fade = MathHelper.Clamp(_fade - Time.DeltaTime, 0, 1);
             
             if (_fade <= 0.0f)
             {
@@ -33,7 +33,7 @@ namespace Yetiface.Engine.Screens.Transitions
         /// </summary>
         protected override void TransitionOut()
         {
-            _fade = MathHelper.Clamp(_fade +  Time.DeltaTime / Speed, 0, 1);
+            _fade = MathHelper.Clamp(_fade +  Time.DeltaTime, 0, 1);
 
             if (_fade >= 1.0f)
             {
