@@ -10,7 +10,7 @@ namespace Mayday.Game.Gameplay.Collections
 
         public Player Add(Player player)
         {
-            Players.Add(player.SteamId, player);
+            Players.Add(player.EntityId, player);
             return player;
         }
 

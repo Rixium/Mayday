@@ -1,5 +1,6 @@
 ﻿using System;
 using Mayday.Game.Gameplay.Entities;
+using Mayday.Game.Networking;
 using Mayday.Game.Networking.Packets;
 using Mayday.Game.Screens;
 using Microsoft.Xna.Framework.Input;
@@ -39,7 +40,7 @@ namespace Mayday.Game.Gameplay.Components
                             IsStopping = true
                         };
 
-                        _gameScreen.JumpStateChange(jumpPacket);
+                        PacketManager.SendJumpStatePacket(jumpPacket);
                     }
                 }
             }

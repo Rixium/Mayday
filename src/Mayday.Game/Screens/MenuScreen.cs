@@ -162,7 +162,7 @@ namespace Mayday.Game.Screens
                 {
                     X = netPlayer.X,
                     Y = netPlayer.Y,
-                    SteamId = netPlayer.SteamId,
+                    EntityId = netPlayer.SteamId,
                     HeadId = netPlayer.HeadId
                 });
             }

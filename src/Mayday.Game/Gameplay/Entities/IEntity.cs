@@ -9,6 +9,7 @@ namespace Mayday.Game.Gameplay.Entities
 {
     public interface IEntity
     {
+        ulong EntityId { get; set; }
         Action<IEntity> Destroy { get; set; }
         IGameWorld GameWorld { get; set; }
         int XDirection { get; set; }

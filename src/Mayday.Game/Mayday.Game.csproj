@@ -100,6 +100,7 @@
     <Compile Include="Networking\Listeners\MaydayClientNetworkListener.cs" />
     <Compile Include="Networking\Listeners\MaydayServerNetworkListener.cs" />
     <Compile Include="Networking\Packagers\MaydayMessagePackager.cs" />
+    <Compile Include="Networking\PacketManager.cs" />
     <Compile Include="Networking\Packets\ChatMessagePacket.cs" />
     <Compile Include="Networking\Packets\ItemDropPacket.cs" />
     <Compile Include="Networking\Packets\JumpPacket.cs" />

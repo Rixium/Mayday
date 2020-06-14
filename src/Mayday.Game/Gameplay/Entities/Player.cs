@@ -5,7 +5,6 @@ namespace Mayday.Game.Gameplay.Entities
 {
     public class Player : Entity
     {
-        public ulong SteamId { get; set; }
         public int HeadId { get; set; } = 1;
         public int BodyId { get; set; } = 1;
         public int LegsId { get; set; } = 1;
@@ -17,7 +16,7 @@ namespace Mayday.Game.Gameplay.Entities
 
         public void SetClientId()
         {
-            SteamId = SteamClient.SteamId;
+            EntityId = SteamClient.SteamId;
         }
     }
 }

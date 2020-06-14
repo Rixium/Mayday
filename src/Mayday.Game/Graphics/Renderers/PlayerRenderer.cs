@@ -43,12 +43,12 @@ namespace Mayday.Game.Graphics.Renderers
 
         private PlayerAnimationComponent GetPlayerAnimationComponent(Player player)
         {
-            _playerAnimationComponents.TryGetValue(player.SteamId, out var component);
+            _playerAnimationComponents.TryGetValue(player.EntityId, out var component);
 
             if (component != null) return component;
 
             component = player.GetComponent<PlayerAnimationComponent>();
-            _playerAnimationComponents.Add(player.SteamId, component);
+            _playerAnimationComponents.Add(player.EntityId, component);
             return component;
         }
 

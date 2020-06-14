@@ -7,6 +7,7 @@ using Mayday.Game.Gameplay.Items;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Graphics;
 using Mayday.Game.Graphics.Renderers;
+using Mayday.Game.Networking;
 using Mayday.Game.Networking.Consumers;
 using Mayday.Game.Networking.Listeners;
 using Mayday.Game.Networking.Packets;
@@ -36,14 +37,13 @@ namespace Mayday.Game.Screens
         private readonly IWorldRenderer _worldRenderer;
         private readonly IPlayerRenderer _playerRenderer;
         private readonly GameScreenUserInterfaceController _interfaceController;
-
-        private IInventory _inventoryBar;
-
+        
         public Camera Camera { get; } = new Camera();
 
         public GameScreen(INetworkManager networkManager) : base("GameScreen")
         {
             NetworkManager = networkManager;
+            PacketManager.Initialize(networkManager);
             
             _worldRenderer = new WorldRenderer();
             _playerRenderer = new PlayerRenderer();
@@ -69,7 +69,7 @@ namespace Mayday.Game.Screens
         private void OnTilePlaced(Tile tile)
         {
             SetupTile(tile);
-            SendTileChangePacket(tile);
+            PacketManager.SendTileChangePacket(tile);
         }
 
         private void SetupTile(Tile tile)
@@ -82,34 +82,6 @@ namespace Mayday.Game.Screens
                 new ItemDropperComponent(itemDropType.Value));
 
             itemDropperComponent.ItemDrop += DropItem;
-        }
-
-        private void SendItemDropPacket(ItemDrop itemDrop)
-        {
-            var itemDropPacket = new ItemDropPacket()
-            {
-                X = itemDrop.X,
-                Y = itemDrop.Y,
-                ItemId = (int) itemDrop.Item.ItemId
-            };
-
-            var package = NetworkManager.MessagePackager.Package(itemDropPacket);
-            
-            NetworkManager.SendMessage(package);
-        }
-
-        private void SendTileChangePacket(Tile tile)
-        {
-            var tileChangePacket = new TileTypePacket()
-            {
-                X = tile.TileX,
-                Y = tile.TileY,
-                TileType = (int) tile.TileType
-            };
-
-            var package = NetworkManager.MessagePackager.Package(tileChangePacket);
-            
-            NetworkManager.SendMessage(package);
         }
         
         public Player AddPlayer(Player player, bool isClients = false)
@@ -141,8 +113,8 @@ namespace Mayday.Game.Screens
             var itemPickerComponent = player.AddComponent(new ItemPickerComponent(this));
             playerAnimationComponent = player.AddComponent(playerAnimationComponent);
 
-            moveComponent.PositionChanged += SendPositionPacket;
-            moveComponent.MoveDirectionChanged += SendMoveDirectionPacket;
+            moveComponent.PositionChanged += PacketManager.SendPositionPacket;
+            moveComponent.MoveDirectionChanged += PacketManager.SendMoveDirectionPacket;
 
             if (isClients)
             {
@@ -160,26 +132,13 @@ namespace Mayday.Game.Screens
                 OnMouseDown += itemPlacerComponent.MouseDown;
                 inventoryBar.InventoryChanged += () => _interfaceController.InventoryBarChanged(inventoryBar);
                 mainInventory.InventoryChanged += () => _interfaceController.MainInventoryChanged(mainInventory);
-                jumpComponent.Jump += SendJumpPacket;
+                jumpComponent.Jump += PacketManager.SendJumpPacket;
                 inventoryBar.AddItemToInventory(ContentChest.ItemData[ItemType.Shuttle]);
-
-                _inventoryBar = inventoryBar;
             }
 
             Players.Add(player);
 
             return player;
-        }
-
-        private void SendJumpPacket(JumpComponent jumpComponent)
-        {
-            var jumpPacket = new JumpPacket
-            {
-                SteamId = MyPlayer.SteamId
-            };
-
-            var package = NetworkManager.MessagePackager.Package(jumpPacket);
-            NetworkManager.SendMessage(package);
         }
 
         public override void Awake()
@@ -231,36 +190,6 @@ namespace Mayday.Game.Screens
                 select GameWorld.Tiles[(int) (GameWorld.Width / 2.0f), tile.TileY])
             .FirstOrDefault();
 
-        private void SendPositionPacket(IComponent moveComponent)
-        {
-            var entity = moveComponent.Entity;
-            
-            var position = new PlayerPositionPacket
-            {
-                X = (int) entity.X,
-                Y = (int) entity.Y,
-                SteamId = MyPlayer.SteamId
-            };
-
-            var package = NetworkManager.MessagePackager.Package(position);
-                
-            NetworkManager.SendMessage(package);
-        }
-
-        private void SendMoveDirectionPacket(IComponent moveComponent)
-        {
-            var entity = moveComponent.Entity;
-            
-            var data = new PlayerMovePacket()
-            {
-                XDirection = entity.XDirection,
-                SteamId = MyPlayer.SteamId
-            };
-            
-            var movePackage = NetworkManager.MessagePackager.Package(data);
-            NetworkManager.SendMessage(movePackage);
-        }
-
         public override void Begin()
         {
         }
@@ -306,14 +235,7 @@ namespace Mayday.Game.Screens
         {
             itemDrop.GameWorld = GameWorld;
             GameWorld.WorldItems.Add(itemDrop);
-            SendItemDropPacket(itemDrop);
-        }
-
-        public void JumpStateChange(JumpPacket jumpPacket)
-        {
-            jumpPacket.SteamId = SteamClient.SteamId;
-            var package = NetworkManager.MessagePackager.Package(jumpPacket);
-            NetworkManager.SendMessage(package);
+            PacketManager.SendItemDropPacket(itemDrop);
         }
 
     }

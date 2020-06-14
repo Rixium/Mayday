@@ -54,7 +54,7 @@ namespace Mayday.Game.Networking.Consumers
             {
                 var playerPacket = new NewPlayerPacket()
                 {
-                    SteamId = player.SteamId,
+                    SteamId = player.EntityId,
                     X = (int) player.X,
                     Y = (int) player.Y,
                     HeadId = player.HeadId
