@@ -37,7 +37,6 @@ namespace Mayday.Game.Screens
         private readonly IPlayerRenderer _playerRenderer;
         private readonly GameScreenUserInterfaceController _interfaceController;
 
-        public IItem SelectedItem { get; set; }
         private IInventory _inventoryBar;
 
         public Camera Camera { get; } = new Camera();
@@ -52,15 +51,6 @@ namespace Mayday.Game.Screens
             var gameScreenUserInterface = new GameScreenUserInterface();
             _interfaceController = new GameScreenUserInterfaceController(gameScreenUserInterface);
             UserInterface = new MyraUserInterface(gameScreenUserInterface);
-
-            _interfaceController.SelectedItemSlotChanged += OnSelectedItemSlotChanged;
-        }
-
-        private void OnSelectedItemSlotChanged(int itemSlot)
-        {
-            if (_inventoryBar == null) return;
-            var selectedItem = _inventoryBar.GetItemAt(itemSlot);
-            SelectedItem = selectedItem;
         }
 
         public void SetWorld(IGameWorld gameWorld)
@@ -159,6 +149,13 @@ namespace Mayday.Game.Screens
                 var blockBreakerComponent = player.AddComponent(new BlockBreakerComponent(GameWorld, Camera));
                 player.AddComponent(new CharacterControllerComponent());
                 var itemPlacerComponent = player.AddComponent(new ItemPlacerComponent(this));
+                _interfaceController.SelectedItemSlotChanged += (i) =>
+                {
+                    var item = inventoryBar.GetItemAt(i);
+                    itemPlacerComponent.SetSelectedItem(item);
+                };
+                itemPlacerComponent.ItemUsed += (item) => inventoryBar.RemoveItem(item);
+                
                 OnMouseDown += blockBreakerComponent.MouseDown;
                 OnMouseDown += itemPlacerComponent.MouseDown;
                 inventoryBar.InventoryChanged += () => _interfaceController.InventoryBarChanged(inventoryBar);
@@ -319,10 +316,6 @@ namespace Mayday.Game.Screens
             NetworkManager.SendMessage(package);
         }
 
-        public void RemoveCurrentItemFromInventory()
-        {
-            _inventoryBar.RemoveItem(SelectedItem);
-        }
     }
 
 }

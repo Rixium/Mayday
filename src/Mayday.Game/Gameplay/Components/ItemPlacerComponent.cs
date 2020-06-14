@@ -1,6 +1,7 @@
 using System;
 using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Entities;
+using Mayday.Game.Gameplay.Items;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Screens;
 using Yetiface.Engine.Inputs;
@@ -11,11 +12,13 @@ namespace Mayday.Game.Gameplay.Components
     public class ItemPlacerComponent : IComponent
     {
         private GameScreen _gameScreen;
+        private IItem _selectedItem;
         private Camera _camera => _gameScreen.Camera;
         public IGameWorld GameWorld => _gameScreen.GameWorld;
         public IEntity Entity { get; set; }
         public int MaxDistanceToPlace => 7 * GameWorld.TileSize;
-        
+        public Action<IItem> ItemUsed { get; set; }
+
         public ItemPlacerComponent(GameScreen gameScreen)
         {
             _gameScreen = gameScreen;
@@ -29,9 +32,8 @@ namespace Mayday.Game.Gameplay.Components
         {
             if (button == MouseButton.Left)
             {
-                var selectedItem = _gameScreen.SelectedItem;
-                if (selectedItem == null) return;
-                if (selectedItem.TileType == TileType.None) return;
+                if (_selectedItem == null) return;
+                if (_selectedItem.TileType == TileType.None) return;
                 var mousePosition = MouseState.Bounds(_camera.GetMatrix());
 
                 var mouseTileX = mousePosition.X / GameWorld.TileSize;
@@ -42,8 +44,8 @@ namespace Mayday.Game.Gameplay.Components
                 if (!CanPlaceAt(mouseTileX, mouseTileY)) return;
                 var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
                 if (!CloseEnoughToTile(tile)) return;
-                GameWorld.PlaceTile(tile, selectedItem.TileType);
-                _gameScreen.RemoveCurrentItemFromInventory();
+                GameWorld.PlaceTile(tile, _selectedItem.TileType);
+                ItemUsed?.Invoke(_selectedItem);
             }
         }
 
@@ -65,5 +67,7 @@ namespace Mayday.Game.Gameplay.Components
             if (Math.Abs(tile.RenderCenter.Y - playerTop) > MaxDistanceToPlace) return false;
             return (Math.Abs(tile.RenderCenter.Y - playerBottom) <= MaxDistanceToPlace);
         }
+
+        public void SetSelectedItem(IItem item) => _selectedItem = item;
     }
 }
