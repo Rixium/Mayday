@@ -1,14 +1,14 @@
 ﻿{
   "0" : {
     "Name": "Dirt",
-    "Mineable": true,
+    "CanMine": true,
     "MineSpeedModifier": 1,
-    "ItemDropName": 0
+    "ItemDropType": 0
   },
   "1" : {
     "Name": "Stone",
-    "Mineable": true,
+    "CanMine": true,
     "MineSpeedModifier": 2,
-    "ItemDropId": 1
+    "ItemDropType": 1
   }
 }

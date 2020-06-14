@@ -1,10 +1,12 @@
-﻿namespace Mayday.Game.Gameplay.Data
+﻿using Mayday.Game.Enums;
+
+namespace Mayday.Game.Gameplay.Data
 {
     public class TileProperties
     {
         public string Name { get; set; }
-        public bool Mineable { get; set; }
+        public bool CanMine { get; set; }
         public float MineSpeedModifier { get; set; }
-        public int ItemDropId { get; set; } = -1;
+        public ItemType ItemDropType { get; set; } = ItemType.None;
     }
 }

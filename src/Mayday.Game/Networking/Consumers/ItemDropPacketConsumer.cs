@@ -1,3 +1,4 @@
+using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Items;
 using Mayday.Game.Networking.Packets;
@@ -21,7 +22,7 @@ namespace Mayday.Game.Networking.Consumers
         {
             var itemDrop = new ItemDrop
             {
-                Item = ContentChest.ItemData[packet.ItemId],
+                Item = ContentChest.ItemData[(ItemType) packet.ItemId],
                 X = packet.X,
                 Y = packet.Y
             };

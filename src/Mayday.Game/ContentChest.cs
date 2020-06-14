@@ -20,7 +20,7 @@ namespace Mayday.Game
     
     public class ContentChest
     {
-        public static Dictionary<int, Item> ItemData;
+        public static Dictionary<ItemType, Item> ItemData;
         public static Dictionary<TileType, TileProperties> TileProperties { get; set; } = new Dictionary<TileType, TileProperties>();
         // ReSharper disable once CollectionNeverUpdated.Global
         public static Dictionary<int, SpriteSheet> Heads { get; set; } = new Dictionary<int, SpriteSheet>();
@@ -86,7 +86,7 @@ namespace Mayday.Game
             var itemDataFile = $"{contentManager.RootDirectory}\\Data\\ItemData.json";
             var itemDataFileText = File.ReadAllText(itemDataFile);
             
-            ItemData = JsonConvert.DeserializeObject<Dictionary<int, Item>>(itemDataFileText);
+            ItemData = JsonConvert.DeserializeObject<Dictionary<ItemType, Item>>(itemDataFileText);
         }
 
         private void LoadJsonImages(ContentManager contentManager)

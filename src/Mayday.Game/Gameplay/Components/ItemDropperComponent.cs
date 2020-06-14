@@ -1,4 +1,5 @@
 using System;
+using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.Items;
 using Yetiface.Engine.Utils;
@@ -9,11 +10,11 @@ namespace Mayday.Game.Gameplay.Components
     {
         public IEntity Entity { get; set; }
         public Action<ItemDrop> ItemDrop { get; set; }
-        public int ItemDropId { get; set; }
+        public ItemType ItemDropType { get; set; }
         
-        public ItemDropperComponent(int itemDropId)
+        public ItemDropperComponent(ItemType itemDropType)
         {
-            ItemDropId = itemDropId;
+            ItemDropType = itemDropType;
         }
         
         public void OnAddedToEntity()
@@ -23,7 +24,7 @@ namespace Mayday.Game.Gameplay.Components
 
         private void Drop()
         {
-            var itemData = GetItemData(ItemDropId);
+            var itemData = GetItemData(ItemDropType);
 
             if (itemData == null) return;
             
@@ -43,8 +44,8 @@ namespace Mayday.Game.Gameplay.Components
             ItemDrop?.Invoke(itemDrop);
         }
 
-        private static Item GetItemData(int itemId) =>
-            ContentChest.ItemData.ContainsKey(itemId) 
-                ? ContentChest.ItemData[itemId] : null;
+        private static Item GetItemData(ItemType itemDropType) =>
+            ContentChest.ItemData.ContainsKey(itemDropType) 
+                ? ContentChest.ItemData[itemDropType] : null;
     }
 }

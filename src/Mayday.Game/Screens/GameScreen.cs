@@ -72,12 +72,12 @@ namespace Mayday.Game.Screens
         {
             foreach (var tile in GameWorld.Tiles)
             {
-                var itemDropId = tile.TileProperties?.ItemDropId;
+                var itemDropType = tile.TileProperties?.ItemDropType;
 
-                if (itemDropId == null || itemDropId.Value == -1) continue;
+                if (itemDropType == null || itemDropType.Value == ItemType.None) continue;
                 
                 var itemDropperComponent = tile.AddComponent(
-                    new ItemDropperComponent(itemDropId.Value));
+                    new ItemDropperComponent(itemDropType.Value));
 
                 itemDropperComponent.ItemDrop += DropItem;
             }
@@ -158,7 +158,7 @@ namespace Mayday.Game.Screens
                 inventoryBar.InventoryChanged += () => _interfaceController.InventoryBarChanged(inventoryBar);
                 mainInventory.InventoryChanged += () => _interfaceController.MainInventoryChanged(mainInventory);
                 jumpComponent.Jump += SendJumpPacket;
-                inventoryBar.AddItemToInventory(ContentChest.ItemData[2]);
+                inventoryBar.AddItemToInventory(ContentChest.ItemData[ItemType.Shuttle]);
 
                 _inventoryBar = inventoryBar;
             }
