@@ -10,7 +10,7 @@ namespace Mayday.Game.Gameplay.Items
 
         public override RectangleF GetBounds()
         {
-            var texture = ContentChest.Items[Item.Id];
+            var texture = ContentChest.ItemTextures[Item.Id];
             return new RectangleF(X, Y, texture.Width, texture.Height);
         }
         

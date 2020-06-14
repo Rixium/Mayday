@@ -21,18 +21,22 @@ namespace Mayday.Game
     {
         public static Dictionary<int, Item> ItemData;
         public static Dictionary<int, TileProperties> TileProperties { get; set; } = new Dictionary<int, TileProperties>();
-        public static Dictionary<int, SpriteSheet> Heads { get; set; } = new Dictionary<int, SpriteSheet>();
-        public static Dictionary<int, SpriteSheet> Bodies { get; set; } = new Dictionary<int, SpriteSheet>();
-        public static Dictionary<int, SpriteSheet> Legs { get; set; } = new Dictionary<int, SpriteSheet>();
-        public static Dictionary<int, Texture2D> Tiles { get; set; } = new Dictionary<int, Texture2D>();
-        public static Dictionary<int, Texture2D> Items { get; set; } = new Dictionary<int, Texture2D>();
+        // ReSharper disable once CollectionNeverUpdated.Global
+        public static Dictionary<int, SpriteSheet> HeadSpriteSheets { get; set; } = new Dictionary<int, SpriteSheet>();
+        // ReSharper disable once CollectionNeverUpdated.Global
+        public static Dictionary<int, SpriteSheet> BodySpriteSheets { get; set; } = new Dictionary<int, SpriteSheet>();
+        // ReSharper disable once CollectionNeverUpdated.Global
+        public static Dictionary<int, SpriteSheet> LegSpriteSheets { get; set; } = new Dictionary<int, SpriteSheet>();
+        public static Dictionary<int, Texture2D> TileTextures { get; set; } = new Dictionary<int, Texture2D>();
+        public static Dictionary<int, Texture2D> ItemTextures { get; set; } = new Dictionary<int, Texture2D>();
+        // ReSharper disable once CollectionNeverQueried.Global
         public static Dictionary<string, SoundEffect> SoundEffects { get; set; } =
             new Dictionary<string, SoundEffect>();
 
         public void Load(ContentManager contentManager)
         {
-            LoadDictionary(contentManager, "Images\\Tiles", Tiles);
-            LoadDictionary(contentManager, "Images\\Items", Items);
+            LoadDictionary(contentManager, "Images\\Tiles", TileTextures);
+            LoadDictionary(contentManager, "Images\\Items", ItemTextures);
             
             LoadJsonImages(contentManager);
             LoadSoundEffects(contentManager);

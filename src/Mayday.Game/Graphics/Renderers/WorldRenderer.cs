@@ -40,7 +40,7 @@ namespace Mayday.Game.Graphics.Renderers
 
                     var tileIndex = GetTileBlobValue(gameWorld, tile, _tileBlobMap);
 
-                    var tileSet = ContentChest.Tiles[tile.TileType];
+                    var tileSet = ContentChest.TileTextures[tile.TileType];
 
                     var sheetTileSize = 8;
                     

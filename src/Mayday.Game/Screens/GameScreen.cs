@@ -130,9 +130,9 @@ namespace Mayday.Game.Screens
 
             var playerAnimationComponent = new PlayerAnimationComponent
             {
-                HeadAnimator = new Animator(ContentChest.Heads[player.HeadId].Animations),
-                BodyAnimator = new Animator(ContentChest.Bodies[player.BodyId].Animations),
-                LegsAnimator = new Animator(ContentChest.Legs[player.LegsId].Animations)
+                HeadAnimator = new Animator(ContentChest.HeadSpriteSheets[player.HeadId].Animations),
+                BodyAnimator = new Animator(ContentChest.BodySpriteSheets[player.BodyId].Animations),
+                LegsAnimator = new Animator(ContentChest.LegSpriteSheets[player.LegsId].Animations)
             };
             
             var moveComponent = player.AddComponent(new MoveComponent());
@@ -270,7 +270,7 @@ namespace Mayday.Game.Screens
                 if (!Camera.Intersects(entity.GetBounds())) continue;
                 if (entity.GetType() != typeof(ItemDrop)) continue;
                 var item = (ItemDrop) entity;
-                GraphicsUtils.Instance.SpriteBatch.Draw(ContentChest.Items[item.Item.Id], new Vector2(item.X, item.Y), Color.White);
+                GraphicsUtils.Instance.SpriteBatch.Draw(ContentChest.ItemTextures[item.Item.Id], new Vector2(item.X, item.Y), Color.White);
             }
             
             GraphicsUtils.Instance.End();
