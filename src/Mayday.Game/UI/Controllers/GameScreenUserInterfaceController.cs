@@ -60,7 +60,7 @@ namespace Mayday.Game.UI.Controllers
                     continue;
                 }
                 
-                SetBarSlotData(ContentChest.ItemTextures[stack.Item.Id], stack.Count, stackIndex + 1);
+                SetBarSlotData(ContentChest.ItemTextures[stack.Item.ItemId], stack.Count, stackIndex + 1);
             }
         }
 
@@ -77,7 +77,7 @@ namespace Mayday.Game.UI.Controllers
                     continue;
                 }
                 
-                SetInventorySlotData(ContentChest.ItemTextures[stack.Item.Id], stack.Count, stackIndex + 1);
+                SetInventorySlotData(ContentChest.ItemTextures[stack.Item.ItemId], stack.Count, stackIndex + 1);
             }
         }
 

@@ -94,7 +94,7 @@ namespace Mayday.Game.Screens
             {
                 X = itemDrop.X,
                 Y = itemDrop.Y,
-                ItemId = (int) itemDrop.Item.Id
+                ItemId = (int) itemDrop.Item.ItemId
             };
 
             var package = NetworkManager.MessagePackager.Package(itemDropPacket);
@@ -271,7 +271,7 @@ namespace Mayday.Game.Screens
                 if (!Camera.Intersects(entity.GetBounds())) continue;
                 if (entity.GetType() != typeof(ItemDrop)) continue;
                 var item = (ItemDrop) entity;
-                GraphicsUtils.Instance.SpriteBatch.Draw(ContentChest.ItemTextures[item.Item.Id], new Vector2(item.X, item.Y), Color.White);
+                GraphicsUtils.Instance.SpriteBatch.Draw(ContentChest.ItemTextures[item.Item.ItemId], new Vector2(item.X, item.Y), Color.White);
             }
             
             GraphicsUtils.Instance.End();
