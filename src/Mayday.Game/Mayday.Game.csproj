@@ -58,6 +58,7 @@
     <Compile Include="Gameplay\Components\InventoryComponent.cs" />
     <Compile Include="Gameplay\Components\ItemDropperComponent.cs" />
     <Compile Include="Gameplay\Components\ItemPickerComponent.cs" />
+    <Compile Include="Gameplay\Components\ItemPlacerComponent.cs" />
     <Compile Include="Gameplay\Components\IUpdateable.cs" />
     <Compile Include="Gameplay\Components\JumpComponent.cs" />
     <Compile Include="Gameplay\Components\MoveComponent.cs" />

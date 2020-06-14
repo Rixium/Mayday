@@ -37,7 +37,15 @@ namespace Mayday.Game.Gameplay.Items
             ItemPickup?.Invoke(item);
             return true;
         }
-        
+
+        public IItem GetItemAt(int itemSlot)
+        {
+            if (itemSlot >= ItemStacks.Count) return null;
+            
+            var stack = ItemStacks[itemSlot];
+            return stack.Item;
+        }
+
         private IItemStack GetStackForItem(IItem item)
         {
             IItemStack selectedStack = null;

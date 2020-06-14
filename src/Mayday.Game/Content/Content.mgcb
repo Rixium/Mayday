@@ -19,23 +19,11 @@
 /processorParam:Quality=Best
 /build:Game/Sounds/breakTile.wav
 
-#begin Game/Sounds/breakTile.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:Game/Sounds/breakTile.wav
-
 #begin Game/Sounds/pop.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Game/Sounds/pop.wav
-
-#begin Game/Sounds/startDig.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:Game/Sounds/startDig.wav
 
 #begin Game/Sounds/startDig.wav
 /importer:WavImporter
@@ -126,6 +114,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Images/Items/Item_1.png
+
+#begin Images/Items/Item_2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/Items/Item_2.png
 
 #begin Images/Tiles/Tiles_1.png
 /importer:TextureImporter

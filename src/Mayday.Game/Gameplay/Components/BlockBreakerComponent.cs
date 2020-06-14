@@ -42,21 +42,7 @@ namespace Mayday.Game.Gameplay.Components
 
         public void MouseDown(MouseButton button)
         {
-            if (button == MouseButton.Left)
-            {
-                var mousePosition = MouseState.Bounds(_camera.GetMatrix());
-
-                var mouseTileX = mousePosition.X / GameWorld.TileSize;
-                var mouseTileY = mousePosition.Y / GameWorld.TileSize;
-                
-                if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > GameWorld.Width - 1 ||
-                    mouseTileY > GameWorld.Height - 1) return;
-                var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
-
-                if (!CloseEnoughToTile(tile)) return;
-                GameWorld.PlaceTile(tile, 1);
-                
-            } else if (button == MouseButton.Right)
+            if (button == MouseButton.Right)
             {
                 var mousePosition = MouseState.Bounds(_camera.GetMatrix());
 

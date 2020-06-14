@@ -10,5 +10,6 @@ namespace Mayday.Game.Gameplay.Items
         IList<IItemStack> ItemStacks { get; set; }
         int Slots { get; set; }
         bool AddItemToInventory(IItem item);
+        IItem GetItemAt(int itemSlot);
     }
 }

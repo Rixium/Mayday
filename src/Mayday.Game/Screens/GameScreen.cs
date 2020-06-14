@@ -12,7 +12,10 @@ using Mayday.Game.Networking.Packets;
 using Mayday.Game.UI.Controllers;
 using Mayday.UI.Views;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Steamworks;
+using Yetiface.Engine;
+using Yetiface.Engine.Inputs;
 using Yetiface.Engine.Networking;
 using Yetiface.Engine.Screens;
 using Yetiface.Engine.UI;
@@ -33,6 +36,9 @@ namespace Mayday.Game.Screens
         private readonly IPlayerRenderer _playerRenderer;
         private readonly GameScreenUserInterfaceController _interfaceController;
 
+        public IItem SelectedItem { get; set; }
+        private IInventory _inventoryBar;
+
         public Camera Camera { get; } = new Camera();
 
         public GameScreen(INetworkManager networkManager) : base("GameScreen")
@@ -45,8 +51,17 @@ namespace Mayday.Game.Screens
             var gameScreenUserInterface = new GameScreenUserInterface();
             _interfaceController = new GameScreenUserInterfaceController(gameScreenUserInterface);
             UserInterface = new MyraUserInterface(gameScreenUserInterface);
+
+            _interfaceController.SelectedItemSlotChanged += OnSelectedItemSlotChanged;
         }
-        
+
+        private void OnSelectedItemSlotChanged(int itemSlot)
+        {
+            var selectedItem = _inventoryBar.GetItemAt(itemSlot);
+            if (selectedItem == null) return;
+            SelectedItem = selectedItem;
+        }
+
         public void SetWorld(IGameWorld gameWorld)
         {
             GameWorld = gameWorld;
@@ -126,20 +141,25 @@ namespace Mayday.Game.Screens
             var inventoryComponent = player.AddComponent(new InventoryComponent());
             var inventoryBar = inventoryComponent.AddInventory(new Inventory(8));
             var mainInventory = inventoryComponent.AddInventory(new Inventory(24));
-            var blockBreakerComponent = player.AddComponent(new BlockBreakerComponent(GameWorld, Camera));
             var itemPickerComponent = player.AddComponent(new ItemPickerComponent(this));
             playerAnimationComponent = player.AddComponent(playerAnimationComponent);
 
-            OnMouseDown += blockBreakerComponent.MouseDown;
             moveComponent.PositionChanged += SendPositionPacket;
             moveComponent.MoveDirectionChanged += SendMoveDirectionPacket;
 
             if (isClients)
             {
+                var blockBreakerComponent = player.AddComponent(new BlockBreakerComponent(GameWorld, Camera));
                 player.AddComponent(new CharacterControllerComponent());
+                var itemPlacerComponent = player.AddComponent(new ItemPlacerComponent(this));
+                OnMouseDown += blockBreakerComponent.MouseDown;
+                OnMouseDown += itemPlacerComponent.MouseDown;
                 inventoryBar.InventoryChanged += () => _interfaceController.InventoryBarChanged(inventoryBar);
                 mainInventory.InventoryChanged += () => _interfaceController.MainInventoryChanged(mainInventory);
                 jumpComponent.Jump += SendJumpPacket;
+                inventoryBar.AddItemToInventory(ContentChest.ItemData[2]);
+
+                _inventoryBar = inventoryBar;
             }
 
             Players.Add(player);
@@ -165,7 +185,20 @@ namespace Mayday.Game.Screens
             SetupNetworking();
             SetupWorldCallbacks();
             SetupTiles();
+            SetupUiInput();
             Camera.SetEntity(MyPlayer);
+        }
+
+        private void SetupUiInput()
+        {
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D1), () => _interfaceController.InventorySelectionChanged(0));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D2), () => _interfaceController.InventorySelectionChanged(1));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D3), () => _interfaceController.InventorySelectionChanged(2));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D4), () => _interfaceController.InventorySelectionChanged(3));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D5), () => _interfaceController.InventorySelectionChanged(4));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D6), () => _interfaceController.InventorySelectionChanged(5));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D7), () => _interfaceController.InventorySelectionChanged(6));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D8), () => _interfaceController.InventorySelectionChanged(7));
         }
 
         private void SetupWorldCallbacks()

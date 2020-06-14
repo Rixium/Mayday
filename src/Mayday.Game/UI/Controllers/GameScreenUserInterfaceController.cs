@@ -1,14 +1,21 @@
-﻿using Mayday.Game.Gameplay.Items;
+﻿using System;
+using System.Drawing;
+using System.Linq;
+using Mayday.Game.Gameplay.Items;
 using Mayday.UI.Views;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.TextureAtlases;
 using Yetiface.Engine;
+using Color = System.Drawing.Color;
 
 namespace Mayday.Game.UI.Controllers
 {
     public class GameScreenUserInterfaceController
     {
+        private int _currentSelection = 0;
         public GameScreenUserInterface UserInterface { get; set; }
+        public Action<int> SelectedItemSlotChanged { get; set; }
 
         public GameScreenUserInterfaceController(GameScreenUserInterface userInterface)
         {
@@ -44,7 +51,7 @@ namespace Mayday.Game.UI.Controllers
         {
             var stackIndex = inventory.Slots - 1;
             
-            foreach (var stack in inventory.ItemStacks)
+            foreach (var stack in inventory.ItemStacks.Reverse())
             {
                 stackIndex--;
                 
@@ -61,7 +68,7 @@ namespace Mayday.Game.UI.Controllers
         {
             var stackIndex = inventory.Slots - 1;
             
-            foreach (var stack in inventory.ItemStacks)
+            foreach (var stack in inventory.ItemStacks.Reverse())
             {
                 stackIndex--;
                 
@@ -77,7 +84,17 @@ namespace Mayday.Game.UI.Controllers
         public void ToggleMainInventory()
         {
             UserInterface.InventoryPanel.Visible = !UserInterface.InventoryPanel.Visible;
-        } 
+        }
+
+        public void InventorySelectionChanged(int selection)
+        {
+            UserInterface.InventorySlotBackgrounds[_currentSelection].Color = Microsoft.Xna.Framework.Color.White;
+            if (_currentSelection == selection) return;
+            _currentSelection = selection;
+            UserInterface.InventorySlotBackgrounds[selection].Color = Microsoft.Xna.Framework.Color.Green * 0.5f;
+            SelectedItemSlotChanged?.Invoke(_currentSelection);
+        }
+        
             
     }
 }
