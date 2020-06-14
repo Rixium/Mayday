@@ -3,7 +3,19 @@ namespace Mayday.Game.Gameplay.Items
     public class ItemStack : IItemStack
     {
         public int MaxStackSize { get; set; } = 1;
-        public int Count { get; set; }
+
+        private int _count;
+        public int Count
+        {
+            get => _count;
+            set
+            {
+                _count = value;
+                if (_count <= 0)
+                    Item = null;
+            }
+        }
+
         public IItem Item { get; set; }
 
         public bool IsEmpty() => Item == null;

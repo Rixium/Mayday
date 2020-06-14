@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Drawing;
 using System.Linq;
 using Mayday.Game.Gameplay.Items;
 using Mayday.UI.Views;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.TextureAtlases;
 using Yetiface.Engine;
-using Color = System.Drawing.Color;
 
 namespace Mayday.Game.UI.Controllers
 {
@@ -35,6 +32,11 @@ namespace Mayday.Game.UI.Controllers
             
         }
 
+        public void ClearBarSlotData(int index)
+        {
+            UserInterface.InventorySlotItemImages[index].Renderable = null;
+            UserInterface.InventorySlotItemCounts[index].Text = "";
+        }
         public void SetBarSlotData(Texture2D itemImage, int count, int index)
         {
             UserInterface.InventorySlotItemImages[index].Renderable = new TextureRegion(itemImage);
@@ -57,11 +59,14 @@ namespace Mayday.Game.UI.Controllers
                 
                 if (stack.IsEmpty())
                 {
+                    ClearBarSlotData(stackIndex + 1);;
                     continue;
                 }
                 
                 SetBarSlotData(ContentChest.ItemTextures[stack.Item.ItemId], stack.Count, stackIndex + 1);
             }
+
+            SelectedItemSlotChanged?.Invoke(_currentSelection);
         }
 
         public void MainInventoryChanged(IInventory inventory)

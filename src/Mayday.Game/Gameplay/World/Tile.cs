@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Mayday.Game.Enums;
-using Mayday.Game.Gameplay.Components;
+﻿using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Data;
 using Mayday.Game.Gameplay.Entities;
 using Microsoft.Xna.Framework;
@@ -65,8 +63,6 @@ namespace Mayday.Game.Gameplay.World
             }
         }
 
-        private IList<IComponent> Components { get; set; } = new List<IComponent>();
-
         public int WallType { get; set; }
 
         public Vector2 RenderCenter => new Vector2(X + TileSize / 2.0f, Y + TileSize / 2.0f);
@@ -86,6 +82,8 @@ namespace Mayday.Game.Gameplay.World
             if (TileType == TileType.None) return;
             TileType = TileType.None;
             Destroy?.Invoke(this);
+            Components.Clear();
+            UpdateableComponents.Clear();
         }
 
     }

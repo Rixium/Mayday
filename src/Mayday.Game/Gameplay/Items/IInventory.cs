@@ -11,5 +11,6 @@ namespace Mayday.Game.Gameplay.Items
         int Slots { get; set; }
         bool AddItemToInventory(IItem item);
         IItem GetItemAt(int itemSlot);
+        void RemoveItem(IItem selectedItem);
     }
 }

@@ -46,6 +46,17 @@ namespace Mayday.Game.Gameplay.Items
             return stack.Item;
         }
 
+        public void RemoveItem(IItem selectedItem)
+        {
+            foreach (var slot in ItemStacks)
+            {
+                if (slot.Item != selectedItem) continue;
+                slot.Count--;
+                InventoryChanged?.Invoke();
+                break;
+            }
+        }
+
         private IItemStack GetStackForItem(IItem item)
         {
             IItemStack selectedStack = null;

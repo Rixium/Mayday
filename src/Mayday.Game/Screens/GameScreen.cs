@@ -58,8 +58,8 @@ namespace Mayday.Game.Screens
 
         private void OnSelectedItemSlotChanged(int itemSlot)
         {
+            if (_inventoryBar == null) return;
             var selectedItem = _inventoryBar.GetItemAt(itemSlot);
-            if (selectedItem == null) return;
             SelectedItem = selectedItem;
         }
 
@@ -72,20 +72,26 @@ namespace Mayday.Game.Screens
         {
             foreach (var tile in GameWorld.Tiles)
             {
-                var itemDropType = tile.TileProperties?.ItemDropType;
-
-                if (itemDropType == null || itemDropType.Value == ItemType.None) continue;
-                
-                var itemDropperComponent = tile.AddComponent(
-                    new ItemDropperComponent(itemDropType.Value));
-
-                itemDropperComponent.ItemDrop += DropItem;
+                SetupTile(tile);
             }
         }
 
         private void OnTilePlaced(Tile tile)
         {
+            SetupTile(tile);
             SendTileChangePacket(tile);
+        }
+
+        private void SetupTile(Tile tile)
+        {
+            var itemDropType = tile.TileProperties?.ItemDropType;
+
+            if (itemDropType == null || itemDropType.Value == ItemType.None) return;
+
+            var itemDropperComponent = tile.AddComponent(
+                new ItemDropperComponent(itemDropType.Value));
+
+            itemDropperComponent.ItemDrop += DropItem;
         }
 
         private void SendItemDropPacket(ItemDrop itemDrop)
@@ -181,6 +187,8 @@ namespace Mayday.Game.Screens
 
         public override void Awake()
         {
+            _interfaceController.ToggleMainInventory();
+            
             BackgroundColor = new Color(47, 39, 54);
 
             SetupNetworking();
@@ -200,6 +208,7 @@ namespace Mayday.Game.Screens
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D6), () => _interfaceController.InventorySelectionChanged(5));
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D7), () => _interfaceController.InventorySelectionChanged(6));
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D8), () => _interfaceController.InventorySelectionChanged(7));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.I), () => _interfaceController.ToggleMainInventory());
         }
 
         private void SetupWorldCallbacks()
@@ -309,7 +318,11 @@ namespace Mayday.Game.Screens
             var package = NetworkManager.MessagePackager.Package(jumpPacket);
             NetworkManager.SendMessage(package);
         }
-        
+
+        public void RemoveCurrentItemFromInventory()
+        {
+            _inventoryBar.RemoveItem(SelectedItem);
+        }
     }
 
 }

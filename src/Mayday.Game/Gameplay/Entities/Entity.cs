@@ -24,14 +24,14 @@ namespace Mayday.Game.Gameplay.Entities
 
         public int FacingDirection { get; set; }
 
-        private readonly IList<IComponent> _components = new List<IComponent>();
-        private readonly IList<IUpdateable> _updateableComponents = new List<IUpdateable>();
+        protected readonly IList<IComponent> Components = new List<IComponent>();
+        protected readonly IList<IUpdateable> UpdateableComponents = new List<IUpdateable>();
         
         public abstract RectangleF GetBounds();
         
         public virtual void Update()
         {
-            foreach (var component in _updateableComponents)
+            foreach (var component in UpdateableComponents)
                 component.Update();
         }
 
@@ -41,11 +41,11 @@ namespace Mayday.Game.Gameplay.Entities
             
             if (typeof(IUpdateable).IsAssignableFrom(typeof(T)))
             {
-                _updateableComponents.Add(component as IUpdateable);
+                UpdateableComponents.Add(component as IUpdateable);
             }
             else
             {
-                _components.Add(component);
+                Components.Add(component);
             }
 
             component.OnAddedToEntity();
@@ -55,10 +55,10 @@ namespace Mayday.Game.Gameplay.Entities
 
         public T GetComponent<T>() where T : IComponent
         {
-            var c = (T) _components.FirstOrDefault(component => component.GetType() == typeof(T));
+            var c = (T) Components.FirstOrDefault(component => component.GetType() == typeof(T));
 
             if (c == null)
-                c = (T) _updateableComponents.FirstOrDefault(component => component.GetType() == typeof(T));
+                c = (T) UpdateableComponents.FirstOrDefault(component => component.GetType() == typeof(T));
 
             return c;
         }

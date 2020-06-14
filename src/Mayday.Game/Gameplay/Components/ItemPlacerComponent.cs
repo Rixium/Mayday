@@ -23,7 +23,6 @@ namespace Mayday.Game.Gameplay.Components
         
         public void OnAddedToEntity()
         {
-            
         }
 
         public void MouseDown(MouseButton button)
@@ -42,9 +41,9 @@ namespace Mayday.Game.Gameplay.Components
                     mouseTileY > GameWorld.Height - 1) return;
                 if (!CanPlaceAt(mouseTileX, mouseTileY)) return;
                 var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
-
                 if (!CloseEnoughToTile(tile)) return;
                 GameWorld.PlaceTile(tile, selectedItem.TileType);
+                _gameScreen.RemoveCurrentItemFromInventory();
             }
         }
 

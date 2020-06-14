@@ -19,10 +19,17 @@ namespace Mayday.Game.Gameplay.Components
         
         public void OnAddedToEntity()
         {
-            Entity.Destroy += (entity) => Drop();
+            Entity.Destroy += Drop;
+            Entity.Destroy += OnEntityDestroyed;
         }
 
-        private void Drop()
+        public void OnEntityDestroyed(IEntity entity)
+        {
+            Entity.Destroy -= Drop;
+            Entity.Destroy -= OnEntityDestroyed;
+        }
+
+        private void Drop(IEntity entity)
         {
             var itemData = GetItemData(ItemDropType);
 
