@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Mayday.Game.Enums;
-using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Entities;
+using Mayday.Game.Gameplay.Items;
 using Yetiface.Engine.Utils;
 
 namespace Mayday.Game.Gameplay.World
@@ -117,5 +118,13 @@ namespace Mayday.Game.Gameplay.World
             TilePlaced?.Invoke(tile);
         }
 
+        public Tile GetRandomSpawnLocation() => (from Tile tile in Tiles
+                    where tile.TileType == TileType.Dirt
+                    select Tiles[(int) (Width / 2.0f), tile.TileY])
+                .FirstOrDefault();
+
+        public void DropItem(ItemDrop item) => 
+            WorldItems.Add(item);
+        
     }
 }

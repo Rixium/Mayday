@@ -50,6 +50,8 @@
     <Compile Include="Enums\TileType.cs" />
     <Compile Include="Enums\WorldObjectType.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Gameplay\Blueprints\BluePrintManager.cs" />
+    <Compile Include="Gameplay\Blueprints\IBluePrintManager.cs" />
     <Compile Include="Gameplay\Collections\IPlayerSet.cs" />
     <Compile Include="Gameplay\Collections\PlayerSet.cs" />
     <Compile Include="Gameplay\Components\BlockBreakerComponent.cs" />

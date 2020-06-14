@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Mayday.Game.Enums;
+using Mayday.Game.Gameplay.Blueprints;
 using Mayday.Game.Gameplay.Collections;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Entities;
@@ -28,6 +29,8 @@ namespace Mayday.Game.Screens
     {
         public INetworkManager NetworkManager { get; }
         public IGameWorld GameWorld { get; private set; }
+        
+        public IBluePrintManager BluePrintManager { get; set; }
 
         public readonly IPlayerSet Players = new PlayerSet();
         public Player MyPlayer { get; private set; }
@@ -49,19 +52,16 @@ namespace Mayday.Game.Screens
             var gameScreenUserInterface = new GameScreenUserInterface();
             _interfaceController = new GameScreenUserInterfaceController(gameScreenUserInterface);
             UserInterface = new MyraUserInterface(gameScreenUserInterface);
+            
+            BluePrintManager = new BluePrintManager(this);
         }
 
-        public void SetWorld(IGameWorld gameWorld)
-        {
-            GameWorld = gameWorld;
-        }
+        public void SetWorld(IGameWorld gameWorld) => GameWorld = gameWorld;
 
         private void SetupTiles()
         {
-            foreach (var tile in GameWorld.Tiles)
-            {
+            foreach (var tile in GameWorld.Tiles) 
                 SetupTile(tile);
-            }
         }
 
         private void OnTilePlaced(Tile tile)
@@ -70,23 +70,13 @@ namespace Mayday.Game.Screens
             PacketManager.SendTileChangePacket(tile);
         }
 
-        private void SetupTile(Tile tile)
-        {
-            var itemDropType = tile.TileProperties?.ItemDropType;
+        private void SetupTile(IEntity tile) => BluePrintManager.SetupFor(tile);
 
-            if (itemDropType == null || itemDropType.Value == ItemType.None) return;
-
-            var itemDropperComponent = tile.AddComponent(
-                new ItemDropperComponent(itemDropType.Value));
-
-            itemDropperComponent.ItemDrop += DropItem;
-        }
-        
         public Player AddPlayer(Player player, bool isClients = false)
         {
             if (isClients)
             {
-                var spawnTile = GetSpawnPosition();
+                var spawnTile = GameWorld.GetRandomSpawnLocation();
                 player.X = spawnTile.TileX * GameWorld.TileSize;
                 player.Y = spawnTile.TileY * GameWorld.TileSize - 70 * Game1.GlobalGameScale;
                 player.SetClientId();
@@ -149,6 +139,7 @@ namespace Mayday.Game.Screens
             SetupWorldCallbacks();
             SetupTiles();
             SetupUiInput();
+            
             Camera.SetEntity(MyPlayer);
         }
 
@@ -171,23 +162,13 @@ namespace Mayday.Game.Screens
         }
 
         private void SetupNetworking()
-        {            
+        {
             var gameServerListener = new MaydayServerNetworkListener(NetworkManager);
             var gameClientListener = new MaydayClientNetworkListener(NetworkManager);
-            
-            NetworkManager.SetServerNetworkListener(gameServerListener);
-            NetworkManager.SetClientNetworkListener(gameClientListener);
-            
             var consumers = new GamePacketConsumerManager(this);
             consumers.InjectInto(gameClientListener, gameServerListener);
         }
         
-        private Tile GetSpawnPosition() =>
-            (from Tile tile in GameWorld.Tiles
-                where tile.TileType == TileType.Dirt
-                select GameWorld.Tiles[(int) (GameWorld.Width / 2.0f), tile.TileY])
-            .FirstOrDefault();
-
         public override void Begin()
         {
         }
@@ -198,7 +179,7 @@ namespace Mayday.Game.Screens
             
             _worldRenderer.Draw(GameWorld, Camera);
             _playerRenderer.DrawPlayers(Players.GetAll());
-
+            
             foreach (var entity in GameWorld.WorldItems)
             {
                 if (!Camera.Intersects(entity.GetBounds())) continue;
@@ -227,13 +208,6 @@ namespace Mayday.Game.Screens
                 entity.Update();
             
             Camera.Update();
-        }
-        
-        public void DropItem(ItemDrop itemDrop)
-        {
-            itemDrop.GameWorld = GameWorld;
-            GameWorld.WorldItems.Add(itemDrop);
-            PacketManager.SendItemDropPacket(itemDrop);
         }
 
     }

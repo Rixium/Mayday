@@ -18,6 +18,7 @@ namespace Mayday.Game.Networking.Listeners
         public MaydayClientNetworkListener(INetworkManager networkManager)
         {
             _messagePackager = networkManager.MessagePackager;
+            networkManager.SetClientNetworkListener(this);
         }
 
         public void OnDisconnectedFromServer(ConnectionInfo info)

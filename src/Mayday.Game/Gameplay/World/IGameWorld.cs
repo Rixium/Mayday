@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Entities;
+using Mayday.Game.Gameplay.Items;
 
 namespace Mayday.Game.Gameplay.World
 {
@@ -19,5 +20,7 @@ namespace Mayday.Game.Gameplay.World
             float yVelocity);
         Tile TryGetTile(int tileX, int tileY);
         void PlaceTile(Tile tile, TileType tileType);
+        Tile GetRandomSpawnLocation();
+        void DropItem(ItemDrop item);
     }
 }

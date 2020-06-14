@@ -21,6 +21,7 @@ namespace Mayday.Game.Networking.Listeners
         {
             _networkManager = networkManager;
             _messagePackager = networkManager.MessagePackager;
+            _networkManager.SetServerNetworkListener(this);
         }
         
         public void OnNewConnection(Connection connection, ConnectionInfo info)

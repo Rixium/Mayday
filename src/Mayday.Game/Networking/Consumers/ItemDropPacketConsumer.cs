@@ -1,3 +1,4 @@
+using System;
 using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Items;
@@ -31,8 +32,8 @@ namespace Mayday.Game.Networking.Consumers
             itemDrop.AddComponent(new GravityComponent());
             moveComponent.XVelocity = Randomizer.Next(-10, 10);
             moveComponent.YVelocity = Randomizer.Next(0, 5);
-
-            _gameScreen.DropItem(itemDrop);
+            
+            _gameScreen.GameWorld.DropItem(itemDrop);
         }
     }
 }
