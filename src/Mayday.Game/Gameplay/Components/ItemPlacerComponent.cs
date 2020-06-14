@@ -36,16 +36,22 @@ namespace Mayday.Game.Gameplay.Components
 
                 var mouseTileX = mousePosition.X / GameWorld.TileSize;
                 var mouseTileY = mousePosition.Y / GameWorld.TileSize;
-                
+
                 if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > GameWorld.Width - 1 ||
                     mouseTileY > GameWorld.Height - 1) return;
+                if (!CanPlaceAt(mouseTileX, mouseTileY)) return;
                 var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
 
                 if (!CloseEnoughToTile(tile)) return;
                 GameWorld.PlaceTile(tile, selectedItem.TileId);
             }
         }
-        
+
+        private bool CanPlaceAt(int tileX, int tileY)
+        {
+            return GameWorld.Tiles[tileX, tileY].TileType == 0;
+        }
+
         private bool CloseEnoughToTile(Tile tile)
         {
             var playerBounds = Entity.GetBounds();
