@@ -15,6 +15,7 @@ using Mayday.Game.UI.Controllers;
 using Mayday.UI.Views;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using Yetiface.Engine;
 using Yetiface.Engine.Inputs;
 using Yetiface.Engine.Networking;
@@ -133,6 +134,10 @@ namespace Mayday.Game.Screens
 
         public override void Awake()
         {
+            MediaPlayer.Stop();
+            MediaPlayer.Play(YetiGame.ContentManager.Load<Song>("gameAmbient"));
+            MediaPlayer.IsRepeating = true;
+            
             _interfaceController.ToggleMainInventory();
             
             BackgroundColor = new Color(47, 39, 54);

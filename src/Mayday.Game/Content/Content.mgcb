@@ -13,6 +13,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin dig.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:dig.wav
+
 #begin Game/Sounds/breakTile.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -30,6 +36,12 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Game/Sounds/startDig.wav
+
+#begin gameAmbient.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:gameAmbient.mp3
 
 #begin Images/Animations/Arms_1.png
 /importer:TextureImporter
@@ -151,6 +163,12 @@
 /processorParam:TextureFormat=Color
 /build:Images/Tiles/Tiles_1.png
 
+#begin jump.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:jump.wav
+
 #begin MainMenu/click.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -192,6 +210,18 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:MainMenu/tap.wav
+
+#begin pickup.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:pickup.wav
+
+#begin place.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:place.wav
 
 #begin UI/bar_inventory_item.png
 /importer:TextureImporter

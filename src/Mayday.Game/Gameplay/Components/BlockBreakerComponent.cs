@@ -1,7 +1,11 @@
 ﻿using System;
+using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.World;
+using Microsoft.Xna.Framework.Audio;
+using Yetiface.Engine;
 using Yetiface.Engine.Inputs;
+using Yetiface.Engine.Utils;
 using MouseState = Yetiface.Engine.Utils.MouseState;
 
 namespace Mayday.Game.Gameplay.Components
@@ -9,6 +13,7 @@ namespace Mayday.Game.Gameplay.Components
     public class BlockBreakerComponent : IComponent
     {
         private readonly Camera _camera;
+        private double _lastBreak;
 
         public IEntity Entity { get; set; }
         public IGameWorld GameWorld { get; set; }
@@ -42,7 +47,7 @@ namespace Mayday.Game.Gameplay.Components
 
         public void MouseDown(MouseButton button)
         {
-            if (button == MouseButton.Right)
+            if (button == MouseButton.Right && Time.GameTime.TotalGameTime.TotalSeconds > _lastBreak + 0.5f)
             {
                 var mousePosition = MouseState.Bounds(_camera.GetMatrix());
 
@@ -54,7 +59,12 @@ namespace Mayday.Game.Gameplay.Components
                 var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
 
                 if (!CloseEnoughToTile(tile)) return;
+                if (tile.TileType == TileType.None) return;
+
+                YetiGame.ContentManager.Load<SoundEffect>("dig").Play();
+                
                 tile.Break();
+                _lastBreak = Time.GameTime.TotalGameTime.TotalSeconds;
             }
         }
     }

@@ -4,7 +4,10 @@ using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.Items;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Screens;
+using Microsoft.Xna.Framework.Audio;
+using Yetiface.Engine;
 using Yetiface.Engine.Inputs;
+using Yetiface.Engine.Utils;
 using MouseState = Yetiface.Engine.Utils.MouseState;
 
 namespace Mayday.Game.Gameplay.Components
@@ -13,6 +16,7 @@ namespace Mayday.Game.Gameplay.Components
     {
         private GameScreen _gameScreen;
         private IItem _selectedItem;
+        private double _lastPlaced;
         private Camera _camera => _gameScreen.Camera;
         public IGameWorld GameWorld => _gameScreen.GameWorld;
         public IEntity Entity { get; set; }
@@ -30,7 +34,7 @@ namespace Mayday.Game.Gameplay.Components
 
         public void MouseDown(MouseButton button)
         {
-            if (button == MouseButton.Left)
+            if (button == MouseButton.Left && Time.GameTime.TotalGameTime.TotalSeconds > _lastPlaced + 0.5f)
             {
                 if (_selectedItem == null) return;
                 if (_selectedItem.TileType == TileType.None) return;
@@ -45,7 +49,9 @@ namespace Mayday.Game.Gameplay.Components
                 var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
                 if (!CloseEnoughToTile(tile)) return;
                 GameWorld.PlaceTile(tile, _selectedItem.TileType);
+                YetiGame.ContentManager.Load<SoundEffect>("place").Play();
                 ItemUsed?.Invoke(_selectedItem);
+                _lastPlaced = Time.GameTime.TotalGameTime.TotalSeconds;
             }
         }
 

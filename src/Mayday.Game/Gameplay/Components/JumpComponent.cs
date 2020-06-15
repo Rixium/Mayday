@@ -1,6 +1,8 @@
 ﻿using System;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Screens;
+using Microsoft.Xna.Framework.Audio;
+using Yetiface.Engine;
 
 namespace Mayday.Game.Gameplay.Components
 {
@@ -32,6 +34,8 @@ namespace Mayday.Game.Gameplay.Components
             
             Jumping = true;
             moveComponent.YVelocity = 2 * Game1.GlobalGameScale;
+
+            YetiGame.ContentManager.Load<SoundEffect>("jump").Play();
             
             Jump?.Invoke(this);
         }

@@ -2,7 +2,10 @@
 using Mayday.Game.Gameplay.Collections;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.Items;
+using Microsoft.Xna.Framework.Audio;
+using Yetiface.Engine;
 using Yetiface.Engine.Optimization;
+using Yetiface.Engine.Utils;
 
 namespace Mayday.Game.Gameplay.Components
 {
@@ -12,6 +15,8 @@ namespace Mayday.Game.Gameplay.Components
         private InventoryComponent _inventoryComponent;
         private IWorldItemSet _worldItemSet;
         private IUpdateResolver<IEntity> _updateResolver;
+        private double _lastPickup;
+        private float _totalItemsLastSecond;
 
         public IEntity Entity { get; set; }
 
@@ -24,6 +29,13 @@ namespace Mayday.Game.Gameplay.Components
         public void Update()
         {
             var newList = new List<IEntity>();
+            var pickedUp = false;
+
+            if (Time.GameTime.TotalGameTime.TotalSeconds > _lastPickup + 1.0f)
+            {
+                _totalItemsLastSecond = 0;
+            }
+            
             foreach (var entity in _worldItemSet.GetItems())
             {
                 if (!_updateResolver.ShouldUpdate(entity))
@@ -42,6 +54,14 @@ namespace Mayday.Game.Gameplay.Components
                 }
                 
                 _inventoryComponent.AddItemToInventory(item.Item);
+                pickedUp = true;
+            }
+
+            if (pickedUp)
+            {
+                _lastPickup = Time.GameTime.TotalGameTime.TotalSeconds;
+                _totalItemsLastSecond++;
+                YetiGame.ContentManager.Load<SoundEffect>("pickup").Play(0.5f, 1.0f / _totalItemsLastSecond, 0.0f);
             }
 
             _worldItemSet.Set(newList);
