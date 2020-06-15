@@ -32,13 +32,9 @@ namespace Mayday.Game.Gameplay.Components
                     continue;
                 }
 
-                if (entity.GetType() != typeof(ItemDrop))
-                {
-                    newList.Add(entity);
+                if (!(entity is ItemDrop item)) 
                     continue;
-                }
                 
-                var item = (ItemDrop) entity;
                 if (!CloseEnoughToGet(item))
                 {
                     newList.Add(entity);
