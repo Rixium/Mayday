@@ -1,52 +1,18 @@
 ﻿using System;
 using Mayday.Game.Gameplay.Entities;
-using Mayday.Game.Networking;
-using Mayday.Game.Networking.Packets;
 using Mayday.Game.Screens;
-using Microsoft.Xna.Framework.Input;
 
 namespace Mayday.Game.Gameplay.Components
 {
-    public class JumpComponent : IUpdateable
+    public class JumpComponent : IComponent
     {
-        private readonly GameScreen _gameScreen;
+        
         private MoveComponent _moveComponent;
-        private KeyboardState _lastKeyboardState;
 
         public Action<JumpComponent> Jump;
 
         public IEntity Entity { get; set; }
         public bool Jumping { get; set; }
-
-        public JumpComponent(GameScreen gameScreen)
-        {
-            _gameScreen = gameScreen;
-        }
-        
-        public void Update()
-        {
-            if (Entity != _gameScreen.MyPlayer) return;
-            
-            if (Jumping)
-            {
-                if (_lastKeyboardState.IsKeyDown(Keys.Space) && Keyboard.GetState().IsKeyUp(Keys.Space))
-                {
-                    if (_moveComponent.YVelocity > 0)
-                    {
-                        EndJump();
-                        
-                        var jumpPacket = new JumpPacket
-                        {
-                            IsStopping = true
-                        };
-
-                        PacketManager.SendJumpStatePacket(jumpPacket);
-                    }
-                }
-            }
-
-            _lastKeyboardState = Keyboard.GetState();
-        }
 
         public void OnAddedToEntity()
         {

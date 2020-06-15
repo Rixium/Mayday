@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Mayday.Game.Enums;
+﻿using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Blueprints;
 using Mayday.Game.Gameplay.Collections;
 using Mayday.Game.Gameplay.Components;
@@ -94,7 +93,7 @@ namespace Mayday.Game.Screens
             
             var moveComponent = player.AddComponent(new MoveComponent());
             var gravityComponent = player.AddComponent(new GravityComponent());
-            var jumpComponent = player.AddComponent(new JumpComponent(this));
+            var jumpComponent = player.AddComponent(new JumpComponent());
             var inventoryComponent = player.AddComponent(new InventoryComponent());
             var inventoryBar = inventoryComponent.AddInventory(new Inventory(8));
             var mainInventory = inventoryComponent.AddInventory(new Inventory(24));
