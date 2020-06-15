@@ -83,8 +83,9 @@ namespace Mayday.Game.Gameplay.World
             if (TileType == TileType.None) return;
             TileType = TileType.None;
             Destroy?.Invoke(this);
-            Components.Clear();
-            UpdateableComponents.Clear();
+
+            CleanUpComponents();
+            
             PacketManager.SendTileChangePacket(this);
         }
 

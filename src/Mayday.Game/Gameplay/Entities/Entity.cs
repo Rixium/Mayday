@@ -63,5 +63,12 @@ namespace Mayday.Game.Gameplay.Entities
 
             return c;
         }
+
+        protected void CleanUpComponents()
+        {
+            Components.Clear();
+            UpdateableComponents.Clear();
+        }
+        
     }
 }
