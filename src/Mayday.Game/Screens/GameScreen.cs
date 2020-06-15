@@ -158,10 +158,7 @@ namespace Mayday.Game.Screens
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.I), () => _interfaceController.ToggleMainInventory());
         }
 
-        private void SetupWorldCallbacks()
-        {
-            GameWorld.TilePlaced += OnTilePlaced;
-        }
+        private void SetupWorldCallbacks() => GameWorld.TilePlaced += OnTilePlaced;
 
         private void SetupNetworking()
         {
@@ -169,10 +166,6 @@ namespace Mayday.Game.Screens
             var gameClientListener = new MaydayClientNetworkListener(NetworkManager);
             var consumers = new GamePacketConsumerManager(this);
             consumers.InjectInto(gameClientListener, gameServerListener);
-        }
-        
-        public override void Begin()
-        {
         }
         
         public override void RenderScreen()
@@ -191,10 +184,6 @@ namespace Mayday.Game.Screens
             }
             
             GraphicsUtils.Instance.End();
-        }
-
-        public override void Finish()
-        {
         }
 
         public override void Update()

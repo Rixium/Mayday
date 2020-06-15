@@ -48,9 +48,15 @@ namespace Yetiface.Engine.Screens
             Name = name;
         }
 
-        public abstract void Awake();
+        public virtual void Awake()
+        {
+            
+        }
 
-        public abstract void Begin();
+        public virtual void Begin()
+        {
+            
+        }
 
         public virtual void Update()
         {
@@ -120,7 +126,10 @@ namespace Yetiface.Engine.Screens
             UserInterface?.Draw();
         }
 
-        public abstract void Finish();
+        public virtual void Finish()
+        {
+            
+        }
 
         /// <summary>
         /// Creates a new entity with a position of 0, 0.
