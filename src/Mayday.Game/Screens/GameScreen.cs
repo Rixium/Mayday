@@ -177,9 +177,8 @@ namespace Mayday.Game.Screens
             
             foreach (var entity in GameWorld.WorldItems.GetItems())
             {
-                if (!Camera.Intersects(entity.GetBounds())) continue;
-                if (entity.GetType() != typeof(ItemDrop)) continue;
-                var item = (ItemDrop) entity;
+                if (!UpdateResolver.ShouldUpdate(entity)) continue;
+                if (!(entity is ItemDrop item)) continue;
                 GraphicsUtils.Instance.SpriteBatch.Draw(ContentChest.ItemTextures[item.Item.ItemId], new Vector2(item.X, item.Y), Color.White);
             }
             
