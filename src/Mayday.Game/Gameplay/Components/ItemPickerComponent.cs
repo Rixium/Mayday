@@ -44,7 +44,6 @@ namespace Mayday.Game.Gameplay.Components
                 _inventoryComponent.AddItemToInventory(item.Item);
             }
 
-            _worldItemSet.Clear();
             _worldItemSet.Set(newList);
         }
 
