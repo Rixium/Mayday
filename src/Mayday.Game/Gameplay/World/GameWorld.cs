@@ -123,8 +123,11 @@ namespace Mayday.Game.Gameplay.World
                     select Tiles[(int) (Width / 2.0f), tile.TileY])
                 .FirstOrDefault();
 
-        public void DropItem(ItemDrop item) => 
+        public void DropItem(ItemDrop item)
+        {
+            item.GameWorld = this;
             WorldItems.Add(item);
-        
+        }
+
     }
 }

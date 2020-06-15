@@ -16,7 +16,7 @@ namespace Mayday.Game.Gameplay.Entities
 
         public void SetClientId()
         {
-            EntityId = SteamClient.SteamId;
+            EntityId = (ulong) Randomizer.Next(0, 100000);
         }
     }
 }

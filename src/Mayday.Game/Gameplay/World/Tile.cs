@@ -1,6 +1,7 @@
 ﻿using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Data;
 using Mayday.Game.Gameplay.Entities;
+using Mayday.Game.Networking;
 using Microsoft.Xna.Framework;
 using Yetiface.Engine.Utils;
 
@@ -84,6 +85,7 @@ namespace Mayday.Game.Gameplay.World
             Destroy?.Invoke(this);
             Components.Clear();
             UpdateableComponents.Clear();
+            PacketManager.SendTileChangePacket(this);
         }
 
     }
