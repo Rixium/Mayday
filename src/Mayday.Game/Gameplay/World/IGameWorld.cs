@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mayday.Game.Enums;
+using Mayday.Game.Gameplay.Collections;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.Items;
 
@@ -13,7 +14,7 @@ namespace Mayday.Game.Gameplay.World
         Tile[,] Tiles { get; set; }
         int Width { get; set; }
         int Height { get; set; }
-        IList<IEntity> WorldItems { get; set; }
+        IWorldItemSet WorldItems { get; set; }
         void Move(IEntity player,
             float xMove,
             float yMove,

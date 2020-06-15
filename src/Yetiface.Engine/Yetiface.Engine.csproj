@@ -71,6 +71,7 @@
     <Compile Include="Networking\Packets\INetworkPacket.cs" />
     <Compile Include="Networking\Packets\IPacketDefinition.cs" />
     <Compile Include="Networking\Packets\PacketDefinition.cs" />
+    <Compile Include="Optimization\IUpdateResolver.cs" />
     <Compile Include="UI\IUserInterface.cs" />
     <Compile Include="UI\MyraUserInterface.cs" />
     <Compile Include="Utils\ArrayUtils.cs" />

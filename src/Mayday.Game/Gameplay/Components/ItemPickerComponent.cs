@@ -1,27 +1,32 @@
 ﻿using System.Collections.Generic;
+using Mayday.Game.Gameplay.Collections;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.Items;
-using Mayday.Game.Screens;
+using Yetiface.Engine.Optimization;
 
 namespace Mayday.Game.Gameplay.Components
 {
     public class ItemPickerComponent : IUpdateable
     {
-        private readonly GameScreen _gameScreen;
+        
         private InventoryComponent _inventoryComponent;
+        private IWorldItemSet _worldItemSet;
+        private IUpdateResolver<IEntity> _updateResolver;
+
         public IEntity Entity { get; set; }
 
-        public ItemPickerComponent(GameScreen gameScreen)
+        public ItemPickerComponent(IWorldItemSet worldItemSet, IUpdateResolver<IEntity> updateResolver)
         {
-            _gameScreen = gameScreen;
+            _worldItemSet = worldItemSet;
+            _updateResolver = updateResolver;
         }
         
         public void Update()
         {
             var newList = new List<IEntity>();
-            foreach (var entity in Entity.GameWorld.WorldItems)
+            foreach (var entity in _worldItemSet.GetItems())
             {
-                if (!_gameScreen.Camera.Intersects(entity.GetBounds()))
+                if (!_updateResolver.ShouldUpdate(entity))
                 {
                     newList.Add(entity);
                     continue;
@@ -43,7 +48,8 @@ namespace Mayday.Game.Gameplay.Components
                 _inventoryComponent.AddItemToInventory(item.Item);
             }
 
-            Entity.GameWorld.WorldItems = newList;
+            _worldItemSet.Clear();
+            _worldItemSet.Set(newList);
         }
 
         private bool CloseEnoughToGet(IEntity item) => item.GetBounds().Intersects(Entity.GetBounds());

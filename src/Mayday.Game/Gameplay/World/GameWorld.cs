@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Mayday.Game.Enums;
+using Mayday.Game.Gameplay.Collections;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.Items;
 using Yetiface.Engine.Utils;
@@ -19,7 +19,7 @@ namespace Mayday.Game.Gameplay.World
         public int Width { get; set; }
 
         public int Height { get; set; }
-        public IList<IEntity> WorldItems { get; set; } = new List<IEntity>();
+        public IWorldItemSet WorldItems { get; set; } = new WorldItemSet();
         public Action<Tile> TilePlaced { get; set; }
 
         public void Move(IEntity player, float xMove, float yMove, float yVelocity)

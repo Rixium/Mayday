@@ -10,6 +10,7 @@ using Mayday.Game.Graphics.Renderers;
 using Mayday.Game.Networking;
 using Mayday.Game.Networking.Consumers;
 using Mayday.Game.Networking.Listeners;
+using Mayday.Game.Optimization;
 using Mayday.Game.UI.Controllers;
 using Mayday.UI.Views;
 using Microsoft.Xna.Framework;
@@ -17,6 +18,7 @@ using Microsoft.Xna.Framework.Input;
 using Yetiface.Engine;
 using Yetiface.Engine.Inputs;
 using Yetiface.Engine.Networking;
+using Yetiface.Engine.Optimization;
 using Yetiface.Engine.Screens;
 using Yetiface.Engine.UI;
 using Yetiface.Engine.Utils;
@@ -28,7 +30,7 @@ namespace Mayday.Game.Screens
     {
         public INetworkManager NetworkManager { get; }
         public IGameWorld GameWorld { get; private set; }
-        
+        public IUpdateResolver<IEntity> UpdateResolver;
         public IBluePrintManager BluePrintManager { get; set; }
 
         public readonly IPlayerSet Players = new PlayerSet();
@@ -53,6 +55,7 @@ namespace Mayday.Game.Screens
             UserInterface = new MyraUserInterface(gameScreenUserInterface);
             
             BluePrintManager = new BluePrintManager(this);
+            UpdateResolver = new CameraBoundsUpdateResolver(Camera);
         }
 
         public void SetWorld(IGameWorld gameWorld) => GameWorld = gameWorld;
@@ -97,7 +100,7 @@ namespace Mayday.Game.Screens
             var inventoryComponent = player.AddComponent(new InventoryComponent());
             var inventoryBar = inventoryComponent.AddInventory(new Inventory(8));
             var mainInventory = inventoryComponent.AddInventory(new Inventory(24));
-            var itemPickerComponent = player.AddComponent(new ItemPickerComponent(this));
+            var itemPickerComponent = player.AddComponent(new ItemPickerComponent(GameWorld.WorldItems, UpdateResolver));
             playerAnimationComponent = player.AddComponent(playerAnimationComponent);
 
             moveComponent.PositionChanged += PacketManager.SendPositionPacket;
@@ -179,7 +182,7 @@ namespace Mayday.Game.Screens
             _worldRenderer.Draw(GameWorld, Camera);
             _playerRenderer.DrawPlayers(Players.GetAll());
             
-            foreach (var entity in GameWorld.WorldItems)
+            foreach (var entity in GameWorld.WorldItems.GetItems())
             {
                 if (!Camera.Intersects(entity.GetBounds())) continue;
                 if (entity.GetType() != typeof(ItemDrop)) continue;
@@ -203,7 +206,7 @@ namespace Mayday.Game.Screens
             foreach(var player in Players.GetAll())
                 player.Update();
             
-            foreach(var entity in GameWorld.WorldItems)
+            foreach(var entity in GameWorld.WorldItems.GetItems())
                 entity.Update();
             
             Camera.Update();
