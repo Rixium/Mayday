@@ -147,7 +147,7 @@ namespace Mayday.Game.Screens
 
             var newPlayerPacket = new NewPlayerPacket
             {
-                SteamId = SteamClient.SteamId,
+                SteamId = player.EntityId,
                 HeadId = player.HeadId,
                 X = (int) player.X,
                 Y = (int) player.Y

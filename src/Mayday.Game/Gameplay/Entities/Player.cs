@@ -1,5 +1,4 @@
-﻿using Steamworks;
-using Yetiface.Engine.Utils;
+﻿using Yetiface.Engine.Utils;
 
 namespace Mayday.Game.Gameplay.Entities
 {
