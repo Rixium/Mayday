@@ -100,6 +100,23 @@ namespace Mayday.Game.UI.Controllers
             SelectedItemSlotChanged?.Invoke(_currentSelection);
         }
         
+        public void IncrementSelection(int value)
+        {
+            UserInterface.InventorySlotBackgrounds[_currentSelection].Color = Microsoft.Xna.Framework.Color.White;
+            var newSelection = _currentSelection + value;
+            
+            if (newSelection < 0)
+                newSelection = UserInterface.InventorySlotBackgrounds.Count - 1;
+            else if (newSelection >= UserInterface.InventorySlotBackgrounds.Count)
+                newSelection = 0;
+            
+            if (_currentSelection == newSelection) return;
+            _currentSelection = newSelection;
+            UserInterface.InventorySlotBackgrounds[newSelection].Color = Microsoft.Xna.Framework.Color.Green * 0.5f;
+            SelectedItemSlotChanged?.Invoke(_currentSelection);
+        }
+
+        
             
     }
 }

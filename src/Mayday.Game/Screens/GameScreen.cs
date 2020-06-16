@@ -23,6 +23,7 @@ using Yetiface.Engine.Optimization;
 using Yetiface.Engine.Screens;
 using Yetiface.Engine.UI;
 using Yetiface.Engine.Utils;
+using MouseState = Yetiface.Engine.Utils.MouseState;
 
 namespace Mayday.Game.Screens
 {
@@ -201,6 +202,11 @@ namespace Mayday.Game.Screens
             
             foreach(var entity in GameWorld.WorldItems.GetItems())
                 entity.Update();
+
+            if (MouseState.CurrentState.ScrollWheelValue > MouseState.LastState.ScrollWheelValue)
+                _interfaceController.IncrementSelection(-1);
+            else if (MouseState.CurrentState.ScrollWheelValue < MouseState.LastState.ScrollWheelValue)
+                _interfaceController.IncrementSelection(1);
             
             Camera.Update();
         }
