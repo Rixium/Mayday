@@ -37,22 +37,69 @@ namespace Mayday.Game.Gameplay.Components
             if (button == MouseButton.Left && Time.GameTime.TotalGameTime.TotalSeconds > _lastPlaced + 0.5f)
             {
                 if (_selectedItem == null) return;
-                if (_selectedItem.TileType == TileType.None) return;
-                var mousePosition = MouseState.Bounds(_camera.GetMatrix());
 
-                var mouseTileX = mousePosition.X / GameWorld.TileSize;
-                var mouseTileY = mousePosition.Y / GameWorld.TileSize;
+                if (_selectedItem.TileType == TileType.None)
+                {
+                    PlaceAsWorldObject();
+                    return;
+                }
 
-                if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > GameWorld.Width - 1 ||
-                    mouseTileY > GameWorld.Height - 1) return;
-                if (!CanPlaceAt(mouseTileX, mouseTileY)) return;
-                var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
-                if (!CloseEnoughToTile(tile)) return;
-                GameWorld.PlaceTile(tile, _selectedItem.TileType);
-                YetiGame.ContentManager.Load<SoundEffect>("place").Play();
-                ItemUsed?.Invoke(_selectedItem);
-                _lastPlaced = Time.GameTime.TotalGameTime.TotalSeconds;
+                PlaceAsTile();
             }
+        }
+
+        private void PlaceAsWorldObject()
+        {
+            var mousePosition = MouseState.Bounds(_camera.GetMatrix());
+
+            var mouseTileX = mousePosition.X / GameWorld.TileSize;
+            var mouseTileY = mousePosition.Y / GameWorld.TileSize;
+
+            if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > GameWorld.Width - 1 ||
+                mouseTileY > GameWorld.Height - 1) return;
+            if (!CanPlaceAt(mouseTileX, mouseTileY)) return;
+            var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
+            if (!CloseEnoughToTile(tile)) return;
+            GameWorld.PlaceTile(tile, _selectedItem.TileType);
+            YetiGame.ContentManager.Load<SoundEffect>("place").Play();
+            ItemUsed?.Invoke(_selectedItem);
+            _lastPlaced = Time.GameTime.TotalGameTime.TotalSeconds;
+        }
+
+        private void PlaceAsTile()
+        {
+            var mousePosition = MouseState.Bounds(_camera.GetMatrix());
+
+            var mouseTileX = mousePosition.X / GameWorld.TileSize;
+            var mouseTileY = mousePosition.Y / GameWorld.TileSize;
+
+            if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > GameWorld.Width - 1 ||
+                mouseTileY > GameWorld.Height - 1) return;
+
+            var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
+            if (!CloseEnoughToTile(tile)) return;
+            if (WorldObjectIntersectsSomethingAt(_selectedItem, tile)) return;
+
+            //
+            // GameWorld.PlaceWorldEntity(tile, _selectedItem.TileType);
+            // YetiGame.ContentManager.Load<SoundEffect>("place").Play();
+            // ItemUsed?.Invoke(_selectedItem);
+            // _lastPlaced = Time.GameTime.TotalGameTime.TotalSeconds;
+        }
+
+        private bool WorldObjectIntersectsSomethingAt(IItem selectedItem, Tile tile)
+        {
+            var worldObjectTexture = ContentChest.ItemTextures[selectedItem.ItemId];
+
+            for (var i = tile.TileX; i < tile.TileX + worldObjectTexture.Width / GameWorld.TileSize; i++)
+            {
+                for (var j = tile.TileY; j < tile.TileY + worldObjectTexture.Height / GameWorld.TileSize; j++)
+                {
+                    if (!CanPlaceAt(i, j)) return true;
+                }
+            }
+
+            return false;
         }
 
         private bool CanPlaceAt(int tileX, int tileY)
