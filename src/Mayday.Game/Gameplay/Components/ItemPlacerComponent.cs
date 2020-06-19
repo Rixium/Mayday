@@ -57,7 +57,8 @@ namespace Mayday.Game.Gameplay.Components
 
         private bool CanPlaceAt(int tileX, int tileY)
         {
-            return GameWorld.Tiles[tileX, tileY].TileType == TileType.None;
+            return GameWorld.Tiles[tileX, tileY].TileType == TileType.None &&
+                !GameWorld.AnythingCollidesWith(GameWorld.Tiles[tileX, tileY]);
         }
 
         private bool CloseEnoughToTile(Tile tile)

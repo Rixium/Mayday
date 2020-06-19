@@ -130,6 +130,8 @@ namespace Mayday.Game.Screens
 
             Players.Add(player);
 
+            GameWorld.AddTrackedEntity(player);
+
             return player;
         }
 

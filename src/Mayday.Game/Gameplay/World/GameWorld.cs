@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Collections;
@@ -21,6 +22,7 @@ namespace Mayday.Game.Gameplay.World
         public int Height { get; set; }
         public IWorldItemSet WorldItems { get; set; } = new WorldItemSet();
         public Action<Tile> TilePlaced { get; set; }
+        public HashSet<IEntity> WorldEntities { get; } = new HashSet<IEntity>();
 
         public void Move(IEntity player, float xMove, float yMove, float yVelocity)
         {
@@ -128,6 +130,11 @@ namespace Mayday.Game.Gameplay.World
             item.GameWorld = this;
             WorldItems.Add(item);
         }
+
+        public bool AnythingCollidesWith(Tile tile) =>
+            WorldEntities.Any(entity => tile.GetBounds().Intersects(entity.GetBounds()));
+
+        public void AddTrackedEntity(Player player) => WorldEntities.Add(player);
 
     }
 }

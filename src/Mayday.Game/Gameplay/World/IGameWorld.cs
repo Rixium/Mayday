@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Collections;
 using Mayday.Game.Gameplay.Entities;
@@ -23,5 +22,7 @@ namespace Mayday.Game.Gameplay.World
         void PlaceTile(Tile tile, TileType tileType);
         Tile GetRandomSpawnLocation();
         void DropItem(ItemDrop item);
+        bool AnythingCollidesWith(Tile gameWorldTile);
+        void AddTrackedEntity(Player player);
     }
 }
