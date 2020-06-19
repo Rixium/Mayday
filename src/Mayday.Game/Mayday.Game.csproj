@@ -71,7 +71,6 @@
     <Compile Include="Gameplay\Data\TileProperties.cs" />
     <Compile Include="Gameplay\Entities\Entity.cs" />
     <Compile Include="Gameplay\Entities\IEntity.cs" />
-    <Compile Include="Gameplay\Entities\Player.cs" />
     <Compile Include="Gameplay\Items\IInventory.cs" />
     <Compile Include="Gameplay\Items\IItem.cs" />
     <Compile Include="Gameplay\Items\IItemStack.cs" />

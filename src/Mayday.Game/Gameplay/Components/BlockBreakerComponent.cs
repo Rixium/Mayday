@@ -28,7 +28,7 @@ namespace Mayday.Game.Gameplay.Components
         
         private bool CloseEnoughToTile(Tile tile)
         {
-            var playerBounds = Entity.GetBounds();
+            var playerBounds = Entity.GetCurrentBounds();
             var playerLeft = playerBounds.Left;
             var playerRight = playerBounds.Right;
             var playerTop = playerBounds.Top;

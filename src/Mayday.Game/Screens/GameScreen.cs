@@ -16,6 +16,7 @@ using Mayday.UI.Views;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Steamworks;
 using Yetiface.Engine;
 using Yetiface.Engine.Inputs;
 using Yetiface.Engine.Networking;
@@ -36,7 +37,7 @@ namespace Mayday.Game.Screens
         public IBluePrintManager BluePrintManager { get; set; }
 
         public readonly IPlayerSet Players = new PlayerSet();
-        public Player MyPlayer { get; private set; }
+        public IEntity MyPlayer { get; private set; }
 
         private readonly IWorldRenderer _worldRenderer;
         private readonly IPlayerRenderer _playerRenderer;
@@ -76,14 +77,14 @@ namespace Mayday.Game.Screens
 
         private void SetupTile(IEntity tile) => BluePrintManager.SetupFor(tile);
 
-        public Player AddPlayer(Player player, bool isClients = false)
+        public IEntity AddPlayer(IEntity player, bool isClients = false)
         {
             if (isClients)
             {
                 var spawnTile = GameWorld.GetRandomSpawnLocation();
                 player.X = spawnTile.TileX * GameWorld.TileSize;
                 player.Y = spawnTile.TileY * GameWorld.TileSize - 70 * Game1.GlobalGameScale;
-                player.SetClientId();
+                player.EntityId = SteamClient.SteamId;
                 MyPlayer = player;
             }
 
@@ -91,9 +92,9 @@ namespace Mayday.Game.Screens
 
             var playerAnimationComponent = new PlayerAnimationComponent
             {
-                HeadAnimator = new Animator(ContentChest.Heads[player.HeadId].Animations),
-                BodyAnimator = new Animator(ContentChest.Bodies[player.BodyId].Animations),
-                LegsAnimator = new Animator(ContentChest.Legs[player.LegsId].Animations)
+                HeadAnimator = new Animator(ContentChest.Heads[1].Animations),
+                BodyAnimator = new Animator(ContentChest.Bodies[1].Animations),
+                LegsAnimator = new Animator(ContentChest.Legs[1].Animations)
             };
             
             var moveComponent = player.AddComponent(new MoveComponent());
@@ -107,6 +108,10 @@ namespace Mayday.Game.Screens
 
             moveComponent.PositionChanged += PacketManager.SendPositionPacket;
             moveComponent.MoveDirectionChanged += PacketManager.SendMoveDirectionPacket;
+
+            player.Bounds = new RectangleF(18 * Game1.GlobalGameScale, 18 * Game1.GlobalGameScale,
+                42 * Game1.GlobalGameScale - 17 * Game1.GlobalGameScale - 18 * Game1.GlobalGameScale,
+                33 * Game1.GlobalGameScale - 19 * Game1.GlobalGameScale);
 
             if (isClients)
             {

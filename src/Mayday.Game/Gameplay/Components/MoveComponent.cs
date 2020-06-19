@@ -53,7 +53,7 @@ namespace Mayday.Game.Gameplay.Components
 
         private void CheckPlayerHit()
         {
-            var playerBounds = Entity.GetBounds();
+            var playerBounds = Entity.GetCurrentBounds();
 
             var tileStartX = (playerBounds.Left + 1) / Entity.GameWorld.TileSize;
             var tileEndX = (playerBounds.Right - 1) / Entity.GameWorld.TileSize;

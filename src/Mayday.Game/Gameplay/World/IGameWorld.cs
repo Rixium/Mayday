@@ -23,6 +23,6 @@ namespace Mayday.Game.Gameplay.World
         Tile GetRandomSpawnLocation();
         void DropItem(ItemDrop item);
         bool AnythingCollidesWith(Tile gameWorldTile);
-        void AddTrackedEntity(Player player);
+        void AddTrackedEntity(IEntity entity);
     }
 }

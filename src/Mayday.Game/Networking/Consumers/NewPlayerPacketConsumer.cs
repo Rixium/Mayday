@@ -16,12 +16,11 @@ namespace Mayday.Game.Networking.Consumers
         }
         protected override void ConsumePacket(Connection connection, NewPlayerPacket packet)
         {
-            var player = new Player
+            var player = new Entity
             {
                 EntityId = packet.SteamId,
                 X = packet.X,
-                Y = packet.Y,
-                HeadId = packet.HeadId
+                Y = packet.Y
             };
 
             _gameScreen.AddPlayer(player);

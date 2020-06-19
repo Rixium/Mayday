@@ -12,7 +12,7 @@ namespace Mayday.Game.Optimization
             _camera = camera;
         }
         
-        public bool ShouldUpdate(IEntity entity) => _camera.Intersects(entity.GetBounds());
+        public bool ShouldUpdate(IEntity entity) => _camera.Intersects(entity.GetCurrentBounds());
         
     }
 }

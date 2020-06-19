@@ -28,7 +28,7 @@ namespace Mayday.Game.Gameplay.World
         {
             player.X += xMove;
 
-            var bounds = player.GetBounds();
+            var bounds = player.GetCurrentBounds();
 
             var tileStartX = (bounds.Left / TileSize) - 1;
             var tileEndX = (bounds.Right / TileSize) + 1;
@@ -43,7 +43,7 @@ namespace Mayday.Game.Gameplay.World
                     if (tile == null) continue;
                     if (tile.TileType == TileType.None) continue;
 
-                    var tileBounds = tile.GetBounds();
+                    var tileBounds = tile.GetCurrentBounds();
 
                     if (!bounds.Intersects(tileBounds)) continue;
 
@@ -74,13 +74,13 @@ namespace Mayday.Game.Gameplay.World
                     {
                         var depth = bounds.GetIntersectionDepth(tileBounds);
                         player.X += depth.X;
-                        bounds = player.GetBounds(); 
+                        bounds = player.GetCurrentBounds();
                     }
                 }
             }
 
             player.Y += yMove;
-            bounds = player.GetBounds();
+            bounds = player.GetCurrentBounds();
 
             tileStartX = (bounds.Left / TileSize) - 1;
             tileEndX = (bounds.Right / TileSize) + 1;
@@ -95,13 +95,13 @@ namespace Mayday.Game.Gameplay.World
                     if (tile == null) continue;
                     if (tile.TileType == TileType.None) continue;
 
-                    var tileBounds = tile.GetBounds();
+                    var tileBounds = tile.GetCurrentBounds();
 
                     if (!bounds.Intersects(tileBounds)) continue;
 
                     var depth = bounds.GetIntersectionDepth(tileBounds);
                     player.Y += depth.Y;
-                    bounds = player.GetBounds();
+                    bounds = player.GetCurrentBounds();
                 }
             }
         }
@@ -132,9 +132,9 @@ namespace Mayday.Game.Gameplay.World
         }
 
         public bool AnythingCollidesWith(Tile tile) =>
-            WorldEntities.Any(entity => tile.GetBounds().Intersects(entity.GetBounds()));
+            WorldEntities.Any(entity => tile.GetCurrentBounds().Intersects(entity.GetCurrentBounds()));
 
-        public void AddTrackedEntity(Player player) => WorldEntities.Add(player);
+        public void AddTrackedEntity(IEntity entity) => WorldEntities.Add(entity);
 
     }
 }

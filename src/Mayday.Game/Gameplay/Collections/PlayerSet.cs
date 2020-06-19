@@ -5,19 +5,19 @@ namespace Mayday.Game.Gameplay.Collections
 {
     public class PlayerSet : IPlayerSet
     {
-        private Dictionary<ulong, Player> Players { get; set; }
-            = new Dictionary<ulong, Player>();
+        private Dictionary<ulong, IEntity> Players { get; set; }
+            = new Dictionary<ulong, IEntity>();
 
-        public Player Add(Player player)
+        public IEntity Add(IEntity player)
         {
             Players.Add(player.EntityId, player);
             return player;
         }
 
-        public Player Get(ulong id) => 
+        public IEntity Get(ulong id) =>
             Players.ContainsKey(id) ? Players[id] : null;
 
-        public IEnumerable<Player> GetAll() => 
+        public IEnumerable<IEntity> GetAll() =>
             Players.Values;
     }
 }

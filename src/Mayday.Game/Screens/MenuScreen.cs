@@ -11,7 +11,6 @@ using Mayday.Game.UI.Controllers;
 using Mayday.UI.Views;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.TextureAtlases;
-using Steamworks;
 using Steamworks.Data;
 using Yetiface.Engine;
 using Yetiface.Engine.Networking;
@@ -87,12 +86,7 @@ namespace Mayday.Game.Screens
             
             gameScreen.SetWorld(world);
 
-            gameScreen.AddPlayer(new Player
-            {
-                HeadId = 1,
-                BodyId = 1,
-                LegsId = 1
-            }, true);
+            gameScreen.AddPlayer(new Entity(), true);
 
 
             ScreenManager.ChangeScreen(gameScreen.Name);
@@ -140,15 +134,12 @@ namespace Mayday.Game.Screens
             
             gameScreen.SetWorld(world);
             
-            var player = gameScreen.AddPlayer(new Player
-            {
-                HeadId = 1
-            }, true);
+            var player = gameScreen.AddPlayer(new Entity(), true);
 
             var newPlayerPacket = new NewPlayerPacket
             {
                 SteamId = player.EntityId,
-                HeadId = player.HeadId,
+                HeadId = 1,
                 X = (int) player.X,
                 Y = (int) player.Y
             };
@@ -158,12 +149,11 @@ namespace Mayday.Game.Screens
 
             foreach (var netPlayer in ((NetworkWorldMaker) _worldMaker).PlayersToAdd)
             {
-                gameScreen.AddPlayer(new Player
+                gameScreen.AddPlayer(new Entity
                 {
                     X = netPlayer.X,
                     Y = netPlayer.Y,
-                    EntityId = netPlayer.SteamId,
-                    HeadId = netPlayer.HeadId
+                    EntityId = netPlayer.SteamId
                 });
             }
             

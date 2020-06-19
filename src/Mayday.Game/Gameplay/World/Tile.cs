@@ -76,7 +76,7 @@ namespace Mayday.Game.Gameplay.World
             TileY = tileY;
         }
 
-        public override RectangleF GetBounds() => new RectangleF(X, Y, TileSize, TileSize);
+        public override RectangleF GetCurrentBounds() => new RectangleF(X, Y, TileSize, TileSize);
 
         public void Break()
         {

@@ -10,7 +10,7 @@ using IUpdateable = Mayday.Game.Gameplay.Components.IUpdateable;
 
 namespace Mayday.Game.Gameplay.Entities
 {
-    public abstract class Entity : IEntity
+    public class Entity : IEntity
     {
         public ulong EntityId { get; set; }
         public Action<IEntity> Destroy { get; set; }
@@ -21,15 +21,18 @@ namespace Mayday.Game.Gameplay.Entities
         public Vector2 Position => new Vector2(X, Y);
         
         public Vector2 Center => 
-            new Vector2(GetBounds().X + GetBounds().Width / 2.0f, GetBounds().Y + GetBounds().Height / 2.0f);
+            new Vector2(GetCurrentBounds().X + GetCurrentBounds().Width / 2.0f, GetCurrentBounds().Y + GetCurrentBounds().Height / 2.0f);
 
         public int FacingDirection { get; set; }
 
         protected readonly IList<IComponent> Components = new List<IComponent>();
         protected readonly IList<IUpdateable> UpdateableComponents = new List<IUpdateable>();
-        
-        public abstract RectangleF GetBounds();
-        
+
+        public RectangleF Bounds { get; set; }
+
+        public virtual RectangleF GetCurrentBounds() =>
+            new RectangleF(Bounds.X + X, Bounds.Y + Y, Bounds.Width, Bounds.Height);
+
         public virtual void Update()
         {
             foreach (var component in UpdateableComponents)

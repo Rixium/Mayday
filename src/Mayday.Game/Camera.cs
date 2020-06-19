@@ -36,8 +36,8 @@ namespace Mayday.Game
             _minY = (int) (Window.Center.Y / _zoom);
 
             if (_following != null)
-                Goto(new Vector2(_following.GetBounds().X + _following.GetBounds().Width / 2.0f,
-                    _following.GetBounds().Y + _following.GetBounds().Height / 2.0f));
+                Goto(new Vector2(_following.GetCurrentBounds().X + _following.GetCurrentBounds().Width / 2.0f,
+                    _following.GetCurrentBounds().Y + _following.GetCurrentBounds().Height / 2.0f));
 
             var (x, y) = Vector2.Lerp(Position, ToGo, 0.03f);
 

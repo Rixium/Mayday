@@ -5,8 +5,8 @@ namespace Mayday.Game.Gameplay.Collections
 {
     public interface IPlayerSet
     {
-        Player Add(Player player);
-        Player Get(ulong id);
-        IEnumerable<Player> GetAll();
+        IEntity Add(IEntity player);
+        IEntity Get(ulong id);
+        IEnumerable<IEntity> GetAll();
     }
 }

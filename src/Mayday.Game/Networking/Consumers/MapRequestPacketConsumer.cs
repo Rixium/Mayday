@@ -57,7 +57,7 @@ namespace Mayday.Game.Networking.Consumers
                     SteamId = player.EntityId,
                     X = (int) player.X,
                     Y = (int) player.Y,
-                    HeadId = player.HeadId
+                    HeadId = 1
                 };
 
                 var package = MessagePackager.Package(playerPacket);

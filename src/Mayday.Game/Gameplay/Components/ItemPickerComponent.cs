@@ -67,7 +67,7 @@ namespace Mayday.Game.Gameplay.Components
             _worldItemSet.Set(newList);
         }
 
-        private bool CloseEnoughToGet(IEntity item) => item.GetBounds().Intersects(Entity.GetBounds());
+        private bool CloseEnoughToGet(IEntity item) => item.GetCurrentBounds().Intersects(Entity.GetCurrentBounds());
 
         public void OnAddedToEntity()
         {

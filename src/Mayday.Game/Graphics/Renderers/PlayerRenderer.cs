@@ -15,13 +15,13 @@ namespace Mayday.Game.Graphics.Renderers
         private IDictionary<ulong, PlayerAnimationComponent> _playerAnimationComponents = 
             new Dictionary<ulong, PlayerAnimationComponent>();
         
-        public void DrawPlayers(IEnumerable<Player> players)
+        public void DrawPlayers(IEnumerable<IEntity> players)
         {
             foreach(var player in players)
                 DrawPlayer(player);
         }
 
-        public void DrawPlayer(Player player)
+        public void DrawPlayer(IEntity player)
         {
             var playerAnimationComponent = GetPlayerAnimationComponent(player);
             
@@ -41,7 +41,7 @@ namespace Mayday.Game.Graphics.Renderers
             
         }
 
-        private PlayerAnimationComponent GetPlayerAnimationComponent(Player player)
+        private PlayerAnimationComponent GetPlayerAnimationComponent(IEntity player)
         {
             _playerAnimationComponents.TryGetValue(player.EntityId, out var component);
 
