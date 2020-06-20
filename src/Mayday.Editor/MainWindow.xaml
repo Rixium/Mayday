@@ -1,0 +1,21 @@
+﻿<Window x:Class="Mayday.Editor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:Mayday.Editor.ViewModels"
+        mc:Ignorable="d"
+        Title="Mayday Editor | Menu" Height="350" Width="525" d:DataContext="{vm:MainWindowViewModel}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Vertical" Width="Auto" Grid.Column="1" Margin="20px">
+            <TextBlock Text="Mayday Editor" Margin="0 0 0 10px" FontSize="20px" TextAlignment="Center"/>
+            <Button Command="{Binding CreateItemCommand}" Content="Create Item" Margin="0 0 0 10px"/>
+            <Button Command="{Binding CreateWorldObjectCommand}" Content="Create Object"/>
+        </StackPanel>
+    </Grid>
+</Window>
