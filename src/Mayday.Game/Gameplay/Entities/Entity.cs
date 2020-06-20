@@ -33,6 +33,8 @@ namespace Mayday.Game.Gameplay.Entities
         public virtual RectangleF GetCurrentBounds() =>
             new RectangleF(Bounds.X + X, Bounds.Y + Y, Bounds.Width, Bounds.Height);
 
+        public Entity(ulong entityId) => EntityId = entityId;
+
         public virtual void Update()
         {
             foreach (var component in UpdateableComponents)

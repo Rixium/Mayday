@@ -54,8 +54,10 @@
     <Compile Include="Gameplay\Blueprints\IBluePrintManager.cs" />
     <Compile Include="Gameplay\Collections\IPlayerSet.cs" />
     <Compile Include="Gameplay\Collections\IWorldItemSet.cs" />
+    <Compile Include="Gameplay\Collections\IWorldObjectSet.cs" />
     <Compile Include="Gameplay\Collections\PlayerSet.cs" />
     <Compile Include="Gameplay\Collections\WorldItemSet.cs" />
+    <Compile Include="Gameplay\Collections\WorldObjectSet.cs" />
     <Compile Include="Gameplay\Components\BlockBreakerComponent.cs" />
     <Compile Include="Gameplay\Components\CharacterControllerComponent.cs" />
     <Compile Include="Gameplay\Components\GravityComponent.cs" />
@@ -68,6 +70,7 @@
     <Compile Include="Gameplay\Components\JumpComponent.cs" />
     <Compile Include="Gameplay\Components\MoveComponent.cs" />
     <Compile Include="Gameplay\Components\PlayerAnimationComponent.cs" />
+    <Compile Include="Gameplay\Components\WorldObjectManagerComponent.cs" />
     <Compile Include="Gameplay\Data\TileProperties.cs" />
     <Compile Include="Gameplay\Entities\Entity.cs" />
     <Compile Include="Gameplay\Entities\IEntity.cs" />

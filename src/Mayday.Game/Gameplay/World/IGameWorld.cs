@@ -24,5 +24,6 @@ namespace Mayday.Game.Gameplay.World
         void DropItem(ItemDrop item);
         bool AnythingCollidesWith(Tile gameWorldTile);
         void AddTrackedEntity(IEntity entity);
+        void PlaceWorldEntity(Tile tile, WorldObjectType worldObjectType);
     }
 }

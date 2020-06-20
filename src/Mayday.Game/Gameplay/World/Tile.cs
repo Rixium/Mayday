@@ -10,6 +10,9 @@ namespace Mayday.Game.Gameplay.World
     public class Tile : Entity
     {
 
+        private static ulong _tileEntityIdCounter = 1;
+        private static ulong CurrentTileEntityId => _tileEntityIdCounter++;
+
         public int TileSize => GameWorld.TileSize;
 
         private float _x;
@@ -69,7 +72,7 @@ namespace Mayday.Game.Gameplay.World
         public Vector2 RenderCenter => new Vector2(X + TileSize / 2.0f, Y + TileSize / 2.0f);
         public int BlobValue { get; set; } = -1;
 
-        public Tile(TileType tileType, int tileX, int tileY)
+        public Tile(TileType tileType, int tileX, int tileY) : base(CurrentTileEntityId)
         {
             TileType = tileType;
             TileX = tileX;

@@ -8,6 +8,7 @@ namespace Mayday.Game.Gameplay.Items
         public string Name { get; set; }
         public int MaxStackSize { get; set; }
         public TileType TileType { get; set; } = TileType.None;
+        public WorldObjectType WorldObjectType { get; set; } = WorldObjectType.None;
 
         public bool IsTheSameAs(IItem item)
             => item.ItemId == ItemId;

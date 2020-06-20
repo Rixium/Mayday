@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Collections;
+using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.Items;
 using Yetiface.Engine.Utils;
@@ -11,6 +12,9 @@ namespace Mayday.Game.Gameplay.World
 {
     public class GameWorld : IGameWorld
     {
+        private static ulong _worldObjectEntityId = 1;
+        private static ulong CurrentWorldObjectEntityId => _worldObjectEntityId++;
+
         public int TileSize { get; set; }
         public Tile[,] Tiles { get; set; }
 
@@ -23,6 +27,8 @@ namespace Mayday.Game.Gameplay.World
         public IWorldItemSet WorldItems { get; set; } = new WorldItemSet();
         public Action<Tile> TilePlaced { get; set; }
         public HashSet<IEntity> WorldEntities { get; } = new HashSet<IEntity>();
+
+        public IWorldObjectSet WorldObjects { get; set; } = new WorldObjectSet();
 
         public void Move(IEntity player, float xMove, float yMove, float yVelocity)
         {
@@ -135,6 +141,13 @@ namespace Mayday.Game.Gameplay.World
             WorldEntities.Any(entity => tile.GetCurrentBounds().Intersects(entity.GetCurrentBounds()));
 
         public void AddTrackedEntity(IEntity entity) => WorldEntities.Add(entity);
+
+        public void PlaceWorldEntity(Tile tile, WorldObjectType worldObjectType)
+        {
+            var entity = new Entity(CurrentWorldObjectEntityId);
+            entity.AddComponent(new WorldObjectManagerComponent(worldObjectType));
+            WorldObjects.Add(entity);
+        }
 
     }
 }

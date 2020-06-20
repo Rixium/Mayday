@@ -84,7 +84,6 @@ namespace Mayday.Game.Screens
                 var spawnTile = GameWorld.GetRandomSpawnLocation();
                 player.X = spawnTile.TileX * GameWorld.TileSize;
                 player.Y = spawnTile.TileY * GameWorld.TileSize - 70 * Game1.GlobalGameScale;
-                player.EntityId = SteamClient.SteamId;
                 MyPlayer = player;
             }
 

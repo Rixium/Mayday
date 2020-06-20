@@ -8,6 +8,7 @@ namespace Mayday.Game.Gameplay.Items
         string Name { get; set; }
         int MaxStackSize { get; set; }
         TileType TileType { get; set; }
+        WorldObjectType WorldObjectType { get; set; }
         bool IsTheSameAs(IItem item);
     }
 }

@@ -80,11 +80,10 @@ namespace Mayday.Game.Gameplay.Components
             if (!CloseEnoughToTile(tile)) return;
             if (WorldObjectIntersectsSomethingAt(_selectedItem, tile)) return;
 
-            //
-            // GameWorld.PlaceWorldEntity(tile, _selectedItem.TileType);
-            // YetiGame.ContentManager.Load<SoundEffect>("place").Play();
-            // ItemUsed?.Invoke(_selectedItem);
-            // _lastPlaced = Time.GameTime.TotalGameTime.TotalSeconds;
+            GameWorld.PlaceWorldEntity(tile, _selectedItem.WorldObjectType);
+            YetiGame.ContentManager.Load<SoundEffect>("place").Play();
+            ItemUsed?.Invoke(_selectedItem);
+            _lastPlaced = Time.GameTime.TotalGameTime.TotalSeconds;
         }
 
         private bool WorldObjectIntersectsSomethingAt(IItem selectedItem, Tile tile)
