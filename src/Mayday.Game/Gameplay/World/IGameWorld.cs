@@ -31,5 +31,6 @@ namespace Mayday.Game.Gameplay.World
         void PlaceWorldEntity(Tile tile, WorldObjectType worldObjectType);
 
         void Update();
+        IEntity GetWorldObjectAbove(Tile tile);
     }
 }

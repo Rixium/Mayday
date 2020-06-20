@@ -185,5 +185,21 @@ namespace Mayday.Game.Gameplay.World
             _trackedEntitiesToRemove.Clear();
         }
 
+        public IEntity GetWorldObjectAbove(Tile tile)
+        {
+            var tileAbove = TryGetTile(tile.TileX, tile.TileY - 1);
+
+            if (tileAbove == null) return null;
+
+            return GetWorldObjectIntersectingTile(tile);
+
+        }
+
+        private IEntity GetWorldObjectIntersectingTile(Tile tile) =>
+            WorldObjects.FirstOrDefault(worldObject =>
+                worldObject
+                    .GetCurrentBounds()
+                    .Intersects(tile.GetCurrentBounds())
+            );
     }
 }

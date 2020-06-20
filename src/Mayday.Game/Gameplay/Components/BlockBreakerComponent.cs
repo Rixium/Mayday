@@ -59,13 +59,19 @@ namespace Mayday.Game.Gameplay.Components
                 var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
 
                 if (!CloseEnoughToTile(tile)) return;
-                if (tile.TileType == TileType.None) return;
+                if (!TileCanBeBroken(tile)) return;
 
                 YetiGame.ContentManager.Load<SoundEffect>("dig").Play();
                 
                 tile.Break();
                 _lastBreak = Time.GameTime.TotalGameTime.TotalSeconds;
             }
+        }
+
+        private bool TileCanBeBroken(Tile tile)
+        {
+            if (tile.TileType == TileType.None) return false;
+            return GameWorld.GetWorldObjectAbove(tile) == null;
         }
     }
 }
