@@ -10,9 +10,9 @@ namespace Mayday.Game.Gameplay.Components
     {
         public IEntity Entity { get; set; }
         public Action<ItemDrop> ItemDrop { get; set; }
-        public ItemType ItemDropType { get; set; }
+        public string ItemDropType { get; set; }
         
-        public ItemDropperComponent(ItemType itemDropType)
+        public ItemDropperComponent(string itemDropType)
         {
             ItemDropType = itemDropType;
         }
@@ -51,7 +51,7 @@ namespace Mayday.Game.Gameplay.Components
             ItemDrop?.Invoke(itemDrop);
         }
 
-        private static Item GetItemData(ItemType itemDropType) =>
+        private static Item GetItemData(string itemDropType) =>
             ContentChest.ItemData.ContainsKey(itemDropType) 
                 ? ContentChest.ItemData[itemDropType] : null;
     }

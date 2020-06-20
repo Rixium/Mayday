@@ -39,7 +39,7 @@ namespace Mayday.Game.Graphics.Renderers
                     if (i < 0 || j < 0 || i > gameWorld.Width - 1 || j > gameWorld.Height - 1) continue;
                     var tile = gameWorld.Tiles[i, j];
 
-                    if (tile.TileType == TileType.None) continue;
+                    if (tile.TileType == TileTypes.None) continue;
 
                     var tileIndex = GetTileBlobValue(gameWorld, tile, _tileBlobMap);
 

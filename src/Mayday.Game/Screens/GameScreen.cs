@@ -129,7 +129,7 @@ namespace Mayday.Game.Screens
                 inventoryBar.InventoryChanged += () => _interfaceController.InventoryBarChanged(inventoryBar);
                 mainInventory.InventoryChanged += () => _interfaceController.MainInventoryChanged(mainInventory);
                 jumpComponent.Jump += PacketManager.SendJumpPacket;
-                inventoryBar.AddItemToInventory(ContentChest.ItemData[ItemType.Shuttle]);
+                inventoryBar.AddItemToInventory(ContentChest.ItemData["Shuttle"]);
             }
 
             Players.Add(player);
@@ -205,7 +205,7 @@ namespace Mayday.Game.Screens
 
             GameWorld.Update();
 
-            foreach (var entity in GameWorld.WorldEntities)
+            foreach (var entity in GameWorld.TrackedEntities)
             {
                 entity.Update();
             }

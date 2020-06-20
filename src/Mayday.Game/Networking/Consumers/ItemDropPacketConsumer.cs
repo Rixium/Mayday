@@ -23,7 +23,7 @@ namespace Mayday.Game.Networking.Consumers
         {
             var itemDrop = new ItemDrop
             {
-                Item = ContentChest.ItemData[(ItemType) packet.ItemId],
+                Item = ContentChest.ItemData[packet.ItemId],
                 X = packet.X,
                 Y = packet.Y
             };

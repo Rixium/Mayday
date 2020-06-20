@@ -26,10 +26,10 @@ namespace Mayday.Game.Gameplay.Blueprints
         {
             var itemDropType = tile.TileProperties?.ItemDropType;
 
-            if (itemDropType == null || itemDropType.Value == ItemType.None) return;
+            if (itemDropType == null || itemDropType == ItemTypes.None) return;
 
             var itemDropperComponent = tile.AddComponent(
-                new ItemDropperComponent(itemDropType.Value));
+                new ItemDropperComponent(itemDropType));
 
             itemDropperComponent.ItemDrop += (itemDrop) =>
             {

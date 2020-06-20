@@ -16,7 +16,7 @@ namespace Mayday.Game.Networking.Consumers
         }
 
         protected override void ConsumePacket(Connection connection, TileTypePacket packet) => 
-            _gameScreen.GameWorld.Tiles[packet.X, packet.Y].TileType = (TileType) packet.TileType;
+            _gameScreen.GameWorld.Tiles[packet.X, packet.Y].TileType = packet.TileType;
         
     }
 }

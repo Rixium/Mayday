@@ -70,7 +70,7 @@ namespace Mayday.Game.Gameplay.Components
 
         private bool TileCanBeBroken(Tile tile)
         {
-            if (tile.TileType == TileType.None) return false;
+            if (tile.TileType == TileTypes.None) return false;
             return GameWorld.GetWorldObjectAbove(tile) == null;
         }
     }

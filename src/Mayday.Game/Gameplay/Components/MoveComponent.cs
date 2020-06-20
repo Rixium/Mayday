@@ -63,7 +63,7 @@ namespace Mayday.Game.Gameplay.Components
                 {
                     var tile = Entity.GameWorld.TryGetTile(i,
                         (int) ((playerBounds.Top - YVelocity) / Entity.GameWorld.TileSize));
-                    if (tile != null && tile.TileType == TileType.None) 
+                    if (tile != null && tile.TileType == TileTypes.None)
                         continue;
                     
                     YVelocity = 0;
@@ -74,7 +74,7 @@ namespace Mayday.Game.Gameplay.Components
                 {
                     var tile = Entity.GameWorld.TryGetTile(i,
                         (int) ((playerBounds.Bottom  + 1) / Entity.GameWorld.TileSize));
-                    if (tile != null && tile.TileType == TileType.None) continue;
+                    if (tile != null && tile.TileType == TileTypes.None) continue;
                     
                     HitFloor?.Invoke();
                     return;

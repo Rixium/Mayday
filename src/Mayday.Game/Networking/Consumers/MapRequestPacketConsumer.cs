@@ -41,7 +41,7 @@ namespace Mayday.Game.Networking.Consumers
                     {
                         X = tileToSend.TileX,
                         Y = tileToSend.TileY,
-                        TileType = (int) tileToSend.TileType
+                        TileType = tileToSend.TileType
                     };
                     var packet = MessagePackager.Package(tileTypePacket);
                     NetworkManager.SendMessage(packet, connection);

@@ -37,7 +37,7 @@ namespace Mayday.Game.Gameplay.Components
             {
                 if (_selectedItem == null) return;
 
-                if (_selectedItem.TileType == TileType.None)
+                if (_selectedItem.TileType == TileTypes.None)
                 {
                     PlaceAsWorldObject();
                     return;
@@ -106,7 +106,7 @@ namespace Mayday.Game.Gameplay.Components
 
             if (tile == null) return false;
 
-            return tile.TileType == TileType.None &&
+            return tile.TileType == TileTypes.None &&
                 !GameWorld.AnythingCollidesWith(tile);
         }
 

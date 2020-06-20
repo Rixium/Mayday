@@ -4,7 +4,7 @@ namespace Mayday.Game.Networking.Packets
 {
     public class ItemDropPacket : INetworkPacket
     {
-        public int ItemId { get; set; }
+        public string ItemId { get; set; }
         public float Y { get; set; }
         public float X { get; set; }
     }

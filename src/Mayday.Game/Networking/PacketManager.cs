@@ -34,7 +34,7 @@ namespace Mayday.Game.Networking
             {
                 X = tile.TileX,
                 Y = tile.TileY,
-                TileType = (int) tile.TileType
+                TileType = tile.TileType
             };
 
             var package = NetworkManager.MessagePackager.Package(tileChangePacket);
@@ -48,7 +48,7 @@ namespace Mayday.Game.Networking
             {
                 X = itemDrop.X,
                 Y = itemDrop.Y,
-                ItemId = (int) itemDrop.Item.ItemId
+                ItemId = itemDrop.Item.ItemId
             };
 
             var package = NetworkManager.MessagePackager.Package(itemDropPacket);

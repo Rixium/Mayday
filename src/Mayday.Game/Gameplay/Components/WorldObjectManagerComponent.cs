@@ -6,9 +6,9 @@ namespace Mayday.Game.Gameplay.Components
     public class WorldObjectManagerComponent : IComponent
     {
         public IEntity Entity { get; set; }
-        public WorldObjectType WorldObjectType { get; set; }
+        public string WorldObjectType { get; set; }
 
-        public WorldObjectManagerComponent(WorldObjectType worldObjectType)
+        public WorldObjectManagerComponent(string worldObjectType)
         {
             WorldObjectType = worldObjectType;
         }

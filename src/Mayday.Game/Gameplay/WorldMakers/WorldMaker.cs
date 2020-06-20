@@ -47,7 +47,7 @@ namespace Mayday.Game.Gameplay.WorldMakers
             {
                 for (var j = 0; j < WorldHeight; j++)
                 {
-                    tiles[i, j] = new Tile(TileType.None, i, j)
+                    tiles[i, j] = new Tile(TileTypes.None, i, j)
                     {
                         GameWorld = world
                     };
@@ -63,12 +63,12 @@ namespace Mayday.Game.Gameplay.WorldMakers
                     poo++;
                     if (poo > 3)
                     {
-                        tiles[i, j].TileType = TileType.Stone;
+                        tiles[i, j].TileType = TileTypes.Stone;
                         bmp.SetPixel(i, j, Color.Gray);
                     }
                     else
                     {
-                        tiles[i, j].TileType = TileType.Dirt;
+                        tiles[i, j].TileType = TileTypes.Dirt;
                         bmp.SetPixel(i, j, Color.Brown);
                     }
 

@@ -16,19 +16,19 @@ namespace Mayday.Game.Gameplay.World
         int Height { get; set; }
         IWorldItemSet WorldItems { get; set; }
         IWorldObjectSet WorldObjects { get; set; }
-        HashSet<IEntity> WorldEntities { get; }
+        HashSet<IEntity> TrackedEntities { get; }
 
         void Move(IEntity player,
             float xMove,
             float yMove,
             float yVelocity);
         Tile TryGetTile(int tileX, int tileY);
-        void PlaceTile(Tile tile, TileType tileType);
+        void PlaceTile(Tile tile, string tileType);
         Tile GetRandomSpawnLocation();
         void DropItem(ItemDrop item);
         bool AnythingCollidesWith(Tile gameWorldTile);
         void AddTrackedEntity(IEntity entity);
-        void PlaceWorldEntity(Tile tile, WorldObjectType worldObjectType);
+        void PlaceWorldEntity(Tile tile, string worldObjectType);
 
         void Update();
         IEntity GetWorldObjectAbove(Tile tile);

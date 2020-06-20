@@ -32,9 +32,9 @@ namespace Mayday.Game.Gameplay.World
         public int TileX { get; set; }
         public int TileY { get; set; }
 
-        private TileType _tileType = TileType.None;
+        private string _tileType = TileTypes.None;
         
-        public TileType TileType
+        public string TileType
         {
             get => _tileType;
             set
@@ -72,7 +72,7 @@ namespace Mayday.Game.Gameplay.World
         public Vector2 RenderCenter => new Vector2(X + TileSize / 2.0f, Y + TileSize / 2.0f);
         public int BlobValue { get; set; } = -1;
 
-        public Tile(TileType tileType, int tileX, int tileY) : base(CurrentTileEntityId)
+        public Tile(string tileType, int tileX, int tileY) : base(CurrentTileEntityId)
         {
             TileType = tileType;
             TileX = tileX;
@@ -83,8 +83,8 @@ namespace Mayday.Game.Gameplay.World
 
         public void Break()
         {
-            if (TileType == TileType.None) return;
-            TileType = TileType.None;
+            if (TileType == TileTypes.None) return;
+            TileType = TileTypes.None;
             Destroy?.Invoke(this);
 
             CleanUpComponents();

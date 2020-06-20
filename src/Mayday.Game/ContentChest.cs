@@ -19,10 +19,10 @@ namespace Mayday.Game
 {
     public class ContentChest
     {
-        public static Dictionary<ItemType, Item> ItemData;
+        public static Dictionary<string, Item> ItemData;
 
-        public static Dictionary<TileType, TileProperties> TileProperties { get; set; } =
-            new Dictionary<TileType, TileProperties>();
+        public static Dictionary<string, TileProperties> TileProperties { get; set; } =
+            new Dictionary<string, TileProperties>();
 
         // ReSharper disable once CollectionNeverUpdated.Global
         public static Dictionary<int, SpriteSheet> Heads { get; set; } = new Dictionary<int, SpriteSheet>();
@@ -33,21 +33,21 @@ namespace Mayday.Game
         // ReSharper disable once CollectionNeverUpdated.Global
         public static Dictionary<int, SpriteSheet> Legs { get; set; } = new Dictionary<int, SpriteSheet>();
 
-        public static Dictionary<TileType, Texture2D> TileTextures { get; set; } =
-            new Dictionary<TileType, Texture2D>();
+        public static Dictionary<string, Texture2D> TileTextures { get; set; } =
+            new Dictionary<string, Texture2D>();
 
-        public static Dictionary<ItemType, Texture2D> ItemTextures { get; set; } =
-            new Dictionary<ItemType, Texture2D>();
+        public static Dictionary<string, Texture2D> ItemTextures { get; set; } =
+            new Dictionary<string, Texture2D>();
 
-        public static Dictionary<WorldObjectType, Texture2D> WorldObjectTextures { get; set; } =
-            new Dictionary<WorldObjectType, Texture2D>();
+        public static Dictionary<string, Texture2D> WorldObjectTextures { get; set; } =
+            new Dictionary<string, Texture2D>();
 
         // ReSharper disable once CollectionNeverQueried.Global
         public static Dictionary<string, SoundEffect> SoundEffects { get; set; } =
             new Dictionary<string, SoundEffect>();
 
-        public static Dictionary<WorldObjectType, WorldObjectData> WorldObjectData { get; set; }
-            = new Dictionary<WorldObjectType, WorldObjectData>();
+        public static Dictionary<string, WorldObjectData> WorldObjectData { get; set; }
+            = new Dictionary<string, WorldObjectData>();
 
         public void Load(ContentManager contentManager)
         {
@@ -65,11 +65,11 @@ namespace Mayday.Game
         {
             var filePath = $"{contentManager.RootDirectory}\\Data\\WorldObjectData.json";
             var worldObjectData = File.ReadAllText(filePath);
-            WorldObjectData = JsonConvert.DeserializeObject<Dictionary<WorldObjectType, WorldObjectData>>(worldObjectData);
+            WorldObjectData = JsonConvert.DeserializeObject<Dictionary<string, WorldObjectData>>(worldObjectData);
         }
 
-        private static void LoadDictionary<T>(ContentManager contentManager, string pathRelativeToContent,
-            Dictionary<T, Texture2D> dictionary)
+        private static void LoadDictionary(ContentManager contentManager, string pathRelativeToContent,
+            Dictionary<string, Texture2D> dictionary)
         {
             var directory = $"{contentManager.RootDirectory}\\{pathRelativeToContent}";
 
@@ -79,8 +79,7 @@ namespace Mayday.Game
 
             foreach (var file in imageFiles)
             {
-                var nameOf = file.Split('_');
-                dictionary.Add((T) Enum.Parse(typeof(T), nameOf[1]),
+                dictionary.Add(file,
                     contentManager.Load<Texture2D>($"{pathRelativeToContent}\\{file}"));
             }
         }
@@ -103,7 +102,7 @@ namespace Mayday.Game
             var tilePropertiesFile = $"{contentManager.RootDirectory}\\Data\\TileProperties.json";
             var tilePropertiesData = File.ReadAllText(tilePropertiesFile);
 
-            TileProperties = JsonConvert.DeserializeObject<Dictionary<TileType, TileProperties>>(tilePropertiesData);
+            TileProperties = JsonConvert.DeserializeObject<Dictionary<string, TileProperties>>(tilePropertiesData);
         }
 
         private static void LoadItemData(ContentManager contentManager)
@@ -111,11 +110,11 @@ namespace Mayday.Game
             var itemDataFile = $"{contentManager.RootDirectory}\\Data\\ItemData.json";
             var itemDataFileText = File.ReadAllText(itemDataFile);
 
-            ItemData = JsonConvert.DeserializeObject<Dictionary<ItemType, Item>>(itemDataFileText);
+            ItemData = JsonConvert.DeserializeObject<Dictionary<string, Item>>(itemDataFileText);
 
             foreach (var item in ItemData.Values)
             {
-                if (item.WorldObjectType == WorldObjectType.None) continue;
+                if (item.WorldObjectType == null) continue;
                 var texture = GetWorldObjectTexture(contentManager, item.WorldObjectType);
                 if (WorldObjectTextures.ContainsKey(item.WorldObjectType)) continue;
                 WorldObjectTextures.Add(item.WorldObjectType, texture);
@@ -123,8 +122,8 @@ namespace Mayday.Game
         }
 
         private static Texture2D
-            GetWorldObjectTexture(ContentManager contentManager, WorldObjectType worldObjectType) =>
-            contentManager.Load<Texture2D>($"Images\\WorldObjects\\{(int) worldObjectType}");
+            GetWorldObjectTexture(ContentManager contentManager, string worldObjectType) =>
+            contentManager.Load<Texture2D>($"Images\\WorldObjects\\{worldObjectType}");
 
         private void LoadJsonImages(ContentManager contentManager)
         {

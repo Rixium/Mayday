@@ -26,10 +26,18 @@ namespace Mayday.Game.Gameplay.World
         public int Height { get; set; }
         public IWorldItemSet WorldItems { get; set; } = new WorldItemSet();
         public Action<Tile> TilePlaced { get; set; }
-        public HashSet<IEntity> WorldEntities { get; } = new HashSet<IEntity>();
+
+        /// <summary>
+        /// These are the entities that should do an update on every frame.
+        /// </summary>
+        public HashSet<IEntity> TrackedEntities { get; } = new HashSet<IEntity>();
 
         private HashSet<IEntity> _trackedEntitiesToRemove = new HashSet<IEntity>();
 
+        /// <summary>
+        /// These are just to store the world objects. They can also exist in the tracked entities,
+        /// if they require an update every frame.
+        /// </summary>
         public IWorldObjectSet WorldObjects { get; set; } = new WorldObjectSet();
 
         public void Move(IEntity player, float xMove, float yMove, float yVelocity)
@@ -49,7 +57,7 @@ namespace Mayday.Game.Gameplay.World
                 {
                     var tile = TryGetTile(i, j);
                     if (tile == null) continue;
-                    if (tile.TileType == TileType.None) continue;
+                    if (tile.TileType == TileTypes.None) continue;
 
                     var tileBounds = tile.GetCurrentBounds();
 
@@ -62,7 +70,7 @@ namespace Mayday.Game.Gameplay.World
                         {
                             var above = TryGetTile(i, k);
 
-                            if (above.TileType == TileType.None)
+                            if (above.TileType == TileTypes.None)
                                 continue;
 
                             canMoveUp = false;
@@ -101,7 +109,7 @@ namespace Mayday.Game.Gameplay.World
                 {
                     var tile = TryGetTile(i, j);
                     if (tile == null) continue;
-                    if (tile.TileType == TileType.None) continue;
+                    if (tile.TileType == TileTypes.None) continue;
 
                     var tileBounds = tile.GetCurrentBounds();
 
@@ -121,7 +129,7 @@ namespace Mayday.Game.Gameplay.World
             return Tiles[tileX, tileY];
         }
         
-        public void PlaceTile(Tile tile, TileType tileType)
+        public void PlaceTile(Tile tile, string tileType)
         {
             if (tile.TileType == tileType) return;
             tile.TileType = tileType;
@@ -129,7 +137,7 @@ namespace Mayday.Game.Gameplay.World
         }
 
         public Tile GetRandomSpawnLocation() => (from Tile tile in Tiles
-                    where tile.TileType == TileType.Dirt
+                    where tile.TileType == TileTypes.Dirt
                     select Tiles[(int) (Width / 2.0f), tile.TileY])
                 .FirstOrDefault();
 
@@ -141,19 +149,19 @@ namespace Mayday.Game.Gameplay.World
         }
 
         public bool AnythingCollidesWith(Tile tile) =>
-            WorldEntities.Any(entity => entity != tile &&
+            TrackedEntities.Any(entity => entity != tile &&
                                         tile.GetCurrentBounds().Intersects(entity.GetCurrentBounds()));
 
         public void AddTrackedEntity(IEntity entity)
         {
-            WorldEntities.Add(entity);
+            TrackedEntities.Add(entity);
             entity.Destroy += OnTrackedEntityDestroyed;
         }
 
         private void OnTrackedEntityDestroyed(IEntity obj) =>
             _trackedEntitiesToRemove.Add(obj);
 
-        public void PlaceWorldEntity(Tile tile, WorldObjectType worldObjectType)
+        public void PlaceWorldEntity(Tile tile, string worldObjectType)
         {
             var worldObjectData = ContentChest.WorldObjectData[worldObjectType];
             var worldObjectTexture = ContentChest.WorldObjectTextures[worldObjectType];
@@ -180,7 +188,7 @@ namespace Mayday.Game.Gameplay.World
             if (_trackedEntitiesToRemove.Count <= 0) return;
 
             foreach (var entity in _trackedEntitiesToRemove)
-                WorldEntities.Remove(entity);
+                TrackedEntities.Remove(entity);
 
             _trackedEntitiesToRemove.Clear();
         }
