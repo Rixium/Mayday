@@ -56,7 +56,7 @@ namespace Mayday.Game.Gameplay.Components
 
             if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > GameWorld.Width - 1 ||
                 mouseTileY > GameWorld.Height - 1) return;
-            if (!CanPlaceAt(mouseTileX, mouseTileY)) return;
+            if (!CanPlaceAt(mouseTileX, mouseTileY, true)) return;
             var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
             if (!CloseEnoughToTile(tile)) return;
             GameWorld.PlaceTile(tile, _selectedItem.TileType);
@@ -100,11 +100,21 @@ namespace Mayday.Game.Gameplay.Components
             return false;
         }
 
-        private bool CanPlaceAt(int tileX, int tileY)
+        /// <summary>
+        /// Checks whether an item can be placed at a particular tileX and tileY position.
+        /// </summary>
+        /// <param name="tileX">The TileX position (i.e tile index).</param>
+        /// <param name="tileY">The TileY position (i.e tile index).</param>
+        /// <param name="requiresImmediateNeighbour">Whether or not the item requires a neighbour to be placed.</param>
+        /// <returns>Returns whether or not the item can be placed at the given position.</returns>
+        private bool CanPlaceAt(int tileX, int tileY, bool requiresImmediateNeighbour = false)
         {
             var tile = GameWorld.TryGetTile(tileX, tileY);
 
             if (tile == null) return false;
+            
+            if (requiresImmediateNeighbour && !tile.HasImmediateNeighbour()) 
+                return false;
 
             return tile.TileType == TileTypes.None &&
                 !GameWorld.AnythingCollidesWith(tile);

@@ -92,5 +92,23 @@ namespace Mayday.Game.Gameplay.World
             PacketManager.SendTileChangePacket(this);
         }
 
+        /// <summary>
+        /// For checking whether a tile has an immediate neighbour (North, east, south west).
+        /// </summary>
+        /// <returns></returns>
+        public bool HasImmediateNeighbour()
+        {
+            var east = GameWorld.TryGetTile(TileX - 1, TileY);
+            if (east != null && east.TileType != TileTypes.None) return true;
+            
+            var west = GameWorld.TryGetTile(TileX + 1, TileY);
+            if (west != null && west.TileType != TileTypes.None) return true;
+            
+            var north = GameWorld.TryGetTile(TileX, TileY - 1);
+            if (north != null && north.TileType != TileTypes.None) return true;
+            
+            var south = GameWorld.TryGetTile(TileX, TileY + 1);
+            return south != null && south.TileType != TileTypes.None;
+        }
     }
 }
