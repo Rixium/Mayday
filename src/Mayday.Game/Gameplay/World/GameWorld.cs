@@ -188,11 +188,7 @@ namespace Mayday.Game.Gameplay.World
         public IEntity GetWorldObjectAbove(Tile tile)
         {
             var tileAbove = TryGetTile(tile.TileX, tile.TileY - 1);
-
-            if (tileAbove == null) return null;
-
-            return GetWorldObjectIntersectingTile(tile);
-
+            return tileAbove == null ? null : GetWorldObjectIntersectingTile(tile);
         }
 
         private IEntity GetWorldObjectIntersectingTile(Tile tile) =>
