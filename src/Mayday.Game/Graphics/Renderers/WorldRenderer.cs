@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using Mayday.Game.Enums;
+using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -54,6 +55,13 @@ namespace Mayday.Game.Graphics.Renderers
                         new Rectangle((int) tile.X, (int) tile.Y, tile.TileSize, tile.TileSize),
                         rect, Color.White);
                 }
+            }
+
+            foreach (var entity in gameWorld.WorldObjects)
+            {
+                var worldObjectComponent = entity.GetComponent<WorldObjectManagerComponent>();
+                var entityTexture = ContentChest.WorldObjectTextures[worldObjectComponent.WorldObjectType];
+                GraphicsUtils.Instance.SpriteBatch.Draw(entityTexture, entity.GetCurrentBounds(), Color.White);
             }
         }
         

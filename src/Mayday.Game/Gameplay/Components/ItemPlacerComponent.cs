@@ -8,7 +8,6 @@ using Microsoft.Xna.Framework.Audio;
 using Yetiface.Engine;
 using Yetiface.Engine.Inputs;
 using Yetiface.Engine.Utils;
-using MouseState = Yetiface.Engine.Utils.MouseState;
 
 namespace Mayday.Game.Gameplay.Components
 {
@@ -90,9 +89,9 @@ namespace Mayday.Game.Gameplay.Components
         {
             var worldObjectTexture = ContentChest.ItemTextures[selectedItem.ItemId];
 
-            for (var i = tile.TileX; i < tile.TileX + worldObjectTexture.Width / GameWorld.TileSize; i++)
+            for (var i = tile.TileX; i <= tile.TileX + worldObjectTexture.Width * Game1.GlobalGameScale / GameWorld.TileSize; i++)
             {
-                for (var j = tile.TileY; j < tile.TileY + worldObjectTexture.Height / GameWorld.TileSize; j++)
+                for (var j = tile.TileY; j <= tile.TileY + worldObjectTexture.Height * Game1.GlobalGameScale / GameWorld.TileSize; j++)
                 {
                     if (!CanPlaceAt(i, j)) return true;
                 }
@@ -103,8 +102,12 @@ namespace Mayday.Game.Gameplay.Components
 
         private bool CanPlaceAt(int tileX, int tileY)
         {
-            return GameWorld.Tiles[tileX, tileY].TileType == TileType.None &&
-                !GameWorld.AnythingCollidesWith(GameWorld.Tiles[tileX, tileY]);
+            var tile = GameWorld.TryGetTile(tileX, tileY);
+
+            if (tile == null) return false;
+
+            return tile.TileType == TileType.None &&
+                !GameWorld.AnythingCollidesWith(tile);
         }
 
         private bool CloseEnoughToTile(Tile tile)

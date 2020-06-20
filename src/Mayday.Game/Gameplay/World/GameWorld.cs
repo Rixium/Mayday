@@ -28,6 +28,8 @@ namespace Mayday.Game.Gameplay.World
         public Action<Tile> TilePlaced { get; set; }
         public HashSet<IEntity> WorldEntities { get; } = new HashSet<IEntity>();
 
+        private HashSet<IEntity> _trackedEntitiesToRemove = new HashSet<IEntity>();
+
         public IWorldObjectSet WorldObjects { get; set; } = new WorldObjectSet();
 
         public void Move(IEntity player, float xMove, float yMove, float yVelocity)
@@ -135,18 +137,52 @@ namespace Mayday.Game.Gameplay.World
         {
             item.GameWorld = this;
             WorldItems.Add(item);
+            AddTrackedEntity(item);
         }
 
         public bool AnythingCollidesWith(Tile tile) =>
-            WorldEntities.Any(entity => tile.GetCurrentBounds().Intersects(entity.GetCurrentBounds()));
+            WorldEntities.Any(entity => entity != tile &&
+                                        tile.GetCurrentBounds().Intersects(entity.GetCurrentBounds()));
 
-        public void AddTrackedEntity(IEntity entity) => WorldEntities.Add(entity);
+        public void AddTrackedEntity(IEntity entity)
+        {
+            WorldEntities.Add(entity);
+            entity.Destroy += OnTrackedEntityDestroyed;
+        }
+
+        private void OnTrackedEntityDestroyed(IEntity obj) =>
+            _trackedEntitiesToRemove.Add(obj);
 
         public void PlaceWorldEntity(Tile tile, WorldObjectType worldObjectType)
         {
-            var entity = new Entity(CurrentWorldObjectEntityId);
+            var worldObjectData = ContentChest.WorldObjectData[worldObjectType];
+            var worldObjectTexture = ContentChest.WorldObjectTextures[worldObjectType];
+
+            var entity = new Entity(CurrentWorldObjectEntityId)
+            {
+                X = tile.X,
+                Y = tile.Y,
+                Bounds = worldObjectData.Width == -1 ?
+                    new RectangleF(0, 0, worldObjectTexture.Width * Game1.GlobalGameScale, worldObjectTexture.Height * Game1.GlobalGameScale) :
+                    new RectangleF(0, 0, worldObjectData.Width, worldObjectData.Height),
+                GameWorld = this
+            };
+
+            entity.AddComponent(new MoveComponent());
+            entity.AddComponent(new GravityComponent());
             entity.AddComponent(new WorldObjectManagerComponent(worldObjectType));
             WorldObjects.Add(entity);
+            AddTrackedEntity(entity);
+        }
+
+        public void Update()
+        {
+            if (_trackedEntitiesToRemove.Count <= 0) return;
+
+            foreach (var entity in _trackedEntitiesToRemove)
+                WorldEntities.Remove(entity);
+
+            _trackedEntitiesToRemove.Clear();
         }
 
     }

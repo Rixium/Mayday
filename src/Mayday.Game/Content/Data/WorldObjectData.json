@@ -1,6 +1,8 @@
 {
   "0": {
     "Id": 0,
-    "Name": "Shuttle"
+    "Name": "Shuttle",
+    "Width": -1,
+    "Height": -1
   }
 }

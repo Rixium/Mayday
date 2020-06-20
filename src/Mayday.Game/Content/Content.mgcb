@@ -163,6 +163,18 @@
 /processorParam:TextureFormat=Color
 /build:Images/Tiles/Tiles_1.png
 
+#begin Images/WorldObjects/0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/WorldObjects/0.png
+
 #begin jump.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

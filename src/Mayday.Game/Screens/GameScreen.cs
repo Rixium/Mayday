@@ -200,14 +200,15 @@ namespace Mayday.Game.Screens
         public override void Update()
         {
             base.Update();
-            
+
             NetworkManager?.Update();
-            
-            foreach(var player in Players.GetAll())
-                player.Update();
-            
-            foreach(var entity in GameWorld.WorldItems.GetItems())
+
+            GameWorld.Update();
+
+            foreach (var entity in GameWorld.WorldEntities)
+            {
                 entity.Update();
+            }
 
             if (MouseState.CurrentState.ScrollWheelValue > MouseState.LastState.ScrollWheelValue)
                 _interfaceController.IncrementSelection(-1);

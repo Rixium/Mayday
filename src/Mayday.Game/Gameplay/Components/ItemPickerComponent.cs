@@ -54,6 +54,9 @@ namespace Mayday.Game.Gameplay.Components
                 }
                 
                 _inventoryComponent.AddItemToInventory(item.Item);
+
+                item?.Destroy(item);
+
                 pickedUp = true;
             }
 

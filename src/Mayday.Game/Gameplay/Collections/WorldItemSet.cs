@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Mayday.Game.Gameplay.Entities;
 
@@ -5,6 +6,7 @@ namespace Mayday.Game.Gameplay.Collections
 {
     public class WorldItemSet : IWorldItemSet
     {
+        public Action WorldItemSetChanged { get; set; }
         public IList<IEntity> Items { get; set; } = new List<IEntity>();
 
         public IEntity Add(IEntity item)
@@ -22,6 +24,10 @@ namespace Mayday.Game.Gameplay.Collections
                 Add(item);
         }
 
-        public void Set(List<IEntity> newList) => Items = newList;
+        public void Set(List<IEntity> newList)
+        {
+            Items = newList;
+            WorldItemSetChanged?.Invoke();
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Collections;
 using Mayday.Game.Gameplay.Entities;
@@ -14,6 +15,9 @@ namespace Mayday.Game.Gameplay.World
         int Width { get; set; }
         int Height { get; set; }
         IWorldItemSet WorldItems { get; set; }
+        IWorldObjectSet WorldObjects { get; set; }
+        HashSet<IEntity> WorldEntities { get; }
+
         void Move(IEntity player,
             float xMove,
             float yMove,
@@ -25,5 +29,7 @@ namespace Mayday.Game.Gameplay.World
         bool AnythingCollidesWith(Tile gameWorldTile);
         void AddTrackedEntity(IEntity entity);
         void PlaceWorldEntity(Tile tile, WorldObjectType worldObjectType);
+
+        void Update();
     }
 }

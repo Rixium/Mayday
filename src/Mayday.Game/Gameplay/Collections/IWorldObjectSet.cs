@@ -3,7 +3,7 @@ using Mayday.Game.Gameplay.Entities;
 
 namespace Mayday.Game.Gameplay.Collections
 {
-    public interface IWorldObjectSet
+    public interface IWorldObjectSet : IEnumerable<IEntity>
     {
         IEntity Add(IEntity worldObject);
         IEntity Get(ulong id);
