@@ -48,7 +48,7 @@ namespace Mayday.Game.Gameplay.Components
             }
         }
 
-        private void PlaceAsWorldObject()
+        private void PlaceAsTile()
         {
             var mousePosition = MouseState.Bounds(_camera.GetMatrix());
 
@@ -66,7 +66,7 @@ namespace Mayday.Game.Gameplay.Components
             _lastPlaced = Time.GameTime.TotalGameTime.TotalSeconds;
         }
 
-        private void PlaceAsTile()
+        private void PlaceAsWorldObject()
         {
             var mousePosition = MouseState.Bounds(_camera.GetMatrix());
 
