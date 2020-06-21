@@ -5,7 +5,6 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:vm="clr-namespace:Mayday.Editor.ViewModels"
       xmlns:local="clr-namespace:Mayday.Editor.Converters"
-      xmlns:items="clr-namespace:Mayday.Game.Gameplay.Items;assembly=Mayday.Game"
       d:DataContext="{vm:ItemsManagerViewModel}"
       mc:Ignorable="d">
 
