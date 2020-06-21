@@ -12,7 +12,11 @@ namespace Mayday.Editor.Loaders
 
         public void Save()
         {
-            var toText = JsonConvert.SerializeObject(WorldObjects, Formatting.Indented);
+            var toText = JsonConvert.SerializeObject(WorldObjects, Formatting.Indented,
+                new JsonSerializerSettings {
+                    NullValueHandling = NullValueHandling.Ignore
+                });
+
             File.WriteAllText(_filePath, toText);
         }
 

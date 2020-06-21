@@ -3,21 +3,18 @@
     "ItemId": "Dirt_Block",
     "Name": "Dirt",
     "MaxStackSize": 30,
-    "TileType": "Dirt",
-    "WorldObjectType": "None"
+    "TileType": "Dirt"
   },
   "Stone_Block": {
     "ItemId": "Stone_Block",
     "Name": "Stone",
     "MaxStackSize": 30,
-    "TileType": "Stone",
-    "WorldObjectType": "None"
+    "TileType": "Stone"
   },
   "Shuttle": {
     "ItemId": "Shuttle",
     "Name": "Shuttle",
     "MaxStackSize": 1,
-    "TileType": "None",
     "WorldObjectType": "Shuttle"
   }
 }

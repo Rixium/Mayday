@@ -7,6 +7,8 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Mayday.Editor.Commands;
 using Mayday.Editor.Loaders;
+using Mayday.Editor.Navigation;
+using Mayday.Editor.Views;
 using Mayday.Game.Gameplay.Data;
 using Mayday.Game.Gameplay.Items;
 using Newtonsoft.Json;
@@ -142,6 +144,8 @@ namespace Mayday.Editor.ViewModels
 
             _itemsLoader.SetItems(items);
             _itemsLoader.Save();
+
+            Navigator.ShowPage(new ItemsManagerPage());
         }
 
         private void ValidateItemUseCase()

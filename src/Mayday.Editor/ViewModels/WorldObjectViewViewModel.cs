@@ -2,7 +2,9 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Mayday.Editor.Commands;
+using Mayday.Editor.Controls;
 using Mayday.Editor.Loaders;
+using Mayday.Editor.Navigation;
 using Mayday.Game.Gameplay.Data;
 
 namespace Mayday.Editor.ViewModels
@@ -75,6 +77,8 @@ namespace Mayday.Editor.ViewModels
 
             _worldObjectLoader.SetWorldObjects(worldObjects);
             _worldObjectLoader.Save();
+
+            Navigator.ShowPage(new WorldObjectsManagerControl());
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
