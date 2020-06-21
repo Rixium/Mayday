@@ -6,18 +6,15 @@ namespace Mayday.Editor.Controls
 {
     public partial class TilesManagerControl
     {
-
-        private TilesManagerViewModel _viewModel;
-
         public TilesManagerControl()
         {
-            _viewModel = new TilesManagerViewModel(
+            var viewModel = new TilesManagerViewModel(
                 new TileLoader()
             );
 
-            _viewModel.OnUpdateTile += (key, tile) => Navigator.ShowPage(new TileViewControl(key, tile));
+            viewModel.OnUpdateTile += (key, tile) => Navigator.ShowPage(new TileViewControl(key, tile));
 
-            DataContext = _viewModel;
+            DataContext = viewModel;
             
             InitializeComponent();
         }

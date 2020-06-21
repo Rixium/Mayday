@@ -7,18 +7,15 @@ namespace Mayday.Editor.Views
 {
     public partial class ItemsManagerPage
     {
-
-        private ItemsManagerViewModel _viewModel;
-
         public ItemsManagerPage()
         {
-            _viewModel = new ItemsManagerViewModel(
+            var viewModel = new ItemsManagerViewModel(
                 new ItemsLoader()
             );
 
-            _viewModel.OnUpdateItem += (key, item) => Navigator.ShowPage(new ItemViewControl(key, item));
+            viewModel.OnUpdateItem += (key, item) => Navigator.ShowPage(new ItemViewControl(key, item));
 
-            DataContext = _viewModel;
+            DataContext = viewModel;
             
             InitializeComponent();
         }
