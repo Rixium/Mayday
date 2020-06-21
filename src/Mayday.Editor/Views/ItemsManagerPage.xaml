@@ -11,6 +11,7 @@
 
     <UserControl.Resources>
         <local:NotNullConverter x:Key="NotNullConverter" />
+
     </UserControl.Resources>
 
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10px">
@@ -18,7 +19,22 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <DataGrid Grid.Row="0" IsReadOnly="True" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}"/>
+        <DataGrid AlternationCount="2" AlternatingRowBackground="#E4E4E4" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" MinRowHeight="50" ColumnWidth="*" Grid.Row="0" IsReadOnly="True" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}">
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Grid Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.CellStyle>
+        </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" Margin="0 10px 0 0">
             <Button Command="{Binding UpdateCommand}" Visibility="{Binding SelectedItem, Converter={StaticResource NotNullConverter}}" Content="Update" Padding="10px"/>
             <Button Command="{Binding NewCommand}" Content="New" Margin="10px 0 0 0" Padding="10px"/>

@@ -7,6 +7,7 @@ namespace Mayday.Editor.Loaders
     {
 
         Dictionary<string, Item> Items { get; set; }
-
+        void SetItems(Dictionary<string, Item> items);
+        void Save();
     }
 }

@@ -13,19 +13,29 @@ namespace Mayday.Editor.ViewModels
     public class ItemsManagerViewModel
     {
 
-        public Action<Item> OnUpdateItem;
+        public Action<string, Item> OnUpdateItem;
 
         private readonly IItemsLoader _itemsLoader;
 
         public string MainText { get; set; } = "Hello World!";
-        public Item SelectedItem { get; set; }
+
+        private Item _selectedItem;
+        public Item SelectedItem
+        {
+            get => _selectedItem;
+            set
+            {
+                _selectedItem = value;
+                UpdateSelectedItem();
+            }
+        }
 
         private ICommand _updateCommand;
         public ICommand UpdateCommand => _updateCommand ?? new RelayCommand(UpdateSelectedItem);
 
         private ICommand _newCommand;
         public ICommand NewCommand => _newCommand ?? new RelayCommand(() =>
-            Navigator.ShowPage(new ItemViewControl(new Item())));
+            Navigator.ShowPage(new ItemViewControl("", new Item())));
 
         public IEnumerable<Item> Items => _itemsLoader.Items.Values.AsEnumerable();
 
@@ -37,7 +47,13 @@ namespace Mayday.Editor.ViewModels
         public void UpdateSelectedItem()
         {
             if (SelectedItem == null) return;
-            OnUpdateItem?.Invoke(SelectedItem);
+
+            var dictionarySelection =
+                _itemsLoader.Items.FirstOrDefault(m => m.Value.ItemId.Equals(SelectedItem.ItemId));
+
+            if (dictionarySelection.Key == null) return;
+
+            OnUpdateItem?.Invoke(dictionarySelection.Key, dictionarySelection.Value);
         }
 
     }

@@ -1,20 +1,23 @@
-﻿{
+{
   "Dirt_Block": {
     "ItemId": "Dirt_Block",
-    "TileType": "Dirt",
     "Name": "Dirt",
-    "MaxStackSize": 30
+    "MaxStackSize": 30,
+    "TileType": "Dirt",
+    "WorldObjectType": "None"
   },
   "Stone_Block": {
     "ItemId": "Stone_Block",
-    "TileType": "Stone",
     "Name": "Stone",
-    "MaxStackSize": 30
+    "MaxStackSize": 30,
+    "TileType": "Stone",
+    "WorldObjectType": "None"
   },
   "Shuttle": {
     "ItemId": "Shuttle",
-    "WorldObjectType": "Shuttle",
     "Name": "Shuttle",
-    "MaxStackSize": 1
+    "MaxStackSize": 1,
+    "TileType": "None",
+    "WorldObjectType": "Shuttle"
   }
 }

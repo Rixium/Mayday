@@ -16,7 +16,7 @@ namespace Mayday.Editor.Views
                 new ItemsLoader()
             );
 
-            _viewModel.OnUpdateItem += (item) => Navigator.ShowPage(new ItemViewControl(item));
+            _viewModel.OnUpdateItem += (key, item) => Navigator.ShowPage(new ItemViewControl(key, item));
 
             DataContext = _viewModel;
             

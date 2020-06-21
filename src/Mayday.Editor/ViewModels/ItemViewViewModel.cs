@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Mayday.Editor.Commands;
 using Mayday.Editor.Loaders;
-using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Data;
 using Mayday.Game.Gameplay.Items;
+using Newtonsoft.Json;
 
 namespace Mayday.Editor.ViewModels
 {
@@ -16,6 +17,7 @@ namespace Mayday.Editor.ViewModels
     {
         private readonly IWorldObjectLoader _worldObjectLoader;
         private readonly ITileLoader _tileLoader;
+        private readonly IItemsLoader _itemsLoader;
 
         private ICommand _saveItemCommand;
         public ICommand SaveItemCommand => _saveItemCommand ?? new RelayCommand(SaveItem);
@@ -40,12 +42,13 @@ namespace Mayday.Editor.ViewModels
                 if (newIndex == _selectedItemUseTypeIndex) return;
 
                 _selectedItemUseTypeIndex = newIndex;
-                
+
                 OnPropertyChanged(nameof(ItemUseTypeIsTile));
                 OnPropertyChanged(nameof(ItemUseTypeIsWorldObject));
             }
         }
 
+        public string Key { get; }
         public Item Item { get; }
 
         public string ItemId
@@ -88,11 +91,13 @@ namespace Mayday.Editor.ViewModels
 
         public TileProperties SelectedTileType { get; set; }
 
-        public ItemViewViewModel(Item item, IWorldObjectLoader worldObjectLoader, ITileLoader tileLoader)
+        public ItemViewViewModel(string key, Item item, IWorldObjectLoader worldObjectLoader, ITileLoader tileLoader, IItemsLoader itemsLoader)
         {
             _worldObjectLoader = worldObjectLoader;
             _tileLoader = tileLoader;
+            _itemsLoader = itemsLoader;
 
+            Key = key;
             Item = item;
 
             InitializeItemTypeIndex();
@@ -115,7 +120,51 @@ namespace Mayday.Editor.ViewModels
 
         private void SaveItem()
         {
+            ValidateItemUseCase();
+            var items = _itemsLoader.Items;
 
+            if (items.ContainsKey(Key))
+            {
+                if (Key.Equals(Item.ItemId))
+                {
+                    items[Key] = Item;
+                }
+                else
+                {
+                    items.Remove(Key);
+                    items.Add(Item.ItemId, Item);
+                }
+            }
+            else
+            {
+                items.Add(Item.ItemId, Item);
+            }
+
+            _itemsLoader.SetItems(items);
+            _itemsLoader.Save();
+        }
+
+        private void ValidateItemUseCase()
+        {
+            switch (SelectedItemUseType)
+            {
+                case "None":
+                    Item.TileType = "None";
+                    Item.WorldObjectType = "None";
+                    break;
+                case "Tile":
+                    Item.WorldObjectType = "None";
+                    Item.TileType = SelectedTileType.Name;
+                    break;
+                case "World Object":
+                    Item.TileType = "None";
+                    Item.WorldObjectType = SelectedWorldObjectType.Name;
+                    break;
+                case "Tool":
+                    Item.TileType = "None";
+                    Item.WorldObjectType = "None";
+                    break;
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

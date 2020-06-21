@@ -55,7 +55,7 @@
         <ComboBox  Visibility="{Binding ItemUseTypeIsTool, Converter={StaticResource BooleanToVisibilityConverter} }" ItemsSource="{Binding ToolUseTypes}"/>
     </StackPanel>
     <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" Margin="0 10px 0 0">
-        <Button Content="Save" Padding="10px" Command="{Binding SaveItem}"/>
+        <Button Content="Save" Padding="10px" Command="{Binding SaveItemCommand}"/>
     </StackPanel>
     </Grid>
 </UserControl>
