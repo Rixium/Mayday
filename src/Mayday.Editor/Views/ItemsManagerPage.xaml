@@ -4,9 +4,22 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:vm="clr-namespace:Mayday.Editor.ViewModels"
+      xmlns:local="clr-namespace:Mayday.Editor.Converters"
       d:DataContext="{vm:ItemsManagerViewModel}"
       mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <local:NotNullConverter x:Key="NotNullConverter" />
+    </UserControl.Resources>
+
     <Grid HorizontalAlignment="Stretch">
-        <ListView ItemsSource="{Binding Items}"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ListView Grid.Row="0" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" Margin="0 10px 0 0">
+            <Button Command="{Binding UpdateSelection}" Visibility="{Binding SelectedItem, Converter={StaticResource NotNullConverter}}" Content="Update"/>
+        </StackPanel>
     </Grid>
 </UserControl>

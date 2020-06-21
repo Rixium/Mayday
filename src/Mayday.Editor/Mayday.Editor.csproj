@@ -80,6 +80,7 @@
             <SubType>Code</SubType>
         </Compile>
         <Compile Include="Commands\RelayCommand.cs" />
+        <Compile Include="Converters\NotNullConverter.cs" />
         <Compile Include="Loaders\IItemsLoader.cs" />
         <Compile Include="Loaders\ItemsLoader.cs" />
         <Compile Include="MainWindow.xaml.cs">
