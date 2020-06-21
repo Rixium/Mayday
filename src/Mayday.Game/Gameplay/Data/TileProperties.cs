@@ -5,7 +5,7 @@
 
         public string Name { get; set; }
         public bool CanMine { get; set; }
-        public float MineSpeedModifier { get; set; }
+        public int MilliSecondsToMine { get; set; }
         public string ItemDropType { get; set; }
     }
 }

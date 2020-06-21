@@ -2,13 +2,13 @@
   "Dirt" : {
     "Name": "Dirt",
     "CanMine": true,
-    "MineSpeedModifier": 1,
+    "MilliSecondsToMine": 100,
     "ItemDropType": "Dirt_Block"
   },
   "Stone" : {
     "Name": "Stone",
     "CanMine": true,
-    "MineSpeedModifier": 2,
+    "MilliSecondsToMine": 400,
     "ItemDropType": "Stone_Block"
   }
 }

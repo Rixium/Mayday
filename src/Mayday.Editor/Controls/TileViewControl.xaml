@@ -3,10 +3,55 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Mayday.Editor.Controls"
+             xmlns:viewModels="clr-namespace:Mayday.Editor.ViewModels"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        
+             d:DesignHeight="300" d:DesignWidth="300"
+                d:DataContext="{viewModels:TileViewViewModel}">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="0 0 0 10px"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="0 0 0 10px"/>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="0 0 0 5px"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="15px"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="10px">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Vertical" Grid.Row="0">
+        <TextBlock Text="{Binding Tile.Name}" HorizontalAlignment="Center" FontSize="20px"/>
+        <TextBlock>Name</TextBlock>
+        <TextBox Text="{Binding Tile.Name}"/>
+        <TextBlock>Can Mine</TextBlock>
+        <CheckBox IsChecked="{Binding Tile.CanMine}"/>
+        <TextBlock>Time To Mine (milliseconds)</TextBlock>
+        <TextBox Text="{Binding Tile.MilliSecondsToMine}"/>
+        <Separator/>
+        <!-- <TextBlock>Use Case</TextBlock> -->
+        <!-- <TextBlock FontSize="12px" FontWeight="Normal" TextWrapping="Wrap"> -->
+        <!--     Items can be used for creating tiles, world objects, or as a tool. Some items may also be used for -->
+        <!--     nothing other than as a reagent for another item during crafting. -->
+        <!-- </TextBlock> -->
+        <!-- <ComboBox ItemsSource="{Binding ItemUseTypes}" SelectedItem="{Binding SelectedItemUseType}"/> -->
+        <!-- <TextBlock Visibility="{Binding ItemUseTypeIsTile, Converter={StaticResource BooleanToVisibilityConverter} }">Tile ID</TextBlock> -->
+        <!-- <ComboBox Visibility="{Binding ItemUseTypeIsTile, Converter={StaticResource BooleanToVisibilityConverter} }" ItemsSource="{Binding TileTypes}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedTileType}"/> -->
+        <!-- <TextBlock Visibility="{Binding ItemUseTypeIsWorldObject, Converter={StaticResource BooleanToVisibilityConverter} }">World Object ID</TextBlock> -->
+        <!-- <ComboBox  Visibility="{Binding ItemUseTypeIsWorldObject, Converter={StaticResource BooleanToVisibilityConverter} }" ItemsSource="{Binding WorldObjectTypes}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedWorldObjectType}"/> -->
+        <!-- <TextBlock Visibility="{Binding ItemUseTypeIsTool, Converter={StaticResource BooleanToVisibilityConverter} }">Tool For</TextBlock> -->
+        <!-- <ComboBox  Visibility="{Binding ItemUseTypeIsTool, Converter={StaticResource BooleanToVisibilityConverter} }" ItemsSource="{Binding ToolUseTypes}"/> -->
+    </StackPanel>
+    <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" Margin="0 10px 0 0">
+        <Button Content="Save" Padding="10px" Command="{Binding SaveItemCommand}"/>
+    </StackPanel>
     </Grid>
 </UserControl>
