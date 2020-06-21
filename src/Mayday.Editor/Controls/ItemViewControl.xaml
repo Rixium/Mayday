@@ -22,11 +22,20 @@
             <Setter Property="FontSize" Value="15px"/>
         </Style>
     </UserControl.Resources>
-    
-    <StackPanel Orientation="Vertical" Margin="10px">
-        <TextBlock Text="{Binding Item.ItemId, FallbackValue=UNSET}" HorizontalAlignment="Center" FontSize="20px"/>
+
+    <Grid Margin="10px">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Vertical" Grid.Row="0">
+        <TextBlock Text="{Binding ItemId}" HorizontalAlignment="Center" FontSize="20px"/>
+        <TextBlock FontSize="12px" FontWeight="Normal" TextWrapping="Wrap">
+            Item ID's should match the name of the image that has been added to the Images/Items directory of the game. This way they
+            can be linked up automatically.
+        </TextBlock>
         <TextBlock>Item ID</TextBlock>
-        <TextBox Text="{Binding Item.ItemId}"/>
+        <TextBox Text="{Binding ItemId}"/>
         <TextBlock>Display Name</TextBlock>
         <TextBox Text="{Binding Item.Name}"/>
         <TextBlock>Max Stack Size</TextBlock>
@@ -45,4 +54,8 @@
         <TextBlock Visibility="{Binding ItemUseTypeIsTool, Converter={StaticResource BooleanToVisibilityConverter} }">Tool For</TextBlock>
         <ComboBox  Visibility="{Binding ItemUseTypeIsTool, Converter={StaticResource BooleanToVisibilityConverter} }" ItemsSource="{Binding ToolUseTypes}"/>
     </StackPanel>
+    <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" Margin="0 10px 0 0">
+        <Button Content="Save" Padding="10px" Command="{Binding SaveItem}"/>
+    </StackPanel>
+    </Grid>
 </UserControl>

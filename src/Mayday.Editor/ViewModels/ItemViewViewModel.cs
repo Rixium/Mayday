@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
+using Mayday.Editor.Commands;
 using Mayday.Editor.Loaders;
 using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Data;
@@ -14,6 +16,9 @@ namespace Mayday.Editor.ViewModels
     {
         private readonly IWorldObjectLoader _worldObjectLoader;
         private readonly ITileLoader _tileLoader;
+
+        private ICommand _saveItemCommand;
+        public ICommand SaveItemCommand => _saveItemCommand ?? new RelayCommand(SaveItem);
 
         public string[] ItemUseTypes { get; set; } =
         {
@@ -42,6 +47,32 @@ namespace Mayday.Editor.ViewModels
         }
 
         public Item Item { get; }
+
+        public string ItemId
+        {
+            get => Item.ItemId;
+            set
+            {
+                if (Item.ItemId.Equals(value))
+                    return;
+
+                Item.ItemId = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ItemName
+        {
+            get => Item.Name;
+            set
+            {
+                if (Item.Name.Equals(value))
+                    return;
+
+                Item.Name = value;
+                OnPropertyChanged();
+            }
+        }
 
         public IEnumerable<TileProperties> TileTypes =>
             _tileLoader.Tiles.Values.AsEnumerable();
@@ -80,6 +111,11 @@ namespace Mayday.Editor.ViewModels
             {
                 SelectedItemUseType = "World Object";
             }
+        }
+
+        private void SaveItem()
+        {
+
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

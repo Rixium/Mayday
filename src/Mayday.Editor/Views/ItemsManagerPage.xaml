@@ -13,7 +13,7 @@
         <local:NotNullConverter x:Key="NotNullConverter" />
     </UserControl.Resources>
 
-    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10px">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
