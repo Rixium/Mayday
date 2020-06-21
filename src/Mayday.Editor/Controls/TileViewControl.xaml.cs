@@ -1,4 +1,5 @@
 using System.Windows.Controls;
+using Mayday.Editor.Loaders;
 using Mayday.Editor.ViewModels;
 using Mayday.Game.Gameplay.Data;
 
@@ -8,7 +9,7 @@ namespace Mayday.Editor.Controls
     {
         public TileViewControl(string key, TileProperties tile)
         {
-            DataContext = new TileViewViewModel(key, tile);
+            DataContext = new TileViewViewModel(key, tile, new TileLoader());
             InitializeComponent();
         }
 

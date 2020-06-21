@@ -1,11 +1,11 @@
-﻿{
-  "Dirt" : {
+{
+  "Dirt": {
     "Name": "Dirt",
     "CanMine": true,
     "MilliSecondsToMine": 100,
     "ItemDropType": "Dirt_Block"
   },
-  "Stone" : {
+  "Stone": {
     "Name": "Stone",
     "CanMine": true,
     "MilliSecondsToMine": 400,
