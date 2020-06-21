@@ -29,7 +29,7 @@ namespace Mayday.Editor.ViewModels
             get => Tile.Name;
             set
             {
-                if (Tile.Name.Equals(value))
+                if (Tile.Name != null && Tile.Name.Equals(value))
                     return;
 
                 Tile.Name = value;

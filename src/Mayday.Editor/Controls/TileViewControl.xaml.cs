@@ -1,4 +1,3 @@
-using System.Windows.Controls;
 using Mayday.Editor.Loaders;
 using Mayday.Editor.ViewModels;
 using Mayday.Game.Gameplay.Data;

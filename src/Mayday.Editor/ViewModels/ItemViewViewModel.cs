@@ -58,7 +58,7 @@ namespace Mayday.Editor.ViewModels
             get => Item.ItemId;
             set
             {
-                if (Item.ItemId.Equals(value))
+                if (Item.ItemId != null && Item.ItemId.Equals(value))
                     return;
 
                 Item.ItemId = value;
@@ -71,7 +71,7 @@ namespace Mayday.Editor.ViewModels
             get => Item.Name;
             set
             {
-                if (Item.Name.Equals(value))
+                if (Item.Name != null && Item.Name.Equals(value))
                     return;
 
                 Item.Name = value;

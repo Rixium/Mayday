@@ -107,6 +107,9 @@
           <SubType>Code</SubType>
         </Compile>
         <Compile Include="Navigation\Navigator.cs" />
+        <Compile Include="Popups\WarningPopup.xaml.cs">
+          <DependentUpon>WarningPopup.xaml</DependentUpon>
+        </Compile>
         <Compile Include="ViewModels\ItemsManagerViewModel.cs" />
         <Compile Include="ViewModels\ItemViewViewModel.cs" />
         <Compile Include="ViewModels\MainWindowViewModel.cs" />
@@ -147,6 +150,7 @@
         <Generator>MSBuild:Compile</Generator>
         <SubType>Designer</SubType>
       </Page>
+      <Page Include="Popups\WarningPopup.xaml" />
       <Page Include="Views\ItemsManagerPage.xaml" />
     </ItemGroup>
     <ItemGroup>

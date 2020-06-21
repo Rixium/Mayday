@@ -1,11 +1,14 @@
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Mayday.Editor.Commands;
 using Mayday.Editor.Controls;
 using Mayday.Editor.Loaders;
 using Mayday.Editor.Navigation;
+using Mayday.Editor.Popups;
 using Mayday.Game.Gameplay.Data;
+using Mayday.Game.Gameplay.Items;
 
 namespace Mayday.Editor.ViewModels
 {
@@ -24,7 +27,7 @@ namespace Mayday.Editor.ViewModels
             get => WorldObjectData.Id;
             set
             {
-                if (WorldObjectData.Id.Equals(value))
+                if (WorldObjectData.Id != null && WorldObjectData.Id.Equals(value))
                     return;
 
                 WorldObjectData.Id = value;
@@ -78,7 +81,28 @@ namespace Mayday.Editor.ViewModels
             _worldObjectLoader.SetWorldObjects(worldObjects);
             _worldObjectLoader.Save();
 
+            CheckTextureExists();
+            
             Navigator.ShowPage(new WorldObjectsManagerControl());
+        }
+
+        private void CheckTextureExists()
+        {
+            var _filePath = $"..\\..\\..\\src\\Mayday.Game\\Content\\Images\\WorldObjects\\{WorldObjectData.Id}.png";
+            if (File.Exists(_filePath))
+            {
+                return;
+            }
+
+            var window = new WarningPopup
+            {
+                WarningText =
+                {
+                    Text = $"{WorldObjectData.Id}.png does not exist in the images\\worldobjects folder."
+                }
+            };
+
+            window.Show();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
