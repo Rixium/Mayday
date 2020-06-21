@@ -33,7 +33,7 @@ namespace Mayday.Editor.ViewModels
         private IWorldObjectLoader _worldObjectLoader;
 
         public ICommand NewCommand => _newCommand ?? new RelayCommand(() =>
-                                          Navigator.ShowPage(new ItemViewControl("", new Item())));
+                                          Navigator.ShowPage(new WorldObjectViewControl("", new WorldObjectData())));
 
         public IEnumerable<WorldObjectData> WorldObjects => _worldObjectLoader.WorldObjects.Values.AsEnumerable();
 

@@ -35,7 +35,7 @@ namespace Mayday.Editor.ViewModels
 
         private ICommand _newCommand;
         public ICommand NewCommand => _newCommand ?? new RelayCommand(() =>
-            Navigator.ShowPage(new ItemViewControl("", new Item())));
+            Navigator.ShowPage(new TileViewControl("", new TileProperties())));
 
         public IEnumerable<TileProperties> Tiles => _tileLoader.Tiles.Values.AsEnumerable();
 

@@ -1,4 +1,5 @@
 using Mayday.Editor.Loaders;
+using Mayday.Editor.Navigation;
 using Mayday.Editor.ViewModels;
 
 namespace Mayday.Editor.Controls
@@ -14,7 +15,7 @@ namespace Mayday.Editor.Controls
                 new TileLoader()
             );
 
-            // _viewModel.OnUpdateTile += (key, tile) => Navigator.ShowPage(new TileViewControl(key, tile));
+            _viewModel.OnUpdateTile += (key, tile) => Navigator.ShowPage(new TileViewControl(key, tile));
 
             DataContext = _viewModel;
             

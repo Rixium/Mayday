@@ -1,10 +1,10 @@
-using System.Windows.Controls;
 using Mayday.Editor.Loaders;
+using Mayday.Editor.Navigation;
 using Mayday.Editor.ViewModels;
 
 namespace Mayday.Editor.Controls
 {
-    public partial class WorldObjectsManagerControl : UserControl
+    public partial class WorldObjectsManagerControl
     {
         private WorldObjectsManagerViewModel _viewModel;
 
@@ -14,7 +14,7 @@ namespace Mayday.Editor.Controls
                 new WorldObjectLoader()
             );
 
-            // _viewModel.OnUpdateTile += (key, tile) => Navigator.ShowPage(new TileViewControl(key, tile));
+            _viewModel.OnUpdateWorldObject += (key, worldObject) => Navigator.ShowPage(new WorldObjectViewControl(key, worldObject));
 
             DataContext = _viewModel;
 

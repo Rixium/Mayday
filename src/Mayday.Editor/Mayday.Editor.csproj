@@ -86,8 +86,14 @@
         <Compile Include="Controls\TilesManagerControl.xaml.cs">
           <DependentUpon>TilesManagerControl.xaml</DependentUpon>
         </Compile>
+        <Compile Include="Controls\TileViewControl.xaml.cs">
+          <DependentUpon>TileViewControl.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Controls\WorldObjectsManagerControl.xaml.cs">
           <DependentUpon>WorldObjectsManagerControl.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Controls\WorldObjectViewControl.xaml.cs">
+          <DependentUpon>WorldObjectViewControl.xaml</DependentUpon>
         </Compile>
         <Compile Include="Converters\NotNullConverter.cs" />
         <Compile Include="Loaders\IItemsLoader.cs" />
@@ -132,7 +138,9 @@
     <ItemGroup>
       <Page Include="Controls\ItemViewControl.xaml" />
       <Page Include="Controls\TilesManagerControl.xaml" />
+      <Page Include="Controls\TileViewControl.xaml" />
       <Page Include="Controls\WorldObjectsManagerControl.xaml" />
+      <Page Include="Controls\WorldObjectViewControl.xaml" />
       <Page Include="MainWindow.xaml">
         <Generator>MSBuild:Compile</Generator>
         <SubType>Designer</SubType>
