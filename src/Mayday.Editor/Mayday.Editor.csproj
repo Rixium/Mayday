@@ -80,6 +80,9 @@
             <SubType>Code</SubType>
         </Compile>
         <Compile Include="Commands\RelayCommand.cs" />
+        <Compile Include="Controls\ItemViewControl.xaml.cs">
+          <DependentUpon>ItemViewControl.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Converters\NotNullConverter.cs" />
         <Compile Include="Loaders\IItemsLoader.cs" />
         <Compile Include="Loaders\ItemsLoader.cs" />
@@ -87,6 +90,7 @@
           <DependentUpon>MainWindow.xaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
+        <Compile Include="Navigation\Navigator.cs" />
         <Compile Include="ViewModels\ItemsManagerViewModel.cs" />
         <Compile Include="ViewModels\MainWindowViewModel.cs" />
         <Compile Include="ViewModels\WorldObjectsManagerViewModel.cs" />
@@ -117,6 +121,7 @@
         <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
+      <Page Include="Controls\ItemViewControl.xaml" />
       <Page Include="MainWindow.xaml">
         <Generator>MSBuild:Compile</Generator>
         <SubType>Designer</SubType>

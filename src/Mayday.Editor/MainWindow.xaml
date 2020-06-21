@@ -4,17 +4,25 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:Mayday.Editor.ViewModels"
+        Background="#333333"
         mc:Ignorable="d"
         Title="Mayday Editor | Menu" Height="350" Width="525" d:DataContext="{vm:MainWindowViewModel}">
-    <Grid Margin="20px">
+    <Grid Margin="10px">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="4*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Vertical" Width="Auto" Grid.Column="0" Margin="0 0 20px 0">
+        <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" Margin="0 0 0 10px">
+            <Button Content="Back"/>
+        </StackPanel>
+        <StackPanel Grid.RowSpan="2" Grid.Row="0" Orientation="Vertical" Width="Auto" Grid.Column="0" Margin="0 0 10px 0">
             <Button Command="{Binding ItemCommand}" Content="Items" Margin="0 0 0 10px"/>
             <Button Command="{Binding WorldObjectCommand}" Content="World Objects"/>
         </StackPanel>
-        <ContentControl Name="MainContent" Grid.Column="1" />
+        <ContentControl Grid.Row="1" Name="MainContent" Grid.Column="1" />
     </Grid>
 </Window>

@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using Mayday.Editor.Navigation;
 using Mayday.Editor.ViewModels;
 using Mayday.Editor.Views;
 
@@ -18,18 +19,15 @@ namespace Mayday.Editor
         {
             _viewModel = new MainWindowViewModel();
 
-            _viewModel.OnShowItems += () => ShowPage(new ItemsManagerPage());
-            _viewModel.OnShowWorldObjects += () => ShowPage(new WorldObjectsManagerPage());
+            _viewModel.OnShowItems += () => Navigator.ShowPage(new ItemsManagerPage());
+            _viewModel.OnShowWorldObjects += () => Navigator.ShowPage(new WorldObjectsManagerPage());
 
             DataContext = _viewModel;
 
             InitializeComponent();
+
+            Navigator.InitializeWith(MainContent);
         }
 
-        private void ShowPage(UserControl page)
-        {
-
-            MainContent.Content = page;
-        }
     }
 }
