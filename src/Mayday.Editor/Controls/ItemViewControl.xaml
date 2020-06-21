@@ -39,8 +39,10 @@
         </TextBlock>
         <ComboBox ItemsSource="{Binding ItemUseTypes}" SelectedItem="{Binding SelectedItemUseType}"/>
         <TextBlock Visibility="{Binding ItemUseTypeIsTile, Converter={StaticResource BooleanToVisibilityConverter} }">Tile ID</TextBlock>
-        <ComboBox Visibility="{Binding ItemUseTypeIsTile, Converter={StaticResource BooleanToVisibilityConverter} }" ItemsSource="{Binding TileTypes}"/>
+        <ComboBox Visibility="{Binding ItemUseTypeIsTile, Converter={StaticResource BooleanToVisibilityConverter} }" ItemsSource="{Binding TileTypes}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedTileType}"/>
         <TextBlock Visibility="{Binding ItemUseTypeIsWorldObject, Converter={StaticResource BooleanToVisibilityConverter} }">World Object ID</TextBlock>
-        <ComboBox  Visibility="{Binding ItemUseTypeIsWorldObject, Converter={StaticResource BooleanToVisibilityConverter} }" ItemsSource="{Binding WorldObjectTypes}"/>
+        <ComboBox  Visibility="{Binding ItemUseTypeIsWorldObject, Converter={StaticResource BooleanToVisibilityConverter} }" ItemsSource="{Binding WorldObjectTypes}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedWorldObjectType}"/>
+        <TextBlock Visibility="{Binding ItemUseTypeIsTool, Converter={StaticResource BooleanToVisibilityConverter} }">Tool For</TextBlock>
+        <ComboBox  Visibility="{Binding ItemUseTypeIsTool, Converter={StaticResource BooleanToVisibilityConverter} }" ItemsSource="{Binding ToolUseTypes}"/>
     </StackPanel>
 </UserControl>

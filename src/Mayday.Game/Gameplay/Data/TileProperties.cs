@@ -1,6 +1,4 @@
-﻿using Mayday.Game.Enums;
-
-namespace Mayday.Game.Gameplay.Data
+﻿namespace Mayday.Game.Gameplay.Data
 {
     public class TileProperties
     {
