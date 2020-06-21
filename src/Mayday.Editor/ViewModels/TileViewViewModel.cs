@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -7,6 +8,7 @@ using Mayday.Editor.Commands;
 using Mayday.Editor.Controls;
 using Mayday.Editor.Loaders;
 using Mayday.Editor.Navigation;
+using Mayday.Editor.Popups;
 using Mayday.Game.Gameplay.Data;
 using Mayday.Game.Gameplay.Items;
 
@@ -89,7 +91,28 @@ namespace Mayday.Editor.ViewModels
             _tileLoader.SetTiles(tiles);
             _tileLoader.Save();
 
+            CheckTextureExists();
+
             Navigator.ShowPage(new TilesManagerControl());
+        }
+
+        private void CheckTextureExists()
+        {
+            var filePath = $"..\\..\\..\\src\\Mayday.Game\\Content\\Images\\Tiles\\{Tile.Name}.png";
+            if (File.Exists(filePath))
+            {
+                return;
+            }
+
+            var window = new WarningPopup
+            {
+                WarningText =
+                {
+                    Text = $"{Tile.Name}.png does not exist in the images\\tiles folder."
+                }
+            };
+
+            window.Show();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

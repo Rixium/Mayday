@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Mayday.Editor.Commands;
 using Mayday.Editor.Loaders;
 using Mayday.Editor.Navigation;
+using Mayday.Editor.Popups;
 using Mayday.Editor.Views;
 using Mayday.Game.Gameplay.Data;
 using Mayday.Game.Gameplay.Items;
@@ -145,8 +146,31 @@ namespace Mayday.Editor.ViewModels
             _itemsLoader.SetItems(items);
             _itemsLoader.Save();
 
+            CheckTextureExists();
+
             Navigator.ShowPage(new ItemsManagerPage());
         }
+
+
+        private void CheckTextureExists()
+        {
+            var filePath = $"..\\..\\..\\src\\Mayday.Game\\Content\\Images\\Items\\{Item.ItemId}.png";
+            if (File.Exists(filePath))
+            {
+                return;
+            }
+
+            var window = new WarningPopup
+            {
+                WarningText =
+                {
+                    Text = $"{Item.ItemId}.png does not exist in the images\\items folder."
+                }
+            };
+
+            window.Show();
+        }
+
 
         private void ValidateItemUseCase()
         {

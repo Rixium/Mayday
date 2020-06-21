@@ -88,8 +88,8 @@ namespace Mayday.Editor.ViewModels
 
         private void CheckTextureExists()
         {
-            var _filePath = $"..\\..\\..\\src\\Mayday.Game\\Content\\Images\\WorldObjects\\{WorldObjectData.Id}.png";
-            if (File.Exists(_filePath))
+            var filePath = $"..\\..\\..\\src\\Mayday.Game\\Content\\Images\\WorldObjects\\{WorldObjectData.Id}.png";
+            if (File.Exists(filePath))
             {
                 return;
             }
