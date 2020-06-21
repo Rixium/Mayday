@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
@@ -9,6 +10,9 @@ namespace Mayday.Editor.ViewModels
 {
     public class ItemsManagerViewModel
     {
+
+        public Action<Item> OnUpdateItem;
+
         private readonly IItemsLoader _itemsLoader;
 
         public string MainText { get; set; } = "Hello World!";
@@ -26,7 +30,8 @@ namespace Mayday.Editor.ViewModels
 
         public void UpdateSelectedItem()
         {
-
+            if (SelectedItem == null) return;
+            OnUpdateItem?.Invoke(SelectedItem);
         }
 
     }

@@ -5,11 +5,16 @@ namespace Mayday.Editor.Views
 {
     public partial class ItemsManagerPage
     {
+
+        private ItemsManagerViewModel _viewModel;
+
         public ItemsManagerPage()
         {
-            DataContext = new ItemsManagerViewModel(
+            _viewModel = new ItemsManagerViewModel(
                 new ItemsLoader()
             );
+
+            DataContext = _viewModel;
             
             InitializeComponent();
         }
