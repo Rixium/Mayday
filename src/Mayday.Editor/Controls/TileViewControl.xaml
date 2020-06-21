@@ -37,19 +37,9 @@
         <TextBlock>Time To Mine (milliseconds)</TextBlock>
         <TextBox Text="{Binding Tile.MilliSecondsToMine}"/>
         <Separator/>
-        <!-- <TextBlock>Use Case</TextBlock> -->
-        <!-- <TextBlock FontSize="12px" FontWeight="Normal" TextWrapping="Wrap"> -->
-        <!--     Items can be used for creating tiles, world objects, or as a tool. Some items may also be used for -->
-        <!--     nothing other than as a reagent for another item during crafting. -->
-        <!-- </TextBlock> -->
-        <!-- <ComboBox ItemsSource="{Binding ItemUseTypes}" SelectedItem="{Binding SelectedItemUseType}"/> -->
-        <!-- <TextBlock Visibility="{Binding ItemUseTypeIsTile, Converter={StaticResource BooleanToVisibilityConverter} }">Tile ID</TextBlock> -->
-        <!-- <ComboBox Visibility="{Binding ItemUseTypeIsTile, Converter={StaticResource BooleanToVisibilityConverter} }" ItemsSource="{Binding TileTypes}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedTileType}"/> -->
-        <!-- <TextBlock Visibility="{Binding ItemUseTypeIsWorldObject, Converter={StaticResource BooleanToVisibilityConverter} }">World Object ID</TextBlock> -->
-        <!-- <ComboBox  Visibility="{Binding ItemUseTypeIsWorldObject, Converter={StaticResource BooleanToVisibilityConverter} }" ItemsSource="{Binding WorldObjectTypes}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedWorldObjectType}"/> -->
-        <!-- <TextBlock Visibility="{Binding ItemUseTypeIsTool, Converter={StaticResource BooleanToVisibilityConverter} }">Tool For</TextBlock> -->
-        <!-- <ComboBox  Visibility="{Binding ItemUseTypeIsTool, Converter={StaticResource BooleanToVisibilityConverter} }" ItemsSource="{Binding ToolUseTypes}"/> -->
-    </StackPanel>
+        <TextBlock>Drops</TextBlock>
+        <ComboBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItemDrop}" DisplayMemberPath="ItemId"/>
+        </StackPanel>
     <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" Margin="0 10px 0 0">
         <Button Content="Save" Padding="10px" Command="{Binding SaveItemCommand}"/>
     </StackPanel>
