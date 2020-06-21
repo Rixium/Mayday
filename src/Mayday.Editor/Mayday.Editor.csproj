@@ -80,12 +80,14 @@
           <DependentUpon>MainWindow.xaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
+        <Compile Include="ViewModels\ItemsManagerViewModel.cs" />
         <Compile Include="ViewModels\MainWindowViewModel.cs" />
-        <Compile Include="Views\NewItemWindow.xaml.cs">
-          <DependentUpon>NewItemWindow.xaml</DependentUpon>
+        <Compile Include="ViewModels\WorldObjectsManagerViewModel.cs" />
+        <Compile Include="Views\ItemsManagerPage.xaml.cs">
+          <DependentUpon>ItemsManagerPage.xaml</DependentUpon>
         </Compile>
-        <Compile Include="Views\NewWorldObjectWindow.xaml.cs">
-          <DependentUpon>NewWorldObjectWindow.xaml</DependentUpon>
+        <Compile Include="Views\WorldObjectsManagerPage.xaml.cs">
+          <DependentUpon>WorldObjectsManagerPage.xaml</DependentUpon>
         </Compile>
     </ItemGroup>
     <ItemGroup>
@@ -112,8 +114,8 @@
         <Generator>MSBuild:Compile</Generator>
         <SubType>Designer</SubType>
       </Page>
-      <Page Include="Views\NewItemWindow.xaml" />
-      <Page Include="Views\NewWorldObjectWindow.xaml" />
+      <Page Include="Views\ItemsManagerPage.xaml" />
+      <Page Include="Views\WorldObjectsManagerPage.xaml" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="Assets\logo.png">

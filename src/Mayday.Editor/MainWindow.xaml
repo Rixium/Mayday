@@ -8,14 +8,13 @@
         Title="Mayday Editor | Menu" Height="350" Width="525" d:DataContext="{vm:MainWindowViewModel}">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="4*"/>
-            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Vertical" Width="Auto" Grid.Column="1" Margin="20px">
-            <TextBlock Text="Mayday Editor" Margin="0 0 0 10px" FontSize="20px" TextAlignment="Center"/>
-            <Button Command="{Binding CreateItemCommand}" Content="Create Item" Margin="0 0 0 10px"/>
-            <Button Command="{Binding CreateWorldObjectCommand}" Content="Create Object"/>
+        <StackPanel Orientation="Vertical" Width="Auto" Grid.Column="0" Margin="20px">
+            <Button Command="{Binding ItemCommand}" Content="Items" Margin="0 0 0 10px"/>
+            <Button Command="{Binding WorldObjectCommand}" Content="World Objects"/>
         </StackPanel>
+        <ContentControl Name="MainContent" Grid.Column="1" />
     </Grid>
 </Window>

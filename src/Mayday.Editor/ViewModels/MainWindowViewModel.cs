@@ -7,21 +7,22 @@ namespace Mayday.Editor.ViewModels
     public class MainWindowViewModel
     {
 
-        public Action OnCreateWorldObject { get; set; }
-        public Action OnCreateItem { get; set; }
+        public Action OnShowWorldObjects { get; set; }
+        public Action OnShowItems { get; set; }
 
-        private ICommand _createWorldObjectCommand;
+        private ICommand _itemCommand;
 
-        public ICommand CreateWorldObjectCommand =>
-            _createWorldObjectCommand ?? (_createWorldObjectCommand = new RelayCommand(CreateWorldObject));
+        public ICommand ItemCommand =>
+            _itemCommand ?? (_itemCommand = new RelayCommand(ShowItems));
 
-        private ICommand _createItemCommand;
+        private ICommand _worldObjectCommand;
 
-        public ICommand CreateItemCommand =>
-            _createItemCommand ?? (_createItemCommand = new RelayCommand(CreateItem));
+        public ICommand WorldObjectCommand =>
+            _worldObjectCommand ?? (_worldObjectCommand = new RelayCommand(ShowWorldObjects));
 
-        private void CreateItem() => OnCreateItem?.Invoke();
+        private void ShowWorldObjects() => OnShowWorldObjects?.Invoke();
 
-        private void CreateWorldObject() => OnCreateWorldObject?.Invoke();
+        private void ShowItems() => OnShowItems?.Invoke();
+        
     }
 }
