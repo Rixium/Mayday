@@ -32,9 +32,10 @@
         <TextBlock>Max Stack Size</TextBlock>
         <TextBox Text="{Binding Item.MaxStackSize}"/>
         <Separator/>
-        <TextBlock>Creates</TextBlock>
-        <TextBlock FontSize="12px" FontWeight="Normal">
-            An item can either be used for creating a tile, world object, or nothing at all.
+        <TextBlock>Use Case</TextBlock>
+        <TextBlock FontSize="12px" FontWeight="Normal" TextWrapping="Wrap">
+            Items can be used for creating tiles, world objects, or as a tool. Some items may also be used for
+            nothing other than as a reagent for another item during crafting.
         </TextBlock>
         <ComboBox ItemsSource="{Binding ItemUseTypes}" SelectedItem="{Binding SelectedItemUseType}"/>
         <TextBlock Visibility="{Binding ItemUseTypeIsTile, Converter={StaticResource BooleanToVisibilityConverter} }">Tile ID</TextBlock>
