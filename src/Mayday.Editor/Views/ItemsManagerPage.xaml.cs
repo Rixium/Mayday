@@ -1,5 +1,4 @@
-using System.Windows;
-using System.Windows.Controls;
+using Mayday.Editor.Loaders;
 using Mayday.Editor.ViewModels;
 
 namespace Mayday.Editor.Views
@@ -8,7 +7,9 @@ namespace Mayday.Editor.Views
     {
         public ItemsManagerPage()
         {
-            DataContext = new ItemsManagerViewModel();
+            DataContext = new ItemsManagerViewModel(
+                new ItemsLoader()
+            );
             
             InitializeComponent();
         }

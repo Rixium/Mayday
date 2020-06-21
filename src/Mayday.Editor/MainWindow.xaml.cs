@@ -19,6 +19,7 @@ namespace Mayday.Editor
             _viewModel = new MainWindowViewModel();
 
             _viewModel.OnShowItems += () => ShowPage(new ItemsManagerPage());
+            _viewModel.OnShowWorldObjects += () => ShowPage(new WorldObjectsManagerPage());
 
             DataContext = _viewModel;
 

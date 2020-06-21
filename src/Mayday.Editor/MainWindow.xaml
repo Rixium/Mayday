@@ -6,12 +6,12 @@
         xmlns:vm="clr-namespace:Mayday.Editor.ViewModels"
         mc:Ignorable="d"
         Title="Mayday Editor | Menu" Height="350" Width="525" d:DataContext="{vm:MainWindowViewModel}">
-    <Grid>
+    <Grid Margin="20px">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="4*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Vertical" Width="Auto" Grid.Column="0" Margin="20px">
+        <StackPanel Orientation="Vertical" Width="Auto" Grid.Column="0" Margin="0 0 20px 0">
             <Button Command="{Binding ItemCommand}" Content="Items" Margin="0 0 0 10px"/>
             <Button Command="{Binding WorldObjectCommand}" Content="World Objects"/>
         </StackPanel>

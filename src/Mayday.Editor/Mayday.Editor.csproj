@@ -38,6 +38,10 @@
           <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.3\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
           <Private>True</Private>
         </Reference>
+        <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+          <HintPath>..\..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="System" />
         <Reference Include="System.Configuration" />
         <Reference Include="System.Core" />
@@ -76,6 +80,8 @@
             <SubType>Code</SubType>
         </Compile>
         <Compile Include="Commands\RelayCommand.cs" />
+        <Compile Include="Loaders\IItemsLoader.cs" />
+        <Compile Include="Loaders\ItemsLoader.cs" />
         <Compile Include="MainWindow.xaml.cs">
           <DependentUpon>MainWindow.xaml</DependentUpon>
           <SubType>Code</SubType>
@@ -121,6 +127,12 @@
       <Content Include="Assets\logo.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Mayday.Game\Mayday.Game.csproj">
+        <Project>{f7229255-f207-4491-9b88-8b5d8091cdbc}</Project>
+        <Name>Mayday.Game</Name>
+      </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
