@@ -92,6 +92,7 @@
         </Compile>
         <Compile Include="Navigation\Navigator.cs" />
         <Compile Include="ViewModels\ItemsManagerViewModel.cs" />
+        <Compile Include="ViewModels\ItemViewViewModel.cs" />
         <Compile Include="ViewModels\MainWindowViewModel.cs" />
         <Compile Include="ViewModels\WorldObjectsManagerViewModel.cs" />
         <Compile Include="Views\ItemsManagerPage.xaml.cs">

@@ -1,13 +1,45 @@
+<!-- ReSharper disable once Xaml.ConstructorWarning -->
 <UserControl x:Class="Mayday.Editor.Controls.ItemViewControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:items="clr-namespace:Mayday.Game.Gameplay.Items;assembly=Mayday.Game"
+             xmlns:viewModels="clr-namespace:Mayday.Editor.ViewModels"
              mc:Ignorable="d"
-             d:DataContext="{items:Item}">
-    <StackPanel Orientation="Vertical">
-        <TextBlock>Name</TextBlock>
-        <TextBox Text="{Binding Name}"/>
+             d:DataContext="{viewModels:ItemViewViewModel}">
+    
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="0 0 0 10px"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="0 0 0 10px"/>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="0 0 0 5px"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="15px"/>
+        </Style>
+    </UserControl.Resources>
+    
+    <StackPanel Orientation="Vertical" Margin="10px">
+        <TextBlock Text="{Binding Item.ItemId, FallbackValue=UNSET}" HorizontalAlignment="Center" FontSize="20px"/>
+        <TextBlock>Item ID</TextBlock>
+        <TextBox Text="{Binding Item.ItemId}"/>
+        <TextBlock>Display Name</TextBlock>
+        <TextBox Text="{Binding Item.Name}"/>
+        <TextBlock>Max Stack Size</TextBlock>
+        <TextBox Text="{Binding Item.MaxStackSize}"/>
+        <Separator/>
+        <TextBlock>Creates</TextBlock>
+        <TextBlock FontSize="12px" FontWeight="Normal">
+            An item can either be used for creating a tile, world object, or nothing at all.
+        </TextBlock>
+        <ComboBox ItemsSource="{Binding ItemUseTypes}" SelectedItem="{Binding SelectedItemUseType}"/>
+        <TextBlock Visibility="{Binding ItemUseTypeIsTile, Converter={StaticResource BooleanToVisibilityConverter} }">Tile ID</TextBlock>
+        <ComboBox Visibility="{Binding ItemUseTypeIsTile, Converter={StaticResource BooleanToVisibilityConverter} }" ItemsSource="{Binding TileTypes}"/>
+        <TextBlock Visibility="{Binding ItemUseTypeIsWorldObject, Converter={StaticResource BooleanToVisibilityConverter} }">World Object ID</TextBlock>
+        <ComboBox  Visibility="{Binding ItemUseTypeIsWorldObject, Converter={StaticResource BooleanToVisibilityConverter} }" ItemsSource="{Binding WorldObjectTypes}"/>
     </StackPanel>
 </UserControl>
