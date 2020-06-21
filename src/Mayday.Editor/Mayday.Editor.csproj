@@ -83,6 +83,12 @@
         <Compile Include="Controls\ItemViewControl.xaml.cs">
           <DependentUpon>ItemViewControl.xaml</DependentUpon>
         </Compile>
+        <Compile Include="Controls\TilesManagerControl.xaml.cs">
+          <DependentUpon>TilesManagerControl.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Controls\WorldObjectsManagerControl.xaml.cs">
+          <DependentUpon>WorldObjectsManagerControl.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Converters\NotNullConverter.cs" />
         <Compile Include="Loaders\IItemsLoader.cs" />
         <Compile Include="Loaders\ItemsLoader.cs" />
@@ -98,12 +104,10 @@
         <Compile Include="ViewModels\ItemsManagerViewModel.cs" />
         <Compile Include="ViewModels\ItemViewViewModel.cs" />
         <Compile Include="ViewModels\MainWindowViewModel.cs" />
+        <Compile Include="ViewModels\TilesManagerViewModel.cs" />
         <Compile Include="ViewModels\WorldObjectsManagerViewModel.cs" />
         <Compile Include="Views\ItemsManagerPage.xaml.cs">
           <DependentUpon>ItemsManagerPage.xaml</DependentUpon>
-        </Compile>
-        <Compile Include="Views\WorldObjectsManagerPage.xaml.cs">
-          <DependentUpon>WorldObjectsManagerPage.xaml</DependentUpon>
         </Compile>
     </ItemGroup>
     <ItemGroup>
@@ -127,12 +131,13 @@
     </ItemGroup>
     <ItemGroup>
       <Page Include="Controls\ItemViewControl.xaml" />
+      <Page Include="Controls\TilesManagerControl.xaml" />
+      <Page Include="Controls\WorldObjectsManagerControl.xaml" />
       <Page Include="MainWindow.xaml">
         <Generator>MSBuild:Compile</Generator>
         <SubType>Designer</SubType>
       </Page>
       <Page Include="Views\ItemsManagerPage.xaml" />
-      <Page Include="Views\WorldObjectsManagerPage.xaml" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="Assets\logo.png">

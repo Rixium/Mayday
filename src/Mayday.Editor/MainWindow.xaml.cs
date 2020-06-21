@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using Mayday.Editor.Controls;
 using Mayday.Editor.Navigation;
 using Mayday.Editor.ViewModels;
 using Mayday.Editor.Views;
@@ -20,7 +21,8 @@ namespace Mayday.Editor
             _viewModel = new MainWindowViewModel();
 
             _viewModel.OnShowItems += () => Navigator.ShowPage(new ItemsManagerPage());
-            _viewModel.OnShowWorldObjects += () => Navigator.ShowPage(new WorldObjectsManagerPage());
+            _viewModel.OnShowWorldObjects += () => Navigator.ShowPage(new WorldObjectsManagerControl());
+            _viewModel.OnShowTiles += () => Navigator.ShowPage(new TilesManagerControl());
 
             DataContext = _viewModel;
 

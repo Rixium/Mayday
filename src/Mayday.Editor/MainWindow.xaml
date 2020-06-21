@@ -14,6 +14,7 @@
         <StackPanel Orientation="Vertical" Width="Auto" Grid.Column="0" Background="#242424">
             <Button Command="{Binding ItemCommand}" Content="Items" Margin="10px" Padding="10px"/>
             <Button Command="{Binding WorldObjectCommand}" Content="World Objects" Margin="10px 0 10px 10px" Padding="10px"/>
+            <Button Command="{Binding TileCommand}" Content="Tiles" Margin="10px 0 10px 10px" Padding="10px"/>
         </StackPanel>
         <ContentControl Name="MainContent" Grid.Column="1" />
     </Grid>

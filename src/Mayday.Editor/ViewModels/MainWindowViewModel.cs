@@ -9,6 +9,12 @@ namespace Mayday.Editor.ViewModels
     {
         public Action OnShowWorldObjects { get; set; }
         public Action OnShowItems { get; set; }
+        public Action OnShowTiles { get; set; }
+
+        private ICommand _tileCommand;
+
+        public ICommand TileCommand =>
+            _tileCommand ?? (_tileCommand = new RelayCommand(ShowTiles));
 
         private ICommand _itemCommand;
 
@@ -28,5 +34,7 @@ namespace Mayday.Editor.ViewModels
         private void ShowWorldObjects() => OnShowWorldObjects?.Invoke();
 
         private void ShowItems() => OnShowItems?.Invoke();
+
+        private void ShowTiles() => OnShowTiles?.Invoke();
     }
 }

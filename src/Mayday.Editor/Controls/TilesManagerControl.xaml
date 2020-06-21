@@ -1,0 +1,42 @@
+<!-- ReSharper disable once Xaml.ConstructorWarning -->
+<UserControl x:Class="Mayday.Editor.Controls.TilesManagerControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:Mayday.Editor.Converters"
+             xmlns:viewModels="clr-namespace:Mayday.Editor.ViewModels"
+             d:DataContext="{viewModels:TilesManagerViewModel}"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <converters:NotNullConverter x:Key="NotNullConverter" />
+    </UserControl.Resources>
+
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10px">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <DataGrid AlternationCount="2" AlternatingRowBackground="#E4E4E4" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" MinRowHeight="50" ColumnWidth="*" Grid.Row="0" IsReadOnly="True" ItemsSource="{Binding Tiles}" SelectedItem="{Binding SelectedTile}">
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Grid Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.CellStyle>
+        </DataGrid>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" Margin="0 10px 0 0">
+            <Button Command="{Binding UpdateCommand}" Visibility="{Binding SelectedTile, Converter={StaticResource NotNullConverter}}" Content="Update" Padding="10px"/>
+            <Button Command="{Binding NewCommand}" Content="New" Margin="10px 0 0 0" Padding="10px"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
