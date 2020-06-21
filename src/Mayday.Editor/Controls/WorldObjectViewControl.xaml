@@ -1,12 +1,42 @@
+<!-- ReSharper disable once Xaml.ConstructorWarning -->
 <UserControl x:Class="Mayday.Editor.Controls.WorldObjectViewControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Mayday.Editor.Controls"
+             xmlns:viewModels="clr-namespace:Mayday.Editor.ViewModels"
              mc:Ignorable="d"
+             d:DataContext="{viewModels:WorldObjectViewViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="0 0 0 10px"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="0 0 0 10px"/>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="0 0 0 5px"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="15px"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid Margin="10px">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Vertical" Grid.Row="0">
+        <TextBlock Text="{Binding WorldObjectId}" HorizontalAlignment="Center" FontSize="20px"/>
+        <TextBlock>World Object ID</TextBlock>
+        <TextBox Text="{Binding WorldObjectId}"/>
+        <TextBlock>Display Name</TextBlock>
+        <TextBox Text="{Binding WorldObjectData.Name}"/>
+        </StackPanel>
+    <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" Margin="0 10px 0 0">
+        <Button Content="Save" Padding="10px" Command="{Binding SaveItemCommand}"/>
+    </StackPanel>
     </Grid>
 </UserControl>
