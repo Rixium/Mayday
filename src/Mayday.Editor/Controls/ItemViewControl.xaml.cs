@@ -7,6 +7,7 @@ namespace Mayday.Editor.Controls
     {
         public ItemViewControl(Item item)
         {
+            DataContext = item;
             InitializeComponent();
         }
     }
