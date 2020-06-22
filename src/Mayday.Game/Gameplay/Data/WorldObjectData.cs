@@ -9,5 +9,7 @@ namespace Mayday.Game.Gameplay.Data
         public string Name { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
+        public bool CanBeUsed { get; set; }
+
     }
 }

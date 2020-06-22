@@ -3,6 +3,7 @@
     "Id": "Shuttle",
     "Name": "Shuttle",
     "Width": -1,
-    "Height": -1
+    "Height": -1,
+    "CanBeUsed": true
   }
 }
