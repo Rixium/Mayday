@@ -12,10 +12,12 @@ namespace Mayday.Game.Gameplay.Components
 
         public int RangeToUseInTiles = 2;
         public Action<IEntity> InRangeOfWorldObject;
+        public Action<IEntity> LeftRangeOfWorldObject;
         public Action<IEntity> UseWorldObject;
 
         private readonly IEntity _player;
         private WorldObjectData _worldObjectData;
+        private bool _playerInRange;
 
         public UseWorldObjectComponent(IEntity player, WorldObjectData worldObjectData)
         {
@@ -25,23 +27,43 @@ namespace Mayday.Game.Gameplay.Components
 
         public void OnAddedToEntity()
         {
-            
+
         }
 
         public void Update()
         {
-            if (PlayerIsCloseEnough())
+            if (!PlayerIsCloseEnough())
             {
-                InRangeOfWorldObject?.Invoke(Entity);
+                PlayerHasLeftRange();
+                return;
             }
+
+            if (_playerInRange)
+                return;
+
+            _playerInRange = true;
+            InRangeOfWorldObject?.Invoke(Entity);
+            Debug.WriteLine("PLAYER IN RANGE NOW");
+        }
+
+        private void PlayerHasLeftRange()
+        {
+            if (!_playerInRange || PlayerIsCloseEnough())
+                return;
+
+            _playerInRange = false;
+            LeftRangeOfWorldObject?.Invoke(Entity);
         }
 
         private bool PlayerIsCloseEnough() =>
             Vector2.Distance(_player.Center, Entity.Center) <=
-            RangeToUseInTiles * Game1.GlobalGameScale * Entity.GameWorld.TileSize;
+            RangeToUseInTiles * Entity.GameWorld.TileSize;
 
-        public void Use() =>
+        public void Use()
+        {
+            if (PlayerIsCloseEnough()) return;
+
             UseWorldObject?.Invoke(Entity);
-
+        }
     }
 }
