@@ -38,7 +38,7 @@ namespace Mayday.Game.Graphics.Renderers
                 DrawSprite(bodySprite, playerPosition, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
             if(headSprite != null)
                 DrawSprite(headSprite, playerPosition, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
-            
+
         }
 
         private PlayerAnimationComponent GetPlayerAnimationComponent(IEntity player)

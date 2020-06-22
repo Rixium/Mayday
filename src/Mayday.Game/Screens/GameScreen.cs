@@ -170,7 +170,13 @@ namespace Mayday.Game.Screens
             YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.I), () => _interfaceController.ToggleMainInventory());
         }
 
-        private void SetupWorldCallbacks() => GameWorld.TilePlaced += OnTilePlaced;
+        private void SetupWorldCallbacks()
+        {
+            GameWorld.TilePlaced += OnTilePlaced;
+            GameWorld.RequestClientPlayer += OnClientPlayerRequested;
+        }
+
+        private IEntity OnClientPlayerRequested() => MyPlayer;
 
         private void SetupNetworking()
         {

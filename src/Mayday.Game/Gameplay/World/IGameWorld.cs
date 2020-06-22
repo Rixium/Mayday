@@ -9,6 +9,7 @@ namespace Mayday.Game.Gameplay.World
 {
     public interface IGameWorld
     {
+        Func<IEntity> RequestClientPlayer { get; set; }
         Action<Tile> TilePlaced { get; set; }
         int TileSize { get; set; }
         Tile[,] Tiles { get; set; }

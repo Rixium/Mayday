@@ -24,7 +24,7 @@ namespace Mayday.Game
             }
             catch ( Exception)
             {
-                // Couldn't init for some reason (steam is closed etc)
+                Quit();
             }
         }
         

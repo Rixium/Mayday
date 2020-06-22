@@ -14,13 +14,14 @@ namespace Mayday.Game.Gameplay.Components
     public class ItemPlacerComponent : IComponent
     {
         private GameScreen _gameScreen;
-        private IItem _selectedItem;
+
         private double _lastPlaced;
         private Camera _camera => _gameScreen.Camera;
         public IGameWorld GameWorld => _gameScreen.GameWorld;
         public IEntity Entity { get; set; }
         public int MaxDistanceToPlace => 7 * GameWorld.TileSize;
         public Action<IItem> ItemUsed { get; set; }
+        public IItem SelectedItem { get; set; }
 
         public ItemPlacerComponent(GameScreen gameScreen)
         {
@@ -35,9 +36,9 @@ namespace Mayday.Game.Gameplay.Components
         {
             if (button == MouseButton.Left && Time.GameTime.TotalGameTime.TotalSeconds > _lastPlaced + 0.5f)
             {
-                if (_selectedItem == null) return;
+                if (SelectedItem == null) return;
 
-                if (_selectedItem.TileType == TileTypes.None)
+                if (SelectedItem.TileType == null || SelectedItem.TileType == TileTypes.None)
                 {
                     PlaceAsWorldObject();
                     return;
@@ -59,9 +60,9 @@ namespace Mayday.Game.Gameplay.Components
             if (!CanPlaceAt(mouseTileX, mouseTileY, true)) return;
             var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
             if (!CloseEnoughToTile(tile)) return;
-            GameWorld.PlaceTile(tile, _selectedItem.TileType);
+            GameWorld.PlaceTile(tile, SelectedItem.TileType);
             YetiGame.ContentManager.Load<SoundEffect>("place").Play();
-            ItemUsed?.Invoke(_selectedItem);
+            ItemUsed?.Invoke(SelectedItem);
             _lastPlaced = Time.GameTime.TotalGameTime.TotalSeconds;
         }
 
@@ -77,11 +78,11 @@ namespace Mayday.Game.Gameplay.Components
 
             var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
             if (!CloseEnoughToTile(tile)) return;
-            if (WorldObjectIntersectsSomethingAt(_selectedItem, tile)) return;
+            if (WorldObjectIntersectsSomethingAt(SelectedItem, tile)) return;
 
-            GameWorld.PlaceWorldEntity(tile, _selectedItem.WorldObjectType);
+            GameWorld.PlaceWorldEntity(tile, SelectedItem.WorldObjectType);
             YetiGame.ContentManager.Load<SoundEffect>("place").Play();
-            ItemUsed?.Invoke(_selectedItem);
+            ItemUsed?.Invoke(SelectedItem);
             _lastPlaced = Time.GameTime.TotalGameTime.TotalSeconds;
         }
 
@@ -134,6 +135,6 @@ namespace Mayday.Game.Gameplay.Components
             return (Math.Abs(tile.RenderCenter.Y - playerBottom) <= MaxDistanceToPlace);
         }
 
-        public void SetSelectedItem(IItem item) => _selectedItem = item;
+        public void SetSelectedItem(IItem item) => SelectedItem = item;
     }
 }

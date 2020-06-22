@@ -12,6 +12,8 @@ namespace Mayday.Game.Gameplay.World
 {
     public class GameWorld : IGameWorld
     {
+        public Func<IEntity> RequestClientPlayer { get; set; }
+
         private static ulong _worldObjectEntityId = 1;
         private static ulong CurrentWorldObjectEntityId => _worldObjectEntityId++;
 
@@ -179,6 +181,10 @@ namespace Mayday.Game.Gameplay.World
             entity.AddComponent(new MoveComponent());
             entity.AddComponent(new GravityComponent());
             entity.AddComponent(new WorldObjectManagerComponent(worldObjectType));
+
+            if (worldObjectData.CanBeUsed)
+                entity.AddComponent(new UseWorldObjectComponent(RequestClientPlayer?.Invoke(), worldObjectData));
+
             WorldObjects.Add(entity);
             AddTrackedEntity(entity);
         }

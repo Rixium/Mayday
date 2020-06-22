@@ -42,6 +42,9 @@ namespace Mayday.Game.Gameplay.World
                 if (_tileType == value)
                     return;
 
+                if (value == null)
+                    return;
+
                 _tileType = value;
                 BlobValue = -1;
 

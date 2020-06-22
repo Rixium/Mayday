@@ -4,6 +4,7 @@ using System.Linq;
 using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.World;
+using Mayday.Game.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Yetiface.Engine.Utils;
@@ -63,6 +64,16 @@ namespace Mayday.Game.Graphics.Renderers
                 var entityTexture = ContentChest.WorldObjectTextures[worldObjectComponent.WorldObjectType];
                 GraphicsUtils.Instance.SpriteBatch.Draw(entityTexture, entity.GetCurrentBounds(), Color.White);
             }
+
+
+            var clientPlayer = gameWorld.RequestClientPlayer?.Invoke();
+
+            var itemPlacerComponent = clientPlayer?.GetComponent<ItemPlacerComponent>();
+            if (itemPlacerComponent?.SelectedItem == null) return;
+
+            var selectedItem = itemPlacerComponent.SelectedItem;
+            var texture = ContentChest.ItemTextures[selectedItem.ItemId];
+            GraphicsUtils.Instance.SpriteBatch.Draw(texture, clientPlayer.Center, Color.White);
         }
         
         // Gets the blob value from a given tile blob map for a given tile.
