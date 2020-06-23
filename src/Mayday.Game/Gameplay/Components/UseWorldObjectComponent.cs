@@ -43,7 +43,6 @@ namespace Mayday.Game.Gameplay.Components
 
             _playerInRange = true;
             InRangeOfWorldObject?.Invoke(Entity);
-            Debug.WriteLine("PLAYER IN RANGE NOW");
         }
 
         private void PlayerHasLeftRange()
