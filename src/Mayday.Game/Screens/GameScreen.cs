@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Mayday.Game.Enums;
+﻿using System.Collections.Generic;
 using Mayday.Game.Gameplay.Blueprints;
 using Mayday.Game.Gameplay.Collections;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.Items;
+using Mayday.Game.Gameplay.Tutorials;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Graphics;
 using Mayday.Game.Graphics.Renderers;
@@ -29,7 +28,6 @@ using MouseState = Yetiface.Engine.Utils.MouseState;
 
 namespace Mayday.Game.Screens
 {
-
     public class GameScreen : Screen
     {
         public INetworkManager NetworkManager { get; }
@@ -53,14 +51,14 @@ namespace Mayday.Game.Screens
         {
             NetworkManager = networkManager;
             PacketManager.Initialize(networkManager);
-            
+
             _worldRenderer = new WorldRenderer();
             _playerRenderer = new PlayerRenderer();
-            
+
             var gameScreenUserInterface = new GameScreenUserInterface();
             _interfaceController = new GameScreenUserInterfaceController(gameScreenUserInterface);
             UserInterface = new MyraUserInterface(gameScreenUserInterface);
-            
+
             BluePrintManager = new BluePrintManager(this);
             UpdateResolver = new CameraBoundsUpdateResolver(Camera);
         }
@@ -69,7 +67,7 @@ namespace Mayday.Game.Screens
 
         private void SetupTiles()
         {
-            foreach (var tile in GameWorld.Tiles) 
+            foreach (var tile in GameWorld.Tiles)
                 SetupTile(tile);
         }
 
@@ -99,14 +97,15 @@ namespace Mayday.Game.Screens
                 BodyAnimator = new Animator(ContentChest.Bodies[1].Animations),
                 LegsAnimator = new Animator(ContentChest.Legs[1].Animations)
             };
-            
+
             var moveComponent = player.AddComponent(new MoveComponent());
             var gravityComponent = player.AddComponent(new GravityComponent());
             var jumpComponent = player.AddComponent(new JumpComponent());
             var inventoryComponent = player.AddComponent(new InventoryComponent());
             var inventoryBar = inventoryComponent.AddInventory(new Inventory(8));
             var mainInventory = inventoryComponent.AddInventory(new Inventory(24));
-            var itemPickerComponent = player.AddComponent(new ItemPickerComponent(GameWorld.WorldItems, UpdateResolver));
+            var itemPickerComponent =
+                player.AddComponent(new ItemPickerComponent(GameWorld.WorldItems, UpdateResolver));
             playerAnimationComponent = player.AddComponent(playerAnimationComponent);
 
             moveComponent.PositionChanged += PacketManager.SendPositionPacket;
@@ -127,13 +126,23 @@ namespace Mayday.Game.Screens
                     itemPlacerComponent.SetSelectedItem(item);
                 };
                 itemPlacerComponent.ItemUsed += (item) => inventoryBar.RemoveItem(item);
-                
+
                 OnMouseDown += blockBreakerComponent.MouseDown;
                 OnMouseDown += itemPlacerComponent.MouseDown;
                 inventoryBar.InventoryChanged += () => _interfaceController.InventoryBarChanged(inventoryBar);
                 mainInventory.InventoryChanged += () => _interfaceController.MainInventoryChanged(mainInventory);
                 jumpComponent.Jump += PacketManager.SendJumpPacket;
                 inventoryBar.AddItemToInventory(ContentChest.ItemData["Shuttle"]);
+
+                var tutorialManagerComponent = player.AddComponent(new TutorialManagerComponent());
+
+                var tutorial1 = new Tutorial<IEntity>(new TutorialDefinition()
+                {
+                    Text = "HELLO WORLD!",
+                });
+
+
+                tutorialManagerComponent.AddTutorial("Test", tutorial1);
             }
 
             Players.Add(player);
@@ -148,30 +157,39 @@ namespace Mayday.Game.Screens
             MediaPlayer.Stop();
             MediaPlayer.Play(YetiGame.ContentManager.Load<Song>("gameAmbient"));
             MediaPlayer.IsRepeating = true;
-            
+
             _interfaceController.ToggleMainInventory();
-            
+
             BackgroundColor = new Color(47, 39, 54);
 
             SetupNetworking();
             SetupWorldCallbacks();
             SetupTiles();
             SetupUiInput();
-            
+
             Camera.SetEntity(MyPlayer);
         }
 
         private void SetupUiInput()
         {
-            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D1), () => _interfaceController.InventorySelectionChanged(0));
-            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D2), () => _interfaceController.InventorySelectionChanged(1));
-            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D3), () => _interfaceController.InventorySelectionChanged(2));
-            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D4), () => _interfaceController.InventorySelectionChanged(3));
-            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D5), () => _interfaceController.InventorySelectionChanged(4));
-            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D6), () => _interfaceController.InventorySelectionChanged(5));
-            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D7), () => _interfaceController.InventorySelectionChanged(6));
-            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D8), () => _interfaceController.InventorySelectionChanged(7));
-            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.I), () => _interfaceController.ToggleMainInventory());
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D1),
+                () => _interfaceController.InventorySelectionChanged(0));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D2),
+                () => _interfaceController.InventorySelectionChanged(1));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D3),
+                () => _interfaceController.InventorySelectionChanged(2));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D4),
+                () => _interfaceController.InventorySelectionChanged(3));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D5),
+                () => _interfaceController.InventorySelectionChanged(4));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D6),
+                () => _interfaceController.InventorySelectionChanged(5));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D7),
+                () => _interfaceController.InventorySelectionChanged(6));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D8),
+                () => _interfaceController.InventorySelectionChanged(7));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.I),
+                () => _interfaceController.ToggleMainInventory());
         }
 
         private void SetupWorldCallbacks()
@@ -208,11 +226,11 @@ namespace Mayday.Game.Screens
             var consumers = new GamePacketConsumerManager(this);
             consumers.InjectInto(gameClientListener, gameServerListener);
         }
-        
+
         public override void RenderScreen()
         {
             GraphicsUtils.Instance.Begin(true, Camera.GetMatrix());
-            
+
             _worldRenderer.Draw(GameWorld, Camera);
             _playerRenderer.DrawPlayers(Players.GetAll());
 
@@ -220,9 +238,10 @@ namespace Mayday.Game.Screens
             {
                 if (!UpdateResolver.ShouldUpdate(entity)) continue;
                 if (!(entity is ItemDrop item)) continue;
-                GraphicsUtils.Instance.SpriteBatch.Draw(ContentChest.ItemTextures[item.Item.ItemId], new Vector2(item.X, item.Y), Color.White);
+                GraphicsUtils.Instance.SpriteBatch.Draw(ContentChest.ItemTextures[item.Item.ItemId],
+                    new Vector2(item.X, item.Y), Color.White);
             }
-            
+
             GraphicsUtils.Instance.End();
         }
 
@@ -243,10 +262,8 @@ namespace Mayday.Game.Screens
                 _interfaceController.IncrementSelection(-1);
             else if (MouseState.CurrentState.ScrollWheelValue < MouseState.LastState.ScrollWheelValue)
                 _interfaceController.IncrementSelection(1);
-            
+
             Camera.Update();
         }
-
     }
-
 }
