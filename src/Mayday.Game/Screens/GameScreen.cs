@@ -1,4 +1,6 @@
-﻿using Mayday.Game.Enums;
+﻿using System;
+using System.Collections.Generic;
+using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Blueprints;
 using Mayday.Game.Gameplay.Collections;
 using Mayday.Game.Gameplay.Components;
@@ -16,7 +18,6 @@ using Mayday.UI.Views;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using Steamworks;
 using Yetiface.Engine;
 using Yetiface.Engine.Inputs;
 using Yetiface.Engine.Networking;
@@ -42,7 +43,10 @@ namespace Mayday.Game.Screens
         private readonly IWorldRenderer _worldRenderer;
         private readonly IPlayerRenderer _playerRenderer;
         private readonly GameScreenUserInterfaceController _interfaceController;
-        
+        private readonly HashSet<IRenderable> _renderableComponents = new HashSet<IRenderable>();
+
+        public IEntity CurrentWorldObjectPlayerIsNearTo { get; set; }
+
         public Camera Camera { get; } = new Camera();
 
         public GameScreen(INetworkManager networkManager) : base("GameScreen")
@@ -174,6 +178,25 @@ namespace Mayday.Game.Screens
         {
             GameWorld.TilePlaced += OnTilePlaced;
             GameWorld.RequestClientPlayer += OnClientPlayerRequested;
+            GameWorld.PlayerInRangeOfWorldObject += OnPlayerInRangeOfWorldObject;
+            GameWorld.PlayerLeftRangeOfWorldObject += OnPlayerLeftRangeOfWorldObject;
+            GameWorld.RenderableComponentAdded += OnNewRenderableComponentAdded;
+        }
+
+        private void OnNewRenderableComponentAdded(IRenderable renderableComponent) =>
+            _renderableComponents.Add(renderableComponent);
+
+        private void OnPlayerLeftRangeOfWorldObject(IEntity entity)
+        {
+            if (entity != CurrentWorldObjectPlayerIsNearTo) return;
+            CurrentWorldObjectPlayerIsNearTo = null;
+            _interfaceController.ClearCurrentWorldObjectForHint();
+        }
+
+        private void OnPlayerInRangeOfWorldObject(IEntity entity)
+        {
+            CurrentWorldObjectPlayerIsNearTo = entity;
+            _interfaceController.SetCurrentWorldObjectForHint(entity);
         }
 
         private IEntity OnClientPlayerRequested() => MyPlayer;
@@ -192,7 +215,7 @@ namespace Mayday.Game.Screens
             
             _worldRenderer.Draw(GameWorld, Camera);
             _playerRenderer.DrawPlayers(Players.GetAll());
-            
+
             foreach (var entity in GameWorld.WorldItems.GetItems())
             {
                 if (!UpdateResolver.ShouldUpdate(entity)) continue;

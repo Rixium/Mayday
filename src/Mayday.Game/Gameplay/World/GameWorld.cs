@@ -6,6 +6,7 @@ using Mayday.Game.Gameplay.Collections;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.Items;
+using Microsoft.Xna.Framework;
 using Yetiface.Engine.Utils;
 
 namespace Mayday.Game.Gameplay.World
@@ -13,6 +14,9 @@ namespace Mayday.Game.Gameplay.World
     public class GameWorld : IGameWorld
     {
         public Func<IEntity> RequestClientPlayer { get; set; }
+        public Action<IEntity> PlayerInRangeOfWorldObject { get; set; }
+        public Action<IEntity> PlayerLeftRangeOfWorldObject { get; set; }
+        public Action<IRenderable> RenderableComponentAdded { get; set; }
 
         private static ulong _worldObjectEntityId = 1;
         private static ulong CurrentWorldObjectEntityId => _worldObjectEntityId++;
@@ -183,7 +187,12 @@ namespace Mayday.Game.Gameplay.World
             entity.AddComponent(new WorldObjectManagerComponent(worldObjectType));
 
             if (worldObjectData.CanBeUsed)
-                entity.AddComponent(new UseWorldObjectComponent(RequestClientPlayer?.Invoke(), worldObjectData));
+            {
+                var worldUseComponent = new UsableWorldObjectComponent(RequestClientPlayer?.Invoke(), worldObjectData);
+                worldUseComponent.InRangeOfWorldObject += PlayerInRangeOfWorldObject;
+                worldUseComponent.LeftRangeOfWorldObject += PlayerLeftRangeOfWorldObject;
+                entity.AddComponent(worldUseComponent);
+            }
 
             WorldObjects.Add(entity);
             AddTrackedEntity(entity);

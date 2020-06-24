@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using Mayday.Game.Gameplay.Components;
+using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.Items;
 using Mayday.UI.Views;
 using Microsoft.Xna.Framework.Graphics;
@@ -116,7 +118,17 @@ namespace Mayday.Game.UI.Controllers
             SelectedItemSlotChanged?.Invoke(_currentSelection);
         }
 
-        
-            
+
+        public void ClearCurrentWorldObjectForHint()
+        {
+            UserInterface.HintText.Text = "";
+        }
+
+        public void SetCurrentWorldObjectForHint(IEntity entity)
+        {
+            var worldObjectType = entity.GetComponent<WorldObjectManagerComponent>().WorldObjectType;
+            var worldObjectData = ContentChest.WorldObjectData[worldObjectType];
+            UserInterface.HintText.Text = $"[Use {worldObjectData.Name}]";
+        }
     }
 }

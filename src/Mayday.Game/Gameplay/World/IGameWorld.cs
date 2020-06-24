@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Collections;
+using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.Items;
 
@@ -10,6 +10,9 @@ namespace Mayday.Game.Gameplay.World
     public interface IGameWorld
     {
         Func<IEntity> RequestClientPlayer { get; set; }
+        Action<IEntity> PlayerInRangeOfWorldObject { get; set; }
+        Action<IEntity> PlayerLeftRangeOfWorldObject { get; set; }
+        Action<IRenderable> RenderableComponentAdded { get; set; }
         Action<Tile> TilePlaced { get; set; }
         int TileSize { get; set; }
         Tile[,] Tiles { get; set; }

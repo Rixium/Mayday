@@ -1,12 +1,11 @@
 using System;
-using System.Diagnostics;
 using Mayday.Game.Gameplay.Data;
 using Mayday.Game.Gameplay.Entities;
 using Microsoft.Xna.Framework;
 
 namespace Mayday.Game.Gameplay.Components
 {
-    public class UseWorldObjectComponent : IUpdateable
+    public class UsableWorldObjectComponent : IUpdateable
     {
         public IEntity Entity { get; set; }
 
@@ -19,7 +18,7 @@ namespace Mayday.Game.Gameplay.Components
         private WorldObjectData _worldObjectData;
         private bool _playerInRange;
 
-        public UseWorldObjectComponent(IEntity player, WorldObjectData worldObjectData)
+        public UsableWorldObjectComponent(IEntity player, WorldObjectData worldObjectData)
         {
             _player = player;
             _worldObjectData = worldObjectData;

@@ -31,6 +31,13 @@ namespace Mayday.UI.Views
 				Margin = new Thickness(0, 10, 0, 0),
 			};
 
+			HintText = new Label()
+			{
+				Margin = new Thickness(10, 0, 0, 10),
+				TextColor = Color.White,
+				HorizontalAlignment = HorizontalAlignment.Left,
+				VerticalAlignment = VerticalAlignment.Bottom
+			};
 
 			TopPanel.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
 			TopPanel.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Top;
@@ -149,9 +156,11 @@ namespace Mayday.UI.Views
 			Widgets.Add(ItemListBox);
 			Widgets.Add(TopPanel);
 			Widgets.Add(InventoryPanel);
+			Widgets.Add(HintText);
 		}
 		
 		public ListBox ItemListBox;
+		public Label HintText { get; set; }
 		
 		public IList<Image> InventorySlotItemImages = new List<Image>();
 		public IList<Label> InventorySlotItemCounts = new List<Label>();
