@@ -20,7 +20,15 @@ namespace Mayday.Game.Gameplay.Components
         {
             if (Tutorials.ContainsKey(name)) return;
             Tutorials.Add(name, tutorial);
+
+            tutorial.Triggered += () => OnTutorialTriggered(name);
         }
-        
+
+        private void OnTutorialTriggered(string name)
+        {
+            Tutorials[name] = null;
+            Tutorials.Remove(name);
+        }
+
     }
 }

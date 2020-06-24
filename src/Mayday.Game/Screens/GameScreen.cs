@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Mayday.Game.Gameplay.Blueprints;
 using Mayday.Game.Gameplay.Collections;
 using Mayday.Game.Gameplay.Components;
@@ -136,13 +137,15 @@ namespace Mayday.Game.Screens
 
                 var tutorialManagerComponent = player.AddComponent(new TutorialManagerComponent());
 
-                var tutorial1 = new Tutorial<IEntity>(new TutorialDefinition()
+                var tutorial1 = new PopupTutorial<IEntity>(new TutorialDefinition()
                 {
                     Text = "HELLO WORLD!",
                 });
 
 
                 tutorialManagerComponent.AddTutorial("Test", tutorial1);
+
+                GameWorld.PlayerInRangeOfWorldObject += tutorial1.Trigger;
             }
 
             Players.Add(player);
