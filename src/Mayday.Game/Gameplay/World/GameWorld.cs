@@ -55,8 +55,13 @@ namespace Mayday.Game.Gameplay.World
         private void OnTrackedEntityDestroyed(IEntity obj) =>
             _trackedEntitiesToRemove.Add(obj);
 
-        public void Update() =>
+        public void Update()
+        {
             CleanUpTrackedEntities();
+
+            foreach(var entity in TrackedEntities)
+                entity.Update();
+        }
 
         private void CleanUpTrackedEntities()
         {

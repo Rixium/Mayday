@@ -259,11 +259,6 @@ namespace Mayday.Game.Screens
 
             GameWorld.Update();
 
-            foreach (var entity in GameWorld.TrackedEntities)
-            {
-                entity.Update();
-            }
-
             if (MouseState.CurrentState.ScrollWheelValue > MouseState.LastState.ScrollWheelValue)
                 _interfaceController.IncrementSelection(-1);
             else if (MouseState.CurrentState.ScrollWheelValue < MouseState.LastState.ScrollWheelValue)
