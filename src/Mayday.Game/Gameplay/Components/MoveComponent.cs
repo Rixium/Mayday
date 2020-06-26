@@ -18,8 +18,6 @@ namespace Mayday.Game.Gameplay.Components
 
         public void Update()
         {
-            var gameWorld = Entity.GameWorld;
-
             if (Entity.XDirection != 0)
                 XVelocity += 0.1f * Entity.XDirection * Game1.GlobalGameScale;
             else
@@ -40,7 +38,7 @@ namespace Mayday.Game.Gameplay.Components
             var xMove = XVelocity;
             var yMove = -YVelocity;
             
-            gameWorld.Move(Entity, xMove, yMove, YVelocity);
+            Entity.GameArea.Move(Entity, xMove, yMove, YVelocity);
 
             Grounded = Math.Abs(currentY - Entity.Y) < 0.01f;
 
@@ -61,7 +59,7 @@ namespace Mayday.Game.Gameplay.Components
             if(YVelocity > 0) // Travelling Upwards
                 for (var i = (int) tileStartX; i <= tileEndX; i++)
                 {
-                    var tile = Entity.GameWorld.TryGetTile(i,
+                    var tile = Entity.GameArea.TryGetTile(i,
                         (int) ((playerBounds.Top - YVelocity) / Entity.GameWorld.TileSize));
                     if (tile != null && tile.TileType == TileTypes.None)
                         continue;
@@ -72,7 +70,7 @@ namespace Mayday.Game.Gameplay.Components
             else if (YVelocity < 0) // Travelling Downwards
                 for (var i = (int) tileStartX; i <= tileEndX; i++)
                 {
-                    var tile = Entity.GameWorld.TryGetTile(i,
+                    var tile = Entity.GameArea.TryGetTile(i,
                         (int) ((playerBounds.Bottom  + 1) / Entity.GameWorld.TileSize));
                     if (tile != null && tile.TileType == TileTypes.None) continue;
                     

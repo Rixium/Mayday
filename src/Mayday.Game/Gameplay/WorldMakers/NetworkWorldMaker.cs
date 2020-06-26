@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.World;
+using Mayday.Game.Gameplay.World.Areas;
 using Mayday.Game.Gameplay.WorldMakers.Listeners;
 using Mayday.Game.Networking.Packagers;
 using Mayday.Game.Networking.Packets;
@@ -29,9 +30,9 @@ namespace Mayday.Game.Gameplay.WorldMakers
         
         private int _tilesReceived;
         
-        public int WorldWidth { get; set; }
+        public int AreaWidth { get; set; }
         
-        public int WorldHeight { get; set; }
+        public int AreaHeight { get; set; }
 
         private Tile[,] _tiles;
         public IList<NewPlayerPacket> PlayersToAdd = new List<NewPlayerPacket>();
@@ -60,37 +61,49 @@ namespace Mayday.Game.Gameplay.WorldMakers
 
         private async Task<IGameWorld> GetWorldFromNetwork(IWorldMakerListener worldGeneratorListener)
         {
-            var world = new GameWorld();
 
             await Task.Delay(1000);
             
             _tilesReceived = 0;
             
-            WorldWidth = 200;
-            WorldHeight = 200;
+            AreaWidth = 200;
+            AreaHeight = 200;
             
-            _tiles = new Tile[WorldWidth, WorldHeight];
+            _tiles = new Tile[AreaWidth, AreaHeight];
 
-            for (var i = 0; i < WorldWidth; i++)
+            var outsideArea = new OutsideArea()
             {
-                for (var j = 0; j < WorldHeight; j++)
+                Tiles = _tiles,
+                AreaWidth = AreaWidth,
+                AreaHeight = AreaHeight,
+            };
+
+            var world = new GameWorld(outsideArea)
+            {
+                TileSize = 8 * Game1.GlobalGameScale
+            };
+
+            for (var i = 0; i < AreaWidth; i++)
+            {
+                for (var j = 0; j < AreaHeight; j++)
                 {
                     _tiles[i, j] = new Tile(TileTypes.None, i, j)
                     {
-                        GameWorld = world
+                        GameWorld = world,
+                        GameArea = outsideArea
                     };
                 }
             }
             
-            Bitmap = new Bitmap(WorldWidth, WorldHeight);
+            Bitmap = new Bitmap(AreaWidth, AreaHeight);
             
             var mapRequest = new MapRequestPacket();
             var toSend = _networkMessagePackager.Package(mapRequest);
             _networkManager.SendMessage(toSend);
             
-            while (_tilesReceived < WorldWidth * WorldHeight)
+            while (_tilesReceived < AreaWidth * AreaHeight)
             {
-                var percent = ((float)_tilesReceived / (WorldWidth * WorldHeight)) * 100;
+                var percent = ((float)_tilesReceived / (AreaWidth * AreaHeight)) * 100;
                 worldGeneratorListener.OnWorldGenerationUpdate($"Receiving tiles... {percent}%");
             }
             
@@ -107,11 +120,6 @@ namespace Mayday.Game.Gameplay.WorldMakers
                     tile.TileType == TileTypes.Dirt ? Color.White : Color.Orange);
             }
 
-            world.Tiles = _tiles;
-            world.Width = WorldWidth;
-            world.Height = WorldHeight;
-            world.TileSize = 8 * Game1.GlobalGameScale;
-            
             return world;
         }
 

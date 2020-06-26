@@ -4,6 +4,7 @@ using Mayday.Game.Gameplay.Collections;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.Items;
+using Mayday.Game.Gameplay.World.Areas;
 
 namespace Mayday.Game.Gameplay.World
 {
@@ -15,26 +16,12 @@ namespace Mayday.Game.Gameplay.World
         Action<IRenderable> RenderableComponentAdded { get; set; }
         Action<Tile> TilePlaced { get; set; }
         int TileSize { get; set; }
-        Tile[,] Tiles { get; set; }
         int Width { get; set; }
         int Height { get; set; }
-        IWorldItemSet WorldItems { get; set; }
-        IWorldObjectSet WorldObjects { get; set; }
         HashSet<IEntity> TrackedEntities { get; }
-
-        void Move(IEntity player,
-            float xMove,
-            float yMove,
-            float yVelocity);
-        Tile TryGetTile(int tileX, int tileY);
-        void PlaceTile(Tile tile, string tileType);
-        Tile GetRandomSpawnLocation();
-        void DropItem(ItemDrop item);
+        IList<IGameArea> GameAreas { get; set; }
         bool AnythingCollidesWith(Tile gameWorldTile);
         void AddTrackedEntity(IEntity entity);
-        void PlaceWorldEntity(Tile tile, string worldObjectType);
-
         void Update();
-        IEntity GetWorldObjectAbove(Tile tile);
     }
 }

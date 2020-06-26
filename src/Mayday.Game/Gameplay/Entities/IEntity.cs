@@ -2,6 +2,7 @@
 using System;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.World;
+using Mayday.Game.Gameplay.World.Areas;
 using Microsoft.Xna.Framework;
 using Yetiface.Engine.Utils;
 
@@ -12,6 +13,7 @@ namespace Mayday.Game.Gameplay.Entities
         ulong EntityId { get; set; }
         Action<IEntity> Destroy { get; set; }
         IGameWorld GameWorld { get; set; }
+        IGameArea GameArea { get; set; }
         int XDirection { get; set; }
         float X { get; set; }
         float Y { get; set; }

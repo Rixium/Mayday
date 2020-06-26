@@ -68,7 +68,7 @@ namespace Mayday.Game.Screens
 
         private void SetupTiles()
         {
-            foreach (var tile in GameWorld.Tiles)
+            foreach (var tile in GameWorld.GameAreas[0].Tiles)
                 SetupTile(tile);
         }
 
@@ -84,7 +84,7 @@ namespace Mayday.Game.Screens
         {
             if (isClients)
             {
-                var spawnTile = GameWorld.GetRandomSpawnLocation();
+                var spawnTile = GameWorld.GameAreas[0].GetRandomSpawnLocation();
                 player.X = spawnTile.TileX * GameWorld.TileSize;
                 player.Y = spawnTile.TileY * GameWorld.TileSize - 70 * Game1.GlobalGameScale;
                 MyPlayer = player;
@@ -106,7 +106,7 @@ namespace Mayday.Game.Screens
             var inventoryBar = inventoryComponent.AddInventory(new Inventory(8));
             var mainInventory = inventoryComponent.AddInventory(new Inventory(24));
             var itemPickerComponent =
-                player.AddComponent(new ItemPickerComponent(GameWorld.WorldItems, UpdateResolver));
+                player.AddComponent(new ItemPickerComponent(GameWorld.GameAreas[0].WorldItems, UpdateResolver));
             playerAnimationComponent = player.AddComponent(playerAnimationComponent);
 
             moveComponent.PositionChanged += PacketManager.SendPositionPacket;
@@ -147,6 +147,9 @@ namespace Mayday.Game.Screens
 
                 GameWorld.PlayerInRangeOfWorldObject += tutorial1.Trigger;
             }
+
+            // TODO LOTS
+            player.GameArea = GameWorld.GameAreas[0];
 
             Players.Add(player);
 
@@ -234,10 +237,10 @@ namespace Mayday.Game.Screens
         {
             GraphicsUtils.Instance.Begin(true, Camera.GetMatrix());
 
-            _worldRenderer.Draw(GameWorld, Camera);
+            _worldRenderer.Draw(GameWorld.GameAreas[0], Camera);
             _playerRenderer.DrawPlayers(Players.GetAll());
 
-            foreach (var entity in GameWorld.WorldItems.GetItems())
+            foreach (var entity in GameWorld.GameAreas[0].GetItems())
             {
                 if (!UpdateResolver.ShouldUpdate(entity)) continue;
                 if (!(entity is ItemDrop item)) continue;

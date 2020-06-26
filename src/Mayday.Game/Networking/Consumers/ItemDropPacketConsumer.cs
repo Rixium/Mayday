@@ -32,8 +32,9 @@ namespace Mayday.Game.Networking.Consumers
             itemDrop.AddComponent(new GravityComponent());
             moveComponent.XVelocity = Randomizer.Next(-10, 10);
             moveComponent.YVelocity = Randomizer.Next(0, 5);
-            
-            _gameScreen.GameWorld.DropItem(itemDrop);
+
+            // TODO NETWORKED GAME AREAS
+            _gameScreen.GameWorld.GameAreas[0].DropItem(itemDrop);
         }
     }
 }

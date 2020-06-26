@@ -9,7 +9,7 @@ namespace Mayday.Game.Gameplay.Components
     public class ItemDropperComponent : IComponent
     {
         public IEntity Entity { get; set; }
-        public Action<ItemDrop> ItemDrop { get; set; }
+        public Action<IEntity, ItemDrop> ItemDrop { get; set; }
         public string ItemDropType { get; set; }
         
         public ItemDropperComponent(string itemDropType)
@@ -48,7 +48,7 @@ namespace Mayday.Game.Gameplay.Components
             moveComponent.XVelocity = Randomizer.Next(-10, 10);
             moveComponent.YVelocity = Randomizer.Next(0, 5);
             
-            ItemDrop?.Invoke(itemDrop);
+            ItemDrop?.Invoke(entity, itemDrop);
         }
 
         private static Item GetItemData(string itemDropType) =>

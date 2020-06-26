@@ -58,9 +58,9 @@ namespace Mayday.Game.Gameplay.Components
             if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > GameWorld.Width - 1 ||
                 mouseTileY > GameWorld.Height - 1) return;
             if (!CanPlaceAt(mouseTileX, mouseTileY, true)) return;
-            var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
+            var tile = Entity.GameArea.Tiles[mouseTileX, mouseTileY];
             if (!CloseEnoughToTile(tile)) return;
-            GameWorld.PlaceTile(tile, SelectedItem.TileType);
+            Entity.GameArea.PlaceTile(tile, SelectedItem.TileType);
             YetiGame.ContentManager.Load<SoundEffect>("place").Play();
             ItemUsed?.Invoke(SelectedItem);
             _lastPlaced = Time.GameTime.TotalGameTime.TotalSeconds;
@@ -73,14 +73,14 @@ namespace Mayday.Game.Gameplay.Components
             var mouseTileX = mousePosition.X / GameWorld.TileSize;
             var mouseTileY = mousePosition.Y / GameWorld.TileSize;
 
-            if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > GameWorld.Width - 1 ||
-                mouseTileY > GameWorld.Height - 1) return;
+            if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > Entity.GameArea.AreaWidth - 1 ||
+                mouseTileY > Entity.GameArea.AreaHeight - 1) return;
 
-            var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
+            var tile = Entity.GameArea.Tiles[mouseTileX, mouseTileY];
             if (!CloseEnoughToTile(tile)) return;
             if (WorldObjectIntersectsSomethingAt(SelectedItem, tile)) return;
 
-            GameWorld.PlaceWorldEntity(tile, SelectedItem.WorldObjectType);
+            Entity.GameArea.PlaceWorldEntity(tile, SelectedItem.WorldObjectType);
             YetiGame.ContentManager.Load<SoundEffect>("place").Play();
             ItemUsed?.Invoke(SelectedItem);
             _lastPlaced = Time.GameTime.TotalGameTime.TotalSeconds;
@@ -110,7 +110,7 @@ namespace Mayday.Game.Gameplay.Components
         /// <returns>Returns whether or not the item can be placed at the given position.</returns>
         private bool CanPlaceAt(int tileX, int tileY, bool requiresImmediateNeighbour = false)
         {
-            var tile = GameWorld.TryGetTile(tileX, tileY);
+            var tile = Entity.GameArea.TryGetTile(tileX, tileY);
 
             if (tile == null) return false;
             

@@ -63,7 +63,7 @@ namespace Mayday.Game.Gameplay.World
                 for (var j = TileY - 1; j <= TileY + 1; j++)
                 {
                     if (i == TileX && j == TileY) continue;
-                    var tile = GameWorld.TryGetTile(i, j);
+                    var tile = GameArea.TryGetTile(i, j);
                     if (tile == null) continue;
                     tile.BlobValue = -1;
                 }
@@ -101,16 +101,16 @@ namespace Mayday.Game.Gameplay.World
         /// <returns></returns>
         public bool HasImmediateNeighbour()
         {
-            var east = GameWorld.TryGetTile(TileX - 1, TileY);
+            var east = GameArea.TryGetTile(TileX - 1, TileY);
             if (east != null && east.TileType != TileTypes.None) return true;
             
-            var west = GameWorld.TryGetTile(TileX + 1, TileY);
+            var west = GameArea.TryGetTile(TileX + 1, TileY);
             if (west != null && west.TileType != TileTypes.None) return true;
             
-            var north = GameWorld.TryGetTile(TileX, TileY - 1);
+            var north = GameArea.TryGetTile(TileX, TileY - 1);
             if (north != null && north.TileType != TileTypes.None) return true;
             
-            var south = GameWorld.TryGetTile(TileX, TileY + 1);
+            var south = GameArea.TryGetTile(TileX, TileY + 1);
             return south != null && south.TileType != TileTypes.None;
         }
     }

@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.World;
-using Mayday.Game.Screens;
+using Mayday.Game.Gameplay.World.Areas;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Yetiface.Engine.Utils;
 
 namespace Mayday.Game.Graphics.Renderers
@@ -24,9 +22,9 @@ namespace Mayday.Game.Graphics.Renderers
             {21, 48}, {245, 49}, {95, 50}, {81, 51}, {85, 52}
         };
 
-        public void Draw(IGameWorld gameWorld, Camera camera)
+        public void Draw(IGameArea gameArea, Camera camera)
         {
-            var worldTileSize = gameWorld.TileSize;
+            var worldTileSize = gameArea.GameWorld.TileSize;
 
             var startTileX = (int) (camera.Position.X - Window.ViewportWidth / 2.0f) / worldTileSize - 1;
             var startTileY = (int) (camera.Position.Y - Window.ViewportHeight / 2.0f) / worldTileSize - 1;
@@ -37,12 +35,12 @@ namespace Mayday.Game.Graphics.Renderers
             {
                 for (var j = startTileY; j < endTileY; j++)
                 {
-                    if (i < 0 || j < 0 || i > gameWorld.Width - 1 || j > gameWorld.Height - 1) continue;
-                    var tile = gameWorld.Tiles[i, j];
+                    if (i < 0 || j < 0 || i > gameArea.AreaWidth - 1 || j > gameArea.AreaHeight - 1) continue;
+                    var tile = gameArea.Tiles[i, j];
 
                     if (tile.TileType == TileTypes.None) continue;
 
-                    var tileIndex = GetTileBlobValue(gameWorld, tile, _tileBlobMap);
+                    var tileIndex = GetTileBlobValue(gameArea, tile, _tileBlobMap);
 
                     var tileSet = ContentChest.TileTextures[tile.TileType];
 
@@ -58,7 +56,7 @@ namespace Mayday.Game.Graphics.Renderers
                 }
             }
 
-            foreach (var entity in gameWorld.WorldObjects)
+            foreach (var entity in gameArea.WorldObjects)
             {
                 var worldObjectComponent = entity.GetComponent<WorldObjectManagerComponent>();
                 var entityTexture = ContentChest.WorldObjectTextures[worldObjectComponent.WorldObjectType];
@@ -66,7 +64,7 @@ namespace Mayday.Game.Graphics.Renderers
             }
 
 
-            var clientPlayer = gameWorld.RequestClientPlayer?.Invoke();
+            var clientPlayer = gameArea.GameWorld.RequestClientPlayer?.Invoke();
 
             var itemPlacerComponent = clientPlayer?.GetComponent<ItemPlacerComponent>();
             if (itemPlacerComponent?.SelectedItem == null) return;
@@ -77,7 +75,7 @@ namespace Mayday.Game.Graphics.Renderers
         }
         
         // Gets the blob value from a given tile blob map for a given tile.
-        private static int GetTileBlobValue(IGameWorld gameWorld, Tile tile, Dictionary<int, int> tileBlobMap)
+        private static int GetTileBlobValue(IGameArea gameArea, Tile tile, Dictionary<int, int> tileBlobMap)
         {
             if (tile.BlobValue != -1) 
                 return tile.BlobValue;
@@ -86,14 +84,14 @@ namespace Mayday.Game.Graphics.Renderers
             var y = tile.TileY;
             byte bitSum = 0;
 
-            var n = gameWorld.TryGetTile(x, y - 1);
-            var e = gameWorld.TryGetTile(x + 1, y);
-            var s =gameWorld.TryGetTile(x, y + 1);
-            var w = gameWorld.TryGetTile( x - 1, y);
-            var nw = gameWorld.TryGetTile( x - 1, y - 1);
-            var ne = gameWorld.TryGetTile( x + 1, y - 1);
-            var se = gameWorld.TryGetTile( x + 1, y + 1);
-            var sw = gameWorld.TryGetTile(x - 1, y + 1);
+            var n = gameArea.TryGetTile(x, y - 1);
+            var e = gameArea.TryGetTile(x + 1, y);
+            var s =gameArea.TryGetTile(x, y + 1);
+            var w = gameArea.TryGetTile( x - 1, y);
+            var nw = gameArea.TryGetTile( x - 1, y - 1);
+            var ne = gameArea.TryGetTile( x + 1, y - 1);
+            var se = gameArea.TryGetTile( x + 1, y + 1);
+            var sw = gameArea.TryGetTile(x - 1, y + 1);
 
             TileTypeMatch(ref bitSum, tile, n, 1);
             TileTypeMatch(ref bitSum, tile, e, 4);

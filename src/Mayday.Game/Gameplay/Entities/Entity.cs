@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.World;
+using Mayday.Game.Gameplay.World.Areas;
 using Microsoft.Xna.Framework;
 using Yetiface.Engine.Utils;
 using IUpdateable = Mayday.Game.Gameplay.Components.IUpdateable;
@@ -15,6 +16,7 @@ namespace Mayday.Game.Gameplay.Entities
         public ulong EntityId { get; set; }
         public Action<IEntity> Destroy { get; set; }
         public IGameWorld GameWorld { get; set; }
+        public IGameArea GameArea { get; set; }
         public int XDirection { get; set; }
         public virtual float X { get; set; }
         public virtual float Y { get; set; }

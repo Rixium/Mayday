@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mayday.Game.Enums;
-using Mayday.Game.Gameplay.Collections;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Entities;
-using Mayday.Game.Gameplay.Items;
-using Microsoft.Xna.Framework;
-using Yetiface.Engine.Utils;
+using Mayday.Game.Gameplay.World.Areas;
 
 namespace Mayday.Game.Gameplay.World
 {
@@ -18,140 +14,32 @@ namespace Mayday.Game.Gameplay.World
         public Action<IEntity> PlayerLeftRangeOfWorldObject { get; set; }
         public Action<IRenderable> RenderableComponentAdded { get; set; }
 
-        private static ulong _worldObjectEntityId = 1;
-        private static ulong CurrentWorldObjectEntityId => _worldObjectEntityId++;
-
         public int TileSize { get; set; }
-        public Tile[,] Tiles { get; set; }
 
         /// <summary>
         /// The width and height are both in tiles, not pixels.
         /// </summary>
         public int Width { get; set; }
-
         public int Height { get; set; }
-        public IWorldItemSet WorldItems { get; set; } = new WorldItemSet();
         public Action<Tile> TilePlaced { get; set; }
 
         /// <summary>
-        /// These are the entities that should do an update on every frame.
+        /// These are the entities that should do an update on every frame, even if they exist in a different area.
         /// </summary>
         public HashSet<IEntity> TrackedEntities { get; } = new HashSet<IEntity>();
+        public IList<IGameArea> GameAreas { get; set; } = new List<IGameArea>();
 
         private HashSet<IEntity> _trackedEntitiesToRemove = new HashSet<IEntity>();
 
-        /// <summary>
-        /// These are just to store the world objects. They can also exist in the tracked entities,
-        /// if they require an update every frame.
-        /// </summary>
-        public IWorldObjectSet WorldObjects { get; set; } = new WorldObjectSet();
-
-        public void Move(IEntity player, float xMove, float yMove, float yVelocity)
+        public GameWorld(IGameArea startingArea)
         {
-            player.X += xMove;
-
-            var bounds = player.GetCurrentBounds();
-
-            var tileStartX = (bounds.Left / TileSize) - 1;
-            var tileEndX = (bounds.Right / TileSize) + 1;
-            var tileStartY = (bounds.Top / TileSize) - 1;
-            var tileEndY = (bounds.Bottom / TileSize) + 1;
-
-            for (var i = (int) tileStartX; i <= tileEndX; i++)
-            {
-                for (var j = (int) tileStartY; j <= tileEndY; j++)
-                {
-                    var tile = TryGetTile(i, j);
-                    if (tile == null) continue;
-                    if (tile.TileType == TileTypes.None) continue;
-
-                    var tileBounds = tile.GetCurrentBounds();
-
-                    if (!bounds.Intersects(tileBounds)) continue;
-
-                    var canMoveUp = true;
-                    if (j >= tileEndY - 2 && Math.Abs(yVelocity) < 0.01f)
-                    {
-                        for (var k = j - 1; k > j - 4; k--)
-                        {
-                            var above = TryGetTile(i, k);
-
-                            if (above.TileType == TileTypes.None)
-                                continue;
-
-                            canMoveUp = false;
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        canMoveUp = false;
-                    }
-
-                    if (canMoveUp)
-                    {
-                        yMove--;
-                    }
-                    else
-                    {
-                        var depth = bounds.GetIntersectionDepth(tileBounds);
-                        player.X += depth.X;
-                        bounds = player.GetCurrentBounds();
-                    }
-                }
-            }
-
-            player.Y += yMove;
-            bounds = player.GetCurrentBounds();
-
-            tileStartX = (bounds.Left / TileSize) - 1;
-            tileEndX = (bounds.Right / TileSize) + 1;
-            tileStartY = (bounds.Top / TileSize) - 1;
-            tileEndY = (bounds.Bottom / TileSize) + 1;
-
-            for (var i = (int) tileStartX; i <= tileEndX; i++)
-            {
-                for (var j = (int) tileStartY; j <= tileEndY; j++)
-                {
-                    var tile = TryGetTile(i, j);
-                    if (tile == null) continue;
-                    if (tile.TileType == TileTypes.None) continue;
-
-                    var tileBounds = tile.GetCurrentBounds();
-
-                    if (!bounds.Intersects(tileBounds)) continue;
-
-                    var depth = bounds.GetIntersectionDepth(tileBounds);
-                    player.Y += depth.Y;
-                    bounds = player.GetCurrentBounds();
-                }
-            }
+            AddGameArea(startingArea);
         }
 
-        public Tile TryGetTile(int tileX, int tileY)
+        private void AddGameArea(IGameArea area)
         {
-            if (tileX < 0 || tileY < 0) return null;
-            if (tileX > Width - 1 || tileY > Height - 1) return null;
-            return Tiles[tileX, tileY];
-        }
-        
-        public void PlaceTile(Tile tile, string tileType)
-        {
-            if (tile.TileType == tileType) return;
-            tile.TileType = tileType;
-            TilePlaced?.Invoke(tile);
-        }
-
-        public Tile GetRandomSpawnLocation() => (from Tile tile in Tiles
-                    where tile.TileType == TileTypes.Dirt
-                    select Tiles[(int) (Width / 2.0f), tile.TileY])
-                .FirstOrDefault();
-
-        public void DropItem(ItemDrop item)
-        {
-            item.GameWorld = this;
-            WorldItems.Add(item);
-            AddTrackedEntity(item);
+            area.GameWorld = this;
+            GameAreas.Add(area);
         }
 
         public bool AnythingCollidesWith(Tile tile) =>
@@ -167,38 +55,10 @@ namespace Mayday.Game.Gameplay.World
         private void OnTrackedEntityDestroyed(IEntity obj) =>
             _trackedEntitiesToRemove.Add(obj);
 
-        public void PlaceWorldEntity(Tile tile, string worldObjectType)
-        {
-            var worldObjectData = ContentChest.WorldObjectData[worldObjectType];
-            var worldObjectTexture = ContentChest.WorldObjectTextures[worldObjectType];
+        public void Update() =>
+            CleanUpTrackedEntities();
 
-            var entity = new Entity(CurrentWorldObjectEntityId)
-            {
-                X = tile.X,
-                Y = tile.Y,
-                Bounds = worldObjectData.Width == -1 ?
-                    new RectangleF(0, 0, worldObjectTexture.Width * Game1.GlobalGameScale, worldObjectTexture.Height * Game1.GlobalGameScale) :
-                    new RectangleF(0, 0, worldObjectData.Width, worldObjectData.Height),
-                GameWorld = this
-            };
-
-            entity.AddComponent(new MoveComponent());
-            entity.AddComponent(new GravityComponent());
-            entity.AddComponent(new WorldObjectManagerComponent(worldObjectType));
-
-            if (worldObjectData.CanBeUsed)
-            {
-                var worldUseComponent = new UsableWorldObjectComponent(RequestClientPlayer?.Invoke(), worldObjectData);
-                worldUseComponent.InRangeOfWorldObject += PlayerInRangeOfWorldObject;
-                worldUseComponent.LeftRangeOfWorldObject += PlayerLeftRangeOfWorldObject;
-                entity.AddComponent(worldUseComponent);
-            }
-
-            WorldObjects.Add(entity);
-            AddTrackedEntity(entity);
-        }
-
-        public void Update()
+        private void CleanUpTrackedEntities()
         {
             if (_trackedEntitiesToRemove.Count <= 0) return;
 
@@ -208,17 +68,5 @@ namespace Mayday.Game.Gameplay.World
             _trackedEntitiesToRemove.Clear();
         }
 
-        public IEntity GetWorldObjectAbove(Tile tile)
-        {
-            var tileAbove = TryGetTile(tile.TileX, tile.TileY - 1);
-            return tileAbove == null ? null : GetWorldObjectIntersectingTile(tile);
-        }
-
-        private IEntity GetWorldObjectIntersectingTile(Tile tile) =>
-            WorldObjects.FirstOrDefault(worldObject =>
-                worldObject
-                    .GetCurrentBounds()
-                    .Intersects(tile.GetCurrentBounds())
-            );
     }
 }

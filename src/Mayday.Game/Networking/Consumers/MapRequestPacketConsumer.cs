@@ -36,7 +36,8 @@ namespace Mayday.Game.Networking.Consumers
             {
                 for (var j = 0; j < GameWorld.Height; j++)
                 {
-                    var tileToSend = GameWorld.Tiles[i, j];
+                    // TODO NETWORK GAME AREAS
+                    var tileToSend = GameWorld.GameAreas[0].Tiles[i, j];
                     var tileTypePacket = new TileTypePacket()
                     {
                         X = tileToSend.TileX,

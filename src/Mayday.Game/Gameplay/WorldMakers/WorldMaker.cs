@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AccidentalNoise;
 using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.World;
+using Mayday.Game.Gameplay.World.Areas;
 using Mayday.Game.Gameplay.WorldMakers.Listeners;
 
 namespace Mayday.Game.Gameplay.WorldMakers
@@ -16,13 +17,13 @@ namespace Mayday.Game.Gameplay.WorldMakers
     public class WorldMaker : IWorldMaker
     {
         
-        public int WorldWidth { get; set; }
-        public int WorldHeight { get; set; }
+        public int AreaWidth { get; set; }
+        public int AreaHeight { get; set; }
 
         public WorldMaker SetWorldSize(int worthWidth, int worldHeight)
         {
-            WorldWidth = worthWidth;
-            WorldHeight = worldHeight;
+            AreaWidth = worthWidth;
+            AreaHeight = worldHeight;
             
             return this;
         }
@@ -37,28 +38,33 @@ namespace Mayday.Game.Gameplay.WorldMakers
         {
             await Task.Delay(1);
 
-            var world = new GameWorld();
-            
-            var bmp = new Bitmap(WorldWidth, WorldHeight);
-
-            var tiles = new Tile[WorldWidth, WorldHeight];
-
-            for (var i = 0; i < WorldWidth; i++)
+            var outsideArea = new OutsideArea();
+            var world = new GameWorld(outsideArea)
             {
-                for (var j = 0; j < WorldHeight; j++)
+                TileSize = 8 * Game1.GlobalGameScale
+            };
+
+            var bmp = new Bitmap(AreaWidth, AreaHeight);
+
+            var tiles = new Tile[AreaWidth, AreaHeight];
+
+            for (var i = 0; i < AreaWidth; i++)
+            {
+                for (var j = 0; j < AreaHeight; j++)
                 {
                     tiles[i, j] = new Tile(TileTypes.None, i, j)
                     {
-                        GameWorld = world
+                        GameWorld = world,
+                        GameArea = outsideArea
                     };
                 }
             }
 
             var poo = 0;
-            for (var i = 0; i < WorldWidth; i++)
+            for (var i = 0; i < AreaWidth; i++)
             {
                 poo = 0;
-                for (var j = (int)(WorldHeight / 2.0f); j < WorldHeight; j++)
+                for (var j = (int)(AreaHeight / 2.0f); j < AreaHeight; j++)
                 {
                     poo++;
                     if (poo > 3)
@@ -79,11 +85,10 @@ namespace Mayday.Game.Gameplay.WorldMakers
 
             worldGeneratorListener.OnWorldGenerationUpdate("Initiating Landing Sequence...");
 
-            world.Tiles = tiles;
-            world.Width = WorldWidth;
-            world.Height = WorldHeight;
-            world.TileSize = 8 * Game1.GlobalGameScale;
-            
+            outsideArea.Tiles = tiles;
+            outsideArea.AreaWidth = AreaWidth;
+            outsideArea.AreaHeight = AreaHeight;
+
             return world;
         }
 

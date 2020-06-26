@@ -53,10 +53,10 @@ namespace Mayday.Game.Gameplay.Components
 
                 var mouseTileX = mousePosition.X / GameWorld.TileSize;
                 var mouseTileY = mousePosition.Y / GameWorld.TileSize;
-                if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > GameWorld.Width - 1 ||
-                    mouseTileY > GameWorld.Height - 1) return;
+                if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > Entity.GameArea.AreaWidth - 1 ||
+                    mouseTileY > Entity.GameArea.AreaHeight - 1) return;
                 
-                var tile = GameWorld.Tiles[mouseTileX, mouseTileY];
+                var tile = Entity.GameArea.Tiles[mouseTileX, mouseTileY];
 
                 if (!CloseEnoughToTile(tile)) return;
                 if (!TileCanBeBroken(tile)) return;
@@ -71,7 +71,7 @@ namespace Mayday.Game.Gameplay.Components
         private bool TileCanBeBroken(Tile tile)
         {
             if (tile.TileType == TileTypes.None) return false;
-            return GameWorld.GetWorldObjectAbove(tile) == null;
+            return Entity.GameArea.GetWorldObjectAbove(tile) == null;
         }
     }
 }

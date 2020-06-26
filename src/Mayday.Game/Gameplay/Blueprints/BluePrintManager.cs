@@ -31,9 +31,9 @@ namespace Mayday.Game.Gameplay.Blueprints
             var itemDropperComponent = tile.AddComponent(
                 new ItemDropperComponent(itemDropType));
 
-            itemDropperComponent.ItemDrop += (itemDrop) =>
+            itemDropperComponent.ItemDrop += (entity, itemDrop) =>
             {
-                _gameScreen.GameWorld.DropItem(itemDrop);
+                entity.GameArea.DropItem(itemDrop);
                 PacketManager.SendItemDropPacket(itemDrop);
             };
         }

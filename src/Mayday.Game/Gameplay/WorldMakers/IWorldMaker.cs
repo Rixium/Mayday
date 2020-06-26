@@ -10,8 +10,8 @@ namespace Mayday.Game.Gameplay.WorldMakers
     /// </summary>
     public interface IWorldMaker
     {
-        int WorldWidth { get; set; }
-        int WorldHeight { get; set; }
+        int AreaWidth { get; set; }
+        int AreaHeight { get; set; }
 
         Task<IGameWorld> Create(IWorldMakerListener listener);
     }
