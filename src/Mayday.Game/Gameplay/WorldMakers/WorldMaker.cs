@@ -41,7 +41,7 @@ namespace Mayday.Game.Gameplay.WorldMakers
             var outsideArea = new OutsideArea();
             var world = new GameWorld(outsideArea)
             {
-                TileSize = 8 * Game1.GlobalGameScale
+                TileSize = 8
             };
 
             var bmp = new Bitmap(AreaWidth, AreaHeight);

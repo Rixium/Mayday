@@ -86,7 +86,7 @@ namespace Mayday.Game.Screens
             {
                 var spawnTile = GameWorld.GameAreas[0].GetRandomSpawnLocation();
                 player.X = spawnTile.TileX * GameWorld.TileSize;
-                player.Y = spawnTile.TileY * GameWorld.TileSize - 70 * Game1.GlobalGameScale;
+                player.Y = spawnTile.TileY * GameWorld.TileSize - 70;
                 MyPlayer = player;
             }
 
@@ -112,9 +112,9 @@ namespace Mayday.Game.Screens
             moveComponent.PositionChanged += PacketManager.SendPositionPacket;
             moveComponent.MoveDirectionChanged += PacketManager.SendMoveDirectionPacket;
 
-            player.Bounds = new RectangleF(18 * Game1.GlobalGameScale, 18 * Game1.GlobalGameScale,
-                42 * Game1.GlobalGameScale - 17 * Game1.GlobalGameScale - 18 * Game1.GlobalGameScale,
-                33 * Game1.GlobalGameScale - 19 * Game1.GlobalGameScale);
+            player.Bounds = new RectangleF(18, 18,
+                42 - 17 - 18,
+                33 - 19);
 
             if (isClients)
             {

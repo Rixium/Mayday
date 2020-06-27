@@ -90,9 +90,9 @@ namespace Mayday.Game.Gameplay.Components
         {
             var worldObjectTexture = ContentChest.ItemTextures[selectedItem.ItemId];
 
-            for (var i = tile.TileX; i <= tile.TileX + worldObjectTexture.Width * Game1.GlobalGameScale / GameWorld.TileSize; i++)
+            for (var i = tile.TileX; i <= tile.TileX + worldObjectTexture.Width / GameWorld.TileSize; i++)
             {
-                for (var j = tile.TileY; j <= tile.TileY + worldObjectTexture.Height * Game1.GlobalGameScale / GameWorld.TileSize; j++)
+                for (var j = tile.TileY; j <= tile.TileY + worldObjectTexture.Height / GameWorld.TileSize; j++)
                 {
                     if (!CanPlaceAt(i, j)) return true;
                 }

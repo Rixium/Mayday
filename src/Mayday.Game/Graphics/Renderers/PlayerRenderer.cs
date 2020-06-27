@@ -56,7 +56,7 @@ namespace Mayday.Game.Graphics.Renderers
         {
             GraphicsUtils.Instance.SpriteBatch.Draw(
                 sprite.Texture, playerPosition, sprite.SourceRectangle, Color.White,
-                0, Vector2.Zero,  1 * Game1.GlobalGameScale, flip, 0F);
+                0, Vector2.Zero,  1, flip, 0F);
         }
 
     }

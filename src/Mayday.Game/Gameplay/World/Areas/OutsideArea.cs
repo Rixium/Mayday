@@ -132,7 +132,7 @@ namespace Mayday.Game.Gameplay.World.Areas
                 X = tile.X,
                 Y = tile.Y,
                 Bounds = worldObjectData.Width == -1 ?
-                    new RectangleF(0, 0, worldObjectTexture.Width * Game1.GlobalGameScale, worldObjectTexture.Height * Game1.GlobalGameScale) :
+                    new RectangleF(0, 0, worldObjectTexture.Width, worldObjectTexture.Height) :
                     new RectangleF(0, 0, worldObjectData.Width, worldObjectData.Height),
                 GameWorld = GameWorld,
                 GameArea = this

@@ -33,7 +33,7 @@ namespace Mayday.Game.Gameplay.Components
             if (!moveComponent.Grounded) return;
             
             Jumping = true;
-            moveComponent.YVelocity = 2 * Game1.GlobalGameScale;
+            moveComponent.YVelocity = 2;
 
             YetiGame.ContentManager.Load<SoundEffect>("jump").Play();
             

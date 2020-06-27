@@ -80,7 +80,7 @@ namespace Mayday.Game.Gameplay.WorldMakers
 
             var world = new GameWorld(outsideArea)
             {
-                TileSize = 8 * Game1.GlobalGameScale
+                TileSize = 8
             };
 
             for (var i = 0; i < AreaWidth; i++)

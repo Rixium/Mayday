@@ -19,7 +19,7 @@ namespace Mayday.Game.Gameplay.Components
         public void Update()
         {
             if (Entity.XDirection != 0)
-                XVelocity += 0.1f * Entity.XDirection * Game1.GlobalGameScale;
+                XVelocity += 0.1f * Entity.XDirection;
             else
             {
                 XVelocity *= 0.9f;
@@ -28,7 +28,7 @@ namespace Mayday.Game.Gameplay.Components
                     XVelocity = 0;
             }
 
-            XVelocity = MathHelper.Clamp(XVelocity, -1f * Game1.GlobalGameScale, 1f * Game1.GlobalGameScale);
+            XVelocity = MathHelper.Clamp(XVelocity, -1f, 1f);
 
             CheckPlayerHit();
 
