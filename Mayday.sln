@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yetiface.Engine", "src\Yeti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Facepunch.Steamworks.Win64", "lib\Facepunch.Steamworks\Facepunch.Steamworks\Facepunch.Steamworks.Win64.csproj", "{4EBC6789-9069-427C-94CB-EBAF1095AAAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccidentalNoise", "lib\AccidentalNoise\AccidentalNoise.csproj", "{548C482E-7AD8-4DD7-B32A-F09340C7A04E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mayday.Game.Tests", "src\Mayday.Game.Tests\Mayday.Game.Tests.csproj", "{7CD75A68-7FEF-430F-8BD3-BEEB9C407FA2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mayday.UI", "src\Mayday.UI\Mayday.UI.csproj", "{BD290914-B822-4B7F-86AA-41ABEC56ACCD}"
