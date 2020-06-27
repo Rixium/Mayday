@@ -9,13 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yetiface.Engine.Tests", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yetiface.Engine", "src\Yetiface.Engine\Yetiface.Engine.csproj", "{6B7D6EE3-17D6-4E6B-AC60-D3BD2027C1CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Facepunch.Steamworks.Win64", "lib\Facepunch.Steamworks\Facepunch.Steamworks\Facepunch.Steamworks.Win64.csproj", "{4EBC6789-9069-427C-94CB-EBAF1095AAAB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mayday.Game.Tests", "src\Mayday.Game.Tests\Mayday.Game.Tests.csproj", "{7CD75A68-7FEF-430F-8BD3-BEEB9C407FA2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mayday.UI", "src\Mayday.UI\Mayday.UI.csproj", "{BD290914-B822-4B7F-86AA-41ABEC56ACCD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.MonoGame", "..\Myra\src\Myra\Myra.MonoGame.csproj", "{4F8B1FE8-E098-4A1E-B5AD-29E64049880E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mayday.Editor", "src\Mayday.Editor\Mayday.Editor.csproj", "{446095C9-3EED-47FF-897C-587FB68E8286}"
 EndProject

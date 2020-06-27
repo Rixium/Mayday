@@ -190,18 +190,6 @@
     <Folder Include="Content\Images\WorldObjects" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Myra\src\Myra\Myra.MonoGame.csproj">
-      <Project>{4f8b1fe8-e098-4a1e-b5ad-29e64049880e}</Project>
-      <Name>Myra.MonoGame</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\lib\AccidentalNoise\AccidentalNoise.csproj">
-      <Project>{548c482e-7ad8-4dd7-b32a-f09340c7a04e}</Project>
-      <Name>AccidentalNoise</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\lib\Facepunch.Steamworks\Facepunch.Steamworks\Facepunch.Steamworks.Win64.csproj">
-      <Project>{4ebc6789-9069-427c-94cb-ebaf1095aaab}</Project>
-      <Name>Facepunch.Steamworks.Win64</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mayday.UI\Mayday.UI.csproj">
       <Project>{bd290914-b822-4b7f-86aa-41abec56accd}</Project>
       <Name>Mayday.UI</Name>
