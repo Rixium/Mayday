@@ -13,7 +13,7 @@ namespace Mayday.Game
         private int _minY;
         private readonly int _maxY;
 
-        private int _zoom = 1;
+        private int _zoom = 4;
         private IEntity _following;
 
         public Camera()
@@ -60,7 +60,7 @@ namespace Mayday.Game
         }
 
         public Matrix GetMatrix() =>
-            Matrix.CreateTranslation(new Vector3(-(int) _position.X, -(int) _position.Y, 0)) *
+            Matrix.CreateTranslation(new Vector3(- _position.X, - _position.Y, 0)) *
             Matrix.CreateScale(_zoom, _zoom, 1) *
             Matrix.CreateTranslation(new Vector3(Window.Center.X, Window.Center.Y, 0));
 

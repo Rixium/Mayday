@@ -30,7 +30,8 @@ namespace Mayday.Game.Graphics.Renderers
             var startTileY = (int) (camera.Position.Y - Window.ViewportHeight / 2.0f) / worldTileSize - 1;
             var endTileX = (int) (camera.Position.X + Window.ViewportWidth / 2.0f) / worldTileSize + 1;
             var endTileY = (int) (camera.Position.Y + Window.ViewportHeight / 2.0f) / worldTileSize + 1;
-
+            var renderedTiles = new List<Tile>();
+            
             for (var i = startTileX; i < endTileX; i++)
             {
                 for (var j = startTileY; j < endTileY; j++)
@@ -39,23 +40,56 @@ namespace Mayday.Game.Graphics.Renderers
                     var tile = gameArea.Tiles[i, j];
 
                     if (tile.TileType == TileTypes.None) continue;
-
-                    var tileIndex = GetTileBlobValue(gameArea, tile, _tileBlobMap);
-
                     var tileSet = ContentChest.TileTextures[tile.TileType];
-
-                    var sheetTileSize = 32;
                     
-                    ArrayUtils.IndexConvert(tileIndex, tileSet.Width / sheetTileSize, out var x, out var y);
-                    
-                    var rect = new Rectangle(x * sheetTileSize, y * sheetTileSize, sheetTileSize, sheetTileSize);
-
+                    var rect = new Rectangle(2, 2, 8, 8);
                     GraphicsUtils.Instance.SpriteBatch.Draw(tileSet,
-                        new Rectangle((int) tile.X, (int) tile.Y, tile.TileSize, tile.TileSize),
+                        new Rectangle((int) tile.X, (int) tile.Y, 8, 8),
                         rect, Color.White);
+                    
+                    renderedTiles.Add(tile);
                 }
             }
 
+            renderedTiles = renderedTiles.OrderBy(o => o.TileProperties.Name.Length).ToList();
+
+            foreach (var tile in renderedTiles)
+            {
+                var tileSet = ContentChest.TileTextures[tile.TileType];
+
+                if (tile.North != null && tile.North.TileType != tile.TileType && (tile.North.TileProperties?.Name.Length > tile.TileProperties?.Name.Length || tile.North.TileProperties == null))
+                {
+                    var rect = new Rectangle(2, 0, 8, 2);
+                    GraphicsUtils.Instance.SpriteBatch.Draw(tileSet,
+                        new Rectangle((int) tile.X, (int) tile.Y - 2, 8, 2),
+                        rect, Color.White);
+                }
+
+                if (tile.East != null && tile.East.TileType != tile.TileType && (tile.East.TileProperties?.Name.Length > tile.TileProperties?.Name.Length || tile.East.TileProperties == null))
+                {
+                    var rect = new Rectangle(10, 2, 2, 8);
+                    GraphicsUtils.Instance.SpriteBatch.Draw(tileSet,
+                        new Rectangle((int) tile.X + 8, (int) tile.Y, 2, 8),
+                        rect, Color.White);
+                }
+                
+                if (tile.South != null && tile.South.TileType != tile.TileType && (tile.South.TileProperties?.Name.Length > tile.TileProperties?.Name.Length || tile.South.TileProperties == null))
+                {
+                    var rect = new Rectangle(2, 10, 8, 2);
+                    GraphicsUtils.Instance.SpriteBatch.Draw(tileSet,
+                        new Rectangle((int) tile.X, (int) tile.Y + 8, 8, 2),
+                        rect, Color.White);
+                }
+                
+                if (tile.West != null && tile.West.TileType != tile.TileType && (tile.West.TileProperties?.Name.Length > tile.TileProperties?.Name.Length || tile.West.TileProperties == null))
+                {
+                    var rect = new Rectangle(0, 2, 2, 8);
+                    GraphicsUtils.Instance.SpriteBatch.Draw(tileSet,
+                        new Rectangle((int) tile.X - 2, (int) tile.Y, 2, 8),
+                        rect, Color.White);
+                }
+            }
+            
             foreach (var entity in gameArea.WorldObjects)
             {
                 var worldObjectComponent = entity.GetComponent<WorldObjectManagerComponent>();
@@ -74,40 +108,6 @@ namespace Mayday.Game.Graphics.Renderers
             GraphicsUtils.Instance.SpriteBatch.Draw(texture, clientPlayer.Center, Color.White);
         }
         
-        // Gets the blob value from a given tile blob map for a given tile.
-        private static int GetTileBlobValue(IGameArea gameArea, Tile tile, Dictionary<int, int> tileBlobMap)
-        {
-            if (tile.BlobValue != -1) 
-                return tile.BlobValue;
-            
-            var x = tile.TileX;
-            var y = tile.TileY;
-            byte bitSum = 0;
-
-            var n = gameArea.TryGetTile(x, y - 1);
-            var e = gameArea.TryGetTile(x + 1, y);
-            var s =gameArea.TryGetTile(x, y + 1);
-            var w = gameArea.TryGetTile( x - 1, y);
-            var nw = gameArea.TryGetTile( x - 1, y - 1);
-            var ne = gameArea.TryGetTile( x + 1, y - 1);
-            var se = gameArea.TryGetTile( x + 1, y + 1);
-            var sw = gameArea.TryGetTile(x - 1, y + 1);
-
-            TileTypeMatch(ref bitSum, tile, n, 1);
-            TileTypeMatch(ref bitSum, tile, e, 4);
-            TileTypeMatch(ref bitSum, tile, s, 16);
-            TileTypeMatch(ref bitSum, tile, w, 64);
-            TileTypeMatch(ref bitSum, tile, se, 8, e, s);
-            TileTypeMatch(ref bitSum, tile, ne, 2, n, e);
-            TileTypeMatch(ref bitSum, tile, sw, 32, s, w);
-            TileTypeMatch(ref bitSum, tile, nw, 128, n, w);
-
-            tileBlobMap.TryGetValue(bitSum, out var tileNumber);
-
-            tile.BlobValue = tileNumber;
-            
-            return tileNumber;
-        }
 
         // Checks if a tile matches another tile, or any of the assure not tiles passed.
         // If they do, then add the bit value to the bit sum. Used for Finding blob tile.

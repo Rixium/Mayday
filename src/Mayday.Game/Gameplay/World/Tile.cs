@@ -113,5 +113,15 @@ namespace Mayday.Game.Gameplay.World
             var south = GameArea.TryGetTile(TileX, TileY + 1);
             return south != null && south.TileType != TileTypes.None;
         }
+
+        public Tile North => GameArea.TryGetTile(TileX, TileY - 1);
+        public Tile NorthEast => GameArea.TryGetTile(TileX + 1, TileY - 1);
+        public Tile East => GameArea.TryGetTile(TileX + 1, TileY);
+        public Tile SouthEast => GameArea.TryGetTile(TileX + 1, TileY + 1);
+        public Tile South => GameArea.TryGetTile(TileX, TileY + 1);
+        public Tile SouthWest => GameArea.TryGetTile(TileX - 1, TileY + 1);
+        public Tile West => GameArea.TryGetTile(TileX - 1, TileY);
+        public Tile NorthWest => GameArea.TryGetTile(TileX - 1, TileY - 1);
+        
     }
 }

@@ -17,8 +17,8 @@ namespace Mayday.Game.Gameplay.Components
         public Action<MoveComponent> PositionChanged { get; set; }
         public bool Grounded { get; set; }
 
-        private float _maxVelocity = 4;
-        private float _velocityChange = 4;
+        private float _maxVelocity = 1;
+        private float _velocityChange = 0.3f;
 
         public void Update()
         {

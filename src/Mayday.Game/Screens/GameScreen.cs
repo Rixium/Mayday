@@ -239,8 +239,8 @@ namespace Mayday.Game.Screens
             
             GraphicsUtils.Instance.Begin(true, Camera.GetMatrix());
 
-            _worldRenderer.Draw(GameWorld.GameAreas[0], Camera);
             _playerRenderer.DrawPlayers(Players.GetAll());
+            _worldRenderer.Draw(GameWorld.GameAreas[0], Camera);
 
             foreach (var entity in GameWorld.GameAreas[0].GetItems())
             {
