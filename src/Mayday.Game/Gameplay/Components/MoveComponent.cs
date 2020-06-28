@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Entities;
 using Microsoft.Xna.Framework;
@@ -42,9 +43,12 @@ namespace Mayday.Game.Gameplay.Components
             var yMove = -YVelocity;
             
             Entity.GameArea.Move(Entity, xMove, yMove, YVelocity);
-
+            Debug.WriteLine(YVelocity);
             Grounded = Math.Abs(currentY - Entity.Y) < 0.01f;
 
+            if (Grounded)
+                YVelocity = 0;
+            
             if (Math.Abs(currentX - Entity.X) > 0.01f || Math.Abs(currentY - Entity.Y) > 0.01f)
             {
                 PositionChanged?.Invoke(this);
