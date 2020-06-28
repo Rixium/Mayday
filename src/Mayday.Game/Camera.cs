@@ -13,7 +13,7 @@ namespace Mayday.Game
         private int _minY;
         private readonly int _maxY;
 
-        private int _zoom = 4;
+        private int _zoom = 3;
         private IEntity _following;
 
         public Camera()
