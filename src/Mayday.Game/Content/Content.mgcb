@@ -1,6 +1,8 @@
 
 #----------------------------- Global Properties ----------------------------#
 
+/outputDir:bin
+/intermediateDir:obj
 /platform:DesktopGL
 /config:
 /profile:Reach
@@ -100,6 +102,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Images/Animations/Legs_1.png
+
+#begin Images/background.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/background.png
 
 #begin Images/Items/Dirt_Block.png
 /importer:TextureImporter

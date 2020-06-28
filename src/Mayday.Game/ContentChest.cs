@@ -59,7 +59,11 @@ namespace Mayday.Game
             LoadTileProperties(contentManager);
             LoadItemData(contentManager);
             LoadWorldObjectData(contentManager);
+
+            Background = contentManager.Load<Texture2D>("Images\\background");
         }
+
+        public static Texture2D Background { get; set; }
 
         private void LoadWorldObjectData(ContentManager contentManager)
         {

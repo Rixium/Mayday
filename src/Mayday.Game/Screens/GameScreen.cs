@@ -233,6 +233,10 @@ namespace Mayday.Game.Screens
 
         public override void RenderScreen()
         {
+            GraphicsUtils.Instance.Begin();
+            GraphicsUtils.Instance.SpriteBatch.Draw(ContentChest.Background, new Rectangle(0, 0, Window.ViewportWidth, Window.ViewportHeight), Color.White);
+            GraphicsUtils.Instance.End();
+            
             GraphicsUtils.Instance.Begin(true, Camera.GetMatrix());
 
             _worldRenderer.Draw(GameWorld.GameAreas[0], Camera);

@@ -41,6 +41,11 @@ namespace Mayday.Game
 
             var (x, y) = Vector2.Lerp(Position, ToGo, 0.03f);
 
+            if (Vector2.Distance(Position, ToGo) < 10)
+            {
+                return;
+            }
+
             _position.X = x;
             _position.Y = y;
 
