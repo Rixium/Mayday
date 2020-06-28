@@ -17,13 +17,17 @@ namespace Mayday.Game.Gameplay.Components
         public Action<MoveComponent> PositionChanged { get; set; }
         public bool Grounded { get; set; }
 
-        private float _maxVelocity = 1;
-        private float _velocityChange = 0.3f;
+        private float _maxVelocity = 1.5f;
+        private float _velocityChange = 0.2f;
 
         public void Update()
         {
+            XVelocity *= 0.9f;
+
             if (Entity.XDirection != 0)
-                XVelocity += _velocityChange * Entity.XDirection;
+            {
+                    XVelocity += _velocityChange * Entity.XDirection;
+            }
             else
             {
                 XVelocity *= 0.9f;

@@ -170,6 +170,11 @@ namespace Mayday.Game.Screens
             SetupUiInput();
 
             Camera.SetEntity(MyPlayer);
+
+            var cameraPosition = Camera.Position;
+            cameraPosition.X = MyPlayer.Center.X;
+            cameraPosition.Y = MyPlayer.Y - Window.ViewportHeight / 2.0f;
+            Camera.Position = cameraPosition;
         }
 
         private void SetupUiInput()

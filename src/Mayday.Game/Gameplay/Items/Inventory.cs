@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Mayday.Game.Gameplay.Items
 {
@@ -64,7 +65,7 @@ namespace Mayday.Game.Gameplay.Items
             if (ItemStacks == null)
                 ItemStacks = new List<IItemStack>();
 
-            foreach (var stack in ItemStacks)
+            foreach (var stack in ItemStacks.Reverse())
             {
                 if (stack.IsEmpty())
                     selectedStack = stack;
