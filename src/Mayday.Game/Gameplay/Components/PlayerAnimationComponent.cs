@@ -9,8 +9,6 @@ namespace Mayday.Game.Gameplay.Components
         private MoveComponent _moveComponent;
         private JumpComponent _jumpComponent;
         public IAnimator HeadAnimator { get; set; }
-        public IAnimator BodyAnimator { get; set; }
-        public IAnimator LegsAnimator { get; set; }
         public IEntity Entity { get; set; }
 
         public void Update()
@@ -18,26 +16,18 @@ namespace Mayday.Game.Gameplay.Components
             var speed = 0.1f;
 
             HeadAnimator?.Update(speed);
-            BodyAnimator?.Update(speed);
-            LegsAnimator?.Update(speed);
 
             if (_jumpComponent.Jumping)
             {
                 HeadAnimator?.SetAnimation("Jump");
-                BodyAnimator?.SetAnimation("Jump");
-                LegsAnimator?.SetAnimation("Jump");
             }
             else if (Math.Abs(_moveComponent.XVelocity) > 0.01f)
             {
                 HeadAnimator?.SetAnimation("Walk");
-                BodyAnimator?.SetAnimation("Walk");
-                LegsAnimator?.SetAnimation("Walk");
             }
             else
             {
                 HeadAnimator?.SetAnimation("Idle");
-                BodyAnimator?.SetAnimation("Idle");
-                LegsAnimator?.SetAnimation("Idle");
             }
         }
 

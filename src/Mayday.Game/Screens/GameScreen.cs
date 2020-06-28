@@ -94,9 +94,7 @@ namespace Mayday.Game.Screens
 
             var playerAnimationComponent = new PlayerAnimationComponent
             {
-                HeadAnimator = new Animator(ContentChest.Heads[1].Animations),
-                BodyAnimator = new Animator(ContentChest.Bodies[1].Animations),
-                LegsAnimator = new Animator(ContentChest.Legs[1].Animations)
+                HeadAnimator = new Animator(ContentChest.Heads[1].Animations)
             };
 
             var moveComponent = player.AddComponent(new MoveComponent());
@@ -112,7 +110,7 @@ namespace Mayday.Game.Screens
             moveComponent.PositionChanged += PacketManager.SendPositionPacket;
             moveComponent.MoveDirectionChanged += PacketManager.SendMoveDirectionPacket;
 
-            player.Bounds = new RectangleF(61, 85, 41, 48);
+            player.Bounds = new RectangleF(9, 10, 13, 30);
 
             if (isClients)
             {
@@ -239,8 +237,8 @@ namespace Mayday.Game.Screens
             
             GraphicsUtils.Instance.Begin(true, Camera.GetMatrix());
 
+            _worldRenderer.DrawWorldObjects(GameWorld.GameAreas[0], Camera);
             _playerRenderer.DrawPlayers(Players.GetAll());
-            _worldRenderer.Draw(GameWorld.GameAreas[0], Camera);
 
             foreach (var entity in GameWorld.GameAreas[0].GetItems())
             {
@@ -249,6 +247,8 @@ namespace Mayday.Game.Screens
                 GraphicsUtils.Instance.SpriteBatch.Draw(ContentChest.ItemTextures[item.Item.ItemId],
                     new Vector2(item.X, item.Y), Color.White);
             }
+
+            _worldRenderer.Draw(GameWorld.GameAreas[0], Camera);
 
             GraphicsUtils.Instance.End();
         }

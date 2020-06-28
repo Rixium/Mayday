@@ -16,7 +16,7 @@ namespace Mayday.Game.Gameplay.Components
         public IEntity Entity { get; set; }
         public bool Jumping { get; set; }
 
-        private float _jumpStartValue = 7;
+        private float _jumpStartValue = 2;
 
         public void OnAddedToEntity()
         {

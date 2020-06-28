@@ -89,7 +89,10 @@ namespace Mayday.Game.Graphics.Renderers
                         rect, Color.White);
                 }
             }
-            
+        }
+
+        public void DrawWorldObjects(IGameArea gameArea, Camera camera)
+        {
             foreach (var entity in gameArea.WorldObjects)
             {
                 var worldObjectComponent = entity.GetComponent<WorldObjectManagerComponent>();
@@ -106,19 +109,6 @@ namespace Mayday.Game.Graphics.Renderers
             var selectedItem = itemPlacerComponent.SelectedItem;
             var texture = ContentChest.ItemTextures[selectedItem.ItemId];
             GraphicsUtils.Instance.SpriteBatch.Draw(texture, clientPlayer.Center, Color.White);
-        }
-        
-
-        // Checks if a tile matches another tile, or any of the assure not tiles passed.
-        // If they do, then add the bit value to the bit sum. Used for Finding blob tile.
-        private static void TileTypeMatch(ref byte bitSum, Tile tile1, Tile tile2, byte bitValue, params Tile[] assureNot)
-        {
-            if (tile2 == null) return;
-            if (tile1 == null) return;
-            if (!tile1.TileType.Equals(tile2.TileType)) return;
-            if (assureNot.Any(tile => tile.TileType != tile1.TileType)) return;
-
-            bitSum += bitValue;
         }
         
     }

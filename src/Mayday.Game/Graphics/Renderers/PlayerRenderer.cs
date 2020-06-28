@@ -26,16 +26,10 @@ namespace Mayday.Game.Graphics.Renderers
             var playerAnimationComponent = GetPlayerAnimationComponent(player);
             
             var headSprite = playerAnimationComponent.HeadAnimator?.Current;
-            var bodySprite = playerAnimationComponent.BodyAnimator?.Current;
-            var legSprite = playerAnimationComponent.LegsAnimator?.Current;
             
             var playerPosition = player.Position;
             var flip = player.FacingDirection < 0;
-            
-            if (legSprite != null)
-                DrawSprite(legSprite, playerPosition, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
-            if(bodySprite != null)
-                DrawSprite(bodySprite, playerPosition, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
+
             if(headSprite != null)
                 DrawSprite(headSprite, playerPosition, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
 

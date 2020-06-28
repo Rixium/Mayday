@@ -27,12 +27,6 @@ namespace Mayday.Game
         // ReSharper disable once CollectionNeverUpdated.Global
         public static Dictionary<int, SpriteSheet> Heads { get; set; } = new Dictionary<int, SpriteSheet>();
 
-        // ReSharper disable once CollectionNeverUpdated.Global
-        public static Dictionary<int, SpriteSheet> Bodies { get; set; } = new Dictionary<int, SpriteSheet>();
-
-        // ReSharper disable once CollectionNeverUpdated.Global
-        public static Dictionary<int, SpriteSheet> Legs { get; set; } = new Dictionary<int, SpriteSheet>();
-
         public static Dictionary<string, Texture2D> TileTextures { get; set; } =
             new Dictionary<string, Texture2D>();
 

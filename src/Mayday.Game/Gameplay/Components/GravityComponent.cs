@@ -7,7 +7,7 @@ namespace Mayday.Game.Gameplay.Components
     public class GravityComponent : IUpdateable
     {
         private MoveComponent _moveComponent;
-        public float Gravity { get; set; } = 20f;
+        public float Gravity { get; set; } = 7f;
 
         public IEntity Entity { get; set; }
 

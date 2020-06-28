@@ -5,5 +5,6 @@ namespace Mayday.Game.Graphics.Renderers
     public interface IWorldRenderer
     {
         void Draw(IGameArea gameWorld, Camera camera);
+        void DrawWorldObjects(IGameArea gameWorldGameArea, Camera camera);
     }
 }
