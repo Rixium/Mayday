@@ -16,6 +16,8 @@ namespace Mayday.Game.Gameplay.Components
         public IEntity Entity { get; set; }
         public bool Jumping { get; set; }
 
+        private float _jumpStartValue = 7;
+
         public void OnAddedToEntity()
         {
             // We need to know when the player hits the floor, so that we can
@@ -33,7 +35,7 @@ namespace Mayday.Game.Gameplay.Components
             if (!moveComponent.Grounded) return;
             
             Jumping = true;
-            moveComponent.YVelocity = 2;
+            moveComponent.YVelocity = _jumpStartValue;
 
             YetiGame.ContentManager.Load<SoundEffect>("jump").Play();
             

@@ -44,7 +44,7 @@ namespace Mayday.Game.Graphics.Renderers
 
                     var tileSet = ContentChest.TileTextures[tile.TileType];
 
-                    var sheetTileSize = 8;
+                    var sheetTileSize = 32;
                     
                     ArrayUtils.IndexConvert(tileIndex, tileSet.Width / sheetTileSize, out var x, out var y);
                     

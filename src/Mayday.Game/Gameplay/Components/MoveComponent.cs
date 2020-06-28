@@ -16,10 +16,13 @@ namespace Mayday.Game.Gameplay.Components
         public Action<MoveComponent> PositionChanged { get; set; }
         public bool Grounded { get; set; }
 
+        private float _maxVelocity = 4;
+        private float _velocityChange = 4;
+
         public void Update()
         {
             if (Entity.XDirection != 0)
-                XVelocity += 0.1f * Entity.XDirection;
+                XVelocity += _velocityChange * Entity.XDirection;
             else
             {
                 XVelocity *= 0.9f;
@@ -28,7 +31,7 @@ namespace Mayday.Game.Gameplay.Components
                     XVelocity = 0;
             }
 
-            XVelocity = MathHelper.Clamp(XVelocity, -1f, 1f);
+            XVelocity = MathHelper.Clamp(XVelocity, -_maxVelocity, _maxVelocity);
 
             CheckPlayerHit();
 

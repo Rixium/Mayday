@@ -18,7 +18,7 @@ namespace Mayday.Game.Gameplay.Components
         public IEntity Entity { get; set; }
         public IGameWorld GameWorld { get; set; }
 
-        public int MaxDistanceToBreak => 7 * GameWorld.TileSize;
+        public int MaxDistanceToBreak => 20 * GameWorld.TileSize;
         
         public BlockBreakerComponent(IGameWorld gameWorld, Camera camera)
         {
