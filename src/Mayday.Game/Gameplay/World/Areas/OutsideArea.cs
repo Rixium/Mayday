@@ -41,42 +41,25 @@ namespace Mayday.Game.Gameplay.World.Areas
                 for (var j = (int) tileStartY; j <= tileEndY; j++)
                 {
                     var tile = TryGetTile(i, j);
-                    if (tile == null) continue;
+
+                    if (tile == null)
+                    {
+                        tile = new Tile(TileTypes.Dirt, i, j)
+                        {
+                            GameWorld = entity.GameWorld,
+                            GameArea = entity.GameArea
+                        };
+                    }
+
                     if (tile.TileType == TileTypes.None) continue;
 
-                    var tileBounds = tile.GetCurrentBounds();
+                    var tileBounds= tile.GetCurrentBounds();
 
                     if (!bounds.Intersects(tileBounds)) continue;
 
-                    var canMoveUp = true;
-                    if (j >= tileEndY - 2 && Math.Abs(yVelocity) < 0.01f)
-                    {
-                        for (var k = j - 1; k > j - 4; k--)
-                        {
-                            var above = TryGetTile(i, k);
-
-                            if (above.TileType == TileTypes.None)
-                                continue;
-
-                            canMoveUp = false;
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        canMoveUp = false;
-                    }
-
-                    if (canMoveUp)
-                    {
-                        yMove--;
-                    }
-                    else
-                    {
-                        var depth = bounds.GetIntersectionDepth(tileBounds);
-                        entity.X += depth.X;
-                        bounds = entity.GetCurrentBounds();
-                    }
+                    var depth = bounds.GetIntersectionDepth(tileBounds);
+                    entity.X += depth.X;
+                    bounds = entity.GetCurrentBounds();
                 }
             }
 
