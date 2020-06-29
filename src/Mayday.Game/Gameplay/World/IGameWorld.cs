@@ -20,6 +20,7 @@ namespace Mayday.Game.Gameplay.World
         int Height { get; set; }
         HashSet<IEntity> TrackedEntities { get; }
         IList<IGameArea> GameAreas { get; set; }
+        Action<Tile> TileDestroyed { get; set; }
         bool AnythingCollidesWith(Tile gameWorldTile);
         void AddTrackedEntity(IEntity entity);
         void Update();

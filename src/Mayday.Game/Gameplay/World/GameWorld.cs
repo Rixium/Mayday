@@ -28,6 +28,7 @@ namespace Mayday.Game.Gameplay.World
         /// </summary>
         public HashSet<IEntity> TrackedEntities { get; } = new HashSet<IEntity>();
         public IList<IGameArea> GameAreas { get; set; } = new List<IGameArea>();
+        public Action<Tile> TileDestroyed { get; set; }
 
         private HashSet<IEntity> _trackedEntitiesToRemove = new HashSet<IEntity>();
 

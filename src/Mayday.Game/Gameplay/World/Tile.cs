@@ -46,9 +46,6 @@ namespace Mayday.Game.Gameplay.World
                     return;
 
                 _tileType = value;
-                BlobValue = -1;
-
-                SetNeighboursBlobFlag();
             }
         }
 
@@ -56,24 +53,9 @@ namespace Mayday.Game.Gameplay.World
             ? ContentChest.TileProperties[TileType]
             : null;
 
-        private void SetNeighboursBlobFlag()
-        {
-            for (var i = TileX - 1; i <= TileX + 1; i++)
-            {
-                for (var j = TileY - 1; j <= TileY + 1; j++)
-                {
-                    if (i == TileX && j == TileY) continue;
-                    var tile = GameArea.TryGetTile(i, j);
-                    if (tile == null) continue;
-                    tile.BlobValue = -1;
-                }
-            }
-        }
-
         public int WallType { get; set; }
 
         public Vector2 RenderCenter => new Vector2(X + TileSize / 2.0f, Y + TileSize / 2.0f);
-        public int BlobValue { get; set; } = -1;
 
         public Tile(string tileType, int tileX, int tileY) : base(CurrentTileEntityId)
         {
@@ -88,6 +70,7 @@ namespace Mayday.Game.Gameplay.World
         {
             if (TileType == TileTypes.None) return;
             TileType = TileTypes.None;
+            GameWorld.TileDestroyed?.Invoke(this);
             Destroy?.Invoke(this);
 
             CleanUpComponents();

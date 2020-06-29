@@ -93,7 +93,7 @@ namespace Yetiface.Engine.Utils
             => new GraphicsDeviceManager(game)
             {
                 PreferredBackBufferWidth = WindowWidth,
-                PreferredBackBufferHeight = WindowHeight
+                PreferredBackBufferHeight = WindowHeight,
             };
         
     }

@@ -9,6 +9,7 @@ using Mayday.Game.Gameplay.Tutorials;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Graphics;
 using Mayday.Game.Graphics.Renderers;
+using Mayday.Game.Lighting;
 using Mayday.Game.Networking;
 using Mayday.Game.Networking.Consumers;
 using Mayday.Game.Networking.Listeners;
@@ -41,8 +42,11 @@ namespace Mayday.Game.Screens
 
         private readonly IWorldRenderer _worldRenderer;
         private readonly IPlayerRenderer _playerRenderer;
+        private readonly LightmapRenderer _lightmapRenderer = new LightmapRenderer();
+        private readonly Lightmap _lightmap = new Lightmap();
         private readonly GameScreenUserInterfaceController _interfaceController;
         private readonly HashSet<IRenderable> _renderableComponents = new HashSet<IRenderable>();
+        private float[,] _lights;
 
         public IEntity CurrentWorldObjectPlayerIsNearTo { get; set; }
 
@@ -75,6 +79,7 @@ namespace Mayday.Game.Screens
         private void OnTilePlaced(Tile tile)
         {
             SetupTile(tile);
+            _lights = _lightmap.CheckLights(MyPlayer, Camera);
             PacketManager.SendTileChangePacket(tile);
         }
 
@@ -175,6 +180,8 @@ namespace Mayday.Game.Screens
             cameraPosition.X = MyPlayer.Center.X;
             cameraPosition.Y = MyPlayer.Y - Window.ViewportHeight / 2.0f;
             Camera.Position = cameraPosition;
+
+            _lights = _lightmap.CheckLights(MyPlayer, Camera);
         }
 
         private void SetupUiInput()
@@ -202,11 +209,14 @@ namespace Mayday.Game.Screens
         private void SetupWorldCallbacks()
         {
             GameWorld.TilePlaced += OnTilePlaced;
+            GameWorld.TileDestroyed += OnTileDestroyed;
             GameWorld.RequestClientPlayer += OnClientPlayerRequested;
             GameWorld.PlayerInRangeOfWorldObject += OnPlayerInRangeOfWorldObject;
             GameWorld.PlayerLeftRangeOfWorldObject += OnPlayerLeftRangeOfWorldObject;
             GameWorld.RenderableComponentAdded += OnNewRenderableComponentAdded;
         }
+
+        private void OnTileDestroyed(Tile obj) => _lights = _lightmap.CheckLights(MyPlayer, Camera);
 
         private void OnNewRenderableComponentAdded(IRenderable renderableComponent) =>
             _renderableComponents.Add(renderableComponent);
@@ -236,6 +246,8 @@ namespace Mayday.Game.Screens
 
         public override void RenderScreen()
         {
+            _lightmapRenderer.RenderToRenderTarget(_lights, GameWorld, MyPlayer);
+
             GraphicsUtils.Instance.Begin();
             GraphicsUtils.Instance.SpriteBatch.Draw(ContentChest.Background, new Rectangle(0, 0, Window.ViewportWidth, Window.ViewportHeight), Color.White);
             GraphicsUtils.Instance.End();
@@ -256,6 +268,8 @@ namespace Mayday.Game.Screens
             _worldRenderer.Draw(GameWorld.GameAreas[0], Camera);
 
             GraphicsUtils.Instance.End();
+
+            _lightmapRenderer.Draw(GameWorld, MyPlayer, Camera);
         }
 
         public override void Update()

@@ -69,10 +69,9 @@ namespace Mayday.Game
             _following = entity;
         }
 
-        public bool Intersects(RectangleF bounds)
-        {
-            var rect = new RectangleF(_position.X - Window.Center.X, _position.Y - Window.Center.Y, Window.ViewportWidth, Window.ViewportHeight);
-            return rect.Intersects(bounds);
-        }
+        public bool Intersects(RectangleF bounds) =>
+            Bounds.Intersects(bounds);
+
+        public RectangleF Bounds => new RectangleF(_position.X - Window.Center.X, _position.Y - Window.Center.Y, Window.ViewportWidth, Window.ViewportHeight);
     }
 }
