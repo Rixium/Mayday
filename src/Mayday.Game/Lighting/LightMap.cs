@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Mayday.Game.Enums;
-using Mayday.Game.Gameplay.Entities;
+using Mayday.Game.Gameplay.World.Areas;
 using Microsoft.Xna.Framework;
 
 namespace Mayday.Game.Lighting
@@ -10,96 +9,104 @@ namespace Mayday.Game.Lighting
     public class LightMap
     {
 
-        private float[,] _lightValues;
-
-        public async Task<float[,]> CheckLights(IEntity player, Camera camera)
+        private IGameArea _gameArea;
+        public IGameArea GameArea
         {
-            var gameArea = player.GameArea;
-
-            _lightValues = new float[gameArea.AreaWidth, gameArea.AreaHeight];
-            var ignores = new List<Vector2>();
-
-            var xStart = (int) camera.Bounds.Left / player.GameWorld.TileSize - 10;
-            var xEnd =(int) camera.Bounds.Right / player.GameWorld.TileSize + 10;
-            var yStart = (int)camera.Bounds.Top / player.GameWorld.TileSize - 10;
-            var yEnd = (int)camera.Bounds.Bottom / player.GameWorld.TileSize + 10;
-
-            xStart = 0;
-            yStart = 0;
-            xEnd = _lightValues.GetLength(0);
-            yEnd = _lightValues.GetLength(1);
-
-            for (var i = xStart; i <= xEnd; i++)
+            get => _gameArea;
+            set
             {
-                for (var j = yStart; j <= yEnd; j++)
-                {
-                    if (i < 0 || i >= _lightValues.GetLength(0)) continue;
-                    if(j < 0 || j >= _lightValues.GetLength(1)) continue;
-
-                    if (ignores.Contains(new Vector2(j, i)))
-                    {
-                        continue;
-                    }
-
-                    var tile = gameArea.TryGetTile(i, j);
-
-                    if (tile == null)
-                    {
-                        _lightValues[i, j] = 1;
-                        continue;
-                    }
-
-                    if (tile.TileType == TileTypes.None)
-                    {
-                        _lightValues[i, j] = 0;
-                    }
-                    else
-                    {
-                        _lightValues[i, j] = 1f;
-                    }
-                }
+                _lightValues = new float[value.AreaWidth, value.AreaHeight];
+                _xEnd = _lightValues.GetLength(0);
+                _yEnd = _lightValues.GetLength(1);
+                _gameArea = value;
             }
+        }
 
-            for (float i = 0; i <= 1f; i += 0.1f)
-            {
-                for (var lightX = xStart; lightX <= xEnd; lightX++)
-                {
-                    for (var lightY = yStart; lightY <= yEnd; lightY++)
-                    {
-                        if (lightX < 0 || lightX >= _lightValues.GetLength(0)) continue;
-                        if(lightY < 0 || lightY >= _lightValues.GetLength(1)) continue;
+        private float[,] _lightValues;
+        private int _yEnd;
+        private int _xEnd;
 
-                        if (Math.Abs(_lightValues[lightX, lightY] - i) > 0.01f) continue;
+        public async Task<float[,]> CheckLights(IGameArea gameArea)
+        {
+            GameArea = gameArea;
 
-                        for (var nX = lightX - 1; nX <= lightX + 1; nX++)
-                        {
-                            for (var nY = lightY - 1; nY <= lightY + 1; nY++)
-                            {
-                                if (nX == lightX && nY == lightY)
-                                {
-                                    continue;
-                                }
-
-                                if ((nX == lightX - 1 && nY == lightY - 1) ||
-                                    (nX == lightX + 1 && nY == lightY + 1) ||
-                                    (nX == lightX + 1 && nY == lightY - 1) ||
-                                    (nX == lightX - 1 && nY == lightY + 1))
-                                {
-                                    continue;
-                                }
-
-                                if (nX < 0 || nX >= _lightValues.GetLength(0) - 1 || nY < 0 || nY >= _lightValues.GetLength(1) - 1) continue;
-                                if (Math.Abs(_lightValues[nX, nY] - i) < 0.01f || !(i < _lightValues[nX, nY])) continue;
-
-                                _lightValues[nX, nY] = i + (0.1f);
-                            }
-                        }
-                    }
-                }
-            }
+            PreCalculateLightValues();
+            CalculateLighting();
 
             return await Task.FromResult(_lightValues);
         }
-    }
 
+        private void PreCalculateLightValues()
+        {
+            for (var tileX = 0; tileX <= _xEnd; tileX++)
+            {
+                for (var tileY = 0; tileY <= _yEnd; tileY++)
+                {
+                    if (tileX < 0 || tileX >= _lightValues.GetLength(0)) continue;
+                    if (tileY < 0 || tileY >= _lightValues.GetLength(1)) continue;
+
+                    var tile = GameArea.TryGetTile(tileX, tileY);
+
+                    if (tile.TileType == TileTypes.None)
+                    {
+                        _lightValues[tileX, tileY] = 0;
+                    }
+                    else
+                    {
+                        _lightValues[tileX, tileY] = 1f;
+                    }
+                }
+            }
+        }
+
+        private void CalculateLighting()
+        {
+            for (float lightChange = 0; lightChange <= 1f; lightChange += 0.1f)
+            {
+                for (var tileX = 0; tileX <= _xEnd; tileX++)
+                {
+                    for (var tileY = 0; tileY <= _yEnd; tileY++)
+                    {
+                        if (IsOutOfBounds(tileX, tileY)) continue;
+                        if (Math.Abs(_lightValues[tileX, tileY] - lightChange) > 0.01f) continue;
+
+                        CompareWithNeighbours(tileX, tileY, lightChange);
+                    }
+                }
+            }
+        }
+
+        private void CompareWithNeighbours(int tileX, int tileY, float lightChange)
+        {
+            for (var neighbourX = tileX - 1; neighbourX <= tileX + 1; neighbourX++)
+            {
+                for (var neighbourY = tileY - 1; neighbourY <= tileY + 1; neighbourY++)
+                {
+                    if (IsSelf(neighbourX, neighbourY, tileX, tileY)) continue;
+                    if (IsDiagonal(neighbourX, neighbourY, tileX, tileY)) continue;
+                    if (IsOutOfBounds(neighbourX, neighbourY)) continue;
+                    if (LightIsBrighterThanChange(lightChange, neighbourX, neighbourY)) continue;
+
+                    _lightValues[neighbourX, neighbourY] = MathHelper.Clamp( lightChange + 0.1f, 0f, 1f);
+                }
+            }
+        }
+
+        private bool LightIsBrighterThanChange(float lightChange, int neighbourX, int neighbourY) =>
+            _lightValues[neighbourX, neighbourY] <= lightChange;
+
+        private static bool IsSelf(int nX, int nY, int lightX, int lightY) =>
+            nX == lightX && nY == lightY;
+
+        private bool IsOutOfBounds(int nX, int nY) =>
+            nX < 0 || nX >= _lightValues.GetLength(0) || nY < 0 ||
+            nY >= _lightValues.GetLength(1);
+
+        private static bool IsDiagonal(int nX, int nY, int lightX, int lightY) =>
+            nX == lightX - 1 && nY == lightY - 1 ||
+            nX == lightX + 1 && nY == lightY + 1 ||
+            nX == lightX + 1 && nY == lightY - 1 ||
+            nX == lightX - 1 && nY == lightY + 1;
+
+    }
 }

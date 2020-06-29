@@ -93,14 +93,19 @@ namespace Mayday.Game.Screens
                 SetupTile(tile);
         }
 
-        private async void OnTilePlaced(Tile tile)
+        private void OnTilePlaced(Tile tile)
         {
             SetupTile(tile);
             PacketManager.SendTileChangePacket(tile);
 
+            RecalculateLighting();
+        }
+
+        private async void RecalculateLighting()
+        {
             Lights = await Task.Run(async () =>
             {
-                var data = await _lightMap.CheckLights(MyPlayer, Camera);
+                var data = await _lightMap.CheckLights(MyPlayer.GameArea);
                 return data;
             });
         }
@@ -181,7 +186,7 @@ namespace Mayday.Game.Screens
             return player;
         }
 
-        public override async void Awake()
+        public override void Awake()
         {
             MediaPlayer.Stop();
             MediaPlayer.Play(YetiGame.ContentManager.Load<Song>("gameAmbient"));
@@ -203,11 +208,7 @@ namespace Mayday.Game.Screens
             cameraPosition.Y = MyPlayer.Y - Window.ViewportHeight / 2.0f;
             Camera.Position = cameraPosition;
 
-            Lights = await Task.Run(async () =>
-            {
-                var data = await _lightMap.CheckLights(MyPlayer, Camera);
-                return data;
-            });
+            RecalculateLighting();
         }
 
         private void SetupUiInput()
@@ -242,12 +243,7 @@ namespace Mayday.Game.Screens
             GameWorld.RenderableComponentAdded += OnNewRenderableComponentAdded;
         }
 
-        private async void OnTileDestroyed(Tile obj) =>
-            Lights = await Task.Run(async () =>
-            {
-                var data = await _lightMap.CheckLights(MyPlayer, Camera);
-                return data;
-            });
+        private void OnTileDestroyed(Tile obj) => RecalculateLighting();
 
         private void OnNewRenderableComponentAdded(IRenderable renderableComponent) =>
             _renderableComponents.Add(renderableComponent);

@@ -32,10 +32,10 @@ namespace Mayday.Game
 
         public void Update(int maxX, int maxY)
         {
-            maxX -= Window.WindowWidth / 2 / _zoom;
-            maxY -= Window.WindowHeight / 2 / _zoom;
-            _minX = (int) (Window.Center.X / _zoom);
-            _minY = (int) (Window.Center.Y / _zoom);
+            maxX -= Window.WindowWidth / 2 / _zoom + 3;
+            maxY -= Window.WindowHeight / 2 / _zoom + 3;
+            _minX = (int) (Window.Center.X / _zoom + 3);
+            _minY = (int) (Window.Center.Y / _zoom + 3);
 
             if (_following != null)
                 Goto(new Vector2(_following.GetCurrentBounds().X + _following.GetCurrentBounds().Width / 2.0f,
