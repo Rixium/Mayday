@@ -1,28 +1,33 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Entities;
-using Mayday.Game.Gameplay.World.Areas;
 using Microsoft.Xna.Framework;
 
 namespace Mayday.Game.Lighting
 {
-    public class Lightmap
+    public class LightMap
     {
 
         private float[,] _lightValues;
 
-        public float[,] CheckLights(IEntity player, Camera camera)
+        public async Task<float[,]> CheckLights(IEntity player, Camera camera)
         {
             var gameArea = player.GameArea;
 
             _lightValues = new float[gameArea.AreaWidth, gameArea.AreaHeight];
             var ignores = new List<Vector2>();
 
-            var xStart = (int) camera.Bounds.Left / player.GameWorld.TileSize;
-            var xEnd =(int) camera.Bounds.Right / player.GameWorld.TileSize;
-            var yStart = (int)camera.Bounds.Top / player.GameWorld.TileSize;
-            var yEnd = (int)camera.Bounds.Bottom / player.GameWorld.TileSize;
+            var xStart = (int) camera.Bounds.Left / player.GameWorld.TileSize - 10;
+            var xEnd =(int) camera.Bounds.Right / player.GameWorld.TileSize + 10;
+            var yStart = (int)camera.Bounds.Top / player.GameWorld.TileSize - 10;
+            var yEnd = (int)camera.Bounds.Bottom / player.GameWorld.TileSize + 10;
+
+            xStart = 0;
+            yStart = 0;
+            xEnd = _lightValues.GetLength(0);
+            yEnd = _lightValues.GetLength(1);
 
             for (var i = xStart; i <= xEnd; i++)
             {
@@ -93,9 +98,8 @@ namespace Mayday.Game.Lighting
                 }
             }
 
-            return _lightValues;
+            return await Task.FromResult(_lightValues);
         }
-
     }
 
 }

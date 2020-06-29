@@ -14,15 +14,14 @@ namespace Yetiface.Engine.Utils
         /// </summary>
         public static Rectangle Bounds(Matrix? supplementMatrix = null)
         {
-
-            var matrix1 = Window.InvertViewportMatrix;
             if (supplementMatrix != null)
-                matrix1 *= Matrix.Invert(supplementMatrix.Value);
-            
-            var relativeToViewport = Vector2.Transform(_mousePosition, matrix1);
-            _bounds.X = (int) (relativeToViewport.X);
-            _bounds.Y = (int) (relativeToViewport.Y);
-            
+            {
+                var relativeToViewport =
+                    Vector2.Transform(_mousePosition, Matrix.Invert(supplementMatrix.Value));
+                _bounds.X = (int) (relativeToViewport.X);
+                _bounds.Y = (int) (relativeToViewport.Y);
+            }
+
             return _bounds;
         }
         

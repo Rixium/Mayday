@@ -47,7 +47,6 @@ namespace Mayday.Game.Gameplay.Components
             var yMove = -YVelocity;
             
             Entity.GameArea.Move(Entity, xMove, yMove, YVelocity);
-            Debug.WriteLine(YVelocity);
             Grounded = Math.Abs(currentY - Entity.Y) < 0.01f;
 
             if (Grounded)

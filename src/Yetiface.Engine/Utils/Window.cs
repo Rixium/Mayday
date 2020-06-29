@@ -10,32 +10,11 @@ namespace Yetiface.Engine.Utils
         public static int ViewportHeight { get; set; } = 720;
         public static int WindowWidth { get; set; } = 1280;
         public static int WindowHeight { get; set; } = 720;
-        
-        private static Matrix _viewportMatrix = Matrix.CreateScale(1, 1, 1.0f);
-
-        /// <summary>
-        /// The viewport relative to the window width.
-        /// Important for resizing the window --> We want everything to scale correctly.
-        /// </summary>
-        public static Matrix ViewportMatrix
-        {
-            get
-            {
-                _viewportMatrix.M11 = (float) WindowWidth / ViewportWidth;
-                _viewportMatrix.M22 = (float) WindowHeight / ViewportHeight;
-                return _viewportMatrix;
-            }
-        }
-
-        /// <summary>
-        /// The inverse of the above, so we can remove any translations for stuff like input.
-        /// </summary>
-        public static Matrix InvertViewportMatrix => Matrix.Invert(ViewportMatrix);
 
         /// <summary>
         /// Returns the center of the viewport.
         /// </summary>
-        public static Vector2 Center => new Vector2(ViewportWidth / 2.0f, ViewportHeight / 2.0f);
+        public static Vector2 Center => new Vector2(WindowWidth / 2.0f, WindowHeight / 2.0f);
 
         public static Vector2 BottomRight => new Vector2(ViewportWidth, ViewportHeight);
 

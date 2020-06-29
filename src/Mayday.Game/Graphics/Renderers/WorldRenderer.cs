@@ -22,6 +22,8 @@ namespace Mayday.Game.Graphics.Renderers
             {21, 48}, {245, 49}, {95, 50}, {81, 51}, {85, 52}
         };
 
+        readonly IList<Tile> _renderedTiles = new List<Tile>();
+
         public void Draw(IGameArea gameArea, Camera camera)
         {
             var worldTileSize = gameArea.GameWorld.TileSize;
@@ -30,8 +32,9 @@ namespace Mayday.Game.Graphics.Renderers
             var startTileY = (int) (camera.Position.Y - Window.ViewportHeight / 2.0f) / worldTileSize - 1;
             var endTileX = (int) (camera.Position.X + Window.ViewportWidth / 2.0f) / worldTileSize + 1;
             var endTileY = (int) (camera.Position.Y + Window.ViewportHeight / 2.0f) / worldTileSize + 1;
-            var renderedTiles = new List<Tile>();
-            
+
+            _renderedTiles.Clear();
+
             for (var i = startTileX; i < endTileX; i++)
             {
                 for (var j = startTileY; j < endTileY; j++)
@@ -41,19 +44,18 @@ namespace Mayday.Game.Graphics.Renderers
 
                     if (tile.TileType == TileTypes.None) continue;
                     var tileSet = ContentChest.TileTextures[tile.TileType];
-                    
+
+                    _renderedTiles.Add(tile);
+
                     var rect = new Rectangle(2, 2, 8, 8);
                     GraphicsUtils.Instance.SpriteBatch.Draw(tileSet,
                         new Rectangle((int) tile.X, (int) tile.Y, 8, 8),
                         rect, Color.White);
-                    
-                    renderedTiles.Add(tile);
                 }
             }
 
-            renderedTiles = renderedTiles.OrderBy(o => o.TileProperties.Name.Length).ToList();
-
-            foreach (var tile in renderedTiles)
+            // Drawing the edges of tiles
+            foreach (var tile in _renderedTiles)
             {
                 var tileSet = ContentChest.TileTextures[tile.TileType];
 

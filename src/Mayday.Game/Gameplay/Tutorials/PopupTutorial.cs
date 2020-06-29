@@ -14,7 +14,6 @@ namespace Mayday.Game.Gameplay.Tutorials
         protected override void Show(T obj)
         {
             var entityPosition = obj.Position;
-            Debug.WriteLine($"IM HERE {entityPosition}");
         }
 
     }

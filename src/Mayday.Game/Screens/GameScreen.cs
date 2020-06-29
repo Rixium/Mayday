@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using Mayday.Game.Gameplay.Blueprints;
 using Mayday.Game.Gameplay.Collections;
 using Mayday.Game.Gameplay.Components;
@@ -17,6 +19,7 @@ using Mayday.Game.Optimization;
 using Mayday.Game.UI.Controllers;
 using Mayday.UI.Views;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Yetiface.Engine;
@@ -42,11 +45,25 @@ namespace Mayday.Game.Screens
 
         private readonly IWorldRenderer _worldRenderer;
         private readonly IPlayerRenderer _playerRenderer;
-        private readonly LightmapRenderer _lightmapRenderer = new LightmapRenderer();
-        private readonly Lightmap _lightmap = new Lightmap();
+        private readonly LightMapRenderer _lightMapRenderer = new LightMapRenderer();
+        private readonly LightMap _lightMap = new LightMap();
         private readonly GameScreenUserInterfaceController _interfaceController;
         private readonly HashSet<IRenderable> _renderableComponents = new HashSet<IRenderable>();
+
+        private float[,] Lights
+        {
+            get => _lights;
+            set
+            {
+                _lights = value;
+                _lightsChanged = true;
+            }
+        }
+        private bool _lightsChanged;
         private float[,] _lights;
+        private RenderTarget2D _renderTarget = new RenderTarget2D(
+            Window.GraphicsDeviceManager.GraphicsDevice,
+            Window.WindowWidth, Window.WindowHeight);
 
         public IEntity CurrentWorldObjectPlayerIsNearTo { get; set; }
 
@@ -76,11 +93,16 @@ namespace Mayday.Game.Screens
                 SetupTile(tile);
         }
 
-        private void OnTilePlaced(Tile tile)
+        private async void OnTilePlaced(Tile tile)
         {
             SetupTile(tile);
-            _lights = _lightmap.CheckLights(MyPlayer, Camera);
             PacketManager.SendTileChangePacket(tile);
+
+            Lights = await Task.Run(async () =>
+            {
+                var data = await _lightMap.CheckLights(MyPlayer, Camera);
+                return data;
+            });
         }
 
         private void SetupTile(IEntity tile) => BluePrintManager.SetupFor(tile);
@@ -159,7 +181,7 @@ namespace Mayday.Game.Screens
             return player;
         }
 
-        public override void Awake()
+        public override async void Awake()
         {
             MediaPlayer.Stop();
             MediaPlayer.Play(YetiGame.ContentManager.Load<Song>("gameAmbient"));
@@ -181,7 +203,11 @@ namespace Mayday.Game.Screens
             cameraPosition.Y = MyPlayer.Y - Window.ViewportHeight / 2.0f;
             Camera.Position = cameraPosition;
 
-            _lights = _lightmap.CheckLights(MyPlayer, Camera);
+            Lights = await Task.Run(async () =>
+            {
+                var data = await _lightMap.CheckLights(MyPlayer, Camera);
+                return data;
+            });
         }
 
         private void SetupUiInput()
@@ -216,7 +242,12 @@ namespace Mayday.Game.Screens
             GameWorld.RenderableComponentAdded += OnNewRenderableComponentAdded;
         }
 
-        private void OnTileDestroyed(Tile obj) => _lights = _lightmap.CheckLights(MyPlayer, Camera);
+        private async void OnTileDestroyed(Tile obj) =>
+            Lights = await Task.Run(async () =>
+            {
+                var data = await _lightMap.CheckLights(MyPlayer, Camera);
+                return data;
+            });
 
         private void OnNewRenderableComponentAdded(IRenderable renderableComponent) =>
             _renderableComponents.Add(renderableComponent);
@@ -246,14 +277,24 @@ namespace Mayday.Game.Screens
 
         public override void RenderScreen()
         {
-            _lightmapRenderer.RenderToRenderTarget(_lights, GameWorld, MyPlayer);
+            if(_renderTarget.Width != Window.WindowWidth)
+                _renderTarget = new RenderTarget2D(
+                Window.GraphicsDeviceManager.GraphicsDevice,
+                Window.WindowWidth, Window.WindowHeight);
+
+            if (_lightsChanged)
+            {
+                _lightMapRenderer.RenderToRenderTarget(Lights);
+                _lightsChanged = false;
+            }
+
+            Window.GraphicsDeviceManager.GraphicsDevice.SetRenderTarget(_renderTarget);
 
             GraphicsUtils.Instance.Begin();
-            GraphicsUtils.Instance.SpriteBatch.Draw(ContentChest.Background, new Rectangle(0, 0, Window.ViewportWidth, Window.ViewportHeight), Color.White);
+            GraphicsUtils.Instance.SpriteBatch.Draw(ContentChest.Background, new Rectangle(0, 0, Window.WindowWidth, Window.WindowHeight), Color.White);
             GraphicsUtils.Instance.End();
-            
-            GraphicsUtils.Instance.Begin(true, Camera.GetMatrix());
 
+            GraphicsUtils.Instance.Begin(Camera.GetMatrix());
             _worldRenderer.DrawWorldObjects(GameWorld.GameAreas[0], Camera);
             _playerRenderer.DrawPlayers(Players.GetAll());
 
@@ -266,10 +307,25 @@ namespace Mayday.Game.Screens
             }
 
             _worldRenderer.Draw(GameWorld.GameAreas[0], Camera);
-
             GraphicsUtils.Instance.End();
 
-            _lightmapRenderer.Draw(GameWorld, MyPlayer, Camera);
+            GraphicsUtils.Instance.SpriteBatch.Begin(
+                SpriteSortMode.Deferred,
+                null,  // No blending
+                null, // Point clamp, so we get sexy pixel perfect resizing
+                      null, // We don't care about this. Tbh, I don't even understand it.
+                null, // I don't even know what this it.
+                null, // We can choose to flip textures as an example, but we dont, so null it.
+                Camera.GetMatrix()); // Window viewport, for nice resizing.
+            _lightMapRenderer?.Draw(MyPlayer, GameWorld);
+            GraphicsUtils.Instance.End();
+
+            Window.GraphicsDeviceManager.GraphicsDevice.SetRenderTarget(null);
+
+            GraphicsUtils.Instance.SpriteBatch.Begin();
+            GraphicsUtils.Instance.SpriteBatch.Draw(_renderTarget,
+                new Rectangle(0, 0, Window.WindowWidth, Window.WindowHeight), Color.White);
+            GraphicsUtils.Instance.End();
         }
 
         public override void Update()

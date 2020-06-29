@@ -34,9 +34,9 @@ namespace Yetiface.Engine.Utils
         /// <summary>
         /// Wrapping this so we don't have to stare at the ugly ass.
         /// </summary>
-        public void Begin(bool useViewportMatrix = true, Matrix? supplementMatrix = null)
+        public void Begin(Matrix? supplementMatrix = null)
         {
-            if(useViewportMatrix)
+            if(supplementMatrix != null)
                 SpriteBatch.Begin(
                     SpriteSortMode.Deferred, // Only render images when end has been called
                     BlendState.AlphaBlend,  // No blending
@@ -44,10 +44,9 @@ namespace Yetiface.Engine.Utils
                     null, // We don't care about this. Tbh, I don't even understand it.
                     null, // I don't even know what this it.
                     null, // We can choose to flip textures as an example, but we dont, so null it.
-                    supplementMatrix != null ?  supplementMatrix * Window.ViewportMatrix : Window.ViewportMatrix); // Window viewport, for nice resizing.
+                    supplementMatrix); // Window viewport, for nice resizing.
             else
-                SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp,
-                    DepthStencilState.None, RasterizerState.CullCounterClockwise);
+                SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
         }
 
         public void Draw(ISprite sprite, Vector2 position) => Draw(sprite, position, Color.White);

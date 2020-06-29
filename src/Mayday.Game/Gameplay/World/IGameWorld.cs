@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Mayday.Game.Gameplay.Collections;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Entities;
-using Mayday.Game.Gameplay.Items;
 using Mayday.Game.Gameplay.World.Areas;
 
 namespace Mayday.Game.Gameplay.World
