@@ -30,8 +30,10 @@ namespace Mayday.Game
 
         public Vector2 ToGo { get; set; }
 
-        public void Update()
+        public void Update(int maxX, int maxY)
         {
+            maxX -= Window.WindowWidth / 2 / _zoom;
+            maxY -= Window.WindowHeight / 2 / _zoom;
             _minX = (int) (Window.Center.X / _zoom);
             _minY = (int) (Window.Center.Y / _zoom);
 
@@ -49,8 +51,8 @@ namespace Mayday.Game
             _position.X = x;
             _position.Y = y;
 
-            _position.X = MathHelper.Clamp(_position.X, _minX, _maxX);
-            _position.Y = MathHelper.Clamp(_position.Y, _minY, _maxY);
+            _position.X = MathHelper.Clamp(_position.X, _minX, maxX);
+            _position.Y = MathHelper.Clamp(_position.Y, _minY, maxY);
         }
 
         public Vector2 Position
@@ -72,6 +74,6 @@ namespace Mayday.Game
         public bool Intersects(RectangleF bounds) =>
             Bounds.Intersects(bounds);
 
-        public RectangleF Bounds => new RectangleF(_position.X - Window.Center.X, _position.Y - Window.Center.Y, Window.ViewportWidth, Window.ViewportHeight);
+        public RectangleF Bounds => new RectangleF(_position.X - Window.Center.X, _position.Y - Window.Center.Y, Window.WindowWidth, Window.WindowHeight);
     }
 }

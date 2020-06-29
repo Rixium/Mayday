@@ -341,7 +341,7 @@ namespace Mayday.Game.Screens
             else if (MouseState.CurrentState.ScrollWheelValue < MouseState.LastState.ScrollWheelValue)
                 _interfaceController.IncrementSelection(1);
 
-            Camera.Update();
+            Camera.Update(MyPlayer.GameArea.AreaWidth * GameWorld.TileSize, MyPlayer.GameArea.AreaHeight * GameWorld.TileSize);
         }
     }
 }
