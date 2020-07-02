@@ -35,7 +35,7 @@ namespace Mayday.Game.Graphics.Renderers
         public void Draw(
             Camera camera,
             IGameWorld gameWorld,
-            IPlayerSet playerSet,
+            IEntitySet entitySet,
             IEntity myPlayer,
             LightMap lightMap)
         {
@@ -56,7 +56,7 @@ namespace Mayday.Game.Graphics.Renderers
 
             GraphicsUtils.Instance.Begin(camera.GetMatrix());
             _worldRenderer.DrawWorldObjects(gameWorld.GameAreas[0], camera);
-            _playerRenderer.DrawPlayers(playerSet.GetAll());
+            _playerRenderer.DrawPlayers(entitySet.GetAll());
 
             foreach (var entity in gameWorld.GameAreas[0].GetItems())
             {

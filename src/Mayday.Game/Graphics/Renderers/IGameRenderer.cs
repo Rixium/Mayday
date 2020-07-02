@@ -10,7 +10,7 @@ namespace Mayday.Game.Graphics.Renderers
 
         void Draw(Camera camera,
             IGameWorld gameWorld,
-            IPlayerSet playerSet,
+            IEntitySet entitySet,
             IEntity myPlayer,
             LightMap lightMap);
     }

@@ -30,7 +30,7 @@ namespace Mayday.Game.Screens
         private readonly HashSet<IRenderable> _renderableComponents = new HashSet<IRenderable>();
         private readonly IBluePrintManager _bluePrintManager;
         private readonly Camera _camera = new Camera();
-        private readonly IPlayerSet _players = new PlayerSet();
+        private readonly IEntitySet _players = new EntitySet();
         private IEntity _myPlayer;
         private IEntity _currentWorldObjectPlayerIsNearTo;
 

@@ -7,16 +7,16 @@ namespace Mayday.Game.Networking.Consumers
 {
     public class PlayerPositionPacketConsumer : PacketConsumer<PlayerPositionPacket>
     {
-        private readonly IPlayerSet _playerSet;
+        private readonly IEntitySet _entitySet;
 
-        public PlayerPositionPacketConsumer(IPlayerSet playerSet)
+        public PlayerPositionPacketConsumer(IEntitySet entitySet)
         {
-            _playerSet = playerSet;
+            _entitySet = entitySet;
         }
 
         protected override void ConsumePacket(Connection connection, PlayerPositionPacket packet)
         {
-            var player = _playerSet.Get(packet.SteamId);
+            var player = _entitySet.Get(packet.SteamId);
 
             if (player == null) return;
 

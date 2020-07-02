@@ -8,16 +8,16 @@ namespace Mayday.Game.Networking.Consumers
 {
     public class JumpPacketConsumer : PacketConsumer<JumpPacket>
     {
-        private readonly IPlayerSet _playerSet;
+        private readonly IEntitySet _entitySet;
 
-        public JumpPacketConsumer(IPlayerSet playerSet)
+        public JumpPacketConsumer(IEntitySet entitySet)
         {
-            _playerSet = playerSet;
+            _entitySet = entitySet;
         }
         
         protected override void ConsumePacket(Connection connection, JumpPacket packet)
         {
-            var player = _playerSet.Get(packet.SteamId);
+            var player = _entitySet.Get(packet.SteamId);
 
             if (player == null) return;
             

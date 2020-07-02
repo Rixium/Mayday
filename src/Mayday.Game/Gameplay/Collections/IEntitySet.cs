@@ -3,9 +3,9 @@ using Mayday.Game.Gameplay.Entities;
 
 namespace Mayday.Game.Gameplay.Collections
 {
-    public interface IPlayerSet
+    public interface IEntitySet
     {
-        IEntity Add(IEntity player);
+        IEntity Add(IEntity entity);
         IEntity Get(ulong id);
         IEnumerable<IEntity> GetAll();
     }

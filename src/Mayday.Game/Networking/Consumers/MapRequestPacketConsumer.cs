@@ -11,18 +11,18 @@ namespace Mayday.Game.Networking.Consumers
 {
     public class MapRequestPacketConsumer : PacketConsumer<MapRequestPacket>
     {
-        private readonly IPlayerSet _playerSet;
+        private readonly IEntitySet _entitySet;
         private readonly INetworkManager _networkManager;
         private readonly INetworkMessagePackager _messagePackager;
         private readonly IGameWorld _gameWorld;
 
         public MapRequestPacketConsumer(
-            IPlayerSet playerSet,
+            IEntitySet entitySet,
             INetworkManager networkManager,
             INetworkMessagePackager messagePackager,
             IGameWorld gameWorld)
         {
-            _playerSet = playerSet;
+            _entitySet = entitySet;
             _networkManager = networkManager;
             _messagePackager = messagePackager;
             _gameWorld = gameWorld;
@@ -56,7 +56,7 @@ namespace Mayday.Game.Networking.Consumers
                 await Task.Delay(1);
             }
 
-            foreach (var player in _playerSet.GetAll())
+            foreach (var player in _entitySet.GetAll())
             {
                 var playerPacket = new NewPlayerPacket()
                 {

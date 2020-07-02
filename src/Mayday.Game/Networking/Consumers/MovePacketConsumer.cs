@@ -7,16 +7,16 @@ namespace Mayday.Game.Networking.Consumers
 {
     public class MovePacketConsumer : PacketConsumer<PlayerMovePacket>
     {
-        private readonly IPlayerSet _playerSet;
+        private readonly IEntitySet _entitySet;
 
-        public MovePacketConsumer(IPlayerSet playerSet)
+        public MovePacketConsumer(IEntitySet entitySet)
         {
-            _playerSet = playerSet;
+            _entitySet = entitySet;
         }
 
         protected override void ConsumePacket(Connection connection, PlayerMovePacket packet)
         {
-            var player = _playerSet.Get(packet.SteamId);
+            var player = _entitySet.Get(packet.SteamId);
 
             if (player == null) return;
 

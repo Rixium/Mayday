@@ -16,19 +16,19 @@ namespace Mayday.Game.Networking.Consumers
         private readonly IList<IPacketConsumer> _packetConsumers = new List<IPacketConsumer>();
 
         public GamePacketConsumerManager(
-            IPlayerSet playerSet,
+            IEntitySet entitySet,
             GameScreen gameScreen,
             IGameWorld gameWorld,
             INetworkMessagePackager messagePackager,
             INetworkManager networkManager)
         {
             _packetConsumers.Add(new ItemDropPacketConsumer(gameWorld));
-            _packetConsumers.Add(new JumpPacketConsumer(playerSet));
-            _packetConsumers.Add(new MovePacketConsumer(playerSet));
+            _packetConsumers.Add(new JumpPacketConsumer(entitySet));
+            _packetConsumers.Add(new MovePacketConsumer(entitySet));
             _packetConsumers.Add(new NewPlayerPacketConsumer(gameScreen));
-            _packetConsumers.Add(new PlayerPositionPacketConsumer(playerSet));
+            _packetConsumers.Add(new PlayerPositionPacketConsumer(entitySet));
             _packetConsumers.Add(new TileTypePacketConsumer(gameWorld));
-            _packetConsumers.Add(new MapRequestPacketConsumer(playerSet, networkManager, messagePackager, gameWorld));
+            _packetConsumers.Add(new MapRequestPacketConsumer(entitySet, networkManager, messagePackager, gameWorld));
         }
 
         public void InjectInto(MaydayClientNetworkListener gameClientListener = null, INetworkServerListener serverListener = null)
