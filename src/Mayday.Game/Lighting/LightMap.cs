@@ -26,12 +26,16 @@ namespace Mayday.Game.Lighting
         private int _yEnd;
         private int _xEnd;
 
+        public bool ChangedSinceLastGet { get; set; }
+
         public async Task<float[,]> CheckLights(IGameArea gameArea)
         {
             GameArea = gameArea;
 
             PreCalculateLightValues();
             CalculateLighting();
+
+            ChangedSinceLastGet = true;
 
             return await Task.FromResult(_lightValues);
         }
@@ -108,5 +112,10 @@ namespace Mayday.Game.Lighting
             nX == lightX + 1 && nY == lightY - 1 ||
             nX == lightX - 1 && nY == lightY + 1;
 
+        public float[,] GetLights()
+        {
+            ChangedSinceLastGet = false;
+            return _lightValues;
+        }
     }
 }

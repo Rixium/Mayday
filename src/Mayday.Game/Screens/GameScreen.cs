@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Mayday.Game.Gameplay.Blueprints;
 using Mayday.Game.Gameplay.Collections;
@@ -19,7 +17,6 @@ using Mayday.Game.Optimization;
 using Mayday.Game.UI.Controllers;
 using Mayday.UI.Views;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Yetiface.Engine;
@@ -43,27 +40,10 @@ namespace Mayday.Game.Screens
         public readonly IPlayerSet Players = new PlayerSet();
         public IEntity MyPlayer { get; private set; }
 
-        private readonly IWorldRenderer _worldRenderer;
-        private readonly IPlayerRenderer _playerRenderer;
-        private readonly LightMapRenderer _lightMapRenderer = new LightMapRenderer();
+        private readonly IGameRenderer _gameRenderer;
         private readonly LightMap _lightMap = new LightMap();
         private readonly GameScreenUserInterfaceController _interfaceController;
         private readonly HashSet<IRenderable> _renderableComponents = new HashSet<IRenderable>();
-
-        private float[,] Lights
-        {
-            get => _lights;
-            set
-            {
-                _lights = value;
-                _lightsChanged = true;
-            }
-        }
-        private bool _lightsChanged;
-        private float[,] _lights;
-        private RenderTarget2D _renderTarget = new RenderTarget2D(
-            Window.GraphicsDeviceManager.GraphicsDevice,
-            Window.WindowWidth, Window.WindowHeight);
 
         public IEntity CurrentWorldObjectPlayerIsNearTo { get; set; }
 
@@ -74,15 +54,19 @@ namespace Mayday.Game.Screens
             NetworkManager = networkManager;
             PacketManager.Initialize(networkManager);
 
-            _worldRenderer = new WorldRenderer();
-            _playerRenderer = new PlayerRenderer();
-
             var gameScreenUserInterface = new GameScreenUserInterface();
             _interfaceController = new GameScreenUserInterfaceController(gameScreenUserInterface);
             UserInterface = new MyraUserInterface(gameScreenUserInterface);
 
             BluePrintManager = new BluePrintManager(this);
+
             UpdateResolver = new CameraBoundsUpdateResolver(Camera);
+
+            _gameRenderer = new GameRenderer(
+                new PlayerRenderer(),
+                new WorldRenderer(),
+                new LightMapRenderer(),
+                UpdateResolver);
         }
 
         public void SetWorld(IGameWorld gameWorld) => GameWorld = gameWorld;
@@ -101,14 +85,11 @@ namespace Mayday.Game.Screens
             RecalculateLighting();
         }
 
-        private async void RecalculateLighting()
-        {
-            Lights = await Task.Run(async () =>
+        private async void RecalculateLighting() =>
+            await Task.Run(async () =>
             {
-                var data = await _lightMap.CheckLights(MyPlayer.GameArea);
-                return data;
+                await _lightMap.CheckLights(MyPlayer.GameArea);
             });
-        }
 
         private void SetupTile(IEntity tile) => BluePrintManager.SetupFor(tile);
 
@@ -271,58 +252,8 @@ namespace Mayday.Game.Screens
             consumers.InjectInto(gameClientListener, gameServerListener);
         }
 
-        public override void RenderScreen()
-        {
-            if(_renderTarget.Width != Window.WindowWidth)
-                _renderTarget = new RenderTarget2D(
-                Window.GraphicsDeviceManager.GraphicsDevice,
-                Window.WindowWidth, Window.WindowHeight);
-
-            if (_lightsChanged)
-            {
-                _lightMapRenderer.RenderToRenderTarget(Lights);
-                _lightsChanged = false;
-            }
-
-            Window.GraphicsDeviceManager.GraphicsDevice.SetRenderTarget(_renderTarget);
-
-            GraphicsUtils.Instance.Begin();
-            GraphicsUtils.Instance.SpriteBatch.Draw(ContentChest.Background, new Rectangle(0, 0, Window.WindowWidth, Window.WindowHeight), Color.White);
-            GraphicsUtils.Instance.End();
-
-            GraphicsUtils.Instance.Begin(Camera.GetMatrix());
-            _worldRenderer.DrawWorldObjects(GameWorld.GameAreas[0], Camera);
-            _playerRenderer.DrawPlayers(Players.GetAll());
-
-            foreach (var entity in GameWorld.GameAreas[0].GetItems())
-            {
-                if (!UpdateResolver.ShouldUpdate(entity)) continue;
-                if (!(entity is ItemDrop item)) continue;
-                GraphicsUtils.Instance.SpriteBatch.Draw(ContentChest.ItemTextures[item.Item.ItemId],
-                    new Vector2(item.X, item.Y), Color.White);
-            }
-
-            _worldRenderer.Draw(GameWorld.GameAreas[0], Camera);
-            GraphicsUtils.Instance.End();
-
-            GraphicsUtils.Instance.SpriteBatch.Begin(
-                SpriteSortMode.Deferred,
-                null,  // No blending
-                null, // Point clamp, so we get sexy pixel perfect resizing
-                      null, // We don't care about this. Tbh, I don't even understand it.
-                null, // I don't even know what this it.
-                null, // We can choose to flip textures as an example, but we dont, so null it.
-                Camera.GetMatrix()); // Window viewport, for nice resizing.
-            _lightMapRenderer?.Draw(MyPlayer, GameWorld);
-            GraphicsUtils.Instance.End();
-
-            Window.GraphicsDeviceManager.GraphicsDevice.SetRenderTarget(null);
-
-            GraphicsUtils.Instance.SpriteBatch.Begin();
-            GraphicsUtils.Instance.SpriteBatch.Draw(_renderTarget,
-                new Rectangle(0, 0, Window.WindowWidth, Window.WindowHeight), Color.White);
-            GraphicsUtils.Instance.End();
-        }
+        public override void RenderScreen() =>
+            _gameRenderer.Draw(Camera, GameWorld, Players, MyPlayer, _lightMap);
 
         public override void Update()
         {

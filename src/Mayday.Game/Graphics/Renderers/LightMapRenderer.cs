@@ -2,22 +2,25 @@ using System;
 using System.Diagnostics;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.World;
+using Mayday.Game.Lighting;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Yetiface.Engine.Utils;
 
 namespace Mayday.Game.Graphics.Renderers
 {
-    public class LightMapRenderer
+    public class LightMapRenderer : ILightMapRenderer
     {
         private RenderTarget2D _renderTarget;
 
-        public void RenderToRenderTarget(float[,] lightMap)
+        public void RenderToRenderTarget(LightMap lightMap)
         {
             if (lightMap == null) return;
 
-            _renderTarget ??= new RenderTarget2D(Window.GraphicsDeviceManager.GraphicsDevice, lightMap.GetLength(0),
-                lightMap.GetLength(1),
+            var lightMapData = lightMap.GetLights();
+
+            _renderTarget ??= new RenderTarget2D(Window.GraphicsDeviceManager.GraphicsDevice, lightMapData.GetLength(0),
+                lightMapData.GetLength(1),
                 false,
                 Window.GraphicsDeviceManager.GraphicsDevice.PresentationParameters.BackBufferFormat,
                 DepthFormat.Depth24);
@@ -33,19 +36,22 @@ namespace Mayday.Game.Graphics.Renderers
                 null, // I don't even know what this it.
                 null, // We can choose to flip textures as an example, but we dont, so null it.
                 null); // Window viewport, for nice resizing.
-            for (var i = 0; i < lightMap.GetLength(0); i++)
+            for (var i = 0; i < lightMapData.GetLength(0); i++)
             {
-                for (var j = 0; j < lightMap.GetLength(1); j++)
+                for (var j = 0; j < lightMapData.GetLength(1); j++)
                 {
                     GraphicsUtils.Instance.SpriteBatch.Draw(
                         GraphicsUtils.Instance.PixelTexture,
                         new Rectangle(i, j, 1, 1),
-                        Color.Black * lightMap[i, j]);
+                        Color.Black * lightMapData[i, j]);
                 }
             }
 
             GraphicsUtils.Instance.End();
+
+            lightMap.ChangedSinceLastGet = false;
         }
+        
         public void Draw(IEntity player, IGameWorld gameWorld)
         {
             if (_renderTarget == null) return;
