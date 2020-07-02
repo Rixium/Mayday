@@ -3,7 +3,6 @@ using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.Items;
 using Mayday.Game.Gameplay.World;
-using Mayday.Game.Screens;
 using Microsoft.Xna.Framework.Audio;
 using Yetiface.Engine;
 using Yetiface.Engine.Inputs;
@@ -13,19 +12,18 @@ namespace Mayday.Game.Gameplay.Components
 {
     public class ItemPlacerComponent : IComponent
     {
-        private GameScreen _gameScreen;
 
         private double _lastPlaced;
-        private Camera _camera => _gameScreen.Camera;
-        public IGameWorld GameWorld => _gameScreen.GameWorld;
+        private Camera _camera;
+        public IGameWorld GameWorld => Entity.GameWorld;
         public IEntity Entity { get; set; }
         public int MaxDistanceToPlace => 7 * GameWorld.TileSize;
         public Action<IItem> ItemUsed { get; set; }
         public IItem SelectedItem { get; set; }
 
-        public ItemPlacerComponent(GameScreen gameScreen)
+        public ItemPlacerComponent(Camera camera)
         {
-            _gameScreen = gameScreen;
+            _camera = camera;
         }
         
         public void OnAddedToEntity()

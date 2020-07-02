@@ -80,12 +80,11 @@ namespace Mayday.Game.Screens
         
         private async void StartNewGame()
         {
-            var gameScreen = 
-                ScreenManager.AddScreen(new GameScreen(_networkManager));
-
             var world = await CreateWorld();
-            
-            gameScreen.SetWorld(world);
+
+            var gameScreen = 
+                ScreenManager.AddScreen(
+                    new GameScreen(world, _networkManager));
 
             gameScreen.AddPlayer(new Entity(SteamClient.SteamId), true);
 
@@ -131,10 +130,8 @@ namespace Mayday.Game.Screens
             var world = await _worldMaker
                 .Create(this);
             
-            var gameScreen = new GameScreen(_networkManager);
-            
-            gameScreen.SetWorld(world);
-            
+            var gameScreen = new GameScreen(world, _networkManager);
+
             var player = gameScreen.AddPlayer(new Entity(SteamClient.SteamId), true);
 
             var newPlayerPacket = new NewPlayerPacket
@@ -190,26 +187,6 @@ namespace Mayday.Game.Screens
         }
         
         private void OnFailedToConnect()
-        {
-            
-        }
-
-        public void OnNewConnection(Connection connection, ConnectionInfo info)
-        {
-            
-        }
-
-        public void OnConnectionLeft(Connection connection, ConnectionInfo info)
-        {
-            
-        }
-
-        public void OnMessageReceived(Connection connection, NetIdentity identity, IntPtr data, int size, long messageNum,
-            long recvTime, int channel)
-        {
-        }
-
-        public void OnConnectionChanged(Connection connection, ConnectionInfo info)
         {
             
         }

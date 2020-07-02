@@ -3,11 +3,9 @@ using System.Threading.Tasks;
 using Mayday.Game.Gameplay.Blueprints;
 using Mayday.Game.Gameplay.Collections;
 using Mayday.Game.Gameplay.Components;
+using Mayday.Game.Gameplay.Creators;
 using Mayday.Game.Gameplay.Entities;
-using Mayday.Game.Gameplay.Items;
-using Mayday.Game.Gameplay.Tutorials;
 using Mayday.Game.Gameplay.World;
-using Mayday.Game.Graphics;
 using Mayday.Game.Graphics.Renderers;
 using Mayday.Game.Lighting;
 using Mayday.Game.Networking;
@@ -22,7 +20,6 @@ using Microsoft.Xna.Framework.Media;
 using Yetiface.Engine;
 using Yetiface.Engine.Inputs;
 using Yetiface.Engine.Networking;
-using Yetiface.Engine.Optimization;
 using Yetiface.Engine.Screens;
 using Yetiface.Engine.UI;
 using Yetiface.Engine.Utils;
@@ -33,25 +30,29 @@ namespace Mayday.Game.Screens
     public class GameScreen : Screen
     {
         public INetworkManager NetworkManager { get; }
-        public IGameWorld GameWorld { get; private set; }
-        public IUpdateResolver<IEntity> UpdateResolver;
+        public IGameWorld GameWorld => _gameWorld;
         public IBluePrintManager BluePrintManager { get; set; }
 
         public readonly IPlayerSet Players = new PlayerSet();
         public IEntity MyPlayer { get; private set; }
 
-        private readonly IGameRenderer _gameRenderer;
-        private readonly LightMap _lightMap = new LightMap();
-        private readonly GameScreenUserInterfaceController _interfaceController;
-        private readonly HashSet<IRenderable> _renderableComponents = new HashSet<IRenderable>();
-
         public IEntity CurrentWorldObjectPlayerIsNearTo { get; set; }
 
         public Camera Camera { get; } = new Camera();
 
-        public GameScreen(INetworkManager networkManager) : base("GameScreen")
+        private readonly IGameWorld _gameWorld;
+        private readonly IGameRenderer _gameRenderer;
+        private IPlayerCreator _playerCreator;
+        private readonly LightMap _lightMap = new LightMap();
+        private readonly GameScreenUserInterfaceController _interfaceController;
+        private readonly HashSet<IRenderable> _renderableComponents = new HashSet<IRenderable>();
+        private CameraBoundsUpdateResolver _updateResolver;
+
+        public GameScreen(IGameWorld gameWorld, INetworkManager networkManager) : base("GameScreen")
         {
+            _gameWorld = gameWorld;
             NetworkManager = networkManager;
+
             PacketManager.Initialize(networkManager);
 
             var gameScreenUserInterface = new GameScreenUserInterface();
@@ -60,16 +61,20 @@ namespace Mayday.Game.Screens
 
             BluePrintManager = new BluePrintManager(this);
 
-            UpdateResolver = new CameraBoundsUpdateResolver(Camera);
+            _updateResolver = new CameraBoundsUpdateResolver(Camera);
 
             _gameRenderer = new GameRenderer(
                 new PlayerRenderer(),
                 new WorldRenderer(),
                 new LightMapRenderer(),
-                UpdateResolver);
-        }
+                _updateResolver);
 
-        public void SetWorld(IGameWorld gameWorld) => GameWorld = gameWorld;
+            _playerCreator = new PlayerCreator(
+                GameWorld,
+                _interfaceController,
+                Camera,
+                _updateResolver);
+        }
 
         private void SetupTiles()
         {
@@ -95,74 +100,14 @@ namespace Mayday.Game.Screens
 
         public IEntity AddPlayer(IEntity player, bool isClients = false)
         {
+            player = isClients ?
+                _playerCreator.CreateHostPlayer(player) :
+                _playerCreator.CreateClientPlayer(player);
+
             if (isClients)
-            {
-                var spawnTile = GameWorld.GameAreas[0].GetRandomSpawnLocation();
-                player.X = spawnTile.TileX * GameWorld.TileSize;
-                player.Y = spawnTile.TileY * GameWorld.TileSize - (70 * 4);
                 MyPlayer = player;
-            }
-
-            player.GameWorld = GameWorld;
-
-            var playerAnimationComponent = new PlayerAnimationComponent
-            {
-                HeadAnimator = new Animator(ContentChest.Heads[1].Animations)
-            };
-
-            var moveComponent = player.AddComponent(new MoveComponent());
-            var gravityComponent = player.AddComponent(new GravityComponent());
-            var jumpComponent = player.AddComponent(new JumpComponent());
-            var inventoryComponent = player.AddComponent(new InventoryComponent());
-            var inventoryBar = inventoryComponent.AddInventory(new Inventory(8));
-            var mainInventory = inventoryComponent.AddInventory(new Inventory(24));
-            var itemPickerComponent =
-                player.AddComponent(new ItemPickerComponent(GameWorld.GameAreas[0].WorldItems, UpdateResolver));
-            playerAnimationComponent = player.AddComponent(playerAnimationComponent);
-
-            moveComponent.PositionChanged += PacketManager.SendPositionPacket;
-            moveComponent.MoveDirectionChanged += PacketManager.SendMoveDirectionPacket;
-
-            player.Bounds = new RectangleF(9, 10, 13, 30);
-
-            if (isClients)
-            {
-                var blockBreakerComponent = player.AddComponent(new BlockBreakerComponent(GameWorld, Camera));
-                player.AddComponent(new CharacterControllerComponent());
-                var itemPlacerComponent = player.AddComponent(new ItemPlacerComponent(this));
-                _interfaceController.SelectedItemSlotChanged += (i) =>
-                {
-                    var item = inventoryBar.GetItemAt(i);
-                    itemPlacerComponent.SetSelectedItem(item);
-                };
-                itemPlacerComponent.ItemUsed += (item) => inventoryBar.RemoveItem(item);
-
-                OnMouseDown += blockBreakerComponent.MouseDown;
-                OnMouseDown += itemPlacerComponent.MouseDown;
-                inventoryBar.InventoryChanged += () => _interfaceController.InventoryBarChanged(inventoryBar);
-                mainInventory.InventoryChanged += () => _interfaceController.MainInventoryChanged(mainInventory);
-                jumpComponent.Jump += PacketManager.SendJumpPacket;
-                inventoryBar.AddItemToInventory(ContentChest.ItemData["Shuttle"]);
-
-                var tutorialManagerComponent = player.AddComponent(new TutorialManagerComponent());
-
-                var tutorial1 = new PopupTutorial<IEntity>(new TutorialDefinition()
-                {
-                    Text = "HELLO WORLD!",
-                });
-
-
-                tutorialManagerComponent.AddTutorial("Test", tutorial1);
-
-                GameWorld.PlayerInRangeOfWorldObject += tutorial1.Trigger;
-            }
-
-            // TODO LOTS
-            player.GameArea = GameWorld.GameAreas[0];
 
             Players.Add(player);
-
-            GameWorld.AddTrackedEntity(player);
 
             return player;
         }
