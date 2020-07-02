@@ -5,8 +5,10 @@ using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.Items;
 using Mayday.UI.Views;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Myra.Graphics2D.TextureAtlases;
 using Yetiface.Engine;
+using Yetiface.Engine.Inputs;
 
 namespace Mayday.Game.UI.Controllers
 {
@@ -129,6 +131,38 @@ namespace Mayday.Game.UI.Controllers
             var worldObjectType = entity.GetComponent<WorldObjectManagerComponent>().WorldObjectType;
             var worldObjectData = ContentChest.WorldObjectData[worldObjectType];
             UserInterface.HintText.Text = $"[Use {worldObjectData.Name}]";
+        }
+
+        public void SetupInput()
+        {
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D1),
+                () => InventorySelectionChanged(0));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D2),
+                () => InventorySelectionChanged(1));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D3),
+                () => InventorySelectionChanged(2));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D4),
+                () => InventorySelectionChanged(3));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D5),
+                () => InventorySelectionChanged(4));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D6),
+                () => InventorySelectionChanged(5));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D7),
+                () => InventorySelectionChanged(6));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.D8),
+                () => InventorySelectionChanged(7));
+            YetiGame.InputManager.RegisterInputEvent(new KeyInputBinding(Keys.I),
+                () => ToggleMainInventory());
+        }
+
+        public void Update()
+        {
+            if (Yetiface.Engine.Utils.MouseState.CurrentState.ScrollWheelValue >
+                Yetiface.Engine.Utils.MouseState.LastState.ScrollWheelValue)
+                IncrementSelection(-1);
+            else if (Yetiface.Engine.Utils.MouseState.CurrentState.ScrollWheelValue <
+                     Yetiface.Engine.Utils.MouseState.LastState.ScrollWheelValue)
+                IncrementSelection(1);
         }
     }
 }

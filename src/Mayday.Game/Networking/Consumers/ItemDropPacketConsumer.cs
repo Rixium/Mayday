@@ -2,6 +2,7 @@ using System;
 using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Items;
+using Mayday.Game.Gameplay.World;
 using Mayday.Game.Networking.Packets;
 using Mayday.Game.Screens;
 using Steamworks.Data;
@@ -12,11 +13,11 @@ namespace Mayday.Game.Networking.Consumers
 {
     public class ItemDropPacketConsumer : PacketConsumer<ItemDropPacket>
     {
-        private readonly GameScreen _gameScreen;
+        private readonly IGameWorld _gameWorld;
 
-        public ItemDropPacketConsumer(GameScreen gameScreen)
+        public ItemDropPacketConsumer(IGameWorld gameWorld)
         {
-            _gameScreen = gameScreen;
+            _gameWorld = gameWorld;
         }
         
         protected override void ConsumePacket(Connection connection, ItemDropPacket packet)
@@ -34,7 +35,7 @@ namespace Mayday.Game.Networking.Consumers
             moveComponent.YVelocity = Randomizer.Next(0, 5);
 
             // TODO NETWORKED GAME AREAS
-            _gameScreen.GameWorld.GameAreas[0].DropItem(itemDrop);
+            _gameWorld.GameAreas[0].DropItem(itemDrop);
         }
     }
 }

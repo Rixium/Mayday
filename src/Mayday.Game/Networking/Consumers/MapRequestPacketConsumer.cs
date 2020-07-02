@@ -1,9 +1,7 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Mayday.Game.Gameplay.Entities;
+using Mayday.Game.Gameplay.Collections;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Networking.Packets;
-using Mayday.Game.Screens;
 using Steamworks.Data;
 using Yetiface.Engine.Networking;
 using Yetiface.Engine.Networking.Consumers;
@@ -13,14 +11,21 @@ namespace Mayday.Game.Networking.Consumers
 {
     public class MapRequestPacketConsumer : PacketConsumer<MapRequestPacket>
     {
-        private readonly GameScreen _gameScreen;
-        private INetworkManager NetworkManager => _gameScreen.NetworkManager;
-        private INetworkMessagePackager MessagePackager => NetworkManager.MessagePackager;
-        private IGameWorld GameWorld => _gameScreen.GameWorld;
+        private readonly IPlayerSet _playerSet;
+        private readonly INetworkManager _networkManager;
+        private readonly INetworkMessagePackager _messagePackager;
+        private readonly IGameWorld _gameWorld;
 
-        public MapRequestPacketConsumer(GameScreen gameScreen)
+        public MapRequestPacketConsumer(
+            IPlayerSet playerSet,
+            INetworkManager networkManager,
+            INetworkMessagePackager messagePackager,
+            IGameWorld gameWorld)
         {
-            _gameScreen = gameScreen;
+            _playerSet = playerSet;
+            _networkManager = networkManager;
+            _messagePackager = messagePackager;
+            _gameWorld = gameWorld;
         }
 
         protected override void ConsumePacket(Connection connection, MapRequestPacket packet)
@@ -32,26 +37,26 @@ namespace Mayday.Game.Networking.Consumers
 
         private async void SendMap(Connection connection)
         {
-            for (var i = 0; i < GameWorld.Width; i++)
+            for (var i = 0; i < _gameWorld.Width; i++)
             {
-                for (var j = 0; j < GameWorld.Height; j++)
+                for (var j = 0; j < _gameWorld.Height; j++)
                 {
                     // TODO NETWORK GAME AREAS
-                    var tileToSend = GameWorld.GameAreas[0].Tiles[i, j];
+                    var tileToSend = _gameWorld.GameAreas[0].Tiles[i, j];
                     var tileTypePacket = new TileTypePacket()
                     {
                         X = tileToSend.TileX,
                         Y = tileToSend.TileY,
                         TileType = tileToSend.TileType
                     };
-                    var packet = MessagePackager.Package(tileTypePacket);
-                    NetworkManager.SendMessage(packet, connection);
+                    var packet = _messagePackager.Package(tileTypePacket);
+                    _networkManager.SendMessage(packet, connection);
                 }
 
                 await Task.Delay(1);
             }
 
-            foreach (var player in _gameScreen.Players.GetAll())
+            foreach (var player in _playerSet.GetAll())
             {
                 var playerPacket = new NewPlayerPacket()
                 {
@@ -61,16 +66,16 @@ namespace Mayday.Game.Networking.Consumers
                     HeadId = 1
                 };
 
-                var package = MessagePackager.Package(playerPacket);
+                var package = _messagePackager.Package(playerPacket);
                 
-                NetworkManager.SendMessage(package, connection);
+                _networkManager.SendMessage(package, connection);
                 
                 await Task.Delay(1);
             }
 
             var mapSendCompletePacket = new MapSendCompletePacket();
-            var mapSendCompletePackage = MessagePackager.Package(mapSendCompletePacket);
-            NetworkManager.SendMessage(mapSendCompletePackage, connection);
+            var mapSendCompletePackage = _messagePackager.Package(mapSendCompletePacket);
+            _networkManager.SendMessage(mapSendCompletePackage, connection);
         }
         
     }
