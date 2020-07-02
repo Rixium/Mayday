@@ -9,38 +9,27 @@ namespace Mayday.Game.Lighting
     public class LightMap
     {
 
-        private IGameArea _gameArea;
-        public IGameArea GameArea
-        {
-            get => _gameArea;
-            set
-            {
-                _lightValues = new float[value.AreaWidth, value.AreaHeight];
-                _xEnd = _lightValues.GetLength(0);
-                _yEnd = _lightValues.GetLength(1);
-                _gameArea = value;
-            }
-        }
-
         private float[,] _lightValues;
         private int _yEnd;
         private int _xEnd;
 
         public bool ChangedSinceLastGet { get; set; }
 
-        public async Task<float[,]> CheckLights(IGameArea gameArea)
+        private async Task CheckLights(IGameArea gameArea)
         {
-            GameArea = gameArea;
+            _lightValues = new float[gameArea.AreaWidth, gameArea.AreaHeight];
+            _xEnd = _lightValues.GetLength(0);
+            _yEnd = _lightValues.GetLength(1);
 
-            PreCalculateLightValues();
+            PreCalculateLightValues(gameArea);
             CalculateLighting();
 
             ChangedSinceLastGet = true;
 
-            return await Task.FromResult(_lightValues);
+            await Task.FromResult(_lightValues);
         }
 
-        private void PreCalculateLightValues()
+        private void PreCalculateLightValues(IGameArea gameArea)
         {
             for (var tileX = 0; tileX <= _xEnd; tileX++)
             {
@@ -49,7 +38,7 @@ namespace Mayday.Game.Lighting
                     if (tileX < 0 || tileX >= _lightValues.GetLength(0)) continue;
                     if (tileY < 0 || tileY >= _lightValues.GetLength(1)) continue;
 
-                    var tile = GameArea.TryGetTile(tileX, tileY);
+                    var tile = gameArea.TryGetTile(tileX, tileY);
 
                     if (tile.TileType == TileTypes.None)
                     {
@@ -117,5 +106,11 @@ namespace Mayday.Game.Lighting
             ChangedSinceLastGet = false;
             return _lightValues;
         }
+
+        public async void Recalculate(IGameArea gameArea) =>
+            await Task.Run(async () =>
+            {
+                await CheckLights(gameArea);
+            });
     }
 }

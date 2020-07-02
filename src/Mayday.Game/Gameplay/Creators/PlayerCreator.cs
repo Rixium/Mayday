@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.Items;
@@ -6,6 +8,7 @@ using Mayday.Game.Gameplay.World;
 using Mayday.Game.Graphics;
 using Mayday.Game.Networking;
 using Mayday.Game.UI.Controllers;
+using Yetiface.Engine.Inputs;
 using Yetiface.Engine.Optimization;
 using Yetiface.Engine.Utils;
 
@@ -30,7 +33,7 @@ namespace Mayday.Game.Gameplay.Creators
             _updateResolver = updateResolver;
         }
 
-        public IEntity CreateHostPlayer(IEntity player)
+        public IPlayerCreationResult CreateHostPlayer(IEntity player)
         {
             var spawnTile = _gameWorld.GameAreas[0].GetRandomSpawnLocation();
             player.X = spawnTile.TileX * _gameWorld.TileSize;
@@ -67,32 +70,27 @@ namespace Mayday.Game.Gameplay.Creators
                 itemPlacerComponent.SetSelectedItem(item);
             };
             itemPlacerComponent.ItemUsed += (item) => inventoryBar.RemoveItem(item);
-            // TODO
-            // OnMouseDown += blockBreakerComponent.MouseDown;
-            // OnMouseDown += itemPlacerComponent.MouseDown;
             inventoryBar.InventoryChanged += () => _interfaceController.InventoryBarChanged(inventoryBar);
             mainInventory.InventoryChanged += () => _interfaceController.MainInventoryChanged(mainInventory);
             jumpComponent.Jump += PacketManager.SendJumpPacket;
             inventoryBar.AddItemToInventory(ContentChest.ItemData["Shuttle"]);
 
-            var tutorialManagerComponent = player.AddComponent(new TutorialManagerComponent());
-
-            var tutorial1 = new PopupTutorial<IEntity>(new TutorialDefinition()
-            {
-                Text = "HELLO WORLD!",
-            });
-
-            tutorialManagerComponent.AddTutorial("Test", tutorial1);
-
-            _gameWorld.PlayerInRangeOfWorldObject += tutorial1.Trigger;
             player.GameArea = _gameWorld.GameAreas[0];
 
             _gameWorld.AddTrackedEntity(player);
 
-            return player;
+            return new PlayerCreationResult
+            {
+                Player = player,
+                MouseDown = new List<Action<MouseButton>>
+                {
+                    blockBreakerComponent.MouseDown,
+                    itemPlacerComponent.MouseDown
+                }
+            };
         }
 
-        public IEntity CreateClientPlayer(IEntity player)
+        public IPlayerCreationResult CreateClientPlayer(IEntity player)
         {
             player.GameWorld = _gameWorld;
 
@@ -118,7 +116,10 @@ namespace Mayday.Game.Gameplay.Creators
 
             _gameWorld.AddTrackedEntity(player);
 
-            return player;
+            return new PlayerCreationResult
+            {
+                Player = player
+            };
         }
     }
 }

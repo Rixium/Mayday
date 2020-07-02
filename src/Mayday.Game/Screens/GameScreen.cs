@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using Mayday.Game.Gameplay.Blueprints;
 using Mayday.Game.Gameplay.Collections;
 using Mayday.Game.Gameplay.Components;
@@ -87,25 +86,23 @@ namespace Mayday.Game.Screens
             SetupTile(tile);
             PacketManager.SendTileChangePacket(tile);
 
-            RecalculateLighting();
+            _lightMap.Recalculate(MyPlayer.GameArea);
         }
-
-        private async void RecalculateLighting() =>
-            await Task.Run(async () =>
-            {
-                await _lightMap.CheckLights(MyPlayer.GameArea);
-            });
 
         private void SetupTile(IEntity tile) => BluePrintManager.SetupFor(tile);
 
         public IEntity AddPlayer(IEntity player, bool isClients = false)
         {
-            player = isClients ?
+            var playerResult = isClients ?
                 _playerCreator.CreateHostPlayer(player) :
                 _playerCreator.CreateClientPlayer(player);
 
             if (isClients)
                 MyPlayer = player;
+
+            if(playerResult.MouseDown != null)
+                foreach (var action in playerResult.MouseDown)
+                    OnMouseDown += action;
 
             Players.Add(player);
 
@@ -134,7 +131,7 @@ namespace Mayday.Game.Screens
             cameraPosition.Y = MyPlayer.Y - Window.ViewportHeight / 2.0f;
             Camera.Position = cameraPosition;
 
-            RecalculateLighting();
+            _lightMap.Recalculate(MyPlayer.GameArea);
         }
 
         private void SetupUiInput()
@@ -169,7 +166,8 @@ namespace Mayday.Game.Screens
             GameWorld.RenderableComponentAdded += OnNewRenderableComponentAdded;
         }
 
-        private void OnTileDestroyed(Tile obj) => RecalculateLighting();
+        private void OnTileDestroyed(Tile obj) =>
+            _lightMap.Recalculate(MyPlayer.GameArea);
 
         private void OnNewRenderableComponentAdded(IRenderable renderableComponent) =>
             _renderableComponents.Add(renderableComponent);

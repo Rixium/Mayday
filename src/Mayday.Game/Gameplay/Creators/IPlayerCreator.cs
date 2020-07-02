@@ -4,7 +4,7 @@ namespace Mayday.Game.Gameplay.Creators
 {
     public interface IPlayerCreator
     {
-        public IEntity CreateHostPlayer(IEntity entity);
-        public IEntity CreateClientPlayer(IEntity entity);
+        public IPlayerCreationResult CreateHostPlayer(IEntity entity);
+        public IPlayerCreationResult CreateClientPlayer(IEntity entity);
     }
 }
