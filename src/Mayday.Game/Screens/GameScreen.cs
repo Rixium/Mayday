@@ -68,19 +68,16 @@ namespace Mayday.Game.Screens
 
         private void SetupTiles()
         {
-            foreach (var tile in GameWorld.GameAreas[0].Tiles)
-                SetupTile(tile);
+            foreach (var tile in _myPlayer.GameArea.Tiles)
+                _bluePrintManager.SetupFor(tile);
         }
 
         private void OnTilePlaced(Tile tile)
         {
-            SetupTile(tile);
+            _bluePrintManager.SetupFor(tile);
             PacketManager.SendTileChangePacket(tile);
-
             _lightMap.Recalculate(_myPlayer.GameArea);
         }
-
-        private void SetupTile(IEntity tile) => _bluePrintManager.SetupFor(tile);
 
         public IEntity AddPlayer(IEntity player, bool isClients = false)
         {
