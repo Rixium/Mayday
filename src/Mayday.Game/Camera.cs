@@ -66,9 +66,12 @@ namespace Mayday.Game
             Matrix.CreateScale(_zoom, _zoom, 1) *
             Matrix.CreateTranslation(new Vector3(Window.Center.X, Window.Center.Y, 0));
 
-        public void SetEntity(IEntity entity)
+        public void SetEntity(IEntity entity, bool immediate)
         {
             _following = entity;
+
+            if (immediate)
+                Position = entity.Center;
         }
 
         public bool Intersects(RectangleF bounds) =>

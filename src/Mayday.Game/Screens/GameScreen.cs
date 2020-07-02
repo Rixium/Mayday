@@ -18,7 +18,6 @@ using Yetiface.Engine;
 using Yetiface.Engine.Networking;
 using Yetiface.Engine.Screens;
 using Yetiface.Engine.UI;
-using Yetiface.Engine.Utils;
 
 namespace Mayday.Game.Screens
 {
@@ -86,7 +85,10 @@ namespace Mayday.Game.Screens
                 _playerCreator.CreateClientPlayer(player);
 
             if (isClients)
+            {
                 _myPlayer = player;
+                _camera.SetEntity(_myPlayer, true);
+            }
 
             if(playerResult.MouseDown != null)
                 foreach (var action in playerResult.MouseDown)
@@ -109,13 +111,6 @@ namespace Mayday.Game.Screens
             SetupNetworking();
             SetupWorldCallbacks();
             SetupTiles();
-
-            _camera.SetEntity(_myPlayer);
-
-            var cameraPosition = _camera.Position;
-            cameraPosition.X = _myPlayer.Center.X;
-            cameraPosition.Y = _myPlayer.Y - Window.ViewportHeight / 2.0f;
-            _camera.Position = cameraPosition;
 
             _lightMap.Recalculate(_myPlayer.GameArea);
         }

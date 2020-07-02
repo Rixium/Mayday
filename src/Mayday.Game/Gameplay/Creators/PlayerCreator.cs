@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.Items;
-using Mayday.Game.Gameplay.Tutorials;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Graphics;
 using Mayday.Game.Networking;
@@ -35,10 +34,6 @@ namespace Mayday.Game.Gameplay.Creators
 
         public IPlayerCreationResult CreateHostPlayer(IEntity player)
         {
-            var spawnTile = _gameWorld.GameAreas[0].GetRandomSpawnLocation();
-            player.X = spawnTile.TileX * _gameWorld.TileSize;
-            player.Y = spawnTile.TileY * _gameWorld.TileSize - (70 * 4);
-
             player.GameWorld = _gameWorld;
 
             var playerAnimationComponent = new PlayerAnimationComponent
@@ -76,6 +71,10 @@ namespace Mayday.Game.Gameplay.Creators
             inventoryBar.AddItemToInventory(ContentChest.ItemData["Shuttle"]);
 
             player.GameArea = _gameWorld.GameAreas[0];
+
+            var spawnTile = _gameWorld.GameAreas[0].GetRandomSpawnLocation();
+            player.X = spawnTile.TileX * _gameWorld.TileSize;
+            player.Y = spawnTile.TileY * _gameWorld.TileSize - player.Bounds.Height ;
 
             _gameWorld.AddTrackedEntity(player);
 
