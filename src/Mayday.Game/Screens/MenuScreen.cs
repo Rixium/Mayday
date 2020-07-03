@@ -95,7 +95,7 @@ namespace Mayday.Game.Screens
         private async Task<IGameWorld> CreateWorld()
         {
             _worldMaker = new WorldMaker()
-                .SetWorldSize(200, 200);
+                .SetWorldSize(1000,1000);
             
             return await _worldMaker.Create(this);
         }

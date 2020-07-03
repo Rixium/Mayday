@@ -46,7 +46,10 @@ namespace Mayday.Game.Graphics.Renderers
                 Window.WindowWidth, Window.WindowHeight);
 
             if (lightMap.ChangedSinceLastGet)
-                _lightMapRenderer.RenderToRenderTarget(lightMap);
+                _lightMapRenderer.RenderToRenderTarget(
+                    camera,
+                    myPlayer.GameArea,
+                    lightMap);
 
             Window.GraphicsDeviceManager.GraphicsDevice.SetRenderTarget(_renderTarget);
 

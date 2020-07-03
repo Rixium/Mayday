@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.World.Areas;
@@ -10,30 +11,28 @@ namespace Mayday.Game.Lighting
     {
 
         private float[,] _lightValues;
-        private int _yEnd;
-        private int _xEnd;
 
         public bool ChangedSinceLastGet { get; set; }
 
-        private async Task CheckLights(IGameArea gameArea)
+        private async void CheckLights(Camera camera, IGameArea gameArea)
         {
-            _lightValues = new float[gameArea.AreaWidth, gameArea.AreaHeight];
-            _xEnd = _lightValues.GetLength(0);
-            _yEnd = _lightValues.GetLength(1);
+            _lightValues ??= new float[gameArea.AreaWidth, gameArea.AreaHeight];
 
-            PreCalculateLightValues(gameArea);
-            CalculateLighting();
+            PreCalculateLightValues(camera, gameArea);
+            CalculateLighting(camera, gameArea);
 
             ChangedSinceLastGet = true;
-
-            await Task.FromResult(_lightValues);
         }
 
-        private void PreCalculateLightValues(IGameArea gameArea)
+        private void PreCalculateLightValues(Camera camera, IGameArea gameArea)
         {
-            for (var tileX = 0; tileX <= _xEnd; tileX++)
+            var startX = (int) camera.Bounds.Left / gameArea.GameWorld.TileSize;
+            var startY =(int) camera.Bounds.Top / gameArea.GameWorld.TileSize;
+            var endX = (int)camera.Bounds.Right / gameArea.GameWorld.TileSize;
+            var endY = (int)camera.Bounds.Bottom / gameArea.GameWorld.TileSize;
+            for (var tileX = startX; tileX <= endX; tileX++)
             {
-                for (var tileY = 0; tileY <= _yEnd; tileY++)
+                for (var tileY = startY; tileY <= endY; tileY++)
                 {
                     if (tileX < 0 || tileX >= _lightValues.GetLength(0)) continue;
                     if (tileY < 0 || tileY >= _lightValues.GetLength(1)) continue;
@@ -52,13 +51,18 @@ namespace Mayday.Game.Lighting
             }
         }
 
-        private void CalculateLighting()
+        private void CalculateLighting(Camera camera, IGameArea gameArea)
         {
+            var startX = (int) camera.Bounds.Left / gameArea.GameWorld.TileSize;
+            var startY =(int) camera.Bounds.Top / gameArea.GameWorld.TileSize;
+            var endX = (int)camera.Bounds.Right / gameArea.GameWorld.TileSize;
+            var endY = (int)camera.Bounds.Bottom / gameArea.GameWorld.TileSize;
+
             for (float lightChange = 0; lightChange <= 1f; lightChange += 0.1f)
             {
-                for (var tileX = 0; tileX <= _xEnd; tileX++)
+                for (var tileX = startX; tileX <= endX; tileX++)
                 {
-                    for (var tileY = 0; tileY <= _yEnd; tileY++)
+                    for (var tileY = startY; tileY <= endY; tileY++)
                     {
                         if (IsOutOfBounds(tileX, tileY)) continue;
                         if (Math.Abs(_lightValues[tileX, tileY] - lightChange) > 0.01f) continue;
@@ -107,10 +111,7 @@ namespace Mayday.Game.Lighting
             return _lightValues;
         }
 
-        public async void Recalculate(IGameArea gameArea) =>
-            await Task.Run(async () =>
-            {
-                await CheckLights(gameArea);
-            });
+        public void Recalculate(Camera camera, IGameArea gameArea) =>
+            Task.Run(() => CheckLights(camera, gameArea));
     }
 }

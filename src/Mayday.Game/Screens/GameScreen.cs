@@ -75,7 +75,7 @@ namespace Mayday.Game.Screens
         {
             _bluePrintManager.SetupFor(tile);
             PacketManager.SendTileChangePacket(tile);
-            _lightMap.Recalculate(_myPlayer.GameArea);
+            _lightMap.Recalculate(_camera, _myPlayer.GameArea);
         }
 
         public IEntity AddPlayer(IEntity player, bool isClients = false)
@@ -112,7 +112,7 @@ namespace Mayday.Game.Screens
             SetupWorldCallbacks();
             SetupTiles();
 
-            _lightMap.Recalculate(_myPlayer.GameArea);
+            _lightMap.Recalculate(_camera, _myPlayer.GameArea);
         }
 
         private void SetupWorldCallbacks()
@@ -126,7 +126,7 @@ namespace Mayday.Game.Screens
         }
 
         private void OnTileDestroyed(Tile obj) =>
-            _lightMap.Recalculate(_myPlayer.GameArea);
+            _lightMap.Recalculate(_camera, _myPlayer.GameArea);
 
         private void OnNewRenderableComponentAdded(IRenderable renderableComponent) =>
             _renderableComponents.Add(renderableComponent);
