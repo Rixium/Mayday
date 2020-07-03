@@ -24,18 +24,19 @@ namespace Mayday.Game.Gameplay.Blueprints
 
         private void SetupTileBlueprint(Tile tile)
         {
-            var itemDropType = tile.TileProperties?.ItemDropType;
-
-            if (itemDropType == null || itemDropType == ItemTypes.None) return;
-
-            var itemDropperComponent = tile.AddComponent(
-                new ItemDropperComponent(itemDropType));
-
-            itemDropperComponent.ItemDrop += (entity, itemDrop) =>
-            {
-                entity.GameArea.DropItem(itemDrop);
-                PacketManager.SendItemDropPacket(itemDrop);
-            };
+            // TODO OPTIMISE
+            // var itemDropType = tile.TileProperties?.ItemDropType;
+            //
+            // if (itemDropType == null || itemDropType == ItemTypes.None) return;
+            //
+            // var itemDropperComponent = tile.AddComponent(
+            //     new ItemDropperComponent(itemDropType));
+            //
+            // itemDropperComponent.ItemDrop += (entity, itemDrop) =>
+            // {
+            //     entity.GameArea.DropItem(itemDrop);
+            //     PacketManager.SendItemDropPacket(itemDrop);
+            // };
         }
     }
 }

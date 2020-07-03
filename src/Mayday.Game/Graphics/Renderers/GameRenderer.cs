@@ -80,7 +80,7 @@ namespace Mayday.Game.Graphics.Renderers
                 null, // I don't even know what this it.
                 null, // We can choose to flip textures as an example, but we dont, so null it.
                 camera.GetMatrix()); // Window viewport, for nice resizing.
-            _lightMapRenderer?.Draw(myPlayer, gameWorld);
+            _lightMapRenderer?.Draw(camera, myPlayer, gameWorld);
             GraphicsUtils.Instance.End();
 
             Window.GraphicsDeviceManager.GraphicsDevice.SetRenderTarget(null);

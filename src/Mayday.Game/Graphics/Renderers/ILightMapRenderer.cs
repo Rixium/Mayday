@@ -9,6 +9,6 @@ namespace Mayday.Game.Graphics.Renderers
     {
         void RenderToRenderTarget(Camera camera, IGameArea gameArea, LightMap lightMap);
 
-        void Draw(IEntity player, IGameWorld gameWorld);
+        void Draw(Camera camera, IEntity player, IGameWorld gameWorld);
     }
 }

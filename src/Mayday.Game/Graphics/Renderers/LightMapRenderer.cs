@@ -18,6 +18,11 @@ namespace Mayday.Game.Graphics.Renderers
 
             var lightMapData = lightMap.GetLights();
 
+            var startX = (int) camera.Bounds.Left / gameArea.GameWorld.TileSize;
+            var startY =(int) camera.Bounds.Top / gameArea.GameWorld.TileSize;
+            var endX = (int)camera.Bounds.Right / gameArea.GameWorld.TileSize;
+            var endY = (int)camera.Bounds.Bottom / gameArea.GameWorld.TileSize;
+
             _renderTarget ??= new RenderTarget2D(Window.GraphicsDeviceManager.GraphicsDevice, lightMapData.GetLength(0),
                 lightMapData.GetLength(1),
                 false,
@@ -26,11 +31,6 @@ namespace Mayday.Game.Graphics.Renderers
             _renderTarget.GraphicsDevice.Clear(Color.Transparent);
 
             Window.GraphicsDeviceManager.GraphicsDevice.SetRenderTarget(_renderTarget);
-
-            var startX = (int) camera.Bounds.Left / gameArea.GameWorld.TileSize;
-            var startY =(int) camera.Bounds.Top / gameArea.GameWorld.TileSize;
-            var endX = (int)camera.Bounds.Right / gameArea.GameWorld.TileSize;
-            var endY = (int)camera.Bounds.Bottom / gameArea.GameWorld.TileSize;
 
             GraphicsUtils.Instance.SpriteBatch.Begin(
                 SpriteSortMode.Deferred,
@@ -45,8 +45,8 @@ namespace Mayday.Game.Graphics.Renderers
             {
                 for (var j = startY; j <= endY; j++)
                 {
-                    if (i >= lightMapData.GetLength(0)) continue;
-                    if (j >= lightMapData.GetLength(1)) continue;
+                    if (i >= lightMapData.GetLength(0) || i < 0) continue;
+                    if (j >= lightMapData.GetLength(1) || j < 0) continue;
 
                     GraphicsUtils.Instance.SpriteBatch.Draw(
                         GraphicsUtils.Instance.PixelTexture,
@@ -60,11 +60,20 @@ namespace Mayday.Game.Graphics.Renderers
             lightMap.ChangedSinceLastGet = false;
         }
         
-        public void Draw(IEntity player, IGameWorld gameWorld)
+        public void Draw(Camera camera, IEntity player, IGameWorld gameWorld)
         {
             if (_renderTarget == null) return;
             GraphicsUtils.Instance.SpriteBatch.Draw(_renderTarget,
-                new Rectangle(0, 0, player.GameArea.AreaWidth * gameWorld.TileSize, player.GameArea.AreaHeight * gameWorld.TileSize),
+                new RectangleF(
+                    (int)(camera.Bounds.Left / gameWorld.TileSize) * gameWorld.TileSize,
+                    (int)(camera.Bounds.Top / gameWorld.TileSize) * gameWorld.TileSize,
+                    (int)(camera.Bounds.Width / gameWorld.TileSize) * gameWorld.TileSize,
+                        (int)(camera.Bounds.Height/ gameWorld.TileSize) * gameWorld.TileSize),
+                new Rectangle(
+                    (int) (camera.Bounds.Left / gameWorld.TileSize),
+                    (int)(camera.Bounds.Top / gameWorld.TileSize),
+                    (int)(camera.Bounds.Width / gameWorld.TileSize),
+                    (int)(camera.Bounds.Height / gameWorld.TileSize)),
                 Color.White);
         }
 

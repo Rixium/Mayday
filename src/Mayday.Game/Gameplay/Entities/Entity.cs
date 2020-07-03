@@ -23,12 +23,13 @@ namespace Mayday.Game.Gameplay.Entities
         public Vector2 Position => new Vector2(X, Y);
         
         public Vector2 Center => 
-            new Vector2(GetCurrentBounds().X + GetCurrentBounds().Width / 2.0f, GetCurrentBounds().Y + GetCurrentBounds().Height / 2.0f);
+            new Vector2(GetCurrentBounds().X + GetCurrentBounds().Width / 2.0f,
+                GetCurrentBounds().Y + GetCurrentBounds().Height / 2.0f);
 
         public int FacingDirection { get; set; }
 
-        protected readonly IList<IComponent> Components = new List<IComponent>();
-        protected readonly IList<IUpdateable> UpdateableComponents = new List<IUpdateable>();
+        protected IList<IComponent> Components;
+        protected IList<IUpdateable> UpdateableComponents;
 
         public RectangleF Bounds { get; set; }
 
@@ -39,16 +40,21 @@ namespace Mayday.Game.Gameplay.Entities
 
         public virtual void Update()
         {
+            if (UpdateableComponents == null) return;
+
             foreach (var component in UpdateableComponents)
                 component.Update();
         }
 
         public T AddComponent<T>(T component) where T : IComponent
         {
+            Components ??= new List<IComponent>();
+
             component.Entity = this;
             
             if (typeof(IUpdateable).IsAssignableFrom(typeof(T)))
             {
+                UpdateableComponents ??= new List<IUpdateable>();
                 UpdateableComponents.Add(component as IUpdateable);
             }
             else
@@ -63,18 +69,18 @@ namespace Mayday.Game.Gameplay.Entities
 
         public T GetComponent<T>() where T : IComponent
         {
-            var c = (T) Components.FirstOrDefault(component => component.GetType() == typeof(T));
+            var c = (T) Components?.FirstOrDefault(component => component.GetType() == typeof(T));
 
             if (c == null)
-                c = (T) UpdateableComponents.FirstOrDefault(component => component.GetType() == typeof(T));
+                c = (T) UpdateableComponents?.FirstOrDefault(component => component.GetType() == typeof(T));
 
             return c;
         }
 
         protected void CleanUpComponents()
         {
-            Components.Clear();
-            UpdateableComponents.Clear();
+            Components?.Clear();
+            UpdateableComponents?.Clear();
         }
         
     }
