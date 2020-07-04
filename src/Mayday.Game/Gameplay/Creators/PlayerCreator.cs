@@ -38,9 +38,30 @@ namespace Mayday.Game.Gameplay.Creators
             player.GameWorld = _gameWorld;
 
             var playerComponentSet = AddCommonComponents(player);
-
+            AddHostComponents(player, playerComponentSet);
             player.Bounds = new RectangleF(9, 10, 13, 30);
 
+            player.GameArea = _gameWorld.GameAreas[0];
+
+            var spawnTile = _gameWorld.GameAreas[0].GetRandomSpawnLocation();
+            player.X = spawnTile.TileX * _gameWorld.TileSize;
+            player.Y = spawnTile.TileY * _gameWorld.TileSize - player.Bounds.Height ;
+
+            _gameWorld.AddTrackedEntity(player);
+
+            return new PlayerCreationResult
+            {
+                Player = player,
+                MouseDown = new List<Action<MouseButton>>
+                {
+                    playerComponentSet.BlockBreakerComponent.MouseDown,
+                    playerComponentSet.ItemPlacerComponent.MouseDown
+                }
+            };
+        }
+
+        private void AddHostComponents(IEntity player, PlayerComponentSet playerComponentSet)
+        {
             playerComponentSet.BlockBreakerComponent = player.AddComponent(new BlockBreakerComponent(_gameWorld, _camera));
             playerComponentSet.CharacterControllerComponent = player.AddComponent(new CharacterControllerComponent());
             playerComponentSet.ItemPlacerComponent = player.AddComponent(new ItemPlacerComponent(_camera)
@@ -61,24 +82,6 @@ namespace Mayday.Game.Gameplay.Creators
                 () => _interfaceController.MainInventoryChanged(playerComponentSet.MainInventory);
             playerComponentSet.JumpComponent.Jump += PacketManager.SendJumpPacket;
             playerComponentSet.BarInventory.AddItemToInventory(ContentChest.ItemData["Shuttle"]);
-
-            player.GameArea = _gameWorld.GameAreas[0];
-
-            var spawnTile = _gameWorld.GameAreas[0].GetRandomSpawnLocation();
-            player.X = spawnTile.TileX * _gameWorld.TileSize;
-            player.Y = spawnTile.TileY * _gameWorld.TileSize - player.Bounds.Height ;
-
-            _gameWorld.AddTrackedEntity(player);
-
-            return new PlayerCreationResult
-            {
-                Player = player,
-                MouseDown = new List<Action<MouseButton>>
-                {
-                    playerComponentSet.BlockBreakerComponent.MouseDown,
-                    playerComponentSet.ItemPlacerComponent.MouseDown
-                }
-            };
         }
 
         private PlayerComponentSet AddCommonComponents(IEntity player)
