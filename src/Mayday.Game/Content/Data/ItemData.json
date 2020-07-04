@@ -16,5 +16,11 @@
     "Name": "Shuttle",
     "MaxStackSize": 1,
     "WorldObjectType": "Shuttle"
+  },
+  "Base_Node_Main": {
+    "ItemId": "Base_Node_Main",
+    "Name": "Main Base Node",
+    "MaxStackSize": 1,
+    "WorldObjectType": "Base_Node_Main"
   }
 }

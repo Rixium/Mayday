@@ -81,7 +81,11 @@ namespace Mayday.Game.Gameplay.Creators
             playerComponentSet.MainInventory.InventoryChanged +=
                 () => _interfaceController.MainInventoryChanged(playerComponentSet.MainInventory);
             playerComponentSet.JumpComponent.Jump += PacketManager.SendJumpPacket;
+            playerComponentSet.BarInventory.AddItemToInventory(ContentChest.ItemData["Base_Node_Main"]);
             playerComponentSet.BarInventory.AddItemToInventory(ContentChest.ItemData["Shuttle"]);
+
+            for(var i = 0; i < 30; i++)
+                playerComponentSet.BarInventory.AddItemToInventory(ContentChest.ItemData["Dirt_Block"]);
         }
 
         private PlayerComponentSet AddCommonComponents(IEntity player)

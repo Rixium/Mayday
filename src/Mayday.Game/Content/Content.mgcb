@@ -127,6 +127,18 @@
 /processorParam:TextureFormat=Color
 /build:Images/Items/Dirt_Block.png
 
+#begin Images/Items/Base_Node_Main.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/Items/Base_Node_Main.png
+
 #begin Images/Items/Shuttle.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -186,6 +198,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Images/WorldObjects/Shuttle.png
+
+#begin Images/WorldObjects/Base_Node_Main.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/WorldObjects/Base_Node_Main.png
 
 #begin jump.wav
 /importer:WavImporter

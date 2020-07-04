@@ -5,5 +5,12 @@
     "Width": -1,
     "Height": -1,
     "CanBeUsed": true
+  },
+  "Base_Node_Main": {
+    "Id": "Base_Node_Main",
+    "Name": "Base",
+    "Width": -1,
+    "Height": -1,
+    "CanBeUsed": true
   }
 }
