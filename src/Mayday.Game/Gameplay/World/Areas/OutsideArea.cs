@@ -97,12 +97,13 @@ namespace Mayday.Game.Gameplay.World.Areas
             return Tiles[tileX, tileY];
         }
 
-        public void DropItem(ItemDrop item)
+        public ItemDrop DropItem(ItemDrop item)
         {
             item.GameWorld = GameWorld;
             item.GameArea = this;
             WorldItems.Add(item);
             GameWorld.AddTrackedEntity(item);
+            return item;
         }
 
         public void PlaceWorldEntity(Tile tile, string worldObjectType)

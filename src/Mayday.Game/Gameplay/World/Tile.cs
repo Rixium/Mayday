@@ -1,6 +1,8 @@
 ﻿using Mayday.Game.Enums;
+using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Data;
 using Mayday.Game.Gameplay.Entities;
+using Mayday.Game.Gameplay.Items;
 using Mayday.Game.Networking;
 using Microsoft.Xna.Framework;
 using Yetiface.Engine.Utils;
@@ -69,13 +71,26 @@ namespace Mayday.Game.Gameplay.World
         public void Break()
         {
             if (TileType == TileTypes.None) return;
+            DropItem();
             TileType = TileTypes.None;
             GameWorld.TileDestroyed?.Invoke(this);
             Destroy?.Invoke(this);
-
-            CleanUpComponents();
-            
             PacketManager.SendTileChangePacket(this);
+            CleanUpComponents();
+        }
+
+        private void DropItem()
+        {
+            if (TileProperties?.ItemDropType == null) return;
+
+            var itemData = ContentChest.ItemData[TileProperties.ItemDropType];
+
+            GameArea.DropItem(new ItemDrop
+            {
+                Item = itemData,
+                X = X,
+                Y = Y
+            });
         }
 
         /// <summary>

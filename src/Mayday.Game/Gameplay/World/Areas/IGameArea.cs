@@ -18,7 +18,7 @@ namespace Mayday.Game.Gameplay.World.Areas
         IEntity GetWorldObjectAbove(Tile tile);
         void PlaceTile(Tile tile, string selectedItemTileType);
         void PlaceWorldEntity(Tile tile, string selectedItemWorldObjectType);
-        void DropItem(ItemDrop itemDrop);
+        ItemDrop DropItem(ItemDrop itemDrop);
         Tile GetRandomSpawnLocation();
         IEnumerable<IEntity> GetItems();
     }
