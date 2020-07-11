@@ -54,9 +54,11 @@ namespace Mayday.Game
             LoadWorldObjectData(contentManager);
 
             Background = contentManager.Load<Texture2D>("Images\\background");
+            NodeTexture = contentManager.Load<Texture2D>("Images\\NodeTexture");
         }
 
         public static Texture2D Background { get; set; }
+        public static Texture2D NodeTexture { get; set; }
 
         private static void LoadWorldObjectData(ContentManager contentManager)
         {

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Components;
+using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Gameplay.World.Areas;
 using Microsoft.Xna.Framework;
@@ -104,6 +105,11 @@ namespace Mayday.Game.Graphics.Renderers
             foreach (var entity in gameArea.WorldObjects)
             {
                 var worldObjectComponent = entity.GetComponent<WorldObjectManagerComponent>();
+                
+                if (worldObjectComponent.WorldObjectData.BuildNodes != null &&
+                    worldObjectComponent.WorldObjectData.BuildNodes.Length > 0)
+                    DrawNodes(entity, worldObjectComponent);
+                
                 GraphicsUtils.Instance.SpriteBatch.Draw(worldObjectComponent.WorldObjectTexture,
                     entity.GetCurrentBounds(), Color.White);
             }
@@ -116,6 +122,21 @@ namespace Mayday.Game.Graphics.Renderers
             var selectedItem = itemPlacerComponent.SelectedItem;
             var texture = ContentChest.ItemTextures[selectedItem.ItemId];
             GraphicsUtils.Instance.SpriteBatch.Draw(texture, clientPlayer.Center, Color.White);
+        }
+
+        private static void DrawNodes(IEntity entity, WorldObjectManagerComponent worldObjectComponent)
+        {
+            foreach (var node in worldObjectComponent.WorldObjectData.BuildNodes)
+            {
+                var nodeXOffset = node.X * worldObjectComponent.WorldObjectTexture.Width -
+                                  ContentChest.NodeTexture.Width / 2.0f;
+                var nodeYOffset = node.Y * worldObjectComponent.WorldObjectTexture.Height -
+                                  ContentChest.NodeTexture.Height / 2.0f;
+
+                GraphicsUtils.Instance.SpriteBatch.Draw(ContentChest.NodeTexture, 
+                    entity.Position + new Vector2(nodeXOffset, nodeYOffset), 
+                    Color.White);
+            }
         }
     }
 }
