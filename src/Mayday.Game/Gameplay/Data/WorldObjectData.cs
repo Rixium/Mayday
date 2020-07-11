@@ -8,6 +8,8 @@ namespace Mayday.Game.Gameplay.Data
         public int Height { get; set; }
         public bool CanBeUsed { get; set; }
 
+        public bool RequiresNode { get; set; }
+        
         public BuildNode[] BuildNodes { get; set; }
     }
 }
