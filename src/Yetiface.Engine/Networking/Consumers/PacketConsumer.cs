@@ -21,7 +21,7 @@ namespace Yetiface.Engine.Networking.Consumers
 
         public void Consume(INetworkPacket packet)
         {
-            ConsumePacket(default(Connection), (T) packet);
+            ConsumePacket(default, (T) packet);
         }
 
 
