@@ -1,5 +1,4 @@
 ﻿using Mayday.Game.Enums;
-using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Data;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.Items;

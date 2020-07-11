@@ -1,5 +1,3 @@
-using Mayday.Game.Enums;
-
 namespace Mayday.Game.Gameplay.Items
 {
     public interface IItem

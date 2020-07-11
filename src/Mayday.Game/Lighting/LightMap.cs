@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.World.Areas;

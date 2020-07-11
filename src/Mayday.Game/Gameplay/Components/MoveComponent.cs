@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Entities;
 using Microsoft.Xna.Framework;

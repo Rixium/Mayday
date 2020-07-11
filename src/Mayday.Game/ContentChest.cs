@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Data;
 using Mayday.Game.Gameplay.Items;
 using Mayday.Game.Graphics;

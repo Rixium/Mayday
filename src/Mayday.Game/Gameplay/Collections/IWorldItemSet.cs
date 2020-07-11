@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Mayday.Game.Gameplay.Entities;
-using Mayday.Game.Gameplay.Items;
 
 namespace Mayday.Game.Gameplay.Collections
 {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Navigation;
-using Mayday.Editor.Controls;
+﻿using Mayday.Editor.Controls;
 using Mayday.Editor.Navigation;
 using Mayday.Editor.ViewModels;
 using Mayday.Editor.Views;

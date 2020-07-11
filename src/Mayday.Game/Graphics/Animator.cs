@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Yetiface.Engine.ECS.Components.Renderables;
 using Yetiface.Engine.Graphics;
 using Yetiface.Engine.Utils;

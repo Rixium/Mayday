@@ -8,7 +8,6 @@ using Mayday.Editor.Loaders;
 using Mayday.Editor.Navigation;
 using Mayday.Editor.Popups;
 using Mayday.Game.Gameplay.Data;
-using Mayday.Game.Gameplay.Items;
 
 namespace Mayday.Editor.ViewModels
 {

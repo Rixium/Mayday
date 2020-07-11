@@ -1,5 +1,4 @@
-﻿using Mayday.Game.Enums;
-using Mayday.Game.Gameplay.Entities;
+﻿using Mayday.Game.Gameplay.Entities;
 using Yetiface.Engine.Utils;
 
 namespace Mayday.Game.Gameplay.Items

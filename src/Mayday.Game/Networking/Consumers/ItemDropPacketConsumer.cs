@@ -1,10 +1,7 @@
-using System;
-using Mayday.Game.Enums;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Items;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Networking.Packets;
-using Mayday.Game.Screens;
 using Steamworks.Data;
 using Yetiface.Engine.Networking.Consumers;
 using Yetiface.Engine.Utils;

@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Mayday.Game.Gameplay.Entities;
 
 namespace Mayday.Game.Gameplay.Tutorials

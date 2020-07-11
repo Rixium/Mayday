@@ -12,7 +12,6 @@ using Mayday.Editor.Popups;
 using Mayday.Editor.Views;
 using Mayday.Game.Gameplay.Data;
 using Mayday.Game.Gameplay.Items;
-using Newtonsoft.Json;
 
 namespace Mayday.Editor.ViewModels
 {

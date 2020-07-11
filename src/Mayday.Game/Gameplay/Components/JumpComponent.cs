@@ -1,6 +1,5 @@
 ﻿using System;
 using Mayday.Game.Gameplay.Entities;
-using Mayday.Game.Screens;
 using Microsoft.Xna.Framework.Audio;
 using Yetiface.Engine;
 

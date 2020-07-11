@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Mayday.Game.Networking.SteamNetworking;
 using Steamworks.Data;
 using Yetiface.Engine.Networking;
 using Yetiface.Engine.Networking.Consumers;

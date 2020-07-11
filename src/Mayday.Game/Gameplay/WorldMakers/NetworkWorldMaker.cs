@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 using Mayday.Game.Enums;
-using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Gameplay.World.Areas;
 using Mayday.Game.Gameplay.WorldMakers.Listeners;
@@ -39,12 +38,6 @@ namespace Mayday.Game.Gameplay.WorldMakers
 
         private int WorldSize { get; set; }
         private Bitmap Bitmap { get; set; }
-
-        public IWorldMaker SetWorldSize(int worldSize)
-        {
-            WorldSize = worldSize;
-            return this;
-        }
 
         public NetworkWorldMaker(INetworkManager networkManager)
         {

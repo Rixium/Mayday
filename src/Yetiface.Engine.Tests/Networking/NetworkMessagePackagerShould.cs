@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using Mayday.Game.Networking;
 using NUnit.Framework;
 using Shouldly;
 using Yetiface.Engine.Networking.Packagers;
