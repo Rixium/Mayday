@@ -10,7 +10,6 @@ namespace Mayday.Game.Graphics.Renderers
 {
     public class WorldRenderer : IWorldRenderer
     {
-        
         private readonly Dictionary<int, int> _tileBlobMap = new Dictionary<int, int>
         {
             {28, 0}, {124, 1}, {112, 2}, {16, 3}, {20, 4}, {116, 5}, {92, 6}, {80, 7}, {84, 8}, {221, 9},
@@ -58,7 +57,9 @@ namespace Mayday.Game.Graphics.Renderers
             {
                 var tileSet = ContentChest.TileTextures[tile.TileType];
 
-                if (tile.North != null && tile.North.TileType != tile.TileType && (tile.North.TileProperties?.Name.Length > tile.TileProperties?.Name.Length || tile.North.TileProperties == null))
+                if (tile.North != null && tile.North.TileType != tile.TileType &&
+                    (tile.North.TileProperties?.Name.Length > tile.TileProperties?.Name.Length ||
+                     tile.North.TileProperties == null))
                 {
                     var rect = new Rectangle(2, 0, 8, 2);
                     GraphicsUtils.Instance.SpriteBatch.Draw(tileSet,
@@ -66,23 +67,29 @@ namespace Mayday.Game.Graphics.Renderers
                         rect, Color.White);
                 }
 
-                if (tile.East != null && tile.East.TileType != tile.TileType && (tile.East.TileProperties?.Name.Length > tile.TileProperties?.Name.Length || tile.East.TileProperties == null))
+                if (tile.East != null && tile.East.TileType != tile.TileType &&
+                    (tile.East.TileProperties?.Name.Length > tile.TileProperties?.Name.Length ||
+                     tile.East.TileProperties == null))
                 {
                     var rect = new Rectangle(10, 2, 2, 8);
                     GraphicsUtils.Instance.SpriteBatch.Draw(tileSet,
                         new Rectangle((int) tile.X + 8, (int) tile.Y, 2, 8),
                         rect, Color.White);
                 }
-                
-                if (tile.South != null && tile.South.TileType != tile.TileType && (tile.South.TileProperties?.Name.Length > tile.TileProperties?.Name.Length || tile.South.TileProperties == null))
+
+                if (tile.South != null && tile.South.TileType != tile.TileType &&
+                    (tile.South.TileProperties?.Name.Length > tile.TileProperties?.Name.Length ||
+                     tile.South.TileProperties == null))
                 {
                     var rect = new Rectangle(2, 10, 8, 2);
                     GraphicsUtils.Instance.SpriteBatch.Draw(tileSet,
                         new Rectangle((int) tile.X, (int) tile.Y + 8, 8, 2),
                         rect, Color.White);
                 }
-                
-                if (tile.West != null && tile.West.TileType != tile.TileType && (tile.West.TileProperties?.Name.Length > tile.TileProperties?.Name.Length || tile.West.TileProperties == null))
+
+                if (tile.West != null && tile.West.TileType != tile.TileType &&
+                    (tile.West.TileProperties?.Name.Length > tile.TileProperties?.Name.Length ||
+                     tile.West.TileProperties == null))
                 {
                     var rect = new Rectangle(0, 2, 2, 8);
                     GraphicsUtils.Instance.SpriteBatch.Draw(tileSet,
@@ -97,10 +104,9 @@ namespace Mayday.Game.Graphics.Renderers
             foreach (var entity in gameArea.WorldObjects)
             {
                 var worldObjectComponent = entity.GetComponent<WorldObjectManagerComponent>();
-                var entityTexture = ContentChest.WorldObjectTextures[worldObjectComponent.WorldObjectType];
-                GraphicsUtils.Instance.SpriteBatch.Draw(entityTexture, entity.GetCurrentBounds(), Color.White);
+                GraphicsUtils.Instance.SpriteBatch.Draw(worldObjectComponent.WorldObjectTexture,
+                    entity.GetCurrentBounds(), Color.White);
             }
-
 
             var clientPlayer = gameArea.GameWorld.RequestClientPlayer?.Invoke();
 
@@ -111,6 +117,5 @@ namespace Mayday.Game.Graphics.Renderers
             var texture = ContentChest.ItemTextures[selectedItem.ItemId];
             GraphicsUtils.Instance.SpriteBatch.Draw(texture, clientPlayer.Center, Color.White);
         }
-        
     }
 }
