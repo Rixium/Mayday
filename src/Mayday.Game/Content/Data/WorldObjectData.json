@@ -11,6 +11,16 @@
     "Name": "Base",
     "Width": -1,
     "Height": -1,
-    "CanBeUsed": true
+    "CanBeUsed": true,
+    "BuildNodes": [
+      {
+        "x": 0,
+        "y": 0.5
+      },
+      {
+        "x": 1,
+        "y": 0.5
+      }
+    ]
   }
 }

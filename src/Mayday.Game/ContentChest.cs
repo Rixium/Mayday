@@ -59,7 +59,7 @@ namespace Mayday.Game
 
         public static Texture2D Background { get; set; }
 
-        private void LoadWorldObjectData(ContentManager contentManager)
+        private static void LoadWorldObjectData(ContentManager contentManager)
         {
             var filePath = $"{contentManager.RootDirectory}\\Data\\WorldObjectData.json";
             var worldObjectData = File.ReadAllText(filePath);
