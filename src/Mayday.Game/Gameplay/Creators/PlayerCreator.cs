@@ -4,6 +4,7 @@ using Mayday.Game.Gameplay.Collections;
 using Mayday.Game.Gameplay.Components;
 using Mayday.Game.Gameplay.Entities;
 using Mayday.Game.Gameplay.Items;
+using Mayday.Game.Gameplay.Items.Placers;
 using Mayday.Game.Gameplay.World;
 using Mayday.Game.Graphics;
 using Mayday.Game.Networking;
@@ -45,7 +46,7 @@ namespace Mayday.Game.Gameplay.Creators
 
             var spawnTile = _gameWorld.GameAreas[0].GetRandomSpawnLocation();
             player.X = spawnTile.TileX * _gameWorld.TileSize;
-            player.Y = spawnTile.TileY * _gameWorld.TileSize - player.Bounds.Height ;
+            player.Y = spawnTile.TileY * _gameWorld.TileSize - player.Bounds.Height;
 
             _gameWorld.AddTrackedEntity(player);
 
@@ -62,14 +63,21 @@ namespace Mayday.Game.Gameplay.Creators
 
         private void AddHostComponents(IEntity player, PlayerComponentSet playerComponentSet)
         {
-            playerComponentSet.BlockBreakerComponent = player.AddComponent(new BlockBreakerComponent(_gameWorld, _camera));
+            playerComponentSet.BlockBreakerComponent =
+                player.AddComponent(new BlockBreakerComponent(_gameWorld, _camera));
             playerComponentSet.CharacterControllerComponent = player.AddComponent(new CharacterControllerComponent());
-            playerComponentSet.ItemPlacerComponent = player.AddComponent(new ItemPlacerComponent(_camera)
-            {
-                ItemUsed = (item) => playerComponentSet.BarInventory.RemoveItem(item)
-            });
-
-
+            
+            playerComponentSet.ItemPlacerComponent =
+                player.AddComponent(
+                    new ItemPlacerComponent(
+                        new List<IPlacer>
+                        {
+                            new TilePlacer(), new WorldObjectPlacer()
+                        }, _camera)
+                    {
+                        ItemUsed = (item) => playerComponentSet.BarInventory.RemoveItem(item)
+                    });
+            
             _interfaceController.SelectedItemSlotChanged += (i) =>
             {
                 var item = playerComponentSet.BarInventory.GetItemAt(i);
@@ -84,7 +92,7 @@ namespace Mayday.Game.Gameplay.Creators
             playerComponentSet.BarInventory.AddItemToInventory(ContentChest.ItemData["Base_Node_Main"]);
             playerComponentSet.BarInventory.AddItemToInventory(ContentChest.ItemData["Shuttle"]);
 
-            for(var i = 0; i < 30; i++)
+            for (var i = 0; i < 30; i++)
                 playerComponentSet.BarInventory.AddItemToInventory(ContentChest.ItemData["Dirt_Block"]);
         }
 
@@ -110,7 +118,8 @@ namespace Mayday.Game.Gameplay.Creators
                 JumpComponent = player.AddComponent(new JumpComponent()),
                 MainInventory = mainInventory,
                 BarInventory = inventoryBar,
-                ItemPickerComponent = player.AddComponent(new ItemPickerComponent(_gameWorld.GameAreas[0].WorldItems, _updateResolver)),
+                ItemPickerComponent =
+                    player.AddComponent(new ItemPickerComponent(_gameWorld.GameAreas[0].WorldItems, _updateResolver)),
                 PlayerAnimationComponent = player.AddComponent(playerAnimationComponent)
             };
         }
